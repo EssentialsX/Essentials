@@ -1,5 +1,6 @@
 package com.earth2me.essentials.perm.impl;
 
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.utils.TriState;
 import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
@@ -35,7 +36,7 @@ public class ConfigPermissionsHandler extends SuperpermsHandler {
     }
 
     @Override
-    public boolean tryProvider() {
+    public boolean tryProvider(Essentials ess) {
         return true;
     }
 }

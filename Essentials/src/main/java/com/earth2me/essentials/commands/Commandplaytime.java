@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -39,9 +40,12 @@ public class Commandplaytime extends EssentialsCommand {
                 if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_15_2_R01)) {
                     throw e;
                 }
-                final IUser user = getPlayer(server, sender, args, 0, true);
-                displayName = user.getName();
+                final User user = getPlayer(server, args, 0, true, true);
+                displayName = user.getName(); // Vanished players will have their name as their display name
                 playtime = Bukkit.getOfflinePlayer(user.getBase().getUniqueId()).getStatistic(PLAY_ONE_TICK);
+                if (user.getBase().isOnline() && user.isVanished()) {
+                    playtime = playtime - ((System.currentTimeMillis() - user.getLastVanishTime()) / 50L);
+                }
             }
             key = "playtimeOther";
         } else if (sender.isPlayer()) {

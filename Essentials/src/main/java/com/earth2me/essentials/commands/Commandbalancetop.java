@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import net.essentialsx.api.v2.services.BalanceTop;
 import org.bukkit.Server;
+import org.bukkit.command.BlockCommandSender;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -32,8 +33,15 @@ public class Commandbalancetop extends EssentialsCommand {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(ess.getBalanceTop().getCacheAge());
         final DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-        sender.sendMessage(tl("balanceTop", format.format(cal.getTime())));
-        new TextPager(cache).showPage(Integer.toString(page), null, "balancetop", sender);
+        final Runnable runnable = () -> {
+            sender.sendMessage(tl("balanceTop", format.format(cal.getTime())));
+            new TextPager(cache).showPage(Integer.toString(page), null, "balancetop", sender);
+        };
+        if (sender.getSender() instanceof BlockCommandSender) {
+            ess.scheduleSyncDelayedTask(runnable);
+        } else {
+            runnable.run();
+        }
     }
 
     @Override
@@ -56,8 +64,8 @@ public class Commandbalancetop extends EssentialsCommand {
         }
 
         // If there are less than 50 users in our usermap, there is no need to display a warning as these calculations should be done quickly
-        if (ess.getUserMap().getUniqueUsers() > MINUSERS) {
-            sender.sendMessage(tl("orderBalances", ess.getUserMap().getUniqueUsers()));
+        if (ess.getUsers().getUserCount() > MINUSERS) {
+            sender.sendMessage(tl("orderBalances", ess.getUsers().getUserCount()));
         }
 
         ess.runTaskAsynchronously(new Viewer(sender, page, force));

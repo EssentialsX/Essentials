@@ -3,6 +3,8 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
@@ -39,7 +41,7 @@ public class Commandrepair extends EssentialsCommand {
 
     public void repairHand(final User user) throws Exception {
         final ItemStack item = user.getItemInHand();
-        if (item == null || item.getType().isBlock() || item.getDurability() == 0) {
+        if (item == null || item.getType().isBlock() || MaterialUtil.getDamage(item) == 0) {
             throw new Exception(tl("repairInvalidType"));
         }
 
@@ -61,7 +63,7 @@ public class Commandrepair extends EssentialsCommand {
 
     public void repairAll(final User user) throws Exception {
         final List<String> repaired = new ArrayList<>();
-        repairItems(user.getBase().getInventory().getContents(), user, repaired);
+        repairItems(Inventories.getInventory(user.getBase(), false), user, repaired);
 
         if (user.isAuthorized("essentials.repair.armor")) {
             repairItems(user.getBase().getInventory().getArmorContents(), user, repaired);
@@ -81,16 +83,16 @@ public class Commandrepair extends EssentialsCommand {
             throw new Exception(tl("repairInvalidType"));
         }
 
-        if (item.getDurability() == 0) {
+        if (MaterialUtil.getDamage(item) == 0) {
             throw new Exception(tl("repairAlreadyFixed"));
         }
 
-        item.setDurability((short) 0);
+        MaterialUtil.setDamage(item, 0);
     }
 
-    private void repairItems(final ItemStack[] items, final IUser user, final List<String> repaired) throws Exception {
+    private void repairItems(final ItemStack[] items, final IUser user, final List<String> repaired) {
         for (final ItemStack item : items) {
-            if (item == null || item.getType().isBlock() || item.getDurability() == 0) {
+            if (item == null || item.getType().isBlock() || MaterialUtil.getDamage(item) == 0) {
                 continue;
             }
 
@@ -123,7 +125,7 @@ public class Commandrepair extends EssentialsCommand {
 
     private Trade getCharge(final Material material) {
         final String itemName = material.toString().toLowerCase(Locale.ENGLISH);
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+        if (VersionUtil.PRE_FLATTENING) {
             final int itemId = material.getId();
             return new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + itemId, new Trade("repair-item", ess), ess), ess);
         } else {

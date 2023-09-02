@@ -1,5 +1,7 @@
 package com.earth2me.essentials.perm.impl;
 
+import com.earth2me.essentials.Essentials;
+
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -21,7 +23,7 @@ public class ModernVaultHandler extends AbstractVaultHandler {
     }
 
     @Override
-    public boolean tryProvider() {
+    public boolean tryProvider(Essentials ess) {
         return super.canLoad() && supportedPlugins.contains(getEnabledPermsPlugin());
     }
 }

@@ -55,7 +55,7 @@ public class Commandtpa extends EssentialsCommand {
                     user.sendMessage(tl("requestAcceptedFromAuto", player.getDisplayName()));
                 }
             });
-            return;
+            throw new NoChargeException();
         }
 
         if (!player.isIgnoredPlayer(user)) {

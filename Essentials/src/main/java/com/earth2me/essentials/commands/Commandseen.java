@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -33,6 +32,7 @@ public class Commandseen extends EssentialsCommand {
         final boolean showBan = sender.isAuthorized("essentials.seen.banreason", ess);
         final boolean showIp = sender.isAuthorized("essentials.seen.ip", ess);
         final boolean showLocation = sender.isAuthorized("essentials.seen.location", ess);
+        final boolean showWhitelist = sender.isAuthorized("essentials.seen.whitelist", ess);
         final boolean searchAccounts = commandLabel.contains("alts") && sender.isAuthorized("essentials.seen.alts", ess);
 
         User player;
@@ -63,7 +63,7 @@ public class Commandseen extends EssentialsCommand {
             ess.getScheduler().runTaskAsynchronously(ess, new Runnable() {
                 @Override
                 public void run() {
-                    final User userFromBukkit = ess.getUserMap().getUserFromBukkit(args[0]);
+                    final User userFromBukkit = ess.getUsers().getUser(args[0]);
                     try {
                         if (userFromBukkit != null) {
                             showUserSeen(userFromBukkit);
@@ -80,21 +80,21 @@ public class Commandseen extends EssentialsCommand {
                 }
 
                 private void showUserSeen(final User user) throws Exception {
-                    showSeenMessage(sender, user, searchAccounts, showBan, showIp, showLocation);
+                    showSeenMessage(sender, user, searchAccounts, showBan, showIp, showLocation, showWhitelist);
                 }
             });
         } else {
-            showSeenMessage(sender, player, searchAccounts, showBan, showIp, showLocation);
+            showSeenMessage(sender, player, searchAccounts, showBan, showIp, showLocation, showWhitelist);
         }
     }
 
-    private void showSeenMessage(final CommandSource sender, final User player, final boolean searchAccounts, final boolean showBan, final boolean showIp, final boolean showLocation) {
+    private void showSeenMessage(final CommandSource sender, final User player, final boolean searchAccounts, final boolean showBan, final boolean showIp, final boolean showLocation, final boolean showWhitelist) {
         if (searchAccounts) {
             seenIP(sender, player.getLastLoginAddress(), player.getDisplayName());
         } else if (player.getBase().isOnline() && canInteractWith(sender, player)) {
             seenOnline(sender, player, showIp);
         } else {
-            seenOffline(sender, player, showBan, showIp, showLocation);
+            seenOffline(sender, player, showBan, showIp, showLocation, showWhitelist);
         }
     }
 
@@ -103,8 +103,8 @@ public class Commandseen extends EssentialsCommand {
         user.setDisplayNick();
         sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
 
-        final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
-        if (history != null && history.size() > 1) {
+        final List<String> history = user.getPastUsernames();
+        if (history != null && !history.isEmpty()) {
             sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
         }
 
@@ -135,11 +135,11 @@ public class Commandseen extends EssentialsCommand {
         }
     }
 
-    private void seenOffline(final CommandSource sender, final User user, final boolean showBan, final boolean showIp, final boolean showLocation) {
+    private void seenOffline(final CommandSource sender, final User user, final boolean showBan, final boolean showIp, final boolean showLocation, final boolean showWhitelist) {
         user.setDisplayNick();
         if (user.getLastLogout() > 0) {
             sender.sendMessage(tl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
-            final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
+            final List<String> history = user.getPastUsernames();
             if (history != null && history.size() > 1) {
                 sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
             }
@@ -149,6 +149,10 @@ public class Commandseen extends EssentialsCommand {
             }
         } else {
             sender.sendMessage(tl("userUnknown", user.getName()));
+        }
+
+        if (showWhitelist) {
+            sender.sendMessage(tl("whoisWhitelist", user.getBase().isWhitelisted() ? tl("true") : tl("false")));
         }
 
         if (BanLookup.isBanned(ess, user)) {
@@ -192,14 +196,12 @@ public class Commandseen extends EssentialsCommand {
     }
 
     private void seenIP(final CommandSource sender, final String ipAddress, final String display) {
-        final UserMap userMap = ess.getUserMap();
-
         sender.sendMessage(tl("runningPlayerMatch", display));
 
         ess.runTaskAsynchronously(() -> {
             final List<String> matches = new ArrayList<>();
-            for (final UUID u : userMap.getAllUniqueUsers()) {
-                final User user = ess.getUserMap().getUser(u);
+            for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
+                final User user = ess.getUsers().loadUncachedUser(u);
                 if (user == null) {
                     continue;
                 }

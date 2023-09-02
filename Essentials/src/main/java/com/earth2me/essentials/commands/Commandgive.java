@@ -3,8 +3,9 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -37,7 +38,7 @@ public class Commandgive extends EssentialsLoopCommand {
         }
 
         try {
-            if (args.length > 3 && NumberUtil.isInt(args[2]) && NumberUtil.isInt(args[3])) {
+            if (args.length > 3 && VersionUtil.PRE_FLATTENING && NumberUtil.isInt(args[2]) && NumberUtil.isInt(args[3])) {
                 stack.setAmount(Integer.parseInt(args[2]));
                 stack.setDurability(Short.parseShort(args[3]));
             } else if (args.length > 2 && Integer.parseInt(args[2]) > 0) {
@@ -80,13 +81,8 @@ public class Commandgive extends EssentialsLoopCommand {
         final ItemStack finalStack = stack;
         loopOnlinePlayersConsumer(server, sender, false, true, args[0], player -> {
             sender.sendMessage(tl("giveSpawn", finalStack.getAmount(), itemName, player.getDisplayName()));
-            final Map<Integer, ItemStack> leftovers;
 
-            if (player.isAuthorized("essentials.oversizedstacks")) {
-                leftovers = InventoryWorkaround.addOversizedItems(player.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), finalStack);
-            } else {
-                leftovers = InventoryWorkaround.addItems(player.getBase().getInventory(), finalStack);
-            }
+            final Map<Integer, ItemStack> leftovers = Inventories.addItem(player.getBase(), player.isAuthorized("essentials.oversizedstacks") ? ess.getSettings().getOversizedStackSize() : 0, finalStack);
 
             for (final ItemStack item : leftovers.values()) {
                 if (isDropItemsIfFull) {

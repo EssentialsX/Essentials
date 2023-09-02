@@ -1,5 +1,6 @@
 package com.earth2me.essentials.config;
 
+import com.earth2me.essentials.Essentials;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
@@ -43,7 +44,7 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
             //noinspection UnstableApiUsage
             Files.move(file, new File(configFile.getParentFile(), uuid + ".yml"));
         } catch (final IOException ex) {
-            LOGGER.log(Level.WARNING, "Failed to migrate user: " + username, ex);
+            Essentials.getWrappedLogger().log(Level.WARNING, "Failed to migrate user: " + username, ex);
         }
 
         setProperty("last-account-name", username);
@@ -51,7 +52,7 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
 
     private File getAltFile() {
         final UUID fn = UUID.nameUUIDFromBytes(("OfflinePlayer:" + username.toLowerCase(Locale.ENGLISH)).getBytes(Charsets.UTF_8));
-        return new File(configFile.getParentFile(), fn.toString() + ".yml");
+        return new File(configFile.getParentFile(), fn + ".yml");
     }
 
     @Override
@@ -68,7 +69,7 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
             //noinspection UnstableApiUsage
             Files.move(getAltFile(), new File(configFile.getParentFile(), uuid + ".yml"));
         } catch (final IOException ex) {
-            LOGGER.log(Level.WARNING, "Failed to migrate user: " + username, ex);
+            Essentials.getWrappedLogger().log(Level.WARNING, "Failed to migrate user: " + username, ex);
         }
     }
 }

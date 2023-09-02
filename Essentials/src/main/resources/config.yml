@@ -27,9 +27,10 @@
 ops-name-color: '4'
 
 # The character(s) to prefix all nicknames, so that you know they are not true usernames.
+# Users with essentials.nick.hideprefix will not be prefixed with the character(s)
 nickname-prefix: '~'
 
-# The maximum length allowed in nicknames. The nickname prefix is included in this.
+# The maximum length allowed in nicknames. The nickname prefix is not included in this.
 max-nick-length: 15
 
 # A list of phrases that cannot be used in nicknames. You can include regular expressions here.
@@ -160,7 +161,7 @@ notify-player-of-mail-cooldown: 60
 #
 # If you have two plugin with the same command and you wish to force Essentials to take over, you need an alias.
 # To force essentials to take 'god' alias 'god' to 'egod'.
-# See http://wiki.bukkit.org/Commands.yml#aliases for more information.
+# See https://bukkit.fandom.com/wiki/Commands.yml#aliases for more information.
 
 overridden-commands:
 #  - god
@@ -168,7 +169,7 @@ overridden-commands:
 
 # Disabling commands here will prevent Essentials handling the command, this will not affect command conflicts.
 # You should not have to disable commands used in other plugins, they will automatically get priority.
-# See http://wiki.bukkit.org/Commands.yml#aliases to map commands to other plugins.
+# See https://bukkit.fandom.com/wiki/Commands.yml#aliases to map commands to other plugins.
 disabled-commands:
 #  - nick
 #  - clear
@@ -283,6 +284,7 @@ player-commands:
   - protect
   - r
   - rules
+  - renamehome
   - realname
   - seen
   - sell
@@ -593,6 +595,9 @@ repair-enchanted: true
 # Warning: Mixing and overleveling some enchantments can cause issues with clients, servers and plugins.
 unsafe-enchantments: false
 
+# The maximum range from the player that the /tree and /bigtree commands can spawn trees.
+tree-command-range-limit: 300
+
 #Do you want Essentials to keep track of previous location for /back in the teleport listener?
 #If you set this to true any plugin that uses teleport will have the previous location registered.
 register-back-in-listener: false
@@ -726,6 +731,10 @@ log-command-block-commands: true
 
 # Set the maximum speed for projectiles spawned with /fireball.
 max-projectile-speed: 8
+
+# Set the maximum amount of lore lines a user can set with the /itemlore command.
+# Users with the essentials.itemlore.bypass permission will be able to bypass this limit.
+max-itemlore-lines: 10
 
 # Should EssentialsX check for updates?
 # If set to true, EssentialsX will show notifications when a new version is available.
@@ -928,6 +937,15 @@ chat:
   world-aliases:
   #  plots: "&dP&r"
   #  creative: "&eC&r"
+
+  # Whether players should be placed into shout mode by default.
+  shout-default: false
+
+  # Whether a player's shout mode should persist restarts.
+  persist-shout: false
+
+  # Whether chat questions should be enabled or not.
+  question-enabled: true
 
 ############################################################
 # +------------------------------------------------------+ #

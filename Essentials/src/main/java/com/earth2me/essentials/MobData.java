@@ -1,12 +1,13 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
@@ -35,7 +36,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -197,9 +197,21 @@ public enum MobData {
     CYAN_AXOLOTL("cyan", MobCompat.AXOLOTL, "axolotl:CYAN", true),
     BLUE_AXOLOTL("blue", MobCompat.AXOLOTL, "axolotl:BLUE", true),
     SCREAMING_GOAT("screaming", MobCompat.GOAT, Data.GOAT_SCREAMING, true),
+    TEMPERATE_FROG("temperate", MobCompat.FROG, "frog:TEMPERATE", true),
+    WARM_FROG("warm", MobCompat.FROG, "frog:WARM", true),
+    COLD_FROG("cold", MobCompat.FROG, "frog:COLD", true),
+    ACACIA_BOAT("acacia", Boat.class, MobCompat.BoatVariant.ACACIA, true),
+    BIRCH_BOAT("birch", Boat.class, MobCompat.BoatVariant.BIRCH, true),
+    DARK_OAK_BOAT("darkoak", Boat.class, MobCompat.BoatVariant.DARKOAK, true),
+    GENERIC_BOAT("generic", Boat.class, MobCompat.BoatVariant.GENERIC, true),
+    JUNGLE_BOAT("jungle", Boat.class, MobCompat.BoatVariant.JUNGLE, true),
+    REDWOOD_BOAT("redwood", Boat.class, MobCompat.BoatVariant.REDWOOD, true),
+    MANGROVE_BOAT("mangrove", Boat.class, MobCompat.BoatVariant.MANGROVE, true),
+    OAK_BOAT("oak", Boat.class, MobCompat.BoatVariant.OAK, true),
+    SPRUCE_BOAT("spruce", Boat.class, MobCompat.BoatVariant.SPRUCE, true),
+    SADDLE_CAMEL("saddle", MobCompat.CAMEL, Data.CAMELSADDLE, true),
     ;
 
-    public static final Logger logger = Logger.getLogger("Essentials");
     final private String nickname;
     final private List<String> suggestions;
     final private Object type;
@@ -351,8 +363,8 @@ public enum MobData {
                 ((Horse) spawned).getInventory().setArmor(new ItemStack((Material) this.value, 1));
             } else if (this.type.equals(EntityType.ZOMBIE.getEntityClass()) || this.type.equals(EntityType.SKELETON)) {
                 final EntityEquipment invent = ((LivingEntity) spawned).getEquipment();
-                InventoryWorkaround.setItemInMainHand(invent, new ItemStack((Material) this.value, 1));
-                InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
+                Inventories.setItemInMainHand(invent, new ItemStack((Material) this.value, 1));
+                Inventories.setItemInMainHandDropChance(invent, 0.1f);
             }
         } else if (this.value.equals(Data.RAID_LEADER)) {
             ((Raider) spawned).setPatrolLeader(true);
@@ -376,6 +388,10 @@ public enum MobData {
             }
         } else if (this.value.equals(Data.GOAT_SCREAMING)) {
             ((Goat) spawned).setScreaming(true);
+        } else if (this.value.equals(Data.CAMELSADDLE)) {
+            MobCompat.setCamelSaddle(spawned, target);
+        } else if (this.value instanceof MobCompat.BoatVariant) {
+            MobCompat.setBoatVariant(spawned, (MobCompat.BoatVariant) this.value);
         } else if (this.value instanceof String) {
             final String[] split = ((String) this.value).split(":");
             switch (split[0]) {
@@ -403,13 +419,15 @@ public enum MobData {
                 case "fox":
                     MobCompat.setFoxType(spawned, split[1]);
                     break;
-                case "axolotl": {
+                case "axolotl":
                     MobCompat.setAxolotlVariant(spawned, split[1]);
                     break;
-                }
+                case "frog":
+                    MobCompat.setFrogVariant(spawned, split[1]);
+                    break;
             }
         } else {
-            logger.warning("Unknown mob data type: " + this.toString());
+            Essentials.getWrappedLogger().warning("Unknown mob data type: " + this.toString());
         }
     }
 
@@ -431,5 +449,6 @@ public enum MobData {
         FISH_BODY_COLOR,
         FISH_PATTERN_COLOR,
         GOAT_SCREAMING,
+        CAMELSADDLE,
     }
 }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.protect;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
@@ -24,6 +25,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
 
     @Override
     public void onEnable() {
+        EssentialsLogger.updatePluginLogger(this);
         final PluginManager pm = this.getServer().getPluginManager();
         final Plugin essPlugin = pm.getPlugin("Essentials");
         if (essPlugin == null || !essPlugin.isEnabled()) {

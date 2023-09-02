@@ -2,13 +2,15 @@ package net.essentialsx.discord.interactions;
 
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.base.Joiner;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.utils.messages.MessageEditBuilder;
 import net.essentialsx.api.v2.services.discord.InteractionChannel;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
 import net.essentialsx.api.v2.services.discord.InteractionMember;
+import net.essentialsx.api.v2.services.discord.InteractionRole;
+import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.util.DiscordUtil;
 
 import java.util.ArrayList;
@@ -20,12 +22,12 @@ import java.util.logging.Logger;
  * A class which provides information about what triggered an interaction event.
  */
 public class InteractionEventImpl implements InteractionEvent {
-    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
-    private final SlashCommandEvent event;
+    private final static Logger logger = EssentialsDiscord.getWrappedLogger();
+    private final SlashCommandInteractionEvent event;
     private final InteractionMember member;
     private final List<String> replyBuffer = new ArrayList<>();
 
-    public InteractionEventImpl(final SlashCommandEvent jdaEvent) {
+    public InteractionEventImpl(final SlashCommandInteractionEvent jdaEvent) {
         this.event = jdaEvent;
         this.member = new InteractionMemberImpl(jdaEvent.getMember());
     }
@@ -37,7 +39,7 @@ public class InteractionEventImpl implements InteractionEvent {
         String reply = Joiner.on('\n').join(replyBuffer);
         reply = reply.substring(0, Math.min(Message.MAX_CONTENT_LENGTH, reply.length()));
         event.getHook().editOriginal(
-                new MessageBuilder()
+                new MessageEditBuilder()
                         .setContent(reply)
                         .setAllowedMentions(DiscordUtil.NO_GROUP_MENTIONS).build())
                 .queue(null, error -> logger.log(Level.SEVERE, "Error while editing command interaction response", error));
@@ -75,7 +77,13 @@ public class InteractionEventImpl implements InteractionEvent {
     @Override
     public InteractionChannel getChannelArgument(String key) {
         final OptionMapping mapping = event.getOption(key);
-        return mapping == null ? null : new InteractionChannelImpl(mapping.getAsGuildChannel());
+        return mapping == null ? null : new InteractionChannelImpl(mapping.getAsChannel().asGuildMessageChannel());
+    }
+
+    @Override
+    public InteractionRole getRoleArgument(String key) {
+        final OptionMapping mapping = event.getOption(key);
+        return mapping == null ? null : new InteractionRoleImpl(mapping.getAsRole());
     }
 
     @Override

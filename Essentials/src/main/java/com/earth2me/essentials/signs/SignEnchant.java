@@ -4,6 +4,7 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Enchantments;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import net.ess3.api.IEssentials;
 import net.ess3.provider.MaterialTagProvider;
 import org.bukkit.enchantments.Enchantment;
@@ -66,7 +67,7 @@ public class SignEnchant extends EssentialsSign {
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
-        final ItemStack playerHand = player.getBase().getItemInHand();
+        final ItemStack playerHand = Inventories.getItemInHand(player.getBase());
         final MaterialTagProvider tagProvider = ess.getMaterialTagProvider();
         final String itemName = sign.getLine(1);
         final ItemStack search = itemName.equals("*") || itemName.equalsIgnoreCase("any") || (tagProvider != null && tagProvider.tagExists(itemName) && tagProvider.isTagged(itemName, playerHand.getType())) ? null : getItemStack(itemName, 1, ess);

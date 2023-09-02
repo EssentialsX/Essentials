@@ -40,7 +40,7 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendMessage(tl("whoisHunger", user.getBase().getFoodLevel(), user.getBase().getSaturation()));
         sender.sendMessage(tl("whoisExp", SetExpFix.getTotalExperience(user.getBase()), user.getBase().getLevel()));
         sender.sendMessage(tl("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
-        final long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50);
+        final long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50L);
         sender.sendMessage(tl("whoisPlaytime", DateUtil.formatDateDiff(playtimeMs)));
         if (!ess.getSettings().isEcoDisabled()) {
             sender.sendMessage(tl("whoisMoney", NumberUtil.displayCurrency(user.getMoney(), ess)));
@@ -57,6 +57,7 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendMessage(tl("whoisOp", user.getBase().isOp() ? tl("true") : tl("false")));
         sender.sendMessage(tl("whoisFly", user.getBase().getAllowFlight() ? tl("true") : tl("false"), user.getBase().isFlying() ? tl("flying") : tl("notFlying")));
         sender.sendMessage(tl("whoisSpeed", user.getBase().isFlying() ? user.getBase().getFlySpeed() : user.getBase().getWalkSpeed()));
+        sender.sendMessage(tl("whoisWhitelist", user.getBase().isWhitelisted() ? tl("true") : tl("false")));
         if (user.isAfk()) {
             sender.sendMessage(tl("whoisAFKSince", tl("true"), DateUtil.formatDateDiff(user.getAfkSince())));
         } else {

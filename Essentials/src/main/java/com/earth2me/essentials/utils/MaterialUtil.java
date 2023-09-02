@@ -3,6 +3,8 @@ package com.earth2me.essentials.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.material.MaterialData;
 
 import java.lang.reflect.InvocationTargetException;
@@ -11,7 +13,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public final class MaterialUtil {
-
     public static final Material SPAWNER = EnumUtil.getMaterial("MOB_SPAWNER", "SPAWNER");
     private static final Set<Material> BEDS;
     private static final Set<Material> BANNERS;
@@ -26,6 +27,8 @@ public final class MaterialUtil {
     private static final Set<Material> POTIONS;
     private static final Set<Material> SIGN_POSTS;
     private static final Set<Material> WALL_SIGNS;
+    private static final Set<Material> HANGING_SIGNS;
+    private static final Set<Material> HANGING_WALL_SIGNS;
 
     private static final Set<Material> HELMETS;
     private static final Set<Material> CHESTPLATES;
@@ -70,7 +73,7 @@ public final class MaterialUtil {
         MOB_HEADS = EnumUtil.getAllMatching(Material.class, "SKELETON_SKULL",
             "SKELETON_WALL_SKULL", "WITHER_SKELETON_SKULL", "WITHER_SKELETON_WALL_SKULL",
             "CREEPER_HEAD", "CREEPER_WALL_HEAD", "ZOMBIE_HEAD", "ZOMBIE_WALL_HEAD", "DRAGON_HEAD"
-            , "DRAGON_WALL_HEAD");
+            , "DRAGON_WALL_HEAD", "PIGLIN_HEAD", "PIGLIN_WALL_HEAD");
 
         PLAYER_HEADS = EnumUtil.getAllMatching(Material.class, "PLAYER_HEAD", "PLAYER_WALL_HEAD");
 
@@ -81,13 +84,31 @@ public final class MaterialUtil {
             "ACACIA_SIGN", "BIRCH_SIGN",
             "DARK_OAK_SIGN", "JUNGLE_SIGN",
             "OAK_SIGN", "SPRUCE_SIGN",
-            "CRIMSON_SIGN", "WARPED_SIGN");
+            "CRIMSON_SIGN", "WARPED_SIGN",
+            "MANGROVE_SIGN", "CHERRY_SIGN",
+            "BAMBOO_SIGN");
 
         WALL_SIGNS = EnumUtil.getAllMatching(Material.class, "WALL_SIGN",
             "ACACIA_WALL_SIGN", "BIRCH_WALL_SIGN",
             "DARK_OAK_WALL_SIGN", "JUNGLE_WALL_SIGN",
             "OAK_WALL_SIGN", "SPRUCE_WALL_SIGN",
-            "CRIMSON_WALL_SIGN", "WARPED_WALL_SIGN");
+            "CRIMSON_WALL_SIGN", "WARPED_WALL_SIGN",
+            "MANGROVE_WALL_SIGN", "CHERRY_WALL_SIGN",
+            "BAMBOO_WALL_SIGN");
+
+        HANGING_SIGNS = EnumUtil.getAllMatching(Material.class, "ACACIA_HANGING_SIGN", "BIRCH_HANGING_SIGN",
+            "DARK_OAK_HANGING_SIGN", "JUNGLE_HANGING_SIGN",
+            "OAK_HANGING_SIGN", "SPRUCE_HANGING_SIGN",
+            "CRIMSON_HANGING_SIGN", "WARPED_HANGING_SIGN",
+            "MANGROVE_HANGING_SIGN", "CHERRY_HANGING_SIGN",
+            "BAMBOO_HANGING_SIGN");
+
+        HANGING_WALL_SIGNS = EnumUtil.getAllMatching(Material.class, "ACACIA_WALL_HANGING_SIGN", "BIRCH_WALL_HANGING_SIGN",
+                "DARK_OAK_WALL_HANGING_SIGN", "JUNGLE_WALL_HANGING_SIGN",
+                "OAK_WALL_HANGING_SIGN", "SPRUCE_WALL_HANGING_SIGN",
+                "CRIMSON_WALL_HANGING_SIGN", "WARPED_WALL_HANGING_SIGN",
+                "MANGROVE_WALL_HANGING_SIGN", "CHERRY_WALL_HANGING_SIGN",
+                "BAMBOO_WALL_HANGING_SIGN");
     }
 
     private MaterialUtil() {
@@ -129,20 +150,12 @@ public final class MaterialUtil {
         return LEATHER_ARMOR.contains(material);
     }
 
-    public static boolean isMobHead(final Material material, final int durability) {
-        if (MOB_HEADS.contains(material)) {
+    public static boolean isPlayerHead(final ItemStack stack) {
+        if (PLAYER_HEADS.contains(stack.getType())) {
             return true;
         }
 
-        return LEGACY_SKULLS.contains(material) && (durability != 3);
-    }
-
-    public static boolean isPlayerHead(final Material material, final int durability) {
-        if (PLAYER_HEADS.contains(material)) {
-            return true;
-        }
-
-        return LEGACY_SKULLS.contains(material) && durability == 3;
+        return VersionUtil.PRE_FLATTENING && LEGACY_SKULLS.contains(stack.getType()) && stack.getDurability() == 3;
     }
 
     public static boolean isPotion(final Material material) {
@@ -157,20 +170,50 @@ public final class MaterialUtil {
         return WALL_SIGNS.contains(material);
     }
 
+    public static boolean isHangingSign(final Material material) {
+        return HANGING_SIGNS.contains(material);
+    }
+
+    public static boolean isWallHangingSign(final Material material) {
+        return HANGING_WALL_SIGNS.contains(material);
+    }
+
     public static boolean isEditableBook(final Material material) {
         return EDITABLE_BOOKS.contains(material);
     }
 
     public static boolean isSign(final Material material) {
-        return isSignPost(material) || isWallSign(material);
+        return isSignPost(material) || isWallSign(material) || isHangingSign(material) || isWallHangingSign(material);
     }
 
     public static boolean isSkull(final Material material) {
-        return isPlayerHead(material, -1) || isMobHead(material, -1);
+        return PLAYER_HEADS.contains(material) || LEGACY_SKULLS.contains(material);
     }
 
     public static boolean isAir(final Material material) {
         return material == Material.AIR || (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01) && material.isAir());
+    }
+
+    public static int getDamage(final ItemStack stack) {
+        if (VersionUtil.PRE_FLATTENING) {
+            return stack.getDurability();
+        }
+        if (stack.getItemMeta() instanceof Damageable) {
+            return ((Damageable) stack.getItemMeta()).getDamage();
+        }
+        return 0;
+    }
+
+    public static void setDamage(final ItemStack stack, final int damage) {
+        if (VersionUtil.PRE_FLATTENING) {
+            stack.setDurability((short) damage);
+        } else {
+            if (stack.getItemMeta() instanceof Damageable) {
+                final Damageable damageable = (Damageable) stack.getItemMeta();
+                damageable.setDamage(damage);
+                stack.setItemMeta(damageable);
+            }
+        }
     }
 
     public static Material convertFromLegacy(final int id, final byte damage) {

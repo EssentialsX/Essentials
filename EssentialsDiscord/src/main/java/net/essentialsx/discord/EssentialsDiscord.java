@@ -1,5 +1,6 @@
 package net.essentialsx.discord;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.metrics.MetricsWrapper;
@@ -17,16 +18,17 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
-    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
     private transient IEssentials ess;
     private transient MetricsWrapper metrics = null;
 
     private JDADiscordService jda;
     private DiscordSettings settings;
     private boolean isPAPI = false;
+    private boolean isEssentialsChat = false;
 
     @Override
     public void onEnable() {
+        EssentialsLogger.updatePluginLogger(this);
         ess = (IEssentials) getServer().getPluginManager().getPlugin("Essentials");
         if (ess == null || !ess.isEnabled()) {
             setEnabled(false);
@@ -39,11 +41,13 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         // JDK-8274349 - Mitigation for a regression in Java 17 on 1 core systems which was fixed in 17.0.2
         final String[] javaVersion = System.getProperty("java.version").split("\\.");
         if (Runtime.getRuntime().availableProcessors() <= 1 && javaVersion[0].startsWith("17") && (javaVersion.length < 2 || (javaVersion[1].equals("0") && javaVersion[2].startsWith("1")))) {
-            logger.log(Level.INFO, "Essentials is mitigating JDK-8274349");
+            getLogger().log(Level.INFO, "Essentials is mitigating JDK-8274349");
             System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "1");
         }
 
         isPAPI = getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
+
+        isEssentialsChat = getServer().getPluginManager().getPlugin("EssentialsChat") != null;
 
         settings = new DiscordSettings(this);
         ess.addReloadListener(settings);
@@ -58,7 +62,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
                 jda.startup();
                 ess.scheduleSyncDelayedTask(() -> ((InteractionControllerImpl) jda.getInteractionController()).processBatchRegistration());
             } catch (Exception e) {
-                logger.log(Level.SEVERE, tl("discordErrorLogin", e.getMessage()));
+                getLogger().log(Level.SEVERE, tl("discordErrorLogin", e.getMessage()));
                 if (ess.getSettings().isDebug()) {
                     e.printStackTrace();
                 }
@@ -67,8 +71,18 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         }
     }
 
+    public static Logger getWrappedLogger() {
+        try {
+            return EssentialsLogger.getLoggerProvider("EssentialsDiscord");
+        } catch (Throwable ignored) {
+            // In case Essentials isn't installed/loaded
+            return Logger.getLogger("EssentialsDiscord");
+        }
+    }
+
     public void onReload() {
         if (jda != null && !jda.isInvalidStartup()) {
+            jda.updateListener();
             jda.updatePresence();
             jda.updatePrimaryChannel();
             jda.updateConsoleRelay();
@@ -90,6 +104,10 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
     public boolean isPAPI() {
         return isPAPI;
+    }
+
+    public boolean isEssentialsChat() {
+        return isEssentialsChat;
     }
 
     @Override
