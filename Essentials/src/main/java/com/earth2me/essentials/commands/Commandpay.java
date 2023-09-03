@@ -72,6 +72,7 @@ public class Commandpay extends EssentialsLoopCommand {
                 }
             }
         }
+
         final BigDecimal amount = tempAmount;
 
         if (amount.compareTo(ess.getSettings().getMinimumPayAmount()) < 0) { // Check if amount is less than minimum-pay-amount
@@ -139,5 +140,4 @@ public class Commandpay extends EssentialsLoopCommand {
             return Collections.emptyList();
         }
     }
-
 }

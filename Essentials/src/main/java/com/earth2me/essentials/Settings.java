@@ -1951,7 +1951,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isPayModifierEnabled() {
-        return config.getBoolean("pay-modifier-enabled", true);
+        return config.getBoolean("pay-modifier-enabled", false);
     }
 
 }
