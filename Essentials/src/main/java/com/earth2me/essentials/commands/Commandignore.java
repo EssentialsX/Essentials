@@ -44,6 +44,8 @@ public class Commandignore extends EssentialsCommand {
         } else if (user.isIgnoredPlayer(player)) {
             user.setIgnoredPlayer(player, false);
             user.sendMessage(tl("unignorePlayer", player.getName()));
+        } else if (user.getUUID().equals(player.getUUID())) {
+            user.sendMessage(tl("ignoreYourself"));
         } else {
             user.setIgnoredPlayer(player, true);
             user.sendMessage(tl("ignorePlayer", player.getName()));

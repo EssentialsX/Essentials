@@ -290,7 +290,7 @@ commands:
     aliases: [eloom]
   mail:
     description: Manages inter-player, intra-server mail.
-    usage: /<command> [read|clear|clear [number]|send [to] [message]|sendtemp [to] [expire time] [message]|sendall [message]]
+    usage: /<command> [read|clear|clear [number]|clear <player> [number]|send [to] [message]|sendtemp [to] [expire time] [message]|sendall [message]]
     aliases: [email,eemail,memo,ememo]
   me:
     description: Describes an action in the context of the player.
@@ -638,6 +638,7 @@ permissions:
       essentials.seen.ip: true
       essentials.seen.location: true
       essentials.seen.uuid: true
+      essentials.seen.whitelist: true
   essentials.keepinv:
     default: false
     description: Controls whether players keep their inventory on death.
@@ -713,6 +714,7 @@ permissions:
       essentials.sudo.exempt: true
       essentials.tempban.exempt: true
       essentials.exempt.protect: true
+      essentials.editsign.waxed.exempt: true
   essentials.nick.hideprefix:
     default: false
     description: Players with this permission will not have the nickname prefix applied to them
