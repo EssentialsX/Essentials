@@ -38,11 +38,12 @@ public class Commandpay extends EssentialsLoopCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        if (args[1].startsWith("-")) {
+        final String amountStr = args[1];
+        if (amountStr.startsWith("-")) {
             throw new Exception(tl("payMustBePositive"));
         }
 
-        final Matcher formatMatcher = NUMBER_FORMAT.matcher(args[1]);
+        final Matcher formatMatcher = NUMBER_FORMAT.matcher(amountStr);
         if (!formatMatcher.matches()) {
             throw new Exception(tl("numberRequired"));
         }
