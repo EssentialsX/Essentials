@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
 import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -52,14 +53,14 @@ public class Commandwhois extends EssentialsCommand {
             sender.sendTl("whoisGeoLocation", location);
         }
         sender.sendTl("whoisGamemode", sender.tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)));
-        sender.sendTl("whoisGod", AdventureUtil.parsed(user.isGodModeEnabled() ? sender.tl("true") : sender.tl("false")));
-        sender.sendTl("whoisOp", AdventureUtil.parsed(user.getBase().isOp() ? sender.tl("true") : sender.tl("false")));
-        sender.sendTl("whoisFly", AdventureUtil.parsed(user.getBase().getAllowFlight() ? sender.tl("true") : sender.tl("false")), AdventureUtil.parsed(user.getBase().isFlying() ? sender.tl("flying") : sender.tl("notFlying")));
+        sender.sendTl("whoisGod", CommonPlaceholders.trueFalse(sender, user.isGodModeEnabled()));
+        sender.sendTl("whoisOp", CommonPlaceholders.trueFalse(sender, user.getBase().isOp()));
+        sender.sendTl("whoisFly", CommonPlaceholders.trueFalse(sender, user.getBase().getAllowFlight()), AdventureUtil.parsed(user.getBase().isFlying() ? sender.tl("flying") : sender.tl("notFlying")));
         sender.sendTl("whoisSpeed", user.getBase().isFlying() ? user.getBase().getFlySpeed() : user.getBase().getWalkSpeed());
         if (user.isAfk()) {
-            sender.sendTl("whoisAFKSince", AdventureUtil.parsed(sender.tl("true")), DateUtil.formatDateDiff(user.getAfkSince()));
+            sender.sendTl("whoisAFKSince", CommonPlaceholders.trueFalse(sender, true), DateUtil.formatDateDiff(user.getAfkSince()));
         } else {
-            sender.sendTl("whoisAFK", AdventureUtil.parsed(sender.tl("false")));
+            sender.sendTl("whoisAFK", CommonPlaceholders.trueFalse(sender, false));
         }
         sender.sendTl("whoisJail", AdventureUtil.parsed(user.isJailed() ? user.getJailTimeout() > 0 ? user.getFormattedJailTime() : sender.tl("true") : sender.tl("false")));
 

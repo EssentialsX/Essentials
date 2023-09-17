@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
@@ -112,17 +113,17 @@ public class Commandseen extends EssentialsCommand {
         }
 
         if (user.isAfk()) {
-            sender.sendTl("whoisAFK", AdventureUtil.parsed(sender.tl("true")));
+            sender.sendTl("whoisAFK", CommonPlaceholders.trueFalse(sender, true));
         }
         if (user.isJailed()) {
-            sender.sendTl("whoisJail", user.getJailTimeout() > 0 ? user.getFormattedJailTime() : AdventureUtil.parsed(sender.tl("true")));
+            sender.sendTl("whoisJail", user.getJailTimeout() > 0 ? user.getFormattedJailTime() : CommonPlaceholders.trueFalse(sender, true));
         }
         if (user.isMuted()) {
             final long muteTimeout = user.getMuteTimeout();
             if (!user.hasMuteReason()) {
-                sender.sendTl("whoisMuted", muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : AdventureUtil.parsed(sender.tl("true")));
+                sender.sendTl("whoisMuted", muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : CommonPlaceholders.trueFalse(sender, true));
             } else {
-                sender.sendTl("whoisMutedReason", muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : AdventureUtil.parsed(sender.tl("true")), user.getMuteReason());
+                sender.sendTl("whoisMutedReason", muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : CommonPlaceholders.trueFalse(sender, true), user.getMuteReason());
             }
         }
         final String location = user.getGeoLocation();
@@ -152,7 +153,7 @@ public class Commandseen extends EssentialsCommand {
 
         if (BanLookup.isBanned(ess, user)) {
             final BanEntry banEntry = BanLookup.getBanEntry(ess, user.getName());
-            final Object reason = showBan ? banEntry.getReason() : AdventureUtil.parsed(sender.tl("true"));
+            final Object reason = showBan ? banEntry.getReason() : CommonPlaceholders.trueFalse(sender, true);
             sender.sendTl("whoisBanned", reason);
             if (banEntry.getExpiration() != null) {
                 final Date expiry = banEntry.getExpiration();
@@ -167,9 +168,9 @@ public class Commandseen extends EssentialsCommand {
         if (user.isMuted()) {
             final long muteTimeout = user.getMuteTimeout();
             if (!user.hasMuteReason()) {
-                sender.sendTl("whoisMuted", muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : AdventureUtil.parsed(sender.tl("true")));
+                sender.sendTl("whoisMuted", muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : CommonPlaceholders.trueFalse(sender, true));
             } else {
-                sender.sendTl("whoisMutedReason", muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : AdventureUtil.parsed(sender.tl("true")), user.getMuteReason());
+                sender.sendTl("whoisMutedReason", muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : CommonPlaceholders.trueFalse(sender, true), user.getMuteReason());
             }
         }
 

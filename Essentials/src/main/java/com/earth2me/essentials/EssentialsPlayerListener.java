@@ -6,7 +6,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
@@ -454,7 +454,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         user.getBase().setAllowFlight(true);
                         user.getBase().setFlying(true);
                         if (ess.getSettings().isSendFlyEnableOnJoin()) {
-                            user.sendTl("flyMode", AdventureUtil.parsed(user.playerTl("enabled")), user.getDisplayName());
+                            user.sendTl("flyMode", CommonPlaceholders.enableDisable(user.getSource(), true), user.getDisplayName());
                         }
                     }
                 }
