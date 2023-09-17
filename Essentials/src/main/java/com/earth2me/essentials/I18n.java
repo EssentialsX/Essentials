@@ -163,7 +163,7 @@ public class I18n implements net.ess3.api.II18n {
         }
 
         final Object[] processedArgs = mutateArgs(objects, arg -> {
-            final String str = arg instanceof AdventureUtil.Placeholder ? arg.toString() : AdventureUtil.miniMessage().escapeTags(arg.toString());
+            final String str = arg instanceof AdventureUtil.ParsedPlaceholder ? arg.toString() : AdventureUtil.miniMessage().escapeTags(arg.toString());
             return AdventureUtil.minifyLegacy(str);
         });
 

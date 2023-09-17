@@ -93,8 +93,8 @@ public final class AdventureUtil {
         return COLORS[index];
     }
 
-    public static Placeholder parsed(final String literal) {
-        return new Placeholder(literal);
+    public static ParsedPlaceholder parsed(final String literal) {
+        return new ParsedPlaceholder(literal);
     }
 
     public static Tag supplyTag(final boolean primary) {
@@ -104,10 +104,10 @@ public final class AdventureUtil {
         return ess != null ? ess.getSettings().getSecondaryColor() : Tag.styling(NamedTextColor.RED);
     }
 
-    public static class Placeholder {
+    public static class ParsedPlaceholder {
         private final String value;
 
-        public Placeholder(String value) {
+        public ParsedPlaceholder(String value) {
             this.value = value;
         }
 
