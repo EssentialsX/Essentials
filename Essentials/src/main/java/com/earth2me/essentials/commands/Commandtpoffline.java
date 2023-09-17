@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -21,7 +22,7 @@ public class Commandtpoffline extends EssentialsCommand {
             final Location logout = target.getLogoutLocation();
 
             if (logout == null) {
-                user.sendTl("teleportOfflineUnknown", user.getDisplayName());
+                user.sendTl("teleportOfflineUnknown", CommonPlaceholders.displayName(user));
                 throw new NoChargeException();
             }
 

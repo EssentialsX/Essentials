@@ -4,6 +4,7 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import net.ess3.api.events.PrivateMessagePreSendEvent;
 import net.ess3.api.events.PrivateMessageSentEvent;
 import org.bukkit.entity.Player;
@@ -94,10 +95,10 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         final MessageResponse messageResponse = recipient.onReceiveMessage(this.parent, message);
         switch (messageResponse) {
             case UNREACHABLE:
-                sendMessage(tlSender("recentlyForeverAlone", recipient.getDisplayName()));
+                sendMessage(tlSender("recentlyForeverAlone", CommonPlaceholders.displayNameRecipient(recipient)));
                 break;
             case MESSAGES_IGNORED:
-                sendMessage(tlSender("msgIgnore", recipient.getDisplayName()));
+                sendMessage(tlSender("msgIgnore", CommonPlaceholders.displayNameRecipient(recipient)));
                 break;
             case SENDER_IGNORED:
                 break;
@@ -105,13 +106,13 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             case SUCCESS_BUT_AFK:
                 // Currently, only IUser can be afk, so we unsafely cast to get the afk message.
                 if (((IUser) recipient).getAfkMessage() != null) {
-                    sendMessage(tlSender("userAFKWithMessage", recipient.getDisplayName(), ((IUser) recipient).getAfkMessage()));
+                    sendMessage(tlSender("userAFKWithMessage", CommonPlaceholders.displayNameRecipient(recipient), ((IUser) recipient).getAfkMessage()));
                 } else {
-                    sendMessage(tlSender("userAFK", recipient.getDisplayName()));
+                    sendMessage(tlSender("userAFK", CommonPlaceholders.displayNameRecipient(recipient)));
                 }
                 // fall through
             default:
-                sendMessage(tlLiteral("msgFormat", AdventureUtil.parsed(tlSender("meSender")), recipient.getDisplayName(), message));
+                sendMessage(tlLiteral("msgFormat", AdventureUtil.parsed(tlSender("meSender")), CommonPlaceholders.displayNameRecipient(recipient), message));
 
                 // Better Social Spy
                 if (ess.getSettings().isSocialSpyMessages()) {
@@ -127,9 +128,9 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                                     && !onlineUser.equals(senderUser)
                                     && !onlineUser.equals(recipient)) {
                                 if (senderUser.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
-                                    onlineUser.sendMessage(tlSender("socialSpyMutedPrefix") + tlLiteral("socialSpyMsgFormat", getDisplayName(), recipient.getDisplayName(), message));
+                                    onlineUser.sendMessage(tlSender("socialSpyMutedPrefix") + tlLiteral("socialSpyMsgFormat", CommonPlaceholders.displayNameRecipient(this), CommonPlaceholders.displayNameRecipient(recipient), message));
                                 } else {
-                                    onlineUser.sendMessage(tlLiteral("socialSpyPrefix") + tlLiteral("socialSpyMsgFormat", getDisplayName(), recipient.getDisplayName(), message));
+                                    onlineUser.sendMessage(tlLiteral("socialSpyPrefix") + tlLiteral("socialSpyMsgFormat", CommonPlaceholders.displayNameRecipient(this), CommonPlaceholders.displayNameRecipient(recipient), message));
                                 }
                             }
                         }
@@ -169,7 +170,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             }
         }
         // Display the formatted message to this recipient.
-        sendMessage(tlLiteral("msgFormat", sender.getDisplayName(), tlSender("meRecipient"), message));
+        sendMessage(tlLiteral("msgFormat", CommonPlaceholders.displayNameRecipient(sender), tlSender("meRecipient"), message));
 
         if (isLastMessageReplyRecipient) {
             // If this recipient doesn't have a reply recipient, initiate by setting the first

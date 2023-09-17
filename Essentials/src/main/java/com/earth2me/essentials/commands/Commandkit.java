@@ -3,7 +3,9 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.StringUtil;
+import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 
@@ -43,7 +45,7 @@ public class Commandkit extends EssentialsCommand {
             for (final String kitName : args[0].toLowerCase(Locale.ENGLISH).split(",")) {
                 new Kit(kitName, ess).expandItems(userTo);
 
-                sender.sendTl("kitGiveTo", kitName, userTo.getDisplayName());
+                sender.sendTl("kitGiveTo", kitName, CommonPlaceholders.displayName((IUser) userTo));
                 userTo.sendTl("kitReceive", kitName);
             }
         }
@@ -79,7 +81,7 @@ public class Commandkit extends EssentialsCommand {
                 kit.chargeUser(userTo);
 
                 if (!userFrom.equals(userTo)) {
-                    userFrom.sendTl("kitGiveTo", kit.getName(), userTo.getDisplayName());
+                    userFrom.sendTl("kitGiveTo", kit.getName(), CommonPlaceholders.displayName((IUser) userTo));
                 }
 
                 userTo.sendTl("kitReceive", kit.getName());

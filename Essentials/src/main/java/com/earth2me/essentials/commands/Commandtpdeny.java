@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.TeleportRequestResponseEvent;
 import org.bukkit.Bukkit;
@@ -54,7 +55,7 @@ public class Commandtpdeny extends EssentialsCommand {
         }
 
         user.sendTl("requestDenied");
-        player.sendTl("requestDeniedFrom", user.getDisplayName());
+        player.sendTl("requestDeniedFrom", CommonPlaceholders.displayName(user));
         user.removeTpaRequest(denyRequest.getName());
     }
 
@@ -69,7 +70,7 @@ public class Commandtpdeny extends EssentialsCommand {
             }
 
             if (player != null && player.getBase().isOnline()) {
-                player.sendTl("requestDeniedFrom", user.getDisplayName());
+                player.sendTl("requestDeniedFrom", CommonPlaceholders.displayName(user));
             }
 
             user.removeTpaRequest(request.getName());

@@ -2,6 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
+import net.ess3.api.IUser;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -69,7 +71,7 @@ public class Commandheal extends EssentialsLoopCommand {
                     player.removePotionEffect(effect.getType());
                 }
             }
-            sender.sendTl("healOther", user.getDisplayName());
+            sender.sendTl("healOther", CommonPlaceholders.displayName((IUser) user));
         } catch (final QuietAbortException e) {
             //Handle Quietly
         }

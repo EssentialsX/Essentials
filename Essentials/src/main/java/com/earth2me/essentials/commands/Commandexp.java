@@ -4,6 +4,8 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
+import com.earth2me.essentials.messaging.IMessageRecipient;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
@@ -97,7 +99,7 @@ public class Commandexp extends EssentialsLoopCommand {
     }
 
     private void showExp(final CommandSource sender, final IUser target) {
-        sender.sendTl("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target.getBase()), target.getBase().getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase()));
+        sender.sendTl("exp", CommonPlaceholders.displayNameRecipient((IMessageRecipient) target), SetExpFix.getTotalExperience(target.getBase()), target.getBase().getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase()));
     }
 
     //TODO: Limit who can give negative exp?
@@ -129,7 +131,7 @@ public class Commandexp extends EssentialsLoopCommand {
             amount = 0L;
         }
         SetExpFix.setTotalExperience(target.getBase(), (int) amount);
-        sender.sendTl("expSet", target.getDisplayName(), amount);
+        sender.sendTl("expSet", CommonPlaceholders.displayNameRecipient((IMessageRecipient) target), amount);
     }
 
     @Override

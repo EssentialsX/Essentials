@@ -7,6 +7,8 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.utils.CommonPlaceholders;
+import net.ess3.api.IUser;
 import net.essentialsx.api.v2.events.UserTeleportSpawnEvent;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -31,7 +33,7 @@ public class Commandspawn extends EssentialsCommand {
             future.thenAccept(success -> {
                 if (success) {
                     if (!otherUser.equals(user)) {
-                        otherUser.sendTl("teleportAtoB", user.getDisplayName(), "spawn");
+                        otherUser.sendTl("teleportAtoB", CommonPlaceholders.displayName((IUser) user), "spawn");
                     }
                 }
             });

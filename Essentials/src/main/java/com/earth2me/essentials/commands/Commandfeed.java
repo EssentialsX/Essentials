@@ -2,6 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
+import net.ess3.api.IUser;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
@@ -42,7 +44,7 @@ public class Commandfeed extends EssentialsLoopCommand {
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws PlayerExemptException {
         try {
             feedPlayer(player.getBase());
-            sender.sendTl("feedOther", player.getDisplayName());
+            sender.sendTl("feedOther", CommonPlaceholders.displayName((IUser) player));
         } catch (final QuietAbortException e) {
             //Handle Quietly
         }

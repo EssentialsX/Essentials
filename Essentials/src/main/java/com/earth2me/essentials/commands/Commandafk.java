@@ -2,7 +2,9 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
+import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.Server;
@@ -95,10 +97,10 @@ public class Commandafk extends EssentialsCommand {
         }
         if (!tlKey.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
             // exclude user from receiving general AFK announcement in favor of personal message
-            ess.broadcastTl(user, u -> u == user, tlKey, user.getDisplayName(), message);
+            ess.broadcastTl(user, u -> u == user, tlKey, CommonPlaceholders.displayName((IUser) user), message);
         }
         if (!selfTlKey.isEmpty()) {
-            user.sendTl(selfTlKey, user.getDisplayName(), message);
+            user.sendTl(selfTlKey, CommonPlaceholders.displayName((IUser) user), message);
         }
         user.setDisplayNick(); // Set this again after toggling
     }

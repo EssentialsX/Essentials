@@ -8,6 +8,7 @@ import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.CommandMapUtil;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FloatUtil;
@@ -20,6 +21,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -482,7 +484,7 @@ public class Commandessentials extends EssentialsCommand {
         }
         final User user = getPlayer(server, args, 1, true, true);
         user.reset();
-        sender.sendMessage("Reset Essentials userdata for player: " + user.getDisplayName());
+        sender.sendMessage("Reset Essentials userdata for player: " + CommonPlaceholders.displayName((IUser) user));
     }
 
     // Toggles debug mode.

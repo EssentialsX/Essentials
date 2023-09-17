@@ -2,6 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
+import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 
@@ -34,7 +36,7 @@ public class Commandkitreset extends EssentialsCommand {
         if (user.equals(target)) {
             user.sendTl("kitReset", kitName);
         } else {
-            user.sendTl("kitResetOther", kitName, target.getDisplayName());
+            user.sendTl("kitResetOther", kitName, CommonPlaceholders.displayName((IUser) target));
         }
     }
 
@@ -51,7 +53,7 @@ public class Commandkitreset extends EssentialsCommand {
 
         final User target = getPlayer(server, sender, args, 1);
         target.setKitTimestamp(kitName, 0);
-        sender.sendTl("kitResetOther", kitName, target.getDisplayName());
+        sender.sendTl("kitResetOther", kitName, CommonPlaceholders.displayName((IUser) target));
     }
 
     @Override

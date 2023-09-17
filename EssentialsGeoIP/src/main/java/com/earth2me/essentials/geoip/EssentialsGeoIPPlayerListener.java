@@ -3,6 +3,7 @@ package com.earth2me.essentials.geoip;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.ice.tar.TarEntry;
 import com.ice.tar.TarInputStream;
 import com.maxmind.geoip2.DatabaseReader;
@@ -11,6 +12,7 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.model.CountryResponse;
 import net.ess3.api.IEssentials;
+import net.ess3.api.IUser;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -99,7 +101,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 for (final Player online : player.getServer().getOnlinePlayers()) {
                     final User user = ess.getUser(online);
                     if (user.isAuthorized("essentials.geoip.show")) {
-                        user.sendTl("geoipCantFind", u.getDisplayName());
+                        user.sendTl("geoipCantFind", CommonPlaceholders.displayName((IUser) u));
                     }
                 }
                 return;
@@ -118,7 +120,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             for (final Player onlinePlayer : player.getServer().getOnlinePlayers()) {
                 final User user = ess.getUser(onlinePlayer);
                 if (user.isAuthorized("essentials.geoip.show")) {
-                    user.sendTl("geoipJoinFormat", u.getDisplayName(), sb.toString());
+                    user.sendTl("geoipJoinFormat", CommonPlaceholders.displayName((IUser) u), sb.toString());
                 }
             }
         }

@@ -101,7 +101,7 @@ public class Commandseen extends EssentialsCommand {
     private void seenOnline(final CommandSource sender, final User user, final boolean showIp) {
 
         user.setDisplayNick();
-        sender.sendTl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin()));
+        sender.sendTl("seenOnline", CommonPlaceholders.displayName(user), DateUtil.formatDateDiff(user.getLastLogin()));
 
         final List<String> history = user.getPastUsernames();
         if (history != null && !history.isEmpty()) {
@@ -192,7 +192,7 @@ public class Commandseen extends EssentialsCommand {
     }
 
     private void seenIP(final CommandSource sender, final String ipAddress, final String display) {
-        sender.sendTl("runningPlayerMatch", display);
+        sender.sendTl("runningPlayerMatch", AdventureUtil.parsed(AdventureUtil.legacyToMini(display)));
 
         ess.runTaskAsynchronously(() -> {
             final List<String> matches = new ArrayList<>();

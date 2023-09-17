@@ -2,7 +2,9 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.google.common.collect.Lists;
+import net.ess3.api.IUser;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -106,7 +108,7 @@ public class Commandnear extends EssentialsCommand {
             if (nearbyPlayer == null) {
                 continue;
             }
-            output.append(user.playerTl("nearbyPlayersList", nearbyPlayer.getDisplayName(), (long)nearbyPlayer.getLocation().distance(loc)));
+            output.append(user.playerTl("nearbyPlayersList", CommonPlaceholders.displayName((IUser) nearbyPlayer), (long)nearbyPlayer.getLocation().distance(loc)));
         }
 
         return output.length() > 1 ? output.toString() : source.tl("none");

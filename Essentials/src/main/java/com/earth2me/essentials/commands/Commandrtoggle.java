@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import org.bukkit.Server;
 
 public class Commandrtoggle extends EssentialsToggleCommand {
@@ -29,7 +30,7 @@ public class Commandrtoggle extends EssentialsToggleCommand {
 
         user.sendTl(!enabled ? "replyLastRecipientDisabled" : "replyLastRecipientEnabled");
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendTl(!enabled ? "replyLastRecipientDisabledFor" : "replyLastRecipientEnabledFor", user.getDisplayName());
+            sender.sendTl(!enabled ? "replyLastRecipientDisabledFor" : "replyLastRecipientEnabledFor", CommonPlaceholders.displayName(user));
         }
     }
 }

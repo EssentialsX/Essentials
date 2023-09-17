@@ -3,8 +3,10 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.IUser;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserBalanceUpdateEvent;
@@ -65,7 +67,7 @@ public class Commandeco extends EssentialsLoopCommand {
                     final boolean aboveMax = userAmount.compareTo(maxBal) > 0;
                     player.setMoney(underMin ? minBal : aboveMax ? maxBal : userAmount, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
                     player.sendTl("setBal", NumberUtil.displayCurrency(player.getMoney(), ess));
-                    sender.sendTl("setBalOthers", player.getDisplayName(), NumberUtil.displayCurrency(player.getMoney(), ess));
+                    sender.sendTl("setBalOthers", CommonPlaceholders.displayName((IUser) player), NumberUtil.displayCurrency(player.getMoney(), ess));
                     break;
                 }
             }

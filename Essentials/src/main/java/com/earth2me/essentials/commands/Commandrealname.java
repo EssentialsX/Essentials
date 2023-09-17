@@ -2,7 +2,9 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.IUser;
 import org.bukkit.Server;
 
 import java.util.Locale;
@@ -29,7 +31,7 @@ public class Commandrealname extends EssentialsCommand {
             u.setDisplayNick();
             if (FormatUtil.stripFormat(u.getDisplayName()).toLowerCase(Locale.ENGLISH).contains(lookup)) {
                 foundUser = true;
-                sender.sendTl("realName", u.getDisplayName(), u.getName());
+                sender.sendTl("realName", CommonPlaceholders.displayName((IUser) u), u.getName());
             }
         }
         if (!foundUser) {

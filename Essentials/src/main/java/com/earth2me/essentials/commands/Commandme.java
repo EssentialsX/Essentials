@@ -2,8 +2,10 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.UserActionEvent;
 import org.bukkit.Bukkit;
@@ -43,7 +45,7 @@ public class Commandme extends EssentialsCommand {
 
         user.setDisplayNick();
         long radius = ess.getSettings().getChatRadius();
-        final String toSend = tlLiteral("action", user.getDisplayName(), message);
+        final String toSend = tlLiteral("action", CommonPlaceholders.displayName((IUser) user), message);
         if (radius < 1) {
             ess.broadcastMessage(user, toSend);
             ess.getServer().getPluginManager().callEvent(new UserActionEvent(user, message, Collections.unmodifiableCollection(ess.getServer().getOnlinePlayers())));

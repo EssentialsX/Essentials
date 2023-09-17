@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -43,7 +44,7 @@ public class Commandtpo extends EssentialsCommand {
                 target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, future);
                 future.thenAccept(success -> {
                     if (success) {
-                        target.sendTl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName());
+                        target.sendTl("teleportAtoB", CommonPlaceholders.displayName(user), CommonPlaceholders.displayName(toPlayer));
                     }
                 });
                 break;

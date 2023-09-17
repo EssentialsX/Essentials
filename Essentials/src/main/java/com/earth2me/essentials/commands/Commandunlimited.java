@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -81,9 +82,9 @@ public class Commandunlimited extends EssentialsCommand {
         }
 
         if (user != target) {
-            user.sendTl(message, itemname, target.getDisplayName());
+            user.sendTl(message, itemname, CommonPlaceholders.displayName(target));
         }
-        target.sendTl(message, itemname, target.getDisplayName());
+        target.sendTl(message, itemname, CommonPlaceholders.displayName(target));
         target.setUnlimited(stack, enableUnlimited);
     }
 }

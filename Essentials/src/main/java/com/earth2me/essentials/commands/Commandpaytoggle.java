@@ -2,6 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
+import net.ess3.api.IUser;
 import org.bukkit.Server;
 
 public class Commandpaytoggle extends EssentialsToggleCommand {
@@ -36,7 +38,7 @@ public class Commandpaytoggle extends EssentialsToggleCommand {
 
         user.sendTl(enabled ? "payToggleOn" : "payToggleOff");
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendTl(enabled ? "payEnabledFor" : "payDisabledFor", user.getDisplayName());
+            sender.sendTl(enabled ? "payEnabledFor" : "payDisabledFor", CommonPlaceholders.displayName((IUser) user));
         }
     }
 }

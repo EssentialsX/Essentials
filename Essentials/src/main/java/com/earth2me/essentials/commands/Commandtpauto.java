@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import org.bukkit.Server;
 
 public class Commandtpauto extends EssentialsToggleCommand {
@@ -32,7 +33,7 @@ public class Commandtpauto extends EssentialsToggleCommand {
             user.sendTl("teleportationDisabledWarning");
         }
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendTl(enabled ? "autoTeleportEnabledFor" : "autoTeleportDisabledFor", user.getDisplayName());
+            sender.sendTl(enabled ? "autoTeleportEnabledFor" : "autoTeleportDisabledFor", CommonPlaceholders.displayName(user));
         }
     }
 }

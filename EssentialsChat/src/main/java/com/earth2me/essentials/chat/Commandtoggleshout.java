@@ -3,6 +3,8 @@ package com.earth2me.essentials.chat;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsToggleCommand;
+import com.earth2me.essentials.utils.CommonPlaceholders;
+import net.ess3.api.IUser;
 import org.bukkit.Server;
 
 public class Commandtoggleshout extends EssentialsToggleCommand {
@@ -30,7 +32,7 @@ public class Commandtoggleshout extends EssentialsToggleCommand {
 
         user.sendTl(enabled ? "shoutEnabled" : "shoutDisabled");
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendTl(enabled ? "shoutEnabledFor" : "shoutDisabledFor", user.getDisplayName());
+            sender.sendTl(enabled ? "shoutEnabledFor" : "shoutDisabledFor", CommonPlaceholders.displayName((IUser) user));
         }
     }
 }

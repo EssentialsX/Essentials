@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import net.essentialsx.api.v2.services.BalanceTop;
@@ -113,7 +114,7 @@ public class Commandbalancetop extends EssentialsCommand {
                     int pos = 1;
                     for (final Map.Entry<UUID, BalanceTop.Entry> entry : ess.getBalanceTop().getBalanceTopCache().entrySet()) {
                         if (ess.getSettings().showZeroBaltop() || entry.getValue().getBalance().compareTo(BigDecimal.ZERO) > 0) {
-                            newCache.getLines().add(tlLiteral("balanceTopLine", pos, entry.getValue().getDisplayName(), NumberUtil.displayCurrency(entry.getValue().getBalance(), ess)));
+                            newCache.getLines().add(tlLiteral("balanceTopLine", pos, AdventureUtil.parsed(AdventureUtil.legacyToMini(entry.getValue().getDisplayName())), NumberUtil.displayCurrency(entry.getValue().getBalance(), ess)));
                         }
                         pos++;
                     }

@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Server;
 import org.bukkit.Statistic;
@@ -34,7 +35,7 @@ public class Commandrest extends EssentialsLoopCommand {
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws PlayerExemptException {
         restPlayer(player);
-        sender.sendTl("restOther", player.getDisplayName());
+        sender.sendTl("restOther", CommonPlaceholders.displayName(player));
     }
 
     private void restPlayer(final IUser user) {

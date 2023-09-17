@@ -454,7 +454,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         user.getBase().setAllowFlight(true);
                         user.getBase().setFlying(true);
                         if (ess.getSettings().isSendFlyEnableOnJoin()) {
-                            user.sendTl("flyMode", CommonPlaceholders.enableDisable(user.getSource(), true), user.getDisplayName());
+                            user.sendTl("flyMode", CommonPlaceholders.enableDisable(user.getSource(), true), CommonPlaceholders.displayName(user));
                         }
                     }
                 }

@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 
@@ -34,8 +35,8 @@ public class Commandhelpop extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         final String message = FormatUtil.stripFormat(getFinalArg(args, 0));
-        ess.getLogger().log(Level.INFO, tlLiteral("helpOp", from, message));
-        ess.broadcastTl(null, u -> !u.isAuthorized("essentials.helpop.receive") && !u.equals(user), "helpOp", from, message);
+        ess.getLogger().log(Level.INFO, tlLiteral("helpOp", AdventureUtil.parsed(AdventureUtil.legacyToMini(from)), message));
+        ess.broadcastTl(null, u -> !u.isAuthorized("essentials.helpop.receive") && !u.equals(user), "helpOp", AdventureUtil.parsed(AdventureUtil.legacyToMini(from)), message);
     }
 
     @Override

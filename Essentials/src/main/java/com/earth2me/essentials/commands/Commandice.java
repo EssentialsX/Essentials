@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IUser;
 import net.ess3.api.MaxMoneyException;
@@ -38,7 +39,7 @@ public class Commandice extends EssentialsLoopCommand {
     @Override
     protected void updatePlayer(Server server, CommandSource sender, User user, String[] args) throws NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException {
         freezePlayer(user);
-        sender.sendTl("iceOther", user.getDisplayName());
+        sender.sendTl("iceOther", CommonPlaceholders.displayName((IUser) user));
     }
 
     private void freezePlayer(final IUser user) {

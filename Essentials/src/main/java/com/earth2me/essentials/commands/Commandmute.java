@@ -3,7 +3,9 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
+import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import org.bukkit.Server;
@@ -85,18 +87,18 @@ public class Commandmute extends EssentialsCommand {
             if (muted) {
                 if (muteTimestamp > 0) {
                     if (!user.hasMuteReason()) {
-                        sender.sendTl("mutedPlayerFor", user.getDisplayName(), muteTime);
+                        sender.sendTl("mutedPlayerFor", CommonPlaceholders.displayName((IUser) user), muteTime);
                         user.sendTl("playerMutedFor", muteTime);
                     } else {
-                        sender.sendTl("mutedPlayerForReason", user.getDisplayName(), muteTime, user.getMuteReason());
+                        sender.sendTl("mutedPlayerForReason", CommonPlaceholders.displayName((IUser) user), muteTime, user.getMuteReason());
                         user.sendTl("playerMutedForReason", muteTime, user.getMuteReason());
                     }
                 } else {
                     if (!user.hasMuteReason()) {
-                        sender.sendTl("mutedPlayer", user.getDisplayName());
+                        sender.sendTl("mutedPlayer", CommonPlaceholders.displayName((IUser) user));
                         user.sendTl("playerMuted");
                     } else {
-                        sender.sendTl("mutedPlayerReason", user.getDisplayName(), user.getMuteReason());
+                        sender.sendTl("mutedPlayerReason", CommonPlaceholders.displayName((IUser) user), user.getMuteReason());
                         user.sendTl("playerMutedReason", user.getMuteReason());
                     }
                 }
@@ -119,7 +121,7 @@ public class Commandmute extends EssentialsCommand {
                 ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
                 ess.broadcastTl(null, "essentials.mute.notify", tlKey, objects);
             } else {
-                sender.sendTl("unmutedPlayer", user.getDisplayName());
+                sender.sendTl("unmutedPlayer", CommonPlaceholders.displayName((IUser) user));
                 user.sendTl("playerUnmuted");
             }
         }

@@ -4,6 +4,7 @@ import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.TeleportRequestResponseEvent;
 import org.bukkit.Bukkit;
@@ -104,7 +105,7 @@ public class Commandtpaccept extends EssentialsCommand {
         }
 
         final Trade charge = new Trade(this.getName(), ess);
-        requester.sendTl("requestAcceptedFrom", user.getDisplayName());
+        requester.sendTl("requestAcceptedFrom", CommonPlaceholders.displayName(user));
 
         final CompletableFuture<Boolean> future = getNewExceptionFuture(requester.getSource(), commandLabel);
         future.exceptionally(e -> {
