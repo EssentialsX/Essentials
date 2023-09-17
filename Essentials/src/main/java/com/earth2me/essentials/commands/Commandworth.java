@@ -87,10 +87,13 @@ public class Commandworth extends EssentialsCommand {
         }
 
         final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
+        final String typeName = is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
+        final String resultDisplay = NumberUtil.displayCurrency(result, ess);
+        final String worthDisplay = NumberUtil.displayCurrency(worth, ess);
         if (MaterialUtil.getDamage(is) != 0) {
-            sender.sendTl("worthMeta", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), MaterialUtil.getDamage(is), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess));
+            sender.sendTl("worthMeta", typeName, MaterialUtil.getDamage(is), resultDisplay, amount, worthDisplay);
         } else {
-            sender.sendTl("worth", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess));
+            sender.sendTl("worth", typeName, resultDisplay, amount, worthDisplay);
         }
         return result;
     }
