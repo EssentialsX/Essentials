@@ -1020,7 +1020,7 @@ public class EssentialsUpgrade {
                 }
             }
         } catch (final Throwable e) {
-            ess.getLogger().log(Level.SEVERE, "Error while upgrade custom locales", e);
+            ess.getLogger().log(Level.SEVERE, "Error while upgrading custom locales", e);
         }
     }
 
