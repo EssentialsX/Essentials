@@ -33,6 +33,7 @@ public class Commandseen extends EssentialsCommand {
         final boolean showBan = sender.isAuthorized("essentials.seen.banreason");
         final boolean showIp = sender.isAuthorized("essentials.seen.ip");
         final boolean showLocation = sender.isAuthorized("essentials.seen.location");
+        final boolean showWhitelist = sender.isAuthorized("essentials.seen.whitelist");
         final boolean searchAccounts = commandLabel.contains("alts") && sender.isAuthorized("essentials.seen.alts");
 
         User player;
@@ -80,21 +81,21 @@ public class Commandseen extends EssentialsCommand {
                 }
 
                 private void showUserSeen(final User user) {
-                    showSeenMessage(sender, user, searchAccounts, showBan, showIp, showLocation);
+                    showSeenMessage(sender, user, searchAccounts, showBan, showIp, showLocation, showWhitelist);
                 }
             });
         } else {
-            showSeenMessage(sender, player, searchAccounts, showBan, showIp, showLocation);
+            showSeenMessage(sender, player, searchAccounts, showBan, showIp, showLocation, showWhitelist);
         }
     }
 
-    private void showSeenMessage(final CommandSource sender, final User player, final boolean searchAccounts, final boolean showBan, final boolean showIp, final boolean showLocation) {
+    private void showSeenMessage(final CommandSource sender, final User player, final boolean searchAccounts, final boolean showBan, final boolean showIp, final boolean showLocation, final boolean showWhitelist) {
         if (searchAccounts) {
             seenIP(sender, player.getLastLoginAddress(), player.getDisplayName());
         } else if (player.getBase().isOnline() && canInteractWith(sender, player)) {
             seenOnline(sender, player, showIp);
         } else {
-            seenOffline(sender, player, showBan, showIp, showLocation);
+            seenOffline(sender, player, showBan, showIp, showLocation, showWhitelist);
         }
     }
 
@@ -135,7 +136,7 @@ public class Commandseen extends EssentialsCommand {
         }
     }
 
-    private void seenOffline(final CommandSource sender, final User user, final boolean showBan, final boolean showIp, final boolean showLocation) {
+    private void seenOffline(final CommandSource sender, final User user, final boolean showBan, final boolean showIp, final boolean showLocation, final boolean showWhitelist) {
         user.setDisplayNick();
         if (user.getLastLogout() > 0) {
             sender.sendTl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout()));
@@ -149,6 +150,10 @@ public class Commandseen extends EssentialsCommand {
             }
         } else {
             sender.sendTl("userUnknown", user.getName());
+        }
+
+        if (showWhitelist) {
+            sender.sendMessage(tl("whoisWhitelist", user.getBase().isWhitelisted() ? tl("true") : tl("false")));
         }
 
         if (BanLookup.isBanned(ess, user)) {

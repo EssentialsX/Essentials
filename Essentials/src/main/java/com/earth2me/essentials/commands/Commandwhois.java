@@ -57,6 +57,7 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendTl("whoisOp", CommonPlaceholders.trueFalse(sender, user.getBase().isOp()));
         sender.sendTl("whoisFly", CommonPlaceholders.trueFalse(sender, user.getBase().getAllowFlight()), AdventureUtil.parsed(user.getBase().isFlying() ? sender.tl("flying") : sender.tl("notFlying")));
         sender.sendTl("whoisSpeed", user.getBase().isFlying() ? user.getBase().getFlySpeed() : user.getBase().getWalkSpeed());
+        sender.sendTl("whoisWhitelist", CommonPlaceholders.trueFalse(sender, user.getBase().isWhitelisted()));
         if (user.isAfk()) {
             sender.sendTl("whoisAFKSince", CommonPlaceholders.trueFalse(sender, true), DateUtil.formatDateDiff(user.getAfkSince()));
         } else {
