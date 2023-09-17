@@ -118,8 +118,10 @@ public class Commandsell extends EssentialsCommand {
         user.getBase().updateInventory();
         Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), user.getMoney(), ess);
         user.giveMoney(result, null, UserBalanceUpdateEvent.Cause.COMMAND_SELL);
-        user.sendTl("itemSold", NumberUtil.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess));
-        ess.getLogger().log(Level.INFO, tlLiteral("itemSoldConsole", user.getName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess), user.getDisplayName()));
+        final String typeName = is.getType().toString().toLowerCase(Locale.ENGLISH);
+        final String worthDisplay = NumberUtil.displayCurrency(worth, ess);
+        user.sendTl("itemSold", NumberUtil.displayCurrency(result, ess), amount, typeName, worthDisplay);
+        ess.getLogger().log(Level.INFO, tlLiteral("itemSoldConsole", user.getName(), typeName, NumberUtil.displayCurrency(result, ess), amount, worthDisplay, user.getDisplayName()));
         return result;
     }
 
