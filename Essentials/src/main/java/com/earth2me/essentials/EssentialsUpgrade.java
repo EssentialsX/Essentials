@@ -993,6 +993,8 @@ public class EssentialsUpgrade {
             return;
         }
 
+        ess.getLogger().log(Level.WARNING, "Beginning Adventure locale file conversion.");
+
         try {
             final File dataFolder = ess.getDataFolder();
             if (!dataFolder.exists() || !dataFolder.isDirectory()) {
