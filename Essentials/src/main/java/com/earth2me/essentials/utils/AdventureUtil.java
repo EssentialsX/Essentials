@@ -51,19 +51,19 @@ public final class AdventureUtil {
         return MINI_MESSAGE_INSTANCE;
     }
 
-    public static Component deserializeLegacy(final String text) {
+    public static Component legacyToAdventure(final String text) {
         return LEGACY_SERIALIZER.deserialize(text);
     }
 
-    public static String serializeLegacy(final Component component) {
+    public static String adventureToLegacy(final Component component) {
         return LEGACY_SERIALIZER.serialize(component);
     }
 
     public static String miniToLegacy(final String format) {
-        return serializeLegacy(miniMessage().deserialize(format));
+        return adventureToLegacy(miniMessage().deserialize(format));
     }
 
-    public static String minifyLegacy(String text) {
+    public static String legacyToMini(String text) {
         StringBuffer buffer = new StringBuffer();
         Matcher matcher = HEX_PATTERN.matcher(text);
         while (matcher.find()) {

@@ -164,7 +164,7 @@ public class I18n implements net.ess3.api.II18n {
 
         final Object[] processedArgs = mutateArgs(objects, arg -> {
             final String str = arg instanceof AdventureUtil.ParsedPlaceholder ? arg.toString() : AdventureUtil.miniMessage().escapeTags(arg.toString());
-            return AdventureUtil.minifyLegacy(str);
+            return AdventureUtil.legacyToMini(str);
         });
 
         return messageFormat.format(processedArgs).replace(' ', ' '); // replace nbsp with a space

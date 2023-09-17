@@ -498,7 +498,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             runTaskAsynchronously(() -> {
                 getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("versionFetching")));
                 for (final Component component : updateChecker.getVersionMessages(false, true, new CommandSource(this, Bukkit.getConsoleSender()))) {
-                    getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, AdventureUtil.serializeLegacy(component));
+                    getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, AdventureUtil.adventureToLegacy(component));
                 }
             });
 
