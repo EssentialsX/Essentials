@@ -153,7 +153,7 @@ public class Commandseen extends EssentialsCommand {
         }
 
         if (showWhitelist) {
-            sender.sendMessage(tl("whoisWhitelist", user.getBase().isWhitelisted() ? tl("true") : tl("false")));
+            sender.sendTl("whoisWhitelist", CommonPlaceholders.trueFalse(sender, user.getBase().isWhitelisted()));
         }
 
         if (BanLookup.isBanned(ess, user)) {
