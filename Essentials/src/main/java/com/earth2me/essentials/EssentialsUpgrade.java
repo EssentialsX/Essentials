@@ -993,6 +993,8 @@ public class EssentialsUpgrade {
             return;
         }
 
+        //todo do we convert/primary secondary colors? how?
+
         ess.getLogger().log(Level.WARNING, "Beginning Adventure locale file conversion.");
 
         try {
