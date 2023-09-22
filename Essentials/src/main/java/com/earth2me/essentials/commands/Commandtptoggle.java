@@ -31,7 +31,7 @@ public class Commandtptoggle extends EssentialsToggleCommand {
 
         user.sendMessage(enabled ? tl("teleportationEnabled") : tl("teleportationDisabled"));
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendMessage(enabled ? tl("teleportationEnabledFor", user.getDisplayName()) : tl("teleportationDisabledFor", user.getDisplayName()));
+            sender.sendMessage(enabled ? tl("teleportationEnabledFor", user.getName()) : tl("teleportationDisabledFor", user.getName()));
         }
     }
 }

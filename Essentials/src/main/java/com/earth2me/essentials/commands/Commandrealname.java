@@ -29,9 +29,9 @@ public class Commandrealname extends EssentialsCommand {
                 continue;
             }
             u.setDisplayNick();
-            if (FormatUtil.stripFormat(u.getDisplayName()).toLowerCase(Locale.ENGLISH).contains(lookup)) {
+            if (FormatUtil.stripFormat(u.getName()).toLowerCase(Locale.ENGLISH).contains(lookup)) {
                 foundUser = true;
-                sender.sendMessage(tl("realName", u.getDisplayName(), u.getName()));
+                sender.sendMessage(tl("realName", u.getName(), u.getName()));
             }
         }
         if (!foundUser) {

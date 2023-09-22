@@ -31,7 +31,7 @@ public class Commandrtoggle extends EssentialsToggleCommand {
 
         user.sendMessage(!enabled ? tl("replyLastRecipientDisabled") : tl("replyLastRecipientEnabled"));
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendMessage(!enabled ? tl("replyLastRecipientDisabledFor", user.getDisplayName()) : tl("replyLastRecipientEnabledFor", user.getDisplayName()));
+            sender.sendMessage(!enabled ? tl("replyLastRecipientDisabledFor", user.getName()) : tl("replyLastRecipientEnabledFor", user.getName()));
         }
     }
 }

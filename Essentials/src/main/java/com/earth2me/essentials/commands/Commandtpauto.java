@@ -34,7 +34,7 @@ public class Commandtpauto extends EssentialsToggleCommand {
             user.sendMessage(tl("teleportationDisabledWarning"));
         }
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendMessage(enabled ? tl("autoTeleportEnabledFor", user.getDisplayName()) : tl("autoTeleportDisabledFor", user.getDisplayName()));
+            sender.sendMessage(enabled ? tl("autoTeleportEnabledFor", user.getName()) : tl("autoTeleportDisabledFor", user.getName()));
         }
     }
 }

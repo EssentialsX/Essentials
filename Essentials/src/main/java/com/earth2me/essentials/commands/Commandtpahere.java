@@ -25,10 +25,10 @@ public class Commandtpahere extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         if (!player.isAuthorized("essentials.tpaccept")) {
-            throw new Exception(tl("teleportNoAcceptPermission", player.getDisplayName()));
+            throw new Exception(tl("teleportNoAcceptPermission", player.getName()));
         }
         if (!player.isTeleportEnabled()) {
-            throw new Exception(tl("teleportDisabled", player.getDisplayName()));
+            throw new Exception(tl("teleportDisabled", player.getName()));
         }
         if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + user.getWorld().getName())) {
             throw new Exception(tl("noPerm", "essentials.worlds." + user.getWorld().getName()));
@@ -36,24 +36,24 @@ public class Commandtpahere extends EssentialsCommand {
 
         // Don't let sender request teleport twice to the same player.
         if (player.hasOutstandingTpaRequest(user.getName(), true)) {
-            throw new Exception(tl("requestSentAlready", player.getDisplayName()));
+            throw new Exception(tl("requestSentAlready", player.getName()));
         }
 
         if (!player.isIgnoredPlayer(user)) {
             final TPARequestEvent tpaEvent = new TPARequestEvent(user.getSource(), player, true);
             ess.getServer().getPluginManager().callEvent(tpaEvent);
             if (tpaEvent.isCancelled()) {
-                throw new Exception(tl("teleportRequestCancelled", player.getDisplayName()));
+                throw new Exception(tl("teleportRequestCancelled", player.getName()));
             }
             player.requestTeleport(user, true);
-            player.sendMessage(tl("teleportHereRequest", user.getDisplayName()));
+            player.sendMessage(tl("teleportHereRequest", user.getName()));
             player.sendMessage(tl("typeTpaccept"));
             player.sendMessage(tl("typeTpdeny"));
             if (ess.getSettings().getTpaAcceptCancellation() != 0) {
                 player.sendMessage(tl("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation()));
             }
         }
-        user.sendMessage(tl("requestSent", player.getDisplayName()));
+        user.sendMessage(tl("requestSent", player.getName()));
         user.sendMessage(tl("typeTpacancel"));
     }
 

@@ -99,7 +99,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
                     if (skipHidden && player.isHidden(sender.getPlayer()) && player.isHiddenFrom(sender.getPlayer())) {
                         continue;
                     }
-                    final String displayName = FormatUtil.stripFormat(player.getDisplayName()).toLowerCase(Locale.ENGLISH);
+                    final String displayName = FormatUtil.stripFormat(player.getName()).toLowerCase(Locale.ENGLISH);
                     if (displayName.contains(matchText)) {
                         foundUser = true;
                         userConsumer.accept(player);

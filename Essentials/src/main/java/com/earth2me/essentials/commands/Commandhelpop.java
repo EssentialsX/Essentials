@@ -20,7 +20,7 @@ public class Commandhelpop extends EssentialsCommand {
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         user.setDisplayNick();
-        final String message = sendMessage(server, user.getDisplayName(), args);
+        final String message = sendMessage(server, user.getName(), args);
         if (!user.isAuthorized("essentials.helpop.receive")) {
             user.sendMessage(message);
         }

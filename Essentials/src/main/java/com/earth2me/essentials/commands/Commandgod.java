@@ -40,7 +40,7 @@ public class Commandgod extends EssentialsToggleCommand {
 
             user.sendMessage(tl("godMode", enabled ? tl("enabled") : tl("disabled")));
             if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase())) {
-                sender.sendMessage(tl("godMode", tl(enabled ? "godEnabledFor" : "godDisabledFor", user.getDisplayName())));
+                sender.sendMessage(tl("godMode", tl(enabled ? "godEnabledFor" : "godDisabledFor", user.getName())));
             }
         }
     }

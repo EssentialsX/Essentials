@@ -44,7 +44,7 @@ public class Commandfeed extends EssentialsLoopCommand {
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws PlayerExemptException {
         try {
             feedPlayer(player.getBase());
-            sender.sendMessage(tl("feedOther", player.getDisplayName()));
+            sender.sendMessage(tl("feedOther", player.getName()));
         } catch (final QuietAbortException e) {
             //Handle Quietly
         }

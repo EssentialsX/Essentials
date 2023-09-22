@@ -27,8 +27,8 @@ public class Commandtempbanip extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
+        final String senderName = sender.isPlayer() ? sender.getPlayer().getName() : Console.NAME;
+        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getName() : Console.DISPLAY_NAME;
 
         String ipAddress;
         if (FormatUtil.validIP(args[0])) {

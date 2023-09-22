@@ -22,7 +22,7 @@ public class Commandtpoffline extends EssentialsCommand {
             final Location logout = target.getLogoutLocation();
 
             if (logout == null) {
-                user.sendMessage(tl("teleportOfflineUnknown", user.getDisplayName()));
+                user.sendMessage(tl("teleportOfflineUnknown", user.getName()));
                 throw new NoChargeException();
             }
 

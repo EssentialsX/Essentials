@@ -49,7 +49,7 @@ public class Commandkick extends EssentialsCommand {
 
         kickReason = event.getReason();
         target.getBase().kickPlayer(kickReason);
-        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
+        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getName() : Console.DISPLAY_NAME;
 
         ess.getLogger().log(Level.INFO, tl("playerKicked", senderDisplayName, target.getName(), kickReason));
         ess.broadcastMessage("essentials.kick.notify", tl("playerKicked", senderDisplayName, target.getName(), kickReason));

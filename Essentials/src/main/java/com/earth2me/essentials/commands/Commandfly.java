@@ -39,9 +39,9 @@ public class Commandfly extends EssentialsToggleCommand {
                 user.getBase().setFlying(false);
             }
 
-            user.sendMessage(tl("flyMode", tl(enabled ? "enabled" : "disabled"), user.getDisplayName()));
+            user.sendMessage(tl("flyMode", tl(enabled ? "enabled" : "disabled"), user.getName()));
             if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase())) {
-                sender.sendMessage(tl("flyMode", tl(enabled ? "enabled" : "disabled"), user.getDisplayName()));
+                sender.sendMessage(tl("flyMode", tl(enabled ? "enabled" : "disabled"), user.getName()));
             }
         }
     }

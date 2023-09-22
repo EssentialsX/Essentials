@@ -480,7 +480,7 @@ public class Commandessentials extends EssentialsCommand {
         }
         final User user = getPlayer(server, args, 1, true, true);
         user.reset();
-        sender.sendMessage("Reset Essentials userdata for player: " + user.getDisplayName());
+        sender.sendMessage("Reset Essentials userdata for player: " + user.getName());
     }
 
     // Toggles debug mode.

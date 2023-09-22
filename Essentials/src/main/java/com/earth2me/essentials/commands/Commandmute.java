@@ -84,18 +84,18 @@ public class Commandmute extends EssentialsCommand {
             if (muted) {
                 if (muteTimestamp > 0) {
                     if (!user.hasMuteReason()) {
-                        sender.sendMessage(tl("mutedPlayerFor", user.getDisplayName(), muteTime));
+                        sender.sendMessage(tl("mutedPlayerFor", user.getName(), muteTime));
                         user.sendMessage(tl("playerMutedFor", muteTime));
                     } else {
-                        sender.sendMessage(tl("mutedPlayerForReason", user.getDisplayName(), muteTime, user.getMuteReason()));
+                        sender.sendMessage(tl("mutedPlayerForReason", user.getName(), muteTime, user.getMuteReason()));
                         user.sendMessage(tl("playerMutedForReason", muteTime, user.getMuteReason()));
                     }
                 } else {
                     if (!user.hasMuteReason()) {
-                        sender.sendMessage(tl("mutedPlayer", user.getDisplayName()));
+                        sender.sendMessage(tl("mutedPlayer", user.getName()));
                         user.sendMessage(tl("playerMuted"));
                     } else {
-                        sender.sendMessage(tl("mutedPlayerReason", user.getDisplayName(), user.getMuteReason()));
+                        sender.sendMessage(tl("mutedPlayerReason", user.getName(), user.getMuteReason()));
                         user.sendMessage(tl("playerMutedReason", user.getMuteReason()));
                     }
                 }
@@ -116,7 +116,7 @@ public class Commandmute extends EssentialsCommand {
                 ess.getLogger().log(Level.INFO, message);
                 ess.broadcastMessage("essentials.mute.notify", message);
             } else {
-                sender.sendMessage(tl("unmutedPlayer", user.getDisplayName()));
+                sender.sendMessage(tl("unmutedPlayer", user.getName()));
                 user.sendMessage(tl("playerUnmuted"));
             }
         }

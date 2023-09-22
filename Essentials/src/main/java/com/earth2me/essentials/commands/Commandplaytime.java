@@ -33,7 +33,7 @@ public class Commandplaytime extends EssentialsCommand {
         if (args.length > 0 && sender.isAuthorized("essentials.playtime.others", ess)) {
             try {
                 final IUser user = getPlayer(server, sender, args, 0);
-                displayName = user.getDisplayName();
+                displayName = user.getName();
                 playtime = user.getBase().getStatistic(PLAY_ONE_TICK);
             } catch (PlayerNotFoundException e) {
                 // The ability to get the statistics of offline players is only available in 1.15.2+
@@ -50,7 +50,7 @@ public class Commandplaytime extends EssentialsCommand {
             key = "playtimeOther";
         } else if (sender.isPlayer()) {
             //noinspection ConstantConditions
-            displayName = sender.getPlayer().getDisplayName();
+            displayName = sender.getPlayer().getName();
             playtime = sender.getPlayer().getStatistic(PLAY_ONE_TICK);
             key = "playtime";
         } else {

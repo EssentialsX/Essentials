@@ -55,7 +55,7 @@ public class Commandtpdeny extends EssentialsCommand {
         }
 
         user.sendMessage(tl("requestDenied"));
-        player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
+        player.sendMessage(tl("requestDeniedFrom", user.getName()));
         user.removeTpaRequest(denyRequest.getName());
     }
 
@@ -70,7 +70,7 @@ public class Commandtpdeny extends EssentialsCommand {
             }
 
             if (player != null && player.getBase().isOnline()) {
-                player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
+                player.sendMessage(tl("requestDeniedFrom", user.getName()));
             }
 
             user.removeTpaRequest(request.getName());

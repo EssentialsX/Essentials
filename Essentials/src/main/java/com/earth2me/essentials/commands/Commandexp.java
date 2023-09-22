@@ -99,7 +99,7 @@ public class Commandexp extends EssentialsLoopCommand {
     }
 
     private void showExp(final CommandSource sender, final IUser target) {
-        sender.sendMessage(tl("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target.getBase()), target.getBase().getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase())));
+        sender.sendMessage(tl("exp", target.getName(), SetExpFix.getTotalExperience(target.getBase()), target.getBase().getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase())));
     }
 
     //TODO: Limit who can give negative exp?
@@ -131,7 +131,7 @@ public class Commandexp extends EssentialsLoopCommand {
             amount = 0L;
         }
         SetExpFix.setTotalExperience(target.getBase(), (int) amount);
-        sender.sendMessage(tl("expSet", target.getDisplayName(), amount));
+        sender.sendMessage(tl("expSet", target.getName(), amount));
     }
 
     @Override

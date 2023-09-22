@@ -46,11 +46,11 @@ public class Commandtpaall extends EssentialsCommand {
                 final TPARequestEvent tpaEvent = new TPARequestEvent(sender, player, true);
                 ess.getServer().getPluginManager().callEvent(tpaEvent);
                 if (tpaEvent.isCancelled()) {
-                    sender.sendMessage(tl("teleportRequestCancelled", player.getDisplayName()));
+                    sender.sendMessage(tl("teleportRequestCancelled", player.getName()));
                     continue;
                 }
                 player.requestTeleport(target, true);
-                player.sendMessage(tl("teleportHereRequest", target.getDisplayName()));
+                player.sendMessage(tl("teleportHereRequest", target.getName()));
                 player.sendMessage(tl("typeTpaccept"));
                 if (ess.getSettings().getTpaAcceptCancellation() != 0) {
                     player.sendMessage(tl("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation()));

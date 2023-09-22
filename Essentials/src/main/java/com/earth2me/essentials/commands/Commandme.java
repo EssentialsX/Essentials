@@ -42,7 +42,7 @@ public class Commandme extends EssentialsCommand {
 
         user.setDisplayNick();
         long radius = ess.getSettings().getChatRadius();
-        final String toSend = tl("action", user.getDisplayName(), message);
+        final String toSend = tl("action", user.getName(), message);
         if (radius < 1) {
             ess.broadcastMessage(user, toSend);
             ess.getServer().getPluginManager().callEvent(new UserActionEvent(user, message, Collections.unmodifiableCollection(ess.getServer().getOnlinePlayers())));

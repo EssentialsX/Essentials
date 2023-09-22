@@ -39,7 +39,7 @@ public class Commandbroadcastworld extends EssentialsCommand {
             }
         }
 
-        sendBroadcast(world, user.getDisplayName(), message);
+        sendBroadcast(world, user.getName(), message);
     }
 
     @Override

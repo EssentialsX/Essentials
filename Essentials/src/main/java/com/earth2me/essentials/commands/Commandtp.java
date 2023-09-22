@@ -29,12 +29,12 @@ public class Commandtp extends EssentialsCommand {
                 final User player = getPlayer(server, user, args, 0, false, true);
 
                 if (!player.isTeleportEnabled()) {
-                    throw new Exception(tl("teleportDisabled", player.getDisplayName()));
+                    throw new Exception(tl("teleportDisabled", player.getName()));
                 }
 
                 if (!player.getBase().isOnline()) {
                     if (user.isAuthorized("essentials.tpoffline")) {
-                        throw new Exception(tl("teleportOffline", player.getDisplayName()));
+                        throw new Exception(tl("teleportOffline", player.getName()));
                     }
                     throw new PlayerNotFoundException();
                 }
@@ -80,7 +80,7 @@ public class Commandtp extends EssentialsCommand {
                 }
                 final Location locposother = new Location(target2.getWorld(), x, y, z, target2.getLocation().getYaw(), target2.getLocation().getPitch());
                 if (!target2.isTeleportEnabled()) {
-                    throw new Exception(tl("teleportDisabled", target2.getDisplayName()));
+                    throw new Exception(tl("teleportDisabled", target2.getName()));
                 }
                 user.sendMessage(tl("teleporting", locposother.getWorld().getName(), locposother.getBlockX(), locposother.getBlockY(), locposother.getBlockZ()));
                 target2.getAsyncTeleport().now(locposother, false, TeleportCause.COMMAND, future);
@@ -98,15 +98,15 @@ public class Commandtp extends EssentialsCommand {
                 final User target = getPlayer(server, user, args, 0);
                 final User toPlayer = getPlayer(server, user, args, 1);
                 if (!target.isTeleportEnabled()) {
-                    throw new Exception(tl("teleportDisabled", target.getDisplayName()));
+                    throw new Exception(tl("teleportDisabled", target.getName()));
                 }
                 if (!toPlayer.isTeleportEnabled()) {
-                    throw new Exception(tl("teleportDisabled", toPlayer.getDisplayName()));
+                    throw new Exception(tl("teleportDisabled", toPlayer.getName()));
                 }
                 if (target.getWorld() != toPlayer.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + toPlayer.getWorld().getName())) {
                     throw new Exception(tl("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
                 }
-                target.sendMessage(tl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
+                target.sendMessage(tl("teleportAtoB", user.getName(), toPlayer.getName()));
                 target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, future);
                 break;
         }
@@ -121,7 +121,7 @@ public class Commandtp extends EssentialsCommand {
         final User target = getPlayer(server, args, 0, true, false);
         if (args.length == 2) {
             final User toPlayer = getPlayer(server, args, 1, true, false);
-            target.sendMessage(tl("teleportAtoB", Console.DISPLAY_NAME, toPlayer.getDisplayName()));
+            target.sendMessage(tl("teleportAtoB", Console.DISPLAY_NAME, toPlayer.getName()));
             target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, getNewExceptionFuture(sender, commandLabel));
         } else if (args.length > 3) {
             final double x = args[1].startsWith("~") ? target.getLocation().getX() + (args[1].length() > 1 ? Double.parseDouble(args[1].substring(1)) : 0) : Double.parseDouble(args[1]);

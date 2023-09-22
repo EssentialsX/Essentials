@@ -87,7 +87,7 @@ public class Commandpay extends EssentialsLoopCommand {
                 }
 
                 if (!player.isAcceptingPay() || (ess.getSettings().isPayExcludesIgnoreList() && player.isIgnoredPlayer(user))) {
-                    user.sendMessage(tl("notAcceptingPay", player.getDisplayName()));
+                    user.sendMessage(tl("notAcceptingPay", player.getName()));
                     return;
                 }
                 if (user.isPromptingPayConfirm() && !amount.equals(user.getConfirmingPayments().get(player))) { // checks if exists and if command needs to be repeated.

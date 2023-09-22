@@ -17,6 +17,6 @@ public class Commandbroadcast extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        ess.broadcastMessage(tl("broadcast", FormatUtil.replaceFormat(getFinalArg(args, 0)).replace("\\n", "\n"), sender.getDisplayName()));
+        ess.broadcastMessage(tl("broadcast", FormatUtil.replaceFormat(getFinalArg(args, 0)).replace("\\n", "\n"), sender.getSender().getName()));
     }
 }

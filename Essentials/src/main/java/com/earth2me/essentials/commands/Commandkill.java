@@ -29,7 +29,7 @@ public class Commandkill extends EssentialsLoopCommand {
     protected void updatePlayer(final Server server, final CommandSource sender, final User user, final String[] args) throws PlayerExemptException {
         final Player matchPlayer = user.getBase();
         if (sender.isPlayer() && user.isAuthorized("essentials.kill.exempt") && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.kill.force")) {
-            throw new PlayerExemptException(tl("killExempt", matchPlayer.getDisplayName()));
+            throw new PlayerExemptException(tl("killExempt", matchPlayer.getName()));
         }
         final EntityDamageEvent ede = new EntityDamageEvent(matchPlayer, sender.isPlayer() && sender.getPlayer().getName().equals(matchPlayer.getName()) ? EntityDamageEvent.DamageCause.SUICIDE : EntityDamageEvent.DamageCause.CUSTOM, Float.MAX_VALUE);
         server.getPluginManager().callEvent(ede);
@@ -38,7 +38,7 @@ public class Commandkill extends EssentialsLoopCommand {
         }
         ede.getEntity().setLastDamageCause(ede);
         matchPlayer.setHealth(0);
-        sender.sendMessage(tl("kill", matchPlayer.getDisplayName()));
+        sender.sendMessage(tl("kill", matchPlayer.getName()));
     }
 
     @Override

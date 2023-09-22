@@ -54,7 +54,7 @@ public class Commanddelhome extends EssentialsCommand {
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("HomeModifyEvent canceled for /delhome execution by " + sender.getDisplayName());
+                ess.getLogger().info("HomeModifyEvent canceled for /delhome execution by " + sender.getSender().getName());
             }
             return;
         }

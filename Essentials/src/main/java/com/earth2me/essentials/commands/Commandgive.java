@@ -80,7 +80,7 @@ public class Commandgive extends EssentialsLoopCommand {
         final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
         final ItemStack finalStack = stack;
         loopOnlinePlayersConsumer(server, sender, false, true, args[0], player -> {
-            sender.sendMessage(tl("giveSpawn", finalStack.getAmount(), itemName, player.getDisplayName()));
+            sender.sendMessage(tl("giveSpawn", finalStack.getAmount(), itemName, player.getName()));
 
             final Map<Integer, ItemStack> leftovers = Inventories.addItem(player.getBase(), player.isAuthorized("essentials.oversizedstacks") ? ess.getSettings().getOversizedStackSize() : 0, finalStack);
 
@@ -89,7 +89,7 @@ public class Commandgive extends EssentialsLoopCommand {
                     final World w = player.getWorld();
                     w.dropItemNaturally(player.getLocation(), item);
                 } else {
-                    sender.sendMessage(tl("giveSpawnFailure", item.getAmount(), itemName, player.getDisplayName()));
+                    sender.sendMessage(tl("giveSpawnFailure", item.getAmount(), itemName, player.getName()));
                 }
             }
 

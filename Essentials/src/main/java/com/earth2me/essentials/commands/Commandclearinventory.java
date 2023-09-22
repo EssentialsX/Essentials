@@ -115,7 +115,7 @@ public class Commandclearinventory extends EssentialsCommand {
         if (type != ClearHandlerType.SPECIFIC_ITEM) {
             final boolean armor = type == ClearHandlerType.ALL_INCLUDING_ARMOR;
             if (showExtended) {
-                sender.sendMessage(tl(armor ? "inventoryClearingAllArmor" : "inventoryClearingAllItems", player.getDisplayName()));
+                sender.sendMessage(tl(armor ? "inventoryClearingAllArmor" : "inventoryClearingAllItems", player.getName()));
             }
             Inventories.removeItems(player, item -> true, armor);
         } else {
@@ -130,15 +130,15 @@ public class Commandclearinventory extends EssentialsCommand {
                 if (amount == -1) {
                     final int removedAmount = Inventories.removeItemSimilar(player, stack, true);
                     if (removedAmount > 0 || showExtended) {
-                        sender.sendMessage(tl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+                        sender.sendMessage(tl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getName()));
                     }
                 } else {
                     stack.setAmount(amount < 0 ? 1 : amount);
                     if (Inventories.removeItemAmount(player, stack, amount)) {
-                        sender.sendMessage(tl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+                        sender.sendMessage(tl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getName()));
                     } else {
                         if (showExtended) {
-                            sender.sendMessage(tl("inventoryClearFail", player.getDisplayName(), amount, stack.getType().toString().toLowerCase(Locale.ENGLISH)));
+                            sender.sendMessage(tl("inventoryClearFail", player.getName(), amount, stack.getType().toString().toLowerCase(Locale.ENGLISH)));
                         }
                     }
                 }

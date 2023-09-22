@@ -101,7 +101,7 @@ public class Commandmail extends EssentialsCommand {
                 u.sendMail(user, msg);
             }
 
-            user.sendMessage(tl("mailSentTo", u.getDisplayName(), u.getName()));
+            user.sendMessage(tl("mailSentTo", u.getName(), u.getName()));
             user.sendMessage(msg);
             return;
         }
@@ -144,7 +144,7 @@ public class Commandmail extends EssentialsCommand {
                 u.sendMail(user, msg, dateDiff);
             }
 
-            user.sendMessage(tl("mailSentToExpire", u.getDisplayName(), DateUtil.formatDateDiff(dateDiff), u.getName()));
+            user.sendMessage(tl("mailSentToExpire", u.getName(), DateUtil.formatDateDiff(dateDiff), u.getName()));
             user.sendMessage(msg);
             return;
         }
@@ -186,7 +186,7 @@ public class Commandmail extends EssentialsCommand {
 
             final ArrayList<MailMessage> mails = mailUser.getMailMessages();
             if (mails == null || mails.isEmpty()) {
-                user.sendMessage(tl(mailUser == user ? "noMail" : "noMailOther", mailUser.getDisplayName()));
+                user.sendMessage(tl(mailUser == user ? "noMail" : "noMailOther", mailUser.getName()));
                 throw new NoChargeException();
             }
 
@@ -226,7 +226,7 @@ public class Commandmail extends EssentialsCommand {
 
             final ArrayList<MailMessage> mails = mailUser.getMailMessages();
             if (mails == null || mails.isEmpty()) {
-                sender.sendMessage(tl("noMailOther", mailUser.getDisplayName()));
+                sender.sendMessage(tl("noMailOther", mailUser.getName()));
                 throw new NoChargeException();
             }
 
