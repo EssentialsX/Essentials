@@ -28,6 +28,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -192,21 +193,26 @@ public class EssentialsEntityListener implements Listener {
         final User user = ess.getUser(event.getEntity());
         if (user.isAuthorized("essentials.keepinv")) {
             event.setKeepInventory(true);
-            event.getDrops().clear();
+
+            // Create a list to hold items to remove from drops
+            List<ItemStack> itemsToRemove = new ArrayList<>();
+
             final ISettings.KeepInvPolicy vanish = ess.getSettings().getVanishingItemsPolicy();
             final ISettings.KeepInvPolicy bind = ess.getSettings().getBindingItemsPolicy();
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01) && (vanish != ISettings.KeepInvPolicy.KEEP || bind != ISettings.KeepInvPolicy.KEEP)) {
                 Inventories.removeItems(user.getBase(), stack -> {
                     if (vanish != ISettings.KeepInvPolicy.KEEP && stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
                         if (vanish == ISettings.KeepInvPolicy.DROP) {
-                            event.getDrops().add(stack.clone());
+                            // Add the item to the removal list
+                            itemsToRemove.add(stack.clone());
                         }
                         return true;
                     }
 
                     if (bind != ISettings.KeepInvPolicy.KEEP && stack.getEnchantments().containsKey(Enchantment.BINDING_CURSE)) {
                         if (bind == ISettings.KeepInvPolicy.DROP) {
-                            event.getDrops().add(stack.clone());
+                            // Add the item to the removal list
+                            itemsToRemove.add(stack.clone());
                         }
                         return true;
                     }
@@ -214,6 +220,9 @@ public class EssentialsEntityListener implements Listener {
                     return false;
                 }, true);
             }
+
+            // Remove items from the drops list
+            event.getDrops().removeAll(itemsToRemove);
         }
     }
 
