@@ -444,7 +444,7 @@ debug: false
 # If you don't set this, the default locale of the server will be used.
 # For example, to set language to English, set locale to en, to use the file "messages_en.properties".
 # Don't forget to remove the # in front of the line.
-# For more information, visit http://wiki.ess3.net/wiki/Locale
+# For more information, visit https://essentialsx.net/wiki/Locale.html
 #locale: en
 
 # Should EssentialsX use player's language instead of the server's when sending messages?
