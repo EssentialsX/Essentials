@@ -454,6 +454,13 @@ debug: false
 # If a player's language is not known, the server's language (or one defined above) will be used.
 per-player-locale: false
 
+# Change the default primary and secondary colours used in EssentialsX messages.
+# Some messages may use custom colours, which will need to be edited in the appropriate message files.
+# For more information on customising messages, see https://essentialsx.net/wiki/Locale.html
+message-colors:
+  primary: '#ffaa00'
+  secondary: '#ff5555'
+
 # Turn off god mode when people leave the server.
 remove-god-on-disconnect: false
 
