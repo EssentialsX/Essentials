@@ -1993,6 +1993,9 @@ public class Settings implements net.ess3.api.ISettings {
                 final NamedTextColor named = AdventureUtil.fromChar(color.charAt(0));
                 return named != null ? named : def;
             }
+
+            final NamedTextColor named = NamedTextColor.NAMES.value(color.toLowerCase(Locale.ENGLISH));
+            return named != null ? named : def;
         } catch (IllegalArgumentException ignored) {
         }
         return def;
