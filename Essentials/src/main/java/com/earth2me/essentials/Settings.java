@@ -1979,7 +1979,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private Tag _getSecondaryColor() {
-        final String color = config.getString("message-colors.secondary", "ff5555");
+        final String color = config.getString("message-colors.secondary", "#ff5555");
         return Tag.styling(_getTagColor(color, NamedTextColor.RED));
     }
 
