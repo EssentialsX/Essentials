@@ -270,7 +270,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             execTimer.start();
 
             final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
-            //upgrade.upgradeLang();
+            upgrade.upgradeLang();
             execTimer.mark("AdventureUpgrade");
 
             i18n = new I18n(this);
