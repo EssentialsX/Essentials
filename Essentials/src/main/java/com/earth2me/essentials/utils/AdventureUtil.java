@@ -64,6 +64,10 @@ public final class AdventureUtil {
     }
 
     public static String legacyToMini(String text) {
+        return legacyToMini(text, false);
+    }
+
+    public static String legacyToMini(String text, boolean useCustomTags) {
         StringBuffer buffer = new StringBuffer();
         Matcher matcher = HEX_PATTERN.matcher(text);
         while (matcher.find()) {
@@ -77,7 +81,16 @@ public final class AdventureUtil {
         while (matcher.find()) {
             final int format = LOOKUP.indexOf(Character.toLowerCase(matcher.group().charAt(1)));
             if (format != -1) {
-                matcher.appendReplacement(buffer, "<" + MINI_TAGS[format] + ">");
+                String tagName = MINI_TAGS[format];
+                if (useCustomTags) {
+                    if (tagName.equals("gold")) {
+                        tagName = "primary";
+                    } else if (tagName.equals("red")) {
+                        tagName = "secondary";
+                    }
+                }
+
+                matcher.appendReplacement(buffer, "<" + tagName + ">");
             }
         }
         matcher.appendTail(buffer);

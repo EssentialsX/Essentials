@@ -1018,11 +1018,14 @@ public class EssentialsUpgrade {
                     properties.load(Files.newReader(backup, Charsets.UTF_8));
                     for (final String key : properties.stringPropertyNames()) {
                         final String value = properties.getProperty(key);
-                        properties.setProperty(key, AdventureUtil.legacyToMini(AdventureUtil.miniMessage().escapeTags(value)));
+                        properties.setProperty(key, AdventureUtil.legacyToMini(AdventureUtil.miniMessage().escapeTags(value), true));
                     }
                     properties.store(Files.newWriter(file, Charsets.UTF_8), null);
                 }
             }
+
+            doneFile.setProperty("updateLegacyToAdventure", true);
+            doneFile.save();
         } catch (final Throwable e) {
             ess.getLogger().log(Level.SEVERE, "Error while upgrading custom locales", e);
         }
