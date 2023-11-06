@@ -33,7 +33,7 @@ public class Commandpotion extends EssentialsCommand {
             final Set<String> potionslist = new TreeSet<>();
             for (final Map.Entry<String, PotionEffectType> entry : Potions.entrySet()) {
                 final String potionName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
-                if (potionslist.contains(potionName) || user.isAuthorized("essentials.potion." + potionName)) {
+                if (potionslist.contains(potionName) || user.isAuthorized("essentials.potions." + potionName)) {
                     potionslist.add(entry.getKey());
                 }
             }
@@ -84,7 +84,7 @@ public class Commandpotion extends EssentialsCommand {
             }
             for (final Map.Entry<String, PotionEffectType> entry : Potions.entrySet()) {
                 final String potionName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
-                if (user.isAuthorized("essentials.potion." + potionName)) {
+                if (user.isAuthorized("essentials.potions." + potionName)) {
                     options.add("effect:" + entry.getKey());
                 }
             }
