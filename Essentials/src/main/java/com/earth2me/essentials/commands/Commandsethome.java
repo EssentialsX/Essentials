@@ -4,6 +4,8 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import net.essentialsx.api.v2.events.HomeModifyEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -62,8 +64,25 @@ public class Commandsethome extends EssentialsCommand {
             return;
         }
 
+        final Location prevHomeLoc = usersHome.getHome(name);
+
+        final HomeModifyEvent event;
+        if (prevHomeLoc == null) {
+            event = new HomeModifyEvent(user, usersHome, name, location, true);
+        } else {
+            event = new HomeModifyEvent(user, usersHome, name, prevHomeLoc, location);
+        }
+
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("HomeModifyEvent canceled for /sethome execution by " + user.getDisplayName());
+            }
+            return;
+        }
+
         usersHome.setHome(name, location);
-        user.sendMessage(tl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
+        user.sendMessage(tl("homeSet", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ(), name));
         usersHome.setLastHomeConfirmation(null);
 
     }

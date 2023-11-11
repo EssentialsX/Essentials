@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.MaterialUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.GameMode;
@@ -45,7 +46,7 @@ public class EssentialsBlockListener implements Listener {
                 if (is != null && is.getType() != null && !MaterialUtil.isAir(is.getType())) {
                     final ItemStack cloneIs = is.clone();
                     cloneIs.setAmount(1);
-                    user.getBase().getInventory().addItem(cloneIs);
+                    Inventories.addItem(user.getBase(), cloneIs);
                     user.getBase().updateInventory();
                 }
             });

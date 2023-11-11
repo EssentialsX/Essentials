@@ -26,7 +26,7 @@ however, have some new requirements:
 * **EssentialsX requires CraftBukkit, Spigot or Paper to run.** Other server software may work, but these are not tested
   by the team and we may not be able to help with any issues that occur.
 * **EssentialsX currently supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.2, 
-  1.16.5, 1.17.1, 1.18.2, and 1.19.2.**
+  1.16.5, 1.17.1, 1.18.2, 1.19.4, and 1.20.2.**
 * **EssentialsX currently requires Java 8 or higher.** We recommend using the latest Java version supported by your
   server software.
 * **EssentialsX requires [Vault](http://dev.bukkit.org/bukkit-plugins/vault/) to enable using chat prefix/suffixes and
@@ -76,8 +76,8 @@ To add EssentialsX to your build system, you should use the following artifacts:
 
 | Type           | Group ID          | Artifact ID   | Version           |
 |:---------------|:------------------|:--------------|:------------------|
-| Latest release | `net.essentialsx` | `EssentialsX` | `2.19.7`          |
-| Snapshots      | `net.essentialsx` | `EssentialsX` | `2.20.0-SNAPSHOT` |
+| Latest release | `net.essentialsx` | `EssentialsX` | `2.20.1`          |
+| Snapshots      | `net.essentialsx` | `EssentialsX` | `2.21.0-SNAPSHOT` |
 | Older releases | `net.ess3`        | `EssentialsX` | `2.18.2`          |
 
 Note: until version `2.18.2`, EssentialsX used the `net.ess3` group ID.  

@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
@@ -27,7 +28,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -90,6 +90,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
     private Boolean toggleShout;
+    private boolean freeze = false;
     private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
     private transient long lastVanishTime = System.currentTimeMillis();
 
@@ -151,7 +152,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isAuthorizedCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return false;
         }
 
@@ -169,7 +170,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isPermSetCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return false;
         }
 
@@ -187,7 +188,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private TriState isAuthorizedExactCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return TriState.UNSET;
         }
 
@@ -310,7 +311,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     private void _dispose() {
         if (!base.isOnline()) {
-            this.base = new OfflinePlayer(getConfigUUID(), ess.getServer());
+            this.base = new OfflinePlayerStub(getConfigUUID(), ess.getServer());
         }
         cleanup();
     }
@@ -678,6 +679,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public boolean isHiddenFrom(Player player) {
+        if (getBase() instanceof OfflinePlayerStub || player instanceof OfflinePlayerStub) {
+            return true;
+        }
         return !player.canSee(getBase());
     }
 
@@ -705,7 +709,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public boolean isHidden(final Player player) {
-        return hidden || !player.canSee(getBase());
+        return hidden || isHiddenFrom(player);
     }
 
     @Override
@@ -1141,12 +1145,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
      * Returns the {@link ItemStack} in the main hand or off-hand. If the main hand is empty then the offhand item is returned - also nullable.
      */
     public ItemStack getItemInHand() {
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
-            return getBase().getInventory().getItemInHand();
-        } else {
-            final PlayerInventory inventory = getBase().getInventory();
-            return inventory.getItemInMainHand() != null ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
-        }
+        return Inventories.getItemInHand(getBase());
     }
 
     @Override
@@ -1194,6 +1193,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public List<String> getSignCopy() {
         return signCopy;
+    }
+
+    @Override
+    public boolean isFreeze() {
+        return freeze;
+    }
+
+    @Override
+    public void setFreeze(boolean freeze) {
+        this.freeze = freeze;
     }
 
     public boolean isBaltopExempt() {

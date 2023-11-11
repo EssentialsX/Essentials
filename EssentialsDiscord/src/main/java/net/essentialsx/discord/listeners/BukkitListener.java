@@ -2,6 +2,7 @@ package net.essentialsx.discord.listeners;
 
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IUser;
 import net.ess3.api.events.AfkStatusChangeEvent;
@@ -10,13 +11,11 @@ import net.ess3.api.events.VanishStatusChangeEvent;
 import net.ess3.provider.AbstractAchievementEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import net.essentialsx.api.v2.events.UserActionEvent;
-import net.essentialsx.api.v2.events.discord.DiscordChatMessageEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.entity.Player;
@@ -24,7 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -80,33 +78,23 @@ public class BukkitListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onChat(AsyncPlayerChatEvent event) {
-        final Player player = event.getPlayer();
-        Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
-            final DiscordChatMessageEvent chatEvent = new DiscordChatMessageEvent(event.getPlayer(), event.getMessage());
-            chatEvent.setCancelled(!jda.getSettings().isShowAllChat() && !event.getRecipients().containsAll(Bukkit.getOnlinePlayers()));
-            Bukkit.getPluginManager().callEvent(chatEvent);
-            if (chatEvent.isCancelled()) {
-                return;
-            }
-
-            jda.sendChatMessage(player, chatEvent.getMessage());
-        });
-    }
-
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(AsyncUserDataLoadEvent event) {
         // Delay join to let nickname load
         if (!isSilentJoinQuit(event.getUser(), "join") && !isVanishHide(event.getUser())) {
-            sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), true);
+            // Check if this is the first time the player has joined
+            if (!event.getUser().getBase().hasPlayedBefore()) {
+                sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), MessageType.DefaultTypes.FIRST_JOIN);
+            } else {
+                sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), MessageType.DefaultTypes.JOIN);
+            }
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event) {
         if (!isSilentJoinQuit(event.getPlayer(), "quit") && !isVanishHide(event.getPlayer())) {
-            sendJoinQuitMessage(event.getPlayer(), event.getQuitMessage(), false);
+            sendJoinQuitMessage(event.getPlayer(), event.getQuitMessage(), MessageType.DefaultTypes.LEAVE);
         }
     }
 
@@ -124,19 +112,34 @@ public class BukkitListener implements Listener {
             return;
         }
         if (event.getValue()) {
-            sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " left the game", false);
+            sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " left the game", MessageType.DefaultTypes.LEAVE);
             return;
         }
-        sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " joined the game", true);
+        sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " joined the game", MessageType.DefaultTypes.JOIN);
     }
 
-    public void sendJoinQuitMessage(final Player player, final String message, boolean join) {
-        sendDiscordMessage(join ? MessageType.DefaultTypes.JOIN : MessageType.DefaultTypes.LEAVE,
-                MessageUtil.formatMessage(join ? jda.getSettings().getJoinFormat(player) : jda.getSettings().getQuitFormat(player),
+    public void sendJoinQuitMessage(final Player player, final String message, MessageType type) {
+        int onlineCount = jda.getPlugin().getEss().getOnlinePlayers().size();
+        final MessageFormat format;
+        switch (type.getKey()) {
+            case "join":
+                format = jda.getSettings().getJoinFormat(player);
+                break;
+            case "first-join":
+                format = jda.getSettings().getFirstJoinFormat(player);
+                break;
+            default: // So that it will always be initialised. Other options shouldn't be possible.
+                format = jda.getSettings().getQuitFormat(player);
+                onlineCount = onlineCount - 1;
+                break;
+
+        }
+        sendDiscordMessage(type,
+                MessageUtil.formatMessage(format,
                         MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                         MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(message),
-                        jda.getPlugin().getEss().getOnlinePlayers().size() - (join ? 0 : 1),
+                        onlineCount,
                         jda.getPlugin().getEss().getUsers().getUserCount()),
                         player);
     }
@@ -251,11 +254,13 @@ public class BukkitListener implements Listener {
                 avatarUrl = DiscordUtil.getAvatarUrl(jda, player);
             }
 
-            if (jda.getSettings().isShowName()) {
-                name = player.getName();
-            } else if (jda.getSettings().isShowDisplayName()) {
-                name = player.getDisplayName();
-            }
+            name = MessageUtil.formatMessage(jda.getSettings().getMcToDiscordNameFormat(player),
+                player.getName(),
+                player.getDisplayName(),
+                jda.getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName()),
+                FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player)),
+                FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player)),
+                jda.getGuild().getMember(jda.getJda().getSelfUser()).getEffectiveName());
 
             uuid = player.getUniqueId();
         }

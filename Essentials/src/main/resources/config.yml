@@ -716,6 +716,10 @@ log-command-block-commands: true
 # Set the maximum speed for projectiles spawned with /fireball.
 max-projectile-speed: 8
 
+# Set the maximum amount of lore lines a user can set with the /itemlore command.
+# Users with the essentials.itemlore.bypass permission will be able to bypass this limit.
+max-itemlore-lines: 10
+
 # Should EssentialsX check for updates?
 # If set to true, EssentialsX will show notifications when a new version is available.
 # This uses the public GitHub API and no identifying information is sent or stored.

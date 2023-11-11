@@ -27,6 +27,8 @@ public final class MaterialUtil {
     private static final Set<Material> POTIONS;
     private static final Set<Material> SIGN_POSTS;
     private static final Set<Material> WALL_SIGNS;
+    private static final Set<Material> HANGING_SIGNS;
+    private static final Set<Material> HANGING_WALL_SIGNS;
 
     private static final Set<Material> HELMETS;
     private static final Set<Material> CHESTPLATES;
@@ -71,7 +73,7 @@ public final class MaterialUtil {
         MOB_HEADS = EnumUtil.getAllMatching(Material.class, "SKELETON_SKULL",
             "SKELETON_WALL_SKULL", "WITHER_SKELETON_SKULL", "WITHER_SKELETON_WALL_SKULL",
             "CREEPER_HEAD", "CREEPER_WALL_HEAD", "ZOMBIE_HEAD", "ZOMBIE_WALL_HEAD", "DRAGON_HEAD"
-            , "DRAGON_WALL_HEAD");
+            , "DRAGON_WALL_HEAD", "PIGLIN_HEAD", "PIGLIN_WALL_HEAD");
 
         PLAYER_HEADS = EnumUtil.getAllMatching(Material.class, "PLAYER_HEAD", "PLAYER_WALL_HEAD");
 
@@ -83,14 +85,30 @@ public final class MaterialUtil {
             "DARK_OAK_SIGN", "JUNGLE_SIGN",
             "OAK_SIGN", "SPRUCE_SIGN",
             "CRIMSON_SIGN", "WARPED_SIGN",
-            "MANGROVE_SIGN");
+            "MANGROVE_SIGN", "CHERRY_SIGN",
+            "BAMBOO_SIGN");
 
         WALL_SIGNS = EnumUtil.getAllMatching(Material.class, "WALL_SIGN",
             "ACACIA_WALL_SIGN", "BIRCH_WALL_SIGN",
             "DARK_OAK_WALL_SIGN", "JUNGLE_WALL_SIGN",
             "OAK_WALL_SIGN", "SPRUCE_WALL_SIGN",
             "CRIMSON_WALL_SIGN", "WARPED_WALL_SIGN",
-            "MANGROVE_WALL_SIGN");
+            "MANGROVE_WALL_SIGN", "CHERRY_WALL_SIGN",
+            "BAMBOO_WALL_SIGN");
+
+        HANGING_SIGNS = EnumUtil.getAllMatching(Material.class, "ACACIA_HANGING_SIGN", "BIRCH_HANGING_SIGN",
+            "DARK_OAK_HANGING_SIGN", "JUNGLE_HANGING_SIGN",
+            "OAK_HANGING_SIGN", "SPRUCE_HANGING_SIGN",
+            "CRIMSON_HANGING_SIGN", "WARPED_HANGING_SIGN",
+            "MANGROVE_HANGING_SIGN", "CHERRY_HANGING_SIGN",
+            "BAMBOO_HANGING_SIGN");
+
+        HANGING_WALL_SIGNS = EnumUtil.getAllMatching(Material.class, "ACACIA_WALL_HANGING_SIGN", "BIRCH_WALL_HANGING_SIGN",
+                "DARK_OAK_WALL_HANGING_SIGN", "JUNGLE_WALL_HANGING_SIGN",
+                "OAK_WALL_HANGING_SIGN", "SPRUCE_WALL_HANGING_SIGN",
+                "CRIMSON_WALL_HANGING_SIGN", "WARPED_WALL_HANGING_SIGN",
+                "MANGROVE_WALL_HANGING_SIGN", "CHERRY_WALL_HANGING_SIGN",
+                "BAMBOO_WALL_HANGING_SIGN");
     }
 
     private MaterialUtil() {
@@ -152,12 +170,20 @@ public final class MaterialUtil {
         return WALL_SIGNS.contains(material);
     }
 
+    public static boolean isHangingSign(final Material material) {
+        return HANGING_SIGNS.contains(material);
+    }
+
+    public static boolean isWallHangingSign(final Material material) {
+        return HANGING_WALL_SIGNS.contains(material);
+    }
+
     public static boolean isEditableBook(final Material material) {
         return EDITABLE_BOOKS.contains(material);
     }
 
     public static boolean isSign(final Material material) {
-        return isSignPost(material) || isWallSign(material);
+        return isSignPost(material) || isWallSign(material) || isHangingSign(material) || isWallHangingSign(material);
     }
 
     public static boolean isSkull(final Material material) {

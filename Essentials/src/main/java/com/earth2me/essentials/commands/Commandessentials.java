@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.userstorage.ModernUserMap;
@@ -22,11 +23,13 @@ import com.google.gson.JsonPrimitive;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -93,6 +96,7 @@ public class Commandessentials extends EssentialsCommand {
         "EssentialsAntiBuild",
         "EssentialsChat",
         "EssentialsDiscord",
+        "EssentialsDiscordLink",
         "EssentialsGeoIP",
         "EssentialsProtect",
         "EssentialsSpawn",
@@ -154,6 +158,10 @@ public class Commandessentials extends EssentialsCommand {
                 runUserMap(sender, args);
                 break;
 
+            case "itemtest":
+                runItemTest(server, sender, commandLabel, args);
+                break;
+
             // "#EasterEgg"
             case "nya":
             case "nyan":
@@ -165,6 +173,56 @@ public class Commandessentials extends EssentialsCommand {
             default:
                 showUsage(sender);
                 break;
+        }
+    }
+
+    public void runItemTest(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (!sender.isAuthorized("essentials.itemtest", ess) || args.length < 2 || !sender.isPlayer()) {
+            return;
+        }
+
+        final Player player = sender.getPlayer();
+        assert player != null;
+
+        switch (args[1]) {
+            case "slot": {
+                if (args.length < 3) {
+                    return;
+                }
+                player.getInventory().setItem(Integer.parseInt(args[2]), new ItemStack(Material.DIRT));
+                break;
+            }
+            case "overfill": {
+                sender.sendMessage(Inventories.addItem(player, 42, false, new ItemStack(Material.DIAMOND_SWORD, 1), new ItemStack(Material.DIRT, 32), new ItemStack(Material.DIRT, 32)).toString());
+                break;
+            }
+            case "overfill2": {
+                if (args.length < 4) {
+                    return;
+                }
+                final boolean armor = Boolean.parseBoolean(args[2]);
+                final boolean add = Boolean.parseBoolean(args[3]);
+                final ItemStack[] items = new ItemStack[]{new ItemStack(Material.DIAMOND_SWORD, 1), new ItemStack(Material.DIRT, 32), new ItemStack(Material.DIRT, 32), new ItemStack(Material.DIAMOND_HELMET, 4), new ItemStack(Material.CHAINMAIL_LEGGINGS, 1)};
+                if (Inventories.hasSpace(player, 0, armor, items)) {
+                    if (add) {
+                        sender.sendMessage(Inventories.addItem(player, 0, armor, items).toString());
+                    }
+                    sender.sendMessage("SO MUCH SPACE!");
+                } else {
+                    sender.sendMessage("No space!");
+                }
+                break;
+            }
+            case "remove": {
+                if (args.length < 3) {
+                    return;
+                }
+                Inventories.removeItemExact(player, new ItemStack(Material.PUMPKIN, 1), Boolean.parseBoolean(args[2]));
+                break;
+            }
+            default: {
+                break;
+            }
         }
     }
 
@@ -270,6 +328,7 @@ public class Commandessentials extends EssentialsCommand {
         files.add(new PasteUtil.PasteFile("dump.json", dump.toString()));
 
         final Plugin essDiscord = Bukkit.getPluginManager().getPlugin("EssentialsDiscord");
+        final Plugin essDiscordLink = Bukkit.getPluginManager().getPlugin("EssentialsDiscordLink");
         final Plugin essSpawn = Bukkit.getPluginManager().getPlugin("EssentialsSpawn");
 
         final Map<String, Command> knownCommandsCopy = new HashMap<>(ess.getKnownCommandsProvider().getKnownCommands());
@@ -330,6 +389,15 @@ public class Commandessentials extends EssentialsCommand {
                                     .replaceAll("[A-Za-z\\d]{24}\\.[\\w-]{6}\\.[\\w-]{27}", "<censored token>")));
                 } catch (IOException e) {
                     sender.sendMessage(tl("dumpErrorUpload", "discord-config.yml", e.getMessage()));
+                }
+
+                if (essDiscordLink != null) {
+                    try {
+                        files.add(new PasteUtil.PasteFile("discord-link-config.yml",
+                                new String(Files.readAllBytes(essDiscordLink.getDataFolder().toPath().resolve("config.yml")), StandardCharsets.UTF_8)));
+                    } catch (IOException e) {
+                        sender.sendMessage(tl("dumpErrorUpload", "discord-link-config.yml", e.getMessage()));
+                    }
                 }
             }
 
@@ -632,6 +700,8 @@ public class Commandessentials extends EssentialsCommand {
                     }
                     ess.getLogger().info("Found " + total + " orphaned userdata files.");
                 });
+            } else if (args[1].equalsIgnoreCase("cache")) {
+                sender.sendMessage(tl("usermapKnown", ess.getUsers().getAllUserUUIDs().size(), ess.getUsers().getNameCache().size()));
             } else {
                 try {
                     final UUID uuid = UUID.fromString(args[1]);

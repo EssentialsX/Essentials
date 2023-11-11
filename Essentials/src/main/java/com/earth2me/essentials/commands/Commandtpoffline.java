@@ -21,6 +21,11 @@ public class Commandtpoffline extends EssentialsCommand {
             final User target = getPlayer(server, args, 0, true, true);
             final Location logout = target.getLogoutLocation();
 
+            if (logout == null) {
+                user.sendMessage(tl("teleportOfflineUnknown", user.getDisplayName()));
+                throw new NoChargeException();
+            }
+
             if (user.getWorld() != logout.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + logout.getWorld().getName())) {
                 throw new Exception(tl("noPerm", "essentials.worlds." + logout.getWorld().getName()));
             }

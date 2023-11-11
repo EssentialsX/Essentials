@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.events.UserBalanceUpdateEvent;
@@ -108,11 +109,11 @@ public class Commandsell extends EssentialsCommand {
         //TODO: Prices for Enchantments
         final ItemStack ris = is.clone();
         ris.setAmount(amount);
-        if (!user.getBase().getInventory().containsAtLeast(ris, amount)) {
+        if (!Inventories.containsAtLeast(user.getBase(), ris, amount)) {
             // This should never happen.
             throw new IllegalStateException("Trying to remove more items than are available.");
         }
-        user.getBase().getInventory().removeItem(ris);
+        Inventories.removeItemAmount(user.getBase(), ris, ris.getAmount());
         user.getBase().updateInventory();
         Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), user.getMoney(), ess);
         user.giveMoney(result, null, UserBalanceUpdateEvent.Cause.COMMAND_SELL);

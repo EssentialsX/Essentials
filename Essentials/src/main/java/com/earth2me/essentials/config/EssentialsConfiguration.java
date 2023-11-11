@@ -33,7 +33,9 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -129,6 +131,7 @@ public class EssentialsConfiguration {
         try {
             return node.get(LazyLocation.class);
         } catch (SerializationException e) {
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
             return null;
         }
     }
@@ -270,7 +273,8 @@ public class EssentialsConfiguration {
         try {
             return node.get(BigDecimal.class);
         } catch (SerializationException e) {
-            return null;
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
+            return def;
         }
     }
 
@@ -301,6 +305,19 @@ public class EssentialsConfiguration {
 
     public Map<String, CommentedConfigurationNode> getMap() {
         return ConfigurateUtil.getMap(configurationNode);
+    }
+
+    public Map<String, String> getStringMap(String path) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node == null || !node.isMap()) {
+            return Collections.emptyMap();
+        }
+
+        final Map<String, String> map = new LinkedHashMap<>();
+        for (Map.Entry<Object, CommentedConfigurationNode> entry : node.childrenMap().entrySet()) {
+            map.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue().rawScalar()));
+        }
+        return map;
     }
 
     public void removeProperty(String path) {

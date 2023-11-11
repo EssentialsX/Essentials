@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -24,8 +25,8 @@ public class Commanditemlore extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final ItemStack item = user.getBase().getItemInHand();
-        if (MaterialUtil.isAir(item.getType())) {
+        final ItemStack item = Inventories.getItemInHand(user.getBase());
+        if (item == null || MaterialUtil.isAir(item.getType())) {
             throw new Exception(tl("itemloreInvalidItem"));
         }
 
@@ -34,7 +35,12 @@ public class Commanditemlore extends EssentialsCommand {
         }
 
         final ItemMeta im = item.getItemMeta();
+        final int loreSize = im.hasLore() ? im.getLore().size() : 0;
         if (args[0].equalsIgnoreCase("add") && args.length > 1) {
+            if (loreSize >= ess.getSettings().getMaxItemLore() && !user.isAuthorized("essentials.itemlore.bypass")) {
+                throw new Exception(tl("itemloreMaxLore"));
+            }
+
             final String line = FormatUtil.formatString(user, "essentials.itemlore", getFinalArg(args, 1)).trim();
             final List<String> lore = im.hasLore() ? im.getLore() : new ArrayList<>();
             lore.add(line);
@@ -73,8 +79,8 @@ public class Commanditemlore extends EssentialsCommand {
         } else if (args.length == 2) {
             switch (args[0].toLowerCase(Locale.ENGLISH)) {
                 case "set": {
-                    final ItemStack item = user.getBase().getItemInHand();
-                    if (!MaterialUtil.isAir(item.getType()) && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+                    final ItemStack item = Inventories.getItemInHand(user.getBase());
+                    if (item != null && !MaterialUtil.isAir(item.getType()) && item.hasItemMeta() && item.getItemMeta().hasLore()) {
                         final List<String> lineNumbers = new ArrayList<>();
                         for (int i = 1; i <= item.getItemMeta().getLore().size(); i++) {
                             lineNumbers.add(String.valueOf(i));
@@ -92,8 +98,8 @@ public class Commanditemlore extends EssentialsCommand {
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("set") && NumberUtil.isInt(args[1])) {
                 final int i = Integer.parseInt(args[1]);
-                final ItemStack item = user.getBase().getItemInHand();
-                if (!MaterialUtil.isAir(item.getType()) && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().size() >= i) {
+                final ItemStack item = Inventories.getItemInHand(user.getBase());
+                if (item != null && !MaterialUtil.isAir(item.getType()) && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().size() >= i) {
                     return Lists.newArrayList(FormatUtil.unformatString(user, "essentials.itemlore", item.getItemMeta().getLore().get(i - 1)));
                 }
             }

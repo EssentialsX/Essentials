@@ -67,7 +67,7 @@ public class Commandspeed extends EssentialsCommand {
         final List<Player> matchedPlayers = server.matchPlayer(name);
         for (final Player matchPlayer : matchedPlayers) {
             final User player = ess.getUser(matchPlayer);
-            if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(matchPlayer)) {
+            if (skipHidden && player.isHidden(sender.getPlayer()) && player.isHiddenFrom(sender.getPlayer())) {
                 continue;
             }
             foundUser = true;

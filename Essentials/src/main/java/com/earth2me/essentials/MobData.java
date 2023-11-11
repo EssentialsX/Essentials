@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -209,6 +209,7 @@ public enum MobData {
     MANGROVE_BOAT("mangrove", Boat.class, MobCompat.BoatVariant.MANGROVE, true),
     OAK_BOAT("oak", Boat.class, MobCompat.BoatVariant.OAK, true),
     SPRUCE_BOAT("spruce", Boat.class, MobCompat.BoatVariant.SPRUCE, true),
+    SADDLE_CAMEL("saddle", MobCompat.CAMEL, Data.CAMELSADDLE, true),
     ;
 
     final private String nickname;
@@ -362,8 +363,8 @@ public enum MobData {
                 ((Horse) spawned).getInventory().setArmor(new ItemStack((Material) this.value, 1));
             } else if (this.type.equals(EntityType.ZOMBIE.getEntityClass()) || this.type.equals(EntityType.SKELETON)) {
                 final EntityEquipment invent = ((LivingEntity) spawned).getEquipment();
-                InventoryWorkaround.setItemInMainHand(invent, new ItemStack((Material) this.value, 1));
-                InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
+                Inventories.setItemInMainHand(invent, new ItemStack((Material) this.value, 1));
+                Inventories.setItemInMainHandDropChance(invent, 0.1f);
             }
         } else if (this.value.equals(Data.RAID_LEADER)) {
             ((Raider) spawned).setPatrolLeader(true);
@@ -387,6 +388,8 @@ public enum MobData {
             }
         } else if (this.value.equals(Data.GOAT_SCREAMING)) {
             ((Goat) spawned).setScreaming(true);
+        } else if (this.value.equals(Data.CAMELSADDLE)) {
+            MobCompat.setCamelSaddle(spawned, target);
         } else if (this.value instanceof MobCompat.BoatVariant) {
             MobCompat.setBoatVariant(spawned, (MobCompat.BoatVariant) this.value);
         } else if (this.value instanceof String) {
@@ -446,5 +449,6 @@ public enum MobData {
         FISH_BODY_COLOR,
         FISH_PATTERN_COLOR,
         GOAT_SCREAMING,
+        CAMELSADDLE,
     }
 }

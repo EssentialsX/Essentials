@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.OfflinePlayer;
+import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
@@ -42,7 +42,7 @@ public class Commandhome extends EssentialsCommand {
         }
         try {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
-                if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayer) {
+                if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayerStub) {
                     throw new Exception(tl("bedOffline"));
                 }
                 PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(location -> {
@@ -101,7 +101,7 @@ public class Commandhome extends EssentialsCommand {
                     user.sendMessage(tl("homes", StringUtil.joinList(homes), count, getHomeLimit(finalPlayer)));
                 }
             });
-            if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayer) {
+            if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayerStub) {
                 message.complete(null);
                 return;
             }
