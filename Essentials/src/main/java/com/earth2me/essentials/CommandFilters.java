@@ -18,13 +18,13 @@ import java.util.regex.PatternSyntaxException;
 
 public class CommandFilters implements IConf {
 
-    private final IEssentials essentials;
+    private final IEssentials ess;
     private final EssentialsConfiguration config;
     private Map<CommandFilter.Type, List<CommandFilter>> commandFilters;
 
-    public CommandFilters(final IEssentials essentials) {
-        this.essentials = essentials;
-        config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "command-filters.yml"), "/command-filters.yml");
+    public CommandFilters(final IEssentials ess) {
+        this.ess = ess;
+        config = new EssentialsConfiguration(new File(ess.getDataFolder(), "command-filters.yml"), "/command-filters.yml");
 
         reloadConfig();
     }
@@ -45,12 +45,12 @@ public class CommandFilters implements IConf {
             final String command = section.node("command").getString();
 
             if (pattern == null && command == null) {
-                EssentialsConf.LOGGER.warning("Invalid command filter '" + filterItem + "', filter must either define 'pattern' or 'command'!");
+                ess.getLogger().warning("Invalid command filter '" + filterItem + "', filter must either define 'pattern' or 'command'!");
                 continue;
             }
 
             if (pattern != null && command != null) {
-                EssentialsConf.LOGGER.warning("Invalid command filter '" + filterItem + "', filter can't have both 'pattern' and 'command'!");
+                ess.getLogger().warning("Invalid command filter '" + filterItem + "', filter can't have both 'pattern' and 'command'!");
                 continue;
             }
 
@@ -62,7 +62,7 @@ public class CommandFilters implements IConf {
             }
 
             final boolean persistentCooldown = section.node("persistent-cooldown").getBoolean(true);
-            final BigDecimal cost = EssentialsConf.toBigDecimal(section.node("cost").getString(), null);
+            final BigDecimal cost = ConfigurateUtil.toBigDecimal(section.node("cost").getString(), null);
 
             final String filterItemName = filterItem.toLowerCase(Locale.ENGLISH);
 
@@ -80,7 +80,7 @@ public class CommandFilters implements IConf {
             try {
                 return Pattern.compile(regex.substring(1));
             } catch (final PatternSyntaxException e) {
-                essentials.getLogger().warning("Command cooldown error: " + e.getMessage());
+                ess.getLogger().warning("Command cooldown error: " + e.getMessage());
                 return null;
             }
         } else {
@@ -112,8 +112,8 @@ public class CommandFilters implements IConf {
             if (!filterPredicate.test(filter)) continue;
 
             final boolean matches = filter.getPattern().matcher(label).matches();
-            if (essentials.getSettings().isDebug()) {
-                essentials.getLogger().info(String.format("Checking command '%s' against filter '%s': %s", label, filter.getName(), matches));
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info(String.format("Checking command '%s' against filter '%s': %s", label, filter.getName(), matches));
             }
 
             if (matches) {
