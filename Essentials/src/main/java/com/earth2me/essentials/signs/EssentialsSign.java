@@ -25,6 +25,7 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -104,6 +105,7 @@ public class EssentialsSign {
             return true;
         }
         sign.setLine(0, tl("signFormatFail", this.signName));
+        changeLineColour(sign, new String[] {"DARK_OAK"}, ChatColor.WHITE);
 
         final SignCreateEvent signEvent = new SignCreateEvent(sign, this, user);
         ess.getServer().getPluginManager().callEvent(signEvent);
@@ -495,6 +497,35 @@ public class EssentialsSign {
         ess.showError(sender, exception, "\\ sign: " + signName);
     }
 
+    protected final void changeLineColour(ISign sign, String[] woodTypes, ChatColor colour, int lineId){
+        if (woodTypes == null){
+            final String line = sign.getLine(lineId);
+            sign.setLine(lineId, colour + line);
+            return;
+        }
+
+        final String signName = sign.getBlock().getType().toString();
+        final ArrayList<String> blockNames = new ArrayList<>();
+        for (String woodType : woodTypes) {
+            blockNames.add(woodType + "_WALL_SIGN");
+            blockNames.add(woodType + "_SIGN");
+            blockNames.add(woodType + "_WALL_HANGING_SIGN");
+        }
+        for (String blockName : blockNames) {
+            if (signName.equals(blockName)) {
+                final String line = sign.getLine(lineId);
+                sign.setLine(lineId, colour + line.toUpperCase());
+            }
+        }
+
+    }
+
+    protected final void changeLineColour(ISign sign, String[] woodTypes, ChatColor colour){
+        for (int i = 1; i < 4; i++){
+            changeLineColour(sign, woodTypes, colour, i);
+        }
+    }
+
     public interface ISign {
         String getLine(final int index);
 
@@ -524,15 +555,19 @@ public class EssentialsSign {
                     builder.append(c);
                 }
             }
-            return builder.toString();
+            return ChatColor.stripColor(builder.toString());
             //return event.getLine(index); // Above code can be removed and replaced with this line when https://github.com/Bukkit/Bukkit/pull/982 is merged.
         }
 
         @Override
         public final void setLine(final int index, final String text) {
-            event.setLine(index, text);
-            sign.setLine(index, text);
+            event.setLine(index, getSignColor(sign, index) + text);
+            sign.setLine(index, getSignColor(sign, index) + text);
             updateSign();
+        }
+
+        protected String getSignColor(final Sign sign, final int lineNumber) {
+            return ChatColor.getLastColors(sign.getLine(lineNumber).trim());
         }
 
         @Override
@@ -562,14 +597,18 @@ public class EssentialsSign {
                     builder.append(c);
                 }
             }
-            return builder.toString();
+            return ChatColor.stripColor(builder.toString());
             //return event.getLine(index); // Above code can be removed and replaced with this line when https://github.com/Bukkit/Bukkit/pull/982 is merged.
         }
 
         @Override
         public final void setLine(final int index, final String text) {
-            getSign().setLine(index, text);
+            getSign().setLine(index, getSignColor(getSign(), index) + text);
             updateSign();
+        }
+
+        protected String getSignColor(final Sign sign, final int lineNumber) {
+            return ChatColor.getLastColors(sign.getLine(lineNumber).trim());
         }
 
         @Override
