@@ -54,7 +54,7 @@ public class Commandsell extends EssentialsCommand {
                 }
             }
             try {
-                if (!user.isAuthorized("essentials.sell.item."+stack.getType().toString())){
+                if (!user.isAuthorized("essentials.item.sell."+stack.getType().toString())){
                     if (isBulk) {
                         notSold.add(stack);
                         continue;

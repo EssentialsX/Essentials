@@ -27,7 +27,7 @@ public class SignSell extends EssentialsSign {
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
         Trade charge = getTrade(sign, 1, 2, player, ess);
         Trade money = getTrade(sign, 3, ess);
-        if (!player.isAuthorized("essentials.sell.item."+ charge.getItemStack().getType())){
+        if (!player.isAuthorized("essentials.item.sell."+ charge.getItemStack().getType())){
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cError: &4You do not have sufficient permissions to sell " + charge.getItemStack().getType()));
             return false;
         }

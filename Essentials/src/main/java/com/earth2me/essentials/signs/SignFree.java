@@ -3,6 +3,7 @@ package com.earth2me.essentials.signs;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -33,6 +34,10 @@ public class SignFree extends EssentialsSign {
         ItemStack itemStack = getItemStack(sign.getLine(1), 1, ess);
         itemStack = getItemMeta(player.getSource(), itemStack, sign.getLine(2), ess);
         final ItemStack item = getItemMeta(player.getSource(), itemStack, sign.getLine(3), ess);
+        if (!player.isAuthorized("essentials.item.free."+ item.getType())){
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cError: &4You do not have sufficient permissions to get " + item.getType()));
+            return false;
+        }
 
         if (item.getType() == Material.AIR) {
             throw new SignException(tl("cantSpawnItem", "Air"));
