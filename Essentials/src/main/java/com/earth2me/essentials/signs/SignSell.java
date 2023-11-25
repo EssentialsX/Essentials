@@ -6,6 +6,7 @@ import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
@@ -26,6 +27,10 @@ public class SignSell extends EssentialsSign {
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
         Trade charge = getTrade(sign, 1, 2, player, ess);
         Trade money = getTrade(sign, 3, ess);
+        if (!player.isAuthorized("essentials.sell.item."+ charge.getItemStack().getType())){
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cError: &4You do not have sufficient permissions to sell " + charge.getItemStack().getType()));
+            return false;
+        }
 
         // Check if the player is trying to sell in bulk.
         if (ess.getSettings().isAllowBulkBuySell() && player.getBase().isSneaking()) {

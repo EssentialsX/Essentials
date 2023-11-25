@@ -54,6 +54,15 @@ public class Commandsell extends EssentialsCommand {
                 }
             }
             try {
+                if (!user.isAuthorized("essentials.sell.item."+stack.getType().toString())){
+                    if (isBulk) {
+                        notSold.add(stack);
+                        continue;
+                    }
+                    user.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cError: &4You do not have sufficient permissions to sell " + stack.getType()));
+                    return;
+                }
+
                 if (stack.getAmount() > 0) {
                     totalWorth = totalWorth.add(sellItem(user, stack, args, isBulk));
                     stack = stack.clone();
