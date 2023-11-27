@@ -46,25 +46,30 @@ public class Commandpay extends EssentialsLoopCommand {
         }
 
         BigDecimal tempAmount = new BigDecimal(sanitizedString);
-        switch (Character.toLowerCase(ogStr.charAt(ogStr.length() - 1))) {
-            case 'k': {
-                tempAmount = tempAmount.multiply(THOUSAND);
-                break;
-            }
-            case 'm': {
-                tempAmount = tempAmount.multiply(MILLION);
-                break;
-            }
-            case 'b': {
-                tempAmount = tempAmount.multiply(BILLION);
-                break;
-            }
-            case 't': {
-                tempAmount = tempAmount.multiply(TRILLION);
-                break;
-            }
-            default: {
-                break;
+        if (ess.getSettings().isPayModifierEnabled()) {
+            final String modifier = ogStr.toLowerCase().replaceAll("[^a-z]", "");
+            if (!modifier.isEmpty()) {
+                switch (modifier) {
+                    case "k": {
+                        tempAmount = tempAmount.multiply(THOUSAND);
+                        break;
+                    }
+                    case "m": {
+                        tempAmount = tempAmount.multiply(MILLION);
+                        break;
+                    }
+                    case "b": {
+                        tempAmount = tempAmount.multiply(BILLION);
+                        break;
+                    }
+                    case "t": {
+                        tempAmount = tempAmount.multiply(TRILLION);
+                        break;
+                    }
+                    default: {
+                        throw new InvalidModifierException();
+                    }
+                }
             }
         }
 

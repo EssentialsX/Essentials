@@ -408,6 +408,8 @@ public interface ISettings extends IConf {
 
     int getMaxItemLore();
 
+    boolean isPayModifierEnabled();
+
     enum KeepInvPolicy {
         KEEP,
         DELETE,

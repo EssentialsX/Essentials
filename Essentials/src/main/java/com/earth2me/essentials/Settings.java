@@ -1948,4 +1948,10 @@ public class Settings implements net.ess3.api.ISettings {
     public int getMaxItemLore() {
         return config.getInt("max-itemlore-lines", 10);
     }
+
+    @Override
+    public boolean isPayModifierEnabled() {
+        return config.getBoolean("pay-modifier-enabled", false);
+    }
+
 }
