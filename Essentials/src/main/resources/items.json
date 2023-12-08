@@ -7808,10 +7808,14 @@
   "wallgr": "granite_wall",
   "wallgranite": "granite_wall",
   "wallgstone": "granite_wall",
-  "grass": {
-    "material": "GRASS"
+  "short_grass": {
+    "material": "SHORT_GRASS",
+    "fallbacks": [
+      "GRASS"
+    ]
   },
-  "minecraft:grass": "grass",
+  "minecraft:short_grass": "short_grass",
+  "grass": "short_grass",
   "grass_block": {
     "material": "GRASS_BLOCK"
   },
