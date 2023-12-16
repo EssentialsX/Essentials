@@ -785,6 +785,38 @@ spawn-if-no-home: true
 # Should players be asked to provide confirmation for homes which they attempt to overwrite?
 confirm-home-overwrite: false
 
+# This setting enables to have for each world limit of homes
+# e.g. when enabled, user can have 3 homes in world, 3 in world_nether and 3 in world_the_end.
+home-limit-per-world: false
+
+# When home-limit-per-world is enabled, with configuration sethome-multiple whichever setting has a number higher,
+# it then will be used
+# e.g. if sethome-multiple.vip is 5 and user has permission for this, and user is in world named world_the_end which
+# limit for home is 2, then user will have limit of higher number, therefore 5 homes in that world.
+# To not follow this logic, please remove user permission for that 'home rank'.
+# If world is not present in this configuration, configuration sethome-multiple.default
+# will be used as a home limit for that world.
+homes-per-world:
+  world: 5
+  world_the_end: 2
+
+# For this configuration, previous configuration home-limit-per-world needs to be enabled.
+# This allows you to create 'world groups' which can consist of how many worlds you want
+# and set limit for these worlds, then they will act as one world with their limit.
+# e.g. 'world group' named player-worlds which has worlds 'world' and 'world_nether'
+# which home limit is set to 4. User will have maximum of 4 homes in these worlds total.
+# If world is not present in this configuration, configuration sethome-multiple.default
+# will be used as a home limit for that world.
+home-limit-per-world-group: false
+
+# Name of the world group can be any english letter with spaces that are -
+# Worlds are split by a colon without spaces, as shown in the example: world,world_nether .
+# Worlds in a 'world group' act as one world.
+homes-per-world-group:
+  player-worlds:
+    worlds: world,world_nether
+    home-limit: 4
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                       Economy                        | #
