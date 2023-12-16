@@ -12,6 +12,7 @@ import org.bukkit.Server;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -90,7 +91,10 @@ public class Commandsethome extends EssentialsCommand {
     private boolean checkHomeLimit(final User user, final User usersHome, final String name) throws Exception {
         if (!user.isAuthorized("essentials.sethome.multiple.unlimited")) {
             final int limit = ess.getSettings().getHomeLimit(user);
-            if (usersHome.getHomes().size() >= limit) {
+            List<String> homes = usersHome.isReachable() ?
+                    usersHome.getHomesPerWorld(Objects.requireNonNull(usersHome.getLocation().getWorld()).getName())
+                    : usersHome.getHomes();
+            if (homes.size() >= limit) {
                 if (usersHome.getHomes().contains(name)) {
                     return false;
                 }

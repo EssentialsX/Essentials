@@ -260,7 +260,7 @@ public class Settings implements net.ess3.api.ISettings {
         if(worlds == null) {
             return new HashSet<>();
         }
-        return new HashSet<>(Arrays.stream(worlds.split(",")).collect(Collectors.toList()));
+        return Arrays.stream(worlds.split(",")).collect(Collectors.toSet());
     }
 
     @Override

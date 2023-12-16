@@ -105,9 +105,9 @@ public interface ISettings extends IConf {
 
     Set getMultipleHomes();
 
-    Set getHomesPerWorld();
+    Set<String>  getHomesPerWorld();
 
-    Set getHomesPerWorldGroup();
+    Set<String> getHomesPerWorldGroup();
 
     int getHomeLimit(String set);
 
@@ -115,7 +115,7 @@ public interface ISettings extends IConf {
 
     int getWorldGroupHomeLimit(String set);
 
-    Set getWorldGroupHomeList(String set);
+    Set<String>  getWorldGroupHomeList(String set);
 
     boolean isHomeLimitPerWorldEnabled();
 

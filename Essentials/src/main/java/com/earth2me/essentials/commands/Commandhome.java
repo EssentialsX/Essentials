@@ -10,9 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -131,6 +129,9 @@ public class Commandhome extends EssentialsCommand {
         if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions() && !user.isAuthorized("essentials.worlds." + loc.getWorld().getName())) {
             throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
         }
+        if(!isUserHomeInWorldGroupWorld(user.getWorld().getName(), Objects.requireNonNull(loc.getWorld()).getName())) {
+            throw new Exception(tl("teleportNotPossible"));
+        }
         final UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, home, loc, UserTeleportHomeEvent.HomeType.HOME);
         user.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
@@ -141,6 +142,18 @@ public class Commandhome extends EssentialsCommand {
                 }
             });
         }
+    }
+
+    private boolean isUserHomeInWorldGroupWorld(String worldFrom, String worldTo) {
+        Set<String> worldGroups = ess.getSettings().getHomesPerWorldGroup();
+
+        for(String wGroup : worldGroups) {
+            Set<String> worldsPerWG = ess.getSettings().getWorldGroupHomeList(wGroup);
+
+            if(worldsPerWG.contains(worldFrom) && worldsPerWG.contains(worldTo))
+                return true;
+        }
+        return false;
     }
 
     @Override
