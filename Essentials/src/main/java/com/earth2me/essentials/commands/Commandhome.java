@@ -16,7 +16,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 

@@ -14,7 +14,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -53,7 +55,7 @@ public class HomeTest {
     }
 
     @Test
-    public void test_home_limit_without_multiple_perm() {
+    public void testHomeLimitWithoutMultiplePerm() {
         final User user = mock(User.class);
 
         when(user.isAuthorized("essentials.sethome.multiple")).thenReturn(false);
@@ -62,7 +64,7 @@ public class HomeTest {
     }
 
     @Test
-    public void test_home_limit_without_world_home_limit() {
+    public void testHomeLimitWithoutWorldHomeLimit() {
         final User user = mock(User.class);
 
         when(settings.isHomeLimitPerWorldEnabled()).thenReturn(false);
@@ -73,7 +75,7 @@ public class HomeTest {
     }
 
     @Test
-    public void test_home_limit_without_world_home_limit_vip() {
+    public void testHomeLimitWithoutWorldHomeLimitVip() {
         final User user = mock(User.class);
 
         when(settings.isHomeLimitPerWorldEnabled()).thenReturn(false);
@@ -85,7 +87,7 @@ public class HomeTest {
     }
 
     @Test
-    public void test_home_limit_with_world_home_limit() {
+    public void testHomeLimitWithWorldHomeLimit() {
         final User user = mock(User.class);
         final World world = mock(World.class);
 
@@ -100,7 +102,7 @@ public class HomeTest {
     }
 
     @Test
-    public void test_home_limit_with_world_home_limit_default() {
+    public void testHomeLimitWithWorldHomeLimitDefault() {
         final User user = mock(User.class);
         final World world = mock(World.class);
 
@@ -115,7 +117,7 @@ public class HomeTest {
     }
 
     @Test
-    public void test_home_limit_with_world_group_home_limit() {
+    public void testHomeLimitWithWorldGroupHomeLimit() {
         final User user = mock(User.class);
         final World world = mock(World.class);
 
@@ -131,7 +133,7 @@ public class HomeTest {
     }
 
     @Test
-    public void test_home_limit_with_world_group_home_limit_outside_default() {
+    public void testHomeLimitWithWorldGroupHomeLimitOutsideDefault() {
         final User user = mock(User.class);
         final World world = mock(World.class);
 
@@ -147,8 +149,8 @@ public class HomeTest {
     }
 
     @Test
-    public void test_home_in_wg() throws NoSuchFieldException {
-        Field field = EssentialsCommand.class.getDeclaredField("ess");
+    public void testHomeInWG() throws NoSuchFieldException {
+        final Field field = EssentialsCommand.class.getDeclaredField("ess");
         field.setAccessible(true);
         FieldSetter.setField(commandhome, field, essentials);
 
@@ -156,8 +158,8 @@ public class HomeTest {
     }
 
     @Test
-    public void test_home_not_in_wg() throws NoSuchFieldException {
-        Field field = EssentialsCommand.class.getDeclaredField("ess");
+    public void testHomeNotInWG() throws NoSuchFieldException {
+        final Field field = EssentialsCommand.class.getDeclaredField("ess");
         field.setAccessible(true);
         FieldSetter.setField(commandhome, field, essentials);
 
