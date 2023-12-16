@@ -231,11 +231,11 @@ public class Settings implements net.ess3.api.ISettings {
         return limit;
     }
 
-    private boolean isUserInWorld(User user, String worldName) {
-        return Objects.requireNonNull(user.getLocation().getWorld()).getName().equalsIgnoreCase(worldName);
+    public boolean isUserInWorld(User user, String worldName) {
+        return Objects.requireNonNull(user.getWorld()).getName().equalsIgnoreCase(worldName);
     }
 
-    private boolean isUserInWorldGroup(User user, String worldGroup) {
+    public boolean isUserInWorldGroup(User user, String worldGroup) {
         return getWorldGroupHomeList(worldGroup).stream().anyMatch(worldName -> isUserInWorld(user, worldName));
     }
 
