@@ -133,7 +133,7 @@ public class Commandhome extends EssentialsCommand {
         if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions() && !user.isAuthorized("essentials.worlds." + loc.getWorld().getName())) {
             throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
         }
-        if(!isUserHomeInWorldGroupWorld(user.getWorld().getName(), Objects.requireNonNull(loc.getWorld()).getName())) {
+        if(!isUserHomeInWorldOrWorldGroupWorld(user.getWorld().getName(), Objects.requireNonNull(loc.getWorld()).getName())) {
             throw new Exception(tl("teleportNotPossible"));
         }
         final UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, home, loc, UserTeleportHomeEvent.HomeType.HOME);
@@ -148,14 +148,23 @@ public class Commandhome extends EssentialsCommand {
         }
     }
 
-    public boolean isUserHomeInWorldGroupWorld(String worldFrom, String worldTo) {
-        final Set<String> worldGroups = ess.getSettings().getHomesPerWorldGroup();
+    public boolean isUserHomeInWorldOrWorldGroupWorld(String worldFrom, String worldTo) {
+        final boolean isHomeLimitPerWorldEnabled = ess.getSettings().isHomeLimitPerWorldEnabled();
+        final boolean isHomeLimitPerWorldGroupEnabled = ess.getSettings().isHomeLimitPerWorldGroupEnabled();
+        if(!isHomeLimitPerWorldEnabled) {
+            return true;
+        }
+        if(isHomeLimitPerWorldGroupEnabled) {
+            final Set<String> worldGroups = ess.getSettings().getHomesPerWorldGroup();
 
-        for(String wGroup : worldGroups) {
-            final Set<String> worldsPerWG = ess.getSettings().getWorldGroupHomeList(wGroup);
+            for (String wGroup : worldGroups) {
+                final Set<String> worldsPerWG = ess.getSettings().getWorldGroupHomeList(wGroup);
 
-            if(worldsPerWG.contains(worldFrom) && worldsPerWG.contains(worldTo))
-                return true;
+                if (worldsPerWG.contains(worldFrom) && worldsPerWG.contains(worldTo))
+                    return true;
+            }
+        }else{
+            return worldFrom.equalsIgnoreCase(worldTo);
         }
         return false;
     }

@@ -51,7 +51,7 @@ public class HomeTest {
 
         when(essentials.getSettings()).thenReturn(settings);
         commandhome.setEssentials(essentials);
-        when(commandhome.isUserHomeInWorldGroupWorld(any(String.class), any(String.class))).thenCallRealMethod();
+        when(commandhome.isUserHomeInWorldOrWorldGroupWorld(any(String.class), any(String.class))).thenCallRealMethod();
     }
 
     @Test
@@ -150,19 +150,48 @@ public class HomeTest {
 
     @Test
     public void testHomeInWG() throws NoSuchFieldException {
+        when(settings.isHomeLimitPerWorldEnabled()).thenReturn(true);
+        when(settings.isHomeLimitPerWorldGroupEnabled()).thenReturn(true);
+
         final Field field = EssentialsCommand.class.getDeclaredField("ess");
         field.setAccessible(true);
         FieldSetter.setField(commandhome, field, essentials);
 
-        assertTrue(commandhome.isUserHomeInWorldGroupWorld("world", "world_nether"));
+        assertTrue(commandhome.isUserHomeInWorldOrWorldGroupWorld("world", "world_nether"));
     }
 
     @Test
     public void testHomeNotInWG() throws NoSuchFieldException {
+        when(settings.isHomeLimitPerWorldEnabled()).thenReturn(true);
+        when(settings.isHomeLimitPerWorldGroupEnabled()).thenReturn(true);
         final Field field = EssentialsCommand.class.getDeclaredField("ess");
         field.setAccessible(true);
         FieldSetter.setField(commandhome, field, essentials);
 
-        assertFalse(commandhome.isUserHomeInWorldGroupWorld("world", "world_the_end"));
+        assertFalse(commandhome.isUserHomeInWorldOrWorldGroupWorld("world", "world_the_end"));
+    }
+
+    @Test
+    public void testHomeInWorld() throws NoSuchFieldException {
+        when(settings.isHomeLimitPerWorldEnabled()).thenReturn(true);
+        when(settings.isHomeLimitPerWorldGroupEnabled()).thenReturn(false);
+
+        final Field field = EssentialsCommand.class.getDeclaredField("ess");
+        field.setAccessible(true);
+        FieldSetter.setField(commandhome, field, essentials);
+
+        assertTrue(commandhome.isUserHomeInWorldOrWorldGroupWorld("world", "world"));
+    }
+
+    @Test
+    public void testHomeNotInWorld() throws NoSuchFieldException {
+        when(settings.isHomeLimitPerWorldEnabled()).thenReturn(true);
+        when(settings.isHomeLimitPerWorldGroupEnabled()).thenReturn(false);
+
+        final Field field = EssentialsCommand.class.getDeclaredField("ess");
+        field.setAccessible(true);
+        FieldSetter.setField(commandhome, field, essentials);
+
+        assertFalse(commandhome.isUserHomeInWorldOrWorldGroupWorld("world", "world_nether"));
     }
 }
