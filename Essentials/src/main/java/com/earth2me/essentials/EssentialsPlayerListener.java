@@ -272,7 +272,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             final String msg = ess.getSettings().getCustomQuitMessage()
                 .replace("{PLAYER}", player.getDisplayName())
                 .replace("{USERNAME}", player.getName())
-                .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
+                .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size() - 1)) // Subtract 1 as the leaving player is still online during this time
                 .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
                 .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
                 .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)));

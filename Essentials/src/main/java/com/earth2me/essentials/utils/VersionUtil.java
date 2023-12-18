@@ -38,8 +38,9 @@ public final class VersionUtil {
     public static final BukkitVersion v1_19_R01 = BukkitVersion.fromString("1.19-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_19_4_R01 = BukkitVersion.fromString("1.19.4-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_20_1_R01 = BukkitVersion.fromString("1.20.1-R0.1-SNAPSHOT");
+    public static final BukkitVersion v1_20_4_R01 = BukkitVersion.fromString("1.20.4-R0.1-SNAPSHOT");
 
-    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01, v1_18_2_R01, v1_19_4_R01, v1_20_1_R01);
+    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01, v1_18_2_R01, v1_19_4_R01, v1_20_4_R01);
 
     public static final boolean PRE_FLATTENING = VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01);
 
@@ -73,6 +74,7 @@ public final class VersionUtil {
         // Forge - Doesn't support Bukkit
         // The below translates to net.minecraftforge.common.MinecraftForge
         builder.put(dumb(new int[] {110, 101, 116, 46, 109, 105, 110, 101, 99, 114, 97, 102, 116, 102, 111, 114, 103, 101, 46, 99, 111, 109, 109, 111, 110, 46, 77, 105, 110, 101, 99, 114, 97, 102, 116, 70, 111, 114, 103, 101}, 40), SupportStatus.UNSTABLE);
+        builder.put("brand:Mohist", SupportStatus.UNSTABLE);
 
         // Fabric - Doesn't support Bukkit
         // The below translates to net.fabricmc.loader.launch.knot.KnotServer
@@ -357,7 +359,7 @@ public final class VersionUtil {
 
         final String decode = String.valueOf(chars);
 
-        if (decode.length() != len) {
+        if (decode.charAt(0) != 'n' || decode.length() != len) {
             System.exit(1);
             return "why do hybrids try to bypass this?";
         }
