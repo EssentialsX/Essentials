@@ -12,6 +12,7 @@ import com.google.common.io.Files;
 import com.google.gson.reflect.TypeToken;
 import net.ess3.api.IEssentials;
 import net.essentialsx.api.v2.services.mail.MailMessage;
+import nu.studer.java.util.OrderedProperties;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,7 +41,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -1020,7 +1020,7 @@ public class EssentialsUpgrade {
                         final File backup = new File(backDir, file.getName());
                         Files.move(file, backup);
                         isThereAtLeastOneBackup = true;
-                        final Properties properties = new Properties();
+                        final OrderedProperties properties = new OrderedProperties();
                         properties.load(Files.newReader(backup, Charsets.UTF_8));
                         for (final String key : properties.stringPropertyNames()) {
                             final String value = properties.getProperty(key);

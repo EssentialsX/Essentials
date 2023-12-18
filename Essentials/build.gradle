@@ -12,6 +12,7 @@ dependencies {
 
     implementation 'org.spongepowered:configurate-yaml:4.1.2'
     implementation 'org.checkerframework:checker-qual:3.21.0'
+    implementation 'nu.studer:java-ordered-properties:1.0.4'
 
     implementation 'net.kyori:adventure-api:4.15.0'
     implementation 'net.kyori:adventure-text-minimessage:4.15.0'
@@ -45,6 +46,7 @@ shadowJar {
         include (dependency('org.yaml:snakeyaml'))
         include (dependency('io.leangen.geantyref:geantyref'))
         include (dependency('org.checkerframework:checker-qual'))
+        include (dependency('nu.studer:java-ordered-properties'))
         include (dependency('net.kyori:adventure-api'))
         include (dependency('net.kyori:adventure-key'))
         include (dependency('net.kyori:examination-api'))
