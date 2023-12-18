@@ -15,7 +15,6 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.PasteUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
@@ -26,7 +25,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -57,7 +55,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -113,70 +110,91 @@ public class Commandessentials extends EssentialsCommand {
     );
     private transient TuneRunnable currentTune = null;
 
+    private final EssentialsCommandNode.Root<CommandSource> tree = EssentialsCommandNode.root(root -> {
+        // Info commands
+        root.literal("debug", ctx -> ctx.execute(this::runDebug), "verbose");
+        root.literal("version", ctx -> ctx.execute(this::runVersion), "ver");
+        root.literal("commands", ctx -> ctx.execute(this::runCommands), "cmd");
+        root.literal("dump", ctx -> ctx.execute(this::runDump));
+
+        // Config commands
+        root.literal("reload", ctx -> ctx.execute(this::runReload));
+        root.literal("locale", locale -> {
+            // TODO
+            locale.execute(ctx -> ctx.sender().sendMessage("Not yet implemented"), Arrays.asList("create", "export", "getraw"));
+        }, "lang");
+
+        // Data commands
+        root.literal("reset", ctx -> ctx.execute(this::runReset));
+        root.literal("cleanup", ctx -> ctx.execute(this::runCleanup));
+        root.literal("homes", ctx -> ctx.execute(this::runHomes));
+        root.literal("usermap", usermap -> {
+            // TODO: split these out from #runUsermap
+            usermap.literal("full", ctx -> ctx.execute(TODO -> {}));
+            usermap.literal("purge", ctx -> ctx.execute(TODO -> {}));
+            usermap.literal("lookup", ctx -> ctx.execute(TODO -> {}));
+        });
+
+        // Internal debugging and #EasterEgg
+        root.literal("itemtest", ctx -> ctx.execute(this::runItemTest));
+        // TODO: hide from tab-complete
+        root.literal("moo", ctx -> ctx.execute(this::runMoo)); // todo: moo moo
+        root.literal("nyan", ctx -> ctx.execute(this::runNya), "nya");
+
+        // TODO: missing tab completions
+        /*
+            switch (args[0]) {
+                case "moo":
+                    if (args.length == 2) {
+                        return Lists.newArrayList("moo");
+                    }
+                    break;
+                case "reset":
+                    if (args.length == 2) {
+                        return getPlayers(server, sender);
+                    }
+                    break;
+                case "cleanup":
+                    if (args.length == 2) {
+                        return COMMON_DURATIONS;
+                    } else if (args.length == 3 || args.length == 4) {
+                        return Lists.newArrayList("-1", "0");
+                    }
+                    break;
+                case "homes":
+                    if (args.length == 2) {
+                        return Lists.newArrayList("fix", "delete");
+                    } else if (args.length == 3 && args[1].equalsIgnoreCase("delete")) {
+                        return server.getWorlds().stream().map(World::getName).collect(Collectors.toList());
+                    }
+                    break;
+                case "dump":
+                    final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "worth", "tpr", "spawns", "commands", "all");
+                    for (String arg : args) {
+                        if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
+                            list.clear();
+                            return list;
+                        }
+                        list.remove(arg.toLowerCase(Locale.ENGLISH));
+                    }
+                    return list;
+            }
+
+            return Collections.emptyList();
+
+         */
+    });
+
     public Commandessentials() {
         super("essentials");
     }
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length == 0) {
-            showUsage(sender);
-        }
-
-        switch (args[0]) {
-            // Info commands
-            case "debug":
-            case "verbose":
-                runDebug(server, sender, commandLabel, args);
-                break;
-            case "ver":
-            case "version":
-                runVersion(server, sender, commandLabel, args);
-                break;
-            case "cmd":
-            case "commands":
-                runCommands(server, sender, commandLabel, args);
-                break;
-            case "dump":
-                runDump(server, sender, commandLabel, args);
-                break;
-
-            // Data commands
-            case "reload":
-                runReload(server, sender, commandLabel, args);
-                break;
-            case "reset":
-                runReset(server, sender, commandLabel, args);
-                break;
-            case "cleanup":
-                runCleanup(server, sender, commandLabel, args);
-                break;
-            case "homes":
-                runHomes(server, sender, commandLabel, args);
-                break;
-            case "usermap":
-                runUserMap(sender, args);
-                break;
-
-            case "itemtest":
-                runItemTest(server, sender, commandLabel, args);
-                break;
-
-            // "#EasterEgg"
-            case "nya":
-            case "nyan":
-                runNya(server, sender, commandLabel, args);
-                break;
-            case "moo":
-                runMoo(server, sender, commandLabel, args);
-                break;
-            default:
-                showUsage(sender);
-                break;
-        }
+        tree.run(server, sender, commandLabel, args);
     }
 
-    public void runItemTest(Server server, CommandSource sender, String commandLabel, String[] args) {
+    public void runItemTest(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (!sender.isAuthorized("essentials.itemtest", ess) || args.length < 2 || !sender.isPlayer()) {
             return;
         }
@@ -227,6 +245,7 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     // Displays the command's usage.
+    // todo: remove
     private void showUsage(final CommandSource sender) throws Exception {
         throw new NotEnoughArgumentsException();
     }
@@ -484,9 +503,9 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     // Toggles debug mode.
-    private void runDebug(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+    private void runDebug(final EssentialsCommandNode.WalkContext<CommandSource> context) {
         ess.getSettings().setDebug(!ess.getSettings().isDebug());
-        sender.sendMessage("Essentials " + ess.getDescription().getVersion() + " debug mode " + (ess.getSettings().isDebug() ? "enabled" : "disabled"));
+        context.sender().sendMessage("Essentials " + ess.getDescription().getVersion() + " debug mode " + (ess.getSettings().isDebug() ? "enabled" : "disabled"));
     }
 
     // Reloads all reloadable configs.
@@ -832,60 +851,12 @@ public class Commandessentials extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1) {
-            final List<String> options = Lists.newArrayList();
-            options.add("reload");
-            options.add("version");
-            options.add("dump");
-            options.add("commands");
-            options.add("debug");
-            options.add("reset");
-            options.add("cleanup");
-            options.add("homes");
-            //options.add("uuidconvert");
-            //options.add("nya");
-            //options.add("moo");
-            return options;
+        try {
+            return tree.tabComplete(server, sender, commandLabel, args);
+        } catch (Exception e) {
+            // TODO: ???
+            throw new RuntimeException(e);
         }
-
-        switch (args[0]) {
-            case "moo":
-                if (args.length == 2) {
-                    return Lists.newArrayList("moo");
-                }
-                break;
-            case "reset":
-                if (args.length == 2) {
-                    return getPlayers(server, sender);
-                }
-                break;
-            case "cleanup":
-                if (args.length == 2) {
-                    return COMMON_DURATIONS;
-                } else if (args.length == 3 || args.length == 4) {
-                    return Lists.newArrayList("-1", "0");
-                }
-                break;
-            case "homes":
-                if (args.length == 2) {
-                    return Lists.newArrayList("fix", "delete");
-                } else if (args.length == 3 && args[1].equalsIgnoreCase("delete")) {
-                    return server.getWorlds().stream().map(World::getName).collect(Collectors.toList());
-                }
-                break;
-            case "dump":
-                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "worth", "tpr", "spawns", "commands", "all");
-                for (String arg : args) {
-                    if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
-                        list.clear();
-                        return list;
-                    }
-                    list.remove(arg.toLowerCase(Locale.ENGLISH));
-                }
-                return list;
-        }
-
-        return Collections.emptyList();
     }
 
     private static class TuneRunnable extends BukkitRunnable {
