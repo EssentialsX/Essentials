@@ -13,6 +13,7 @@ public class DiscordLinkSettings implements IConf {
     private LinkPolicy linkPolicy;
     private Map<String, String> roleSyncGroups;
     private Map<String, String> roleSyncRoles;
+    private NameSyncDirection nameSyncDirection;
 
     public DiscordLinkSettings(EssentialsDiscordLink plugin) {
         this.plugin = plugin;
@@ -68,6 +69,10 @@ public class DiscordLinkSettings implements IConf {
         return config.getStringMap("role-sync.roles");
     }
 
+    public NameSyncDirection getNameSyncDirection() {
+        return nameSyncDirection;
+    }
+
     public enum LinkPolicy {
         KICK,
         FREEZE,
@@ -83,6 +88,21 @@ public class DiscordLinkSettings implements IConf {
         }
     }
 
+    public enum NameSyncDirection {
+        NONE,
+        MC_TO_DISCORD,
+        DISCORD_TO_MC;
+
+        static NameSyncDirection fromName(final String name) {
+            for (NameSyncDirection direction : values()) {
+                if (direction.name().replaceAll("_", "-").equalsIgnoreCase(name)) {
+                    return direction;
+                }
+            }
+            return NameSyncDirection.NONE;
+        }
+    }
+
     @Override
     public void reloadConfig() {
         config.load();
@@ -90,6 +110,7 @@ public class DiscordLinkSettings implements IConf {
         linkPolicy = LinkPolicy.fromName(config.getString("link-policy", "none"));
         roleSyncGroups = _getRoleSyncGroups();
         roleSyncRoles = _getRoleSyncRoles();
+        nameSyncDirection = NameSyncDirection.fromName(config.getString("name-sync", "none"));
 
         plugin.onReload();
     }
