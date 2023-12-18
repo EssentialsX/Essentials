@@ -508,7 +508,7 @@ public class EssentialsSign {
     static class EventSign implements ISign {
         private final transient SignChangeEvent event;
         private final transient Block block;
-        private final transient Sign sign;
+        private transient Sign sign;
 
         EventSign(final SignChangeEvent event) {
             this.event = event;
@@ -543,22 +543,21 @@ public class EssentialsSign {
         @Override
         public void updateSign() {
             sign.update();
+            sign = (Sign) block.getState();
         }
     }
 
     static class BlockSign implements ISign {
-        private final transient Sign sign;
         private final transient Block block;
 
         BlockSign(final Block block) {
             this.block = block;
-            this.sign = (Sign) block.getState();
         }
 
         @Override
         public final String getLine(final int index) {
             final StringBuilder builder = new StringBuilder();
-            for (final char c : sign.getLine(index).toCharArray()) {
+            for (final char c : getSign().getLine(index).toCharArray()) {
                 if (c < 0xF700 || c > 0xF747) {
                     builder.append(c);
                 }
@@ -569,7 +568,7 @@ public class EssentialsSign {
 
         @Override
         public final void setLine(final int index, final String text) {
-            sign.setLine(index, text);
+            getSign().setLine(index, text);
             updateSign();
         }
 
@@ -578,9 +577,15 @@ public class EssentialsSign {
             return block;
         }
 
+        private Sign getSign() {
+            // Starting in 1.19, the block state is no longer persistent I guess? We must get it every time to prevent
+            // sign updates from not taking effect.
+            return (Sign) block.getState();
+        }
+
         @Override
         public final void updateSign() {
-            sign.update();
+            getSign().update();
         }
     }
 }
