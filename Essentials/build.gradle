@@ -56,6 +56,8 @@ shadowJar {
         include (dependency('net.kyori:adventure-text-serializer-bungeecord'))
         include (dependency('net.kyori:adventure-text-serializer-gson'))
         include (dependency('net.kyori:adventure-text-serializer-gson-legacy-impl'))
+        include (dependency('net.kyori:adventure-text-serializer-json'))
+        include (dependency('net.kyori:adventure-text-serializer-json-legacy-impl'))
         include (dependency('net.kyori:adventure-text-serializer-legacy'))
         include (dependency('net.kyori:adventure-text-minimessage'))
         include (project(':providers:BaseProviders'))
