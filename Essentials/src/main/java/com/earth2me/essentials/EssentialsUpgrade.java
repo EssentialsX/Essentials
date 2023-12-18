@@ -993,8 +993,6 @@ public class EssentialsUpgrade {
             return;
         }
 
-        //todo do we convert/primary secondary colors? how?
-
         ess.getLogger().log(Level.WARNING, "Beginning Adventure locale file conversion.");
 
         try {
@@ -1009,19 +1007,32 @@ public class EssentialsUpgrade {
                 return;
             }
 
+            final File messagesDir = new File(dataFolder, "messages");
+            //noinspection ResultOfMethodCallIgnored
+            messagesDir.mkdir();
+
             final File[] files = dataFolder.listFiles();
-            for (final File file : files) {
-                if (file.getName().endsWith(".properties")) {
-                    final File backup = new File(backDir, file.getName());
-                    Files.move(file, backup);
-                    final Properties properties = new Properties();
-                    properties.load(Files.newReader(backup, Charsets.UTF_8));
-                    for (final String key : properties.stringPropertyNames()) {
-                        final String value = properties.getProperty(key);
-                        properties.setProperty(key, AdventureUtil.legacyToMini(AdventureUtil.miniMessage().escapeTags(value), true));
+            boolean isThereAtLeastOneBackup = false;
+            if (files != null) {
+                for (final File file : files) {
+                    if (file.getName().endsWith(".properties")) {
+                        final File newFile = new File(messagesDir, file.getName());
+                        final File backup = new File(backDir, file.getName());
+                        Files.move(file, backup);
+                        isThereAtLeastOneBackup = true;
+                        final Properties properties = new Properties();
+                        properties.load(Files.newReader(backup, Charsets.UTF_8));
+                        for (final String key : properties.stringPropertyNames()) {
+                            final String value = properties.getProperty(key);
+                            properties.setProperty(key, AdventureUtil.legacyToMini(AdventureUtil.miniMessage().escapeTags(value), true));
+                        }
+                        properties.store(Files.newWriter(newFile, Charsets.UTF_8), null);
                     }
-                    properties.store(Files.newWriter(file, Charsets.UTF_8), null);
                 }
+            }
+
+            if (!isThereAtLeastOneBackup) {
+                backDir.delete();
             }
 
             doneFile.setProperty("updateLegacyToAdventure", true);

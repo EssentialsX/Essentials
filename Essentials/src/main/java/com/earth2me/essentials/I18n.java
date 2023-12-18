@@ -222,16 +222,18 @@ public class I18n implements net.ess3.api.II18n {
      * Attempts to load properties files from the plugin directory before falling back to the jar.
      */
     private static class FileResClassLoader extends ClassLoader {
-        private final transient File dataFolder;
+        private final transient File messagesFolder;
 
         FileResClassLoader(final ClassLoader classLoader, final IEssentials ess) {
             super(classLoader);
-            this.dataFolder = ess.getDataFolder();
+            this.messagesFolder = new File(ess.getDataFolder(), "messages");
+            //noinspection ResultOfMethodCallIgnored
+            this.messagesFolder.mkdirs();
         }
 
         @Override
         public URL getResource(final String string) {
-            final File file = new File(dataFolder, string);
+            final File file = new File(messagesFolder, string);
             if (file.exists()) {
                 try {
                     return file.toURI().toURL();
@@ -243,7 +245,7 @@ public class I18n implements net.ess3.api.II18n {
 
         @Override
         public InputStream getResourceAsStream(final String string) {
-            final File file = new File(dataFolder, string);
+            final File file = new File(messagesFolder, string);
             if (file.exists()) {
                 try {
                     return new FileInputStream(file);
