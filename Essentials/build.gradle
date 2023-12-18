@@ -13,9 +13,9 @@ dependencies {
     implementation 'org.spongepowered:configurate-yaml:4.1.2'
     implementation 'org.checkerframework:checker-qual:3.21.0'
 
-    implementation 'net.kyori:adventure-api:4.13.0'
-    implementation 'net.kyori:adventure-text-minimessage:4.13.0'
-    implementation 'net.kyori:adventure-platform-bukkit:4.3.0'
+    implementation 'net.kyori:adventure-api:4.15.0'
+    implementation 'net.kyori:adventure-text-minimessage:4.15.0'
+    implementation 'net.kyori:adventure-platform-bukkit:4.3.1'
 
     // Providers
     api project(':providers:BaseProviders')
