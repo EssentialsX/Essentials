@@ -51,22 +51,38 @@ public final class AdventureUtil {
         return MINI_MESSAGE_INSTANCE;
     }
 
+    /**
+     * Converts a section sign legacy string to an adventure component.
+     */
     public static Component legacyToAdventure(final String text) {
         return LEGACY_SERIALIZER.deserialize(text);
     }
 
+    /**
+     * Converts an adventure component to a section sign legacy string.
+     */
     public static String adventureToLegacy(final Component component) {
         return LEGACY_SERIALIZER.serialize(component);
     }
 
+    /**
+     * Converts a MiniMessage string to a section sign legacy string.
+     */
     public static String miniToLegacy(final String format) {
         return adventureToLegacy(miniMessage().deserialize(format));
     }
 
+    /**
+     * Converts a section sign legacy string to a MiniMessage string.
+     */
     public static String legacyToMini(String text) {
         return legacyToMini(text, false);
     }
 
+    /**
+     * Converts a section sign legacy string to a MiniMessage string.
+     * @param useCustomTags true if gold and red colors should use primary and secondary tags instead.
+     */
     public static String legacyToMini(String text, boolean useCustomTags) {
         StringBuffer buffer = new StringBuffer();
         Matcher matcher = HEX_PATTERN.matcher(text);
@@ -98,6 +114,9 @@ public final class AdventureUtil {
         return buffer.toString();
     }
 
+    /**
+     * Get the {@link NamedTextColor} from its associated section sign char.
+     */
     public static NamedTextColor fromChar(final char c) {
         final int index = LOOKUP.indexOf(c);
         if (index == -1 || index > 15) {
@@ -106,11 +125,15 @@ public final class AdventureUtil {
         return COLORS[index];
     }
 
+    /**
+     * Parameters for a translation message are not parsed for MiniMessage by default to avoid injection. If you want
+     * a parameter to be parsed for MiniMessage you must wrap it in a ParsedPlaceholder by using this method.
+     */
     public static ParsedPlaceholder parsed(final String literal) {
         return new ParsedPlaceholder(literal);
     }
 
-    public static Tag supplyTag(final boolean primary) {
+    private static Tag supplyTag(final boolean primary) {
         if (primary) {
             return ess != null ? ess.getSettings().getPrimaryColor() : Tag.styling(NamedTextColor.GOLD);
         }
@@ -120,7 +143,7 @@ public final class AdventureUtil {
     public static class ParsedPlaceholder {
         private final String value;
 
-        public ParsedPlaceholder(String value) {
+        protected ParsedPlaceholder(String value) {
             this.value = value;
         }
 

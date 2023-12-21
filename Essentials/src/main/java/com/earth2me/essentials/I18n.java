@@ -62,27 +62,42 @@ public class I18n implements net.ess3.api.II18n {
         localeBundle = defaultBundle;
     }
 
-    public static String tlLiteral(final String string, final Object... objects) {
+    /**
+     * Translates a message using the server's configured locale.
+     * @param tlKey The translation key.
+     * @param objects Translation parameters, if applicable. Note: by default, these will not be parsed for MiniMessage.
+     * @return The translated message.
+     * @see AdventureUtil#parsed(String)
+     */
+    public static String tlLiteral(final String tlKey, final Object... objects) {
         if (instance == null) {
             return "";
         }
 
-        return tlLocale(instance.currentLocale, string, objects);
+        return tlLocale(instance.currentLocale, tlKey, objects);
     }
 
-    public static String tlLocale(final Locale locale, final String string, final Object... objects) {
+    /**
+     * Translates a message using the provided locale.
+     * @param locale The locale to translate the key to.
+     * @param tlKey The translation key.
+     * @param objects Translation parameters, if applicable. Note: by default, these will not be parsed for MiniMessage.
+     * @return The translated message.
+     * @see AdventureUtil#parsed(String)
+     */
+    public static String tlLocale(final Locale locale, final String tlKey, final Object... objects) {
         if (instance == null) {
             return "";
         }
         if (objects.length == 0) {
-            return NODOUBLEMARK.matcher(instance.translate(locale, string)).replaceAll("'");
+            return NODOUBLEMARK.matcher(instance.translate(locale, tlKey)).replaceAll("'");
         } else {
-            return instance.format(string, objects);
+            return instance.format(tlKey, objects);
         }
     }
 
     public static String capitalCase(final String input) {
-        return input == null || input.length() == 0 ? input : input.toUpperCase(Locale.ENGLISH).charAt(0) + input.toLowerCase(Locale.ENGLISH).substring(1);
+        return input == null || input.isEmpty() ? input : input.toUpperCase(Locale.ENGLISH).charAt(0) + input.toLowerCase(Locale.ENGLISH).substring(1);
     }
 
     public void onEnable() {
@@ -98,6 +113,10 @@ public class I18n implements net.ess3.api.II18n {
         return currentLocale;
     }
 
+    /**
+     * Returns the {@link ResourceBundle} for the given {@link Locale}, if loaded. If a bundle is requested which is
+     * not loaded, it will be loaded asynchronously and the default bundle will be returned in the meantime.
+     */
     private ResourceBundle getBundle(final Locale locale) {
         if (loadedBundles.containsKey(locale)) {
             return loadedBundles.get(locale);
@@ -143,11 +162,11 @@ public class I18n implements net.ess3.api.II18n {
         }
     }
 
-    public String format(final String string, final Object... objects) {
+    private String format(final String string, final Object... objects) {
         return format(currentLocale, string, objects);
     }
 
-    public String format(final Locale locale, final String string, final Object... objects) {
+    private String format(final Locale locale, final String string, final Object... objects) {
         String format = translate(locale, string);
 
         MessageFormat messageFormat = messageFormatCache.computeIfAbsent(locale, l -> new HashMap<>()).get(format);
