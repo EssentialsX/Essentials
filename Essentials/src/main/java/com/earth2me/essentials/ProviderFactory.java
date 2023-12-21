@@ -24,6 +24,11 @@ public class ProviderFactory {
         this.essentials = essentials;
     }
 
+    /**
+     * Gets the provider which has been selected for the given type.
+     * @param providerClass The provider type.
+     * @return the provider or null if no provider could be selected for that type.
+     */
     public <P extends Provider> P get(final Class<P> providerClass) {
         final Provider provider = providers.get(providerClass);
         if (provider == null) {
@@ -93,6 +98,11 @@ public class ProviderFactory {
             }
             final Object[] args = new Object[constructor.getParameterTypes().length];
 
+            /*
+            Providers can have constructors with any of the following types, and this code will automatically supply them;
+            - Plugin - The Essentials instance will be passed
+            - boolean - True will be passed if this server is running Paper, otherwise false.
+             */
             for (int i = 0; i < args.length; i++) {
                 final Class<?> paramType = constructor.getParameterTypes()[i];
                 if (paramType.isAssignableFrom(Plugin.class)) {
