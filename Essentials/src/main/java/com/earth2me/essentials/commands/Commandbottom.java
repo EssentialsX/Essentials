@@ -24,7 +24,7 @@ public class Commandbottom extends EssentialsCommand {
         final int bottomZ = user.getLocation().getBlockZ();
         final float pitch = user.getLocation().getPitch();
         final float yaw = user.getLocation().getYaw();
-        final Location unsafe = new Location(user.getWorld(), bottomX, ess.getProviders().get(WorldInfoProvider.class).getMinHeight(user.getWorld()), bottomZ, yaw, pitch);
+        final Location unsafe = new Location(user.getWorld(), bottomX, ess.provider(WorldInfoProvider.class).getMinHeight(user.getWorld()), bottomZ, yaw, pitch);
         final Location safe = LocationUtil.getSafeDestination(ess, unsafe);
         final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
         future.thenAccept(success -> {

@@ -506,7 +506,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
-        final boolean stopping = getProviders().get(ServerStateProvider.class).isStopping();
+        final boolean stopping = provider(ServerStateProvider.class).isStopping();
         if (!stopping) {
             LOGGER.log(Level.SEVERE, tl("serverReloading"));
         }
@@ -619,8 +619,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // Check for disabled commands
             if (getSettings().isCommandDisabled(commandLabel)) {
-                if (getProviders().get(KnownCommandsProvider.class).getKnownCommands().containsKey(commandLabel)) {
-                    final Command newCmd = getProviders().get(KnownCommandsProvider.class).getKnownCommands().get(commandLabel);
+                if (provider(KnownCommandsProvider.class).getKnownCommands().containsKey(commandLabel)) {
+                    final Command newCmd = provider(KnownCommandsProvider.class).getKnownCommands().get(commandLabel);
                     if (!(newCmd instanceof PluginIdentifiableCommand) || ((PluginIdentifiableCommand) newCmd).getPlugin() != this) {
                         return newCmd.tabComplete(cSender, commandLabel, args);
                     }
@@ -725,8 +725,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // Check for disabled commands
             if (getSettings().isCommandDisabled(commandLabel)) {
-                if (getProviders().get(KnownCommandsProvider.class).getKnownCommands().containsKey(commandLabel)) {
-                    final Command newCmd = getProviders().get(KnownCommandsProvider.class).getKnownCommands().get(commandLabel);
+                if (provider(KnownCommandsProvider.class).getKnownCommands().containsKey(commandLabel)) {
+                    final Command newCmd = provider(KnownCommandsProvider.class).getKnownCommands().get(commandLabel);
                     if (!(newCmd instanceof PluginIdentifiableCommand) || !isEssentialsPlugin(((PluginIdentifiableCommand) newCmd).getPlugin())) {
                         return newCmd.execute(cSender, commandLabel, args);
                     }

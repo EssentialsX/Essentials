@@ -262,7 +262,7 @@ public class Commandessentials extends EssentialsCommand {
         serverData.addProperty("bukkit-version", Bukkit.getBukkitVersion());
         serverData.addProperty("server-version", Bukkit.getVersion());
         serverData.addProperty("server-brand", Bukkit.getName());
-        serverData.addProperty("online-mode", ess.getProviders().get(OnlineModeProvider.class).getOnlineModeString());
+        serverData.addProperty("online-mode", ess.provider(OnlineModeProvider.class).getOnlineModeString());
         final JsonObject supportStatus = new JsonObject();
         final VersionUtil.SupportStatus status = VersionUtil.getServerSupportStatus();
         supportStatus.addProperty("status", status.name());
@@ -333,7 +333,7 @@ public class Commandessentials extends EssentialsCommand {
         final Plugin essDiscordLink = Bukkit.getPluginManager().getPlugin("EssentialsDiscordLink");
         final Plugin essSpawn = Bukkit.getPluginManager().getPlugin("EssentialsSpawn");
 
-        final Map<String, Command> knownCommandsCopy = new HashMap<>(ess.getProviders().get(KnownCommandsProvider.class).getKnownCommands());
+        final Map<String, Command> knownCommandsCopy = new HashMap<>(ess.provider(KnownCommandsProvider.class).getKnownCommands());
         final Map<String, String> disabledCommandsCopy = new HashMap<>(ess.getAlternativeCommandsHandler().disabledCommands());
 
         // Further operations will be heavy IO

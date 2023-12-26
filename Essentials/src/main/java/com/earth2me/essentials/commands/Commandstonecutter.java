@@ -14,11 +14,13 @@ public class Commandstonecutter extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (ess.getProviders().get(ContainerProvider.class) == null) {
+        final ContainerProvider containerProvider = ess.provider(ContainerProvider.class);
+        
+        if (containerProvider == null) {
             user.sendMessage(tl("unsupportedBrand"));
             return;
         }
 
-        ess.getProviders().get(ContainerProvider.class).openStonecutter(user.getBase());
+        containerProvider.openStonecutter(user.getBase());
     }
 }

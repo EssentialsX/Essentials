@@ -26,16 +26,17 @@ public class RandomTeleport implements IConf {
     private final IEssentials ess;
     private final EssentialsConfiguration config;
     private final ConcurrentLinkedQueue<Location> cachedLocations = new ConcurrentLinkedQueue<>();
+    private WorldInfoProvider worldInfoProvider;
 
     public RandomTeleport(final IEssentials essentials) {
         this.ess = essentials;
         config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "tpr.yml"), "/tpr.yml",
                 "Configuration for the random teleport command.\nSome settings may be defaulted, and can be changed via the /settpr command in-game.");
-        reloadConfig();
     }
 
     @Override
     public void reloadConfig() {
+        worldInfoProvider = ess.provider(WorldInfoProvider.class);
         config.load();
         cachedLocations.clear();
     }
@@ -178,7 +179,7 @@ public class RandomTeleport implements IConf {
         final Location location = new Location(
             center.getWorld(),
             center.getX() + offsetX,
-            ess.getProviders().get(WorldInfoProvider.class).getMaxHeight(center.getWorld()),
+            worldInfoProvider.getMaxHeight(center.getWorld()),
             center.getZ() + offsetZ,
             360 * RANDOM.nextFloat() - 180,
             0
@@ -196,7 +197,7 @@ public class RandomTeleport implements IConf {
 
     // Returns an appropriate elevation for a given location in the nether, or -1 if none is found
     private double getNetherYAt(final Location location) {
-        for (int y = 32; y < ess.getProviders().get(WorldInfoProvider.class).getMaxHeight(location.getWorld()); ++y) {
+        for (int y = 32; y < worldInfoProvider.getMaxHeight(location.getWorld()); ++y) {
             if (!LocationUtil.isBlockUnsafe(ess, location.getWorld(), location.getBlockX(), y, location.getBlockZ())) {
                 return y;
             }
@@ -205,7 +206,7 @@ public class RandomTeleport implements IConf {
     }
 
     private boolean isValidRandomLocation(final Location location) {
-        return location.getBlockY() > ess.getProviders().get(WorldInfoProvider.class).getMinHeight(location.getWorld()) && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
+        return location.getBlockY() > worldInfoProvider.getMinHeight(location.getWorld()) && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
     }
 
     public File getFile() {

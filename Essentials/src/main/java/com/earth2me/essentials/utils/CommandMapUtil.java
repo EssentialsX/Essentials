@@ -61,7 +61,7 @@ public final class CommandMapUtil {
         } else if (value instanceof FormattedCommandAlias) {
             json.addProperty("source", "commands.yml");
             final JsonArray formatStrings = new JsonArray();
-            for (final String entry : ess.getProviders().get(FormattedCommandAliasProvider.class).getFormatStrings((FormattedCommandAlias) value)) {
+            for (final String entry : ess.provider(FormattedCommandAliasProvider.class).getFormatStrings((FormattedCommandAlias) value)) {
                 formatStrings.add(new JsonPrimitive(entry));
             }
             json.add("bukkit_aliases", formatStrings);

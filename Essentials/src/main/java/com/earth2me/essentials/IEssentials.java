@@ -8,6 +8,7 @@ import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.IUserMap;
+import net.ess3.provider.Provider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
 import org.bukkit.Server;
@@ -131,4 +132,8 @@ public interface IEssentials extends Plugin {
     PluginCommand getPluginCommand(String cmd);
 
     ProviderFactory getProviders();
+
+    default <P extends Provider> P provider(final Class<P> providerClass) {
+        return getProviders().get(providerClass);
+    }
 }

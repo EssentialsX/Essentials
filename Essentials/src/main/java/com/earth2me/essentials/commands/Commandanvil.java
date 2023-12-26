@@ -14,11 +14,13 @@ public class Commandanvil extends EssentialsCommand {
 
     @Override
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
-        if (ess.getProviders().get(ContainerProvider.class) == null) {
+        final ContainerProvider containerProvider = ess.provider(ContainerProvider.class);
+
+        if (containerProvider == null) {
             user.sendMessage(tl("unsupportedBrand"));
             return;
         }
 
-        ess.getProviders().get(ContainerProvider.class).openAnvil(user.getBase());
+        containerProvider.openAnvil(user.getBase());
     }
 }

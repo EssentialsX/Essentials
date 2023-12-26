@@ -13,7 +13,7 @@ public class SignGrindstone extends EssentialsSign {
 
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) {
-        if (ess.getProviders().get(ContainerProvider.class) == null) {
+        if (ess.provider(ContainerProvider.class) == null) {
             player.sendMessage(tl("unsupportedBrand"));
             return false;
         }
@@ -22,7 +22,7 @@ public class SignGrindstone extends EssentialsSign {
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) {
-        ess.getProviders().get(ContainerProvider.class).openGrindstone(player.getBase());
+        ess.provider(ContainerProvider.class).openGrindstone(player.getBase());
         return true;
     }
 }

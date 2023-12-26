@@ -37,7 +37,7 @@ public class Commandhelp extends EssentialsCommand {
         if (input.getLines().isEmpty()) {
             if (pageStr != null && pageStr.startsWith("/")) {
                 final String cmd = pageStr.substring(1);
-                for (final Map.Entry<String, Command> knownCmd : ess.getProviders().get(KnownCommandsProvider.class).getKnownCommands().entrySet()) {
+                for (final Map.Entry<String, Command> knownCmd : ess.provider(KnownCommandsProvider.class).getKnownCommands().entrySet()) {
                     if (knownCmd.getKey().equalsIgnoreCase(cmd)) {
                         user.sendMessage(tl("commandHelpLine1", cmd));
                         user.sendMessage(tl("commandHelpLine2", knownCmd.getValue().getDescription()));

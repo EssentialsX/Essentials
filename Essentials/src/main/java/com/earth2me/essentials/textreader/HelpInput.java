@@ -34,7 +34,7 @@ public class HelpInput implements IText {
         }
 
         final Multimap<Plugin, Command> pluginCommands = HashMultimap.create();
-        for (final Command command : ess.getProviders().get(KnownCommandsProvider.class).getKnownCommands().values()) {
+        for (final Command command : ess.provider(KnownCommandsProvider.class).getKnownCommands().values()) {
             if (!(command instanceof PluginIdentifiableCommand)) {
                 continue;
             }

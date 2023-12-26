@@ -702,7 +702,7 @@ public class MetaItemStack {
 
     private void setUnbreakable(final IEssentials ess, final ItemStack is, final boolean unbreakable) {
         final ItemMeta meta = is.getItemMeta();
-        ess.getProviders().get(ItemUnbreakableProvider.class).setUnbreakable(meta, unbreakable);
+        ess.provider(ItemUnbreakableProvider.class).setUnbreakable(meta, unbreakable);
         is.setItemMeta(meta);
     }
 }

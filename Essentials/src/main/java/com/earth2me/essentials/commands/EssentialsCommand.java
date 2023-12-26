@@ -278,7 +278,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
      * Lists all commands.
      */
     protected final List<String> getCommands(Server server) {
-        final Map<String, Command> commandMap = Maps.newHashMap(this.ess.getProviders().get(KnownCommandsProvider.class).getKnownCommands());
+        final Map<String, Command> commandMap = Maps.newHashMap(this.ess.provider(KnownCommandsProvider.class).getKnownCommands());
         final List<String> commands = Lists.newArrayListWithCapacity(commandMap.size());
         for (final Command command : commandMap.values()) {
             if (!(command instanceof PluginIdentifiableCommand)) {

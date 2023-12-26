@@ -190,13 +190,14 @@ public class Kit {
                 }
 
                 final ItemStack stack;
+                final SerializationProvider serializationProvider = ess.provider(SerializationProvider.class);
 
                 if (kitItem.startsWith("@")) {
-                    if (ess.getProviders().get(SerializationProvider.class) == null) {
+                    if (serializationProvider == null) {
                         ess.getLogger().log(Level.WARNING, tl("kitError3", kitName, user.getName()));
                         continue;
                     }
-                    stack = ess.getProviders().get(SerializationProvider.class).deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
+                    stack = serializationProvider.deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
                 } else {
                     final String[] parts = kitItem.split(" +");
                     final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);

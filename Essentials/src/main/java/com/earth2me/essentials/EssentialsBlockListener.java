@@ -28,11 +28,11 @@ public class EssentialsBlockListener implements Listener {
     public void onBlockPlace(final BlockPlaceEvent event) {
         final ItemStack is = event.getItemInHand();
 
-        if (is.getType() == MaterialUtil.SPAWNER && ess.getProviders().get(PersistentDataProvider.class).getString(is, "convert") != null) {
+        if (is.getType() == MaterialUtil.SPAWNER && ess.provider(PersistentDataProvider.class).getString(is, "convert") != null) {
             final BlockState blockState = event.getBlockPlaced().getState();
             if (blockState instanceof CreatureSpawner) {
                 final CreatureSpawner spawner = (CreatureSpawner) blockState;
-                final EntityType type = ess.getProviders().get(SpawnerItemProvider.class).getEntityType(event.getItemInHand());
+                final EntityType type = ess.provider(SpawnerItemProvider.class).getEntityType(event.getItemInHand());
                 if (type != null && Mob.fromBukkitType(type) != null) {
                     if (ess.getUser(event.getPlayer()).isAuthorized("essentials.spawnerconvert." + Mob.fromBukkitType(type).name().toLowerCase(Locale.ENGLISH))) {
                         spawner.setSpawnedType(type);
