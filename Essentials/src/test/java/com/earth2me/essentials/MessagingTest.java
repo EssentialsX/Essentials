@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 
 public class MessagingTest {
 
-    private final OfflinePlayer base1;
+    private final OfflinePlayerStub base1;
     private final Essentials ess;
     private final FakeServer server;
 

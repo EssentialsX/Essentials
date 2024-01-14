@@ -20,6 +20,8 @@ public final class ReflUtil {
     public static final NMSVersion V1_11_R1 = NMSVersion.fromString("v1_11_R1");
     public static final NMSVersion V1_17_R1 = NMSVersion.fromString("v1_17_R1");
     public static final NMSVersion V1_18_R1 = NMSVersion.fromString("v1_18_R1");
+    public static final NMSVersion V1_19_R1 = NMSVersion.fromString("v1_19_R1");
+    public static final NMSVersion V1_19_R2 = NMSVersion.fromString("v1_19_R2");
     private static final Map<String, Class<?>> classCache = new HashMap<>();
     private static final Table<Class<?>, String, Method> methodCache = HashBasedTable.create();
     private static final Table<Class<?>, MethodParams, Method> methodParamCache = HashBasedTable.create();

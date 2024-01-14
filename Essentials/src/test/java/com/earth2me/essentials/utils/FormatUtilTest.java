@@ -19,6 +19,17 @@ public class FormatUtilTest {
     }
 
     @Test
+    public void testFormatHexColors() {
+        checkFormatPerms("&#ffffff", "&#ffffff");
+        checkFormatPerms("&#ffffff", "§x§f§f§f§f§f§f", "color", "rgb");
+        checkFormatPerms("&#ff0000test", "§x§f§f§0§0§0§0test", "rgb");
+        checkFormatPerms("&#ff0000test", "§x§f§f§0§0§0§0test", "rgb", "color");
+        checkFormatPerms("&#ff0000test", "§x§f§f§0§0§0§0test", "rgb", "white");
+        checkFormatPerms("&#ff0000test", "§x§f§f§0§0§0§0test", "rgb", "black");
+        checkFormatPerms("&#ff0000test", "§x§f§f§0§0§0§0test", "rgb", "black", "white");
+    }
+
+    @Test
     public void testFormatCategoryPerms() {
         checkFormatPerms("Test", "Test");
         checkFormatPerms("Test", "Test", "color", "format");

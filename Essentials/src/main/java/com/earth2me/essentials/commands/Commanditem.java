@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -63,11 +63,7 @@ public class Commanditem extends EssentialsCommand {
 
         final String displayName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
         user.sendMessage(tl("itemSpawn", stack.getAmount(), displayName));
-        if (user.isAuthorized("essentials.oversizedstacks")) {
-            InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), stack);
-        } else {
-            InventoryWorkaround.addItems(user.getBase().getInventory(), stack);
-        }
+        Inventories.addItem(user.getBase(), user.isAuthorized("essentials.oversizedstacks") ? ess.getSettings().getOversizedStackSize() : 0, stack);
         user.getBase().updateInventory();
     }
 

@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -53,7 +54,18 @@ public class Commandrecipe extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        final ItemStack itemType = ess.getItemDb().get(args[0]);
+        final ItemStack itemType;
+
+        if (args[0].equalsIgnoreCase("hand")) {
+            if (!sender.isPlayer()) {
+                throw new Exception(tl("consoleCannotUseCommand"));
+            }
+            
+            itemType = Inventories.getItemInHand(sender.getPlayer());
+        } else {
+            itemType = ess.getItemDb().get(args[0]);
+        }
+
         int recipeNo = 0;
 
         if (args.length > 1) {
@@ -155,6 +167,7 @@ public class Commandrecipe extends EssentialsCommand {
         final List<ItemStack> ingredients = recipe.getIngredientList();
         if (showWindow) {
             final User user = ess.getUser(sender.getPlayer());
+            user.getBase().closeInventory();
             user.setRecipeSee(true);
             final InventoryView view = user.getBase().openWorkbench(null, true);
             for (int i = 0; i < ingredients.size(); i++) {

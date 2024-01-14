@@ -31,6 +31,11 @@ public final class LocationUtil {
         "FLOWING_LAVA", "LAVA", "STATIONARY_LAVA");
     private static final Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
     private static final Material LIGHT = EnumUtil.getMaterial("LIGHT");
+
+    private static final Material PATH = EnumUtil.getMaterial("GRASS_PATH");
+
+    private static final Material FARMLAND = EnumUtil.getMaterial("FARMLAND");
+
     // The player can stand inside these materials
     private static final Set<Material> HOLLOW_MATERIALS = EnumSet.noneOf(Material.class);
     private static final Set<Material> TRANSPARENT_MATERIALS = EnumSet.noneOf(Material.class);
@@ -48,6 +53,10 @@ public final class LocationUtil {
 
         // Barrier is transparent, but solid
         HOLLOW_MATERIALS.remove(Material.BARRIER);
+
+        // Path and farmland are transparent, but solid
+        HOLLOW_MATERIALS.remove(PATH);
+        HOLLOW_MATERIALS.remove(FARMLAND);
 
         // Light blocks can be passed through and are not considered transparent for some reason
         if (LIGHT != null) {

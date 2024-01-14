@@ -4,9 +4,9 @@ import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.craftbukkit.BanLookup;
+import com.earth2me.essentials.userstorage.ModernUUIDCache;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
-import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.google.gson.reflect.TypeToken;
 import net.ess3.api.IEssentials;
@@ -31,10 +31,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -47,15 +47,12 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsUpgrade {
-    private final static Logger LOGGER = Logger.getLogger("Essentials");
-    private static final FileFilter YML_FILTER = pathname -> pathname.isFile() && pathname.getName().endsWith(".yml");
+    public static final FileFilter YML_FILTER = pathname -> pathname.isFile() && pathname.getName().endsWith(".yml");
     private static final String PATTERN_CONFIG_UUID_REGEX = "(?mi)^uuid:\\s*([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\\s*$";
     private static final Pattern PATTERN_CONFIG_UUID = Pattern.compile(PATTERN_CONFIG_UUID_REGEX);
     private static final String PATTERN_CONFIG_NAME_REGEX = "(?mi)^lastAccountName:\\s*[\"\']?(\\w+)[\"\']?\\s*$";
@@ -95,7 +92,6 @@ public class EssentialsUpgrade {
             final int showProgress = countFiles % 250;
 
             if (showProgress == 0) {
-                ess.getUserMap().getUUIDMap().forceWriteUUIDMap();
                 ess.getLogger().info("Converted " + countFiles + "/" + userdir.list().length);
             }
 
@@ -105,7 +101,8 @@ public class EssentialsUpgrade {
             final EssentialsUserConfiguration config;
             UUID uuid = null;
             try {
-                uuid = UUID.fromString(name);
+                //noinspection ResultOfMethodCallIgnored
+                UUID.fromString(name);
             } catch (final IllegalArgumentException ex) {
                 final File file = new File(userdir, string);
                 final EssentialsConfiguration conf = new EssentialsConfiguration(file);
@@ -117,6 +114,7 @@ public class EssentialsUpgrade {
 
                 final String uuidString = conf.getString(uuidConf, null);
 
+                //noinspection ConstantConditions
                 for (int i = 0; i < 4; i++) {
                     try {
                         uuid = UUID.fromString(uuidString);
@@ -124,7 +122,7 @@ public class EssentialsUpgrade {
                         break;
                     } catch (final Exception ex2) {
                         if (conf.getBoolean("npc", false)) {
-                            uuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
+                            uuid = UUID.nameUUIDFromBytes(("NPC:" + (ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name)).getBytes(Charsets.UTF_8));
                             break;
                         }
 
@@ -132,23 +130,24 @@ public class EssentialsUpgrade {
                         uuid = player.getUniqueId();
                     }
 
+                    //noinspection ConstantConditions
                     if (uuid != null) {
                         countBukkit++;
                         break;
                     }
                 }
 
+                //noinspection ConstantConditions
                 if (uuid != null) {
                     conf.blockingSave();
                     config = new EssentialsUserConfiguration(name, uuid, new File(userdir, uuid + ".yml"));
                     config.convertLegacyFile();
-                    ess.getUserMap().trackUUID(uuid, name, false);
+                    ess.getUsers().loadUncachedUser(uuid);
                     continue;
                 }
                 countFails++;
             }
         }
-        ess.getUserMap().getUUIDMap().forceWriteUUIDMap();
 
         ess.getLogger().info("Converted " + countFiles + "/" + countFiles + ".  Conversion complete.");
         ess.getLogger().info("Converted via cache: " + countEssCache + " :: Converted via lookup: " + countBukkit + " :: Failed to convert: " + countFails);
@@ -186,13 +185,13 @@ public class EssentialsUpgrade {
                     config.blockingSave();
                 }
             } catch (RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file);
+                ess.getLogger().log(Level.INFO, "File: " + file);
                 throw ex;
             }
         }
         doneFile.setProperty("updateUsersMailList", true);
         doneFile.save();
-        LOGGER.info("Done converting mail list.");
+        ess.getLogger().info("Done converting mail list.");
     }
 
     public void convertStupidCamelCaseUserdataKeys() {
@@ -200,7 +199,7 @@ public class EssentialsUpgrade {
             return;
         }
 
-        LOGGER.info("Attempting to migrate legacy userdata keys to Configurate");
+        ess.getLogger().info("Attempting to migrate legacy userdata keys to Configurate");
 
         final File userdataFolder = new File(ess.getDataFolder(), "userdata");
         if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
@@ -241,13 +240,13 @@ public class EssentialsUpgrade {
                 }
                 config.blockingSave();
             } catch (final RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file);
+                ess.getLogger().log(Level.INFO, "File: " + file);
                 throw ex;
             }
         }
         doneFile.setProperty("updateUsersStupidLegacyPathNames", true);
         doneFile.save();
-        LOGGER.info("Done converting legacy userdata keys to Configurate.");
+        ess.getLogger().info("Done converting legacy userdata keys to Configurate.");
     }
 
     /**
@@ -290,31 +289,31 @@ public class EssentialsUpgrade {
         }
         final File backupFolder = new File(ess.getDataFolder(), "userdata-npc-backup");
         if (backupFolder.exists()) {
-            LOGGER.info("NPC backup folder already exists; skipping NPC purge.");
-            LOGGER.info("To finish purging broken NPC accounts, rename the \"plugins/Essentials/userdata-npc-backup\" folder and restart your server.");
+            ess.getLogger().info("NPC backup folder already exists; skipping NPC purge.");
+            ess.getLogger().info("To finish purging broken NPC accounts, rename the \"plugins/Essentials/userdata-npc-backup\" folder and restart your server.");
             return;
         } else if (!backupFolder.mkdir()) {
-            LOGGER.info("Skipping NPC purge due to error creating backup folder.");
+            ess.getLogger().info("Skipping NPC purge due to error creating backup folder.");
             return;
         }
 
-        LOGGER.info("#===========================================================================#");
-        LOGGER.info(" EssentialsX will now purge any NPC accounts which were incorrectly created.");
-        LOGGER.info(" Only NPC accounts with the default starting balance will be deleted. If");
-        LOGGER.info(" they turn out to be valid NPC accounts, they will be re-created as needed.");
-        LOGGER.info(" Any files deleted here will be backed up to the ");
-        LOGGER.info(" \"plugins/Essentials/userdata-npc-backup\" folder. If you notice any files");
-        LOGGER.info(" have been purged incorrectly, you should restore it from the backup and");
-        LOGGER.info(" report it to us on GitHub:");
-        LOGGER.info(" https://github.com/EssentialsX/Essentials/issues/new/choose");
-        LOGGER.info("");
-        LOGGER.info(" NOTE: This is a one-time process and will take several minutes if you have");
-        LOGGER.info(" a lot of userdata files! If you interrupt this process, EssentialsX will");
-        LOGGER.info(" skip the process until you rename or remove the backup folder.");
-        LOGGER.info("#===========================================================================#");
+        ess.getLogger().info("#===========================================================================#");
+        ess.getLogger().info(" EssentialsX will now purge any NPC accounts which were incorrectly created.");
+        ess.getLogger().info(" Only NPC accounts with the default starting balance will be deleted. If");
+        ess.getLogger().info(" they turn out to be valid NPC accounts, they will be re-created as needed.");
+        ess.getLogger().info(" Any files deleted here will be backed up to the ");
+        ess.getLogger().info(" \"plugins/Essentials/userdata-npc-backup\" folder. If you notice any files");
+        ess.getLogger().info(" have been purged incorrectly, you should restore it from the backup and");
+        ess.getLogger().info(" report it to us on GitHub:");
+        ess.getLogger().info(" https://github.com/EssentialsX/Essentials/issues/new/choose");
+        ess.getLogger().info("");
+        ess.getLogger().info(" NOTE: This is a one-time process and will take several minutes if you have");
+        ess.getLogger().info(" a lot of userdata files! If you interrupt this process, EssentialsX will");
+        ess.getLogger().info(" skip the process until you rename or remove the backup folder.");
+        ess.getLogger().info("#===========================================================================#");
 
         final int totalUserFiles = userFiles.length;
-        LOGGER.info("Found ~" + totalUserFiles + " files under \"plugins/Essentials/userdata\"...");
+        ess.getLogger().info("Found ~" + totalUserFiles + " files under \"plugins/Essentials/userdata\"...");
 
         final AtomicInteger movedAccounts = new AtomicInteger(0);
         final AtomicInteger totalAccounts = new AtomicInteger(0);
@@ -324,7 +323,7 @@ public class EssentialsUpgrade {
 
         final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         final ScheduledFuture<?> feedbackTask = executor.scheduleWithFixedDelay(
-                () -> LOGGER.info("Scanned " + totalAccounts.get() + "/" + totalUserFiles + " accounts; moved " + movedAccounts.get() + " accounts"),
+                () -> ess.getLogger().info("Scanned " + totalAccounts.get() + "/" + totalUserFiles + " accounts; moved " + movedAccounts.get() + " accounts"),
                 5, feedbackInterval, TimeUnit.SECONDS);
 
         for (final File file : userFiles) {
@@ -358,10 +357,10 @@ public class EssentialsUpgrade {
                     Files.move(file, new File(backupFolder, file.getName()));
                     movedAccounts.incrementAndGet();
                 } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE, "Error while moving NPC file", e);
+                    ess.getLogger().log(Level.SEVERE, "Error while moving NPC file", e);
                 }
             } catch (final RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file);
+                ess.getLogger().log(Level.INFO, "File: " + file);
                 feedbackTask.cancel(false);
                 executor.shutdown();
                 throw ex;
@@ -372,18 +371,18 @@ public class EssentialsUpgrade {
         doneFile.setProperty("updatePurgeBrokenNpcAccounts", true);
         doneFile.save();
 
-        LOGGER.info("#===========================================================================#");
-        LOGGER.info(" EssentialsX has finished purging NPC accounts.");
-        LOGGER.info("");
-        LOGGER.info(" Deleted accounts: " + movedAccounts);
-        LOGGER.info(" Total accounts processed: " + totalAccounts);
-        LOGGER.info("");
-        LOGGER.info(" Purged accounts have been backed up to");
-        LOGGER.info(" \"plugins/Essentials/userdata-npc-backup\", and can be restored from there");
-        LOGGER.info(" if needed. Please report any files which have been incorrectly deleted");
-        LOGGER.info(" to us on GitHub:");
-        LOGGER.info(" https://github.com/EssentialsX/Essentials/issues/new/choose");
-        LOGGER.info("#===========================================================================#");
+        ess.getLogger().info("#===========================================================================#");
+        ess.getLogger().info(" EssentialsX has finished purging NPC accounts.");
+        ess.getLogger().info("");
+        ess.getLogger().info(" Deleted accounts: " + movedAccounts);
+        ess.getLogger().info(" Total accounts processed: " + totalAccounts);
+        ess.getLogger().info("");
+        ess.getLogger().info(" Purged accounts have been backed up to");
+        ess.getLogger().info(" \"plugins/Essentials/userdata-npc-backup\", and can be restored from there");
+        ess.getLogger().info(" if needed. Please report any files which have been incorrectly deleted");
+        ess.getLogger().info(" to us on GitHub:");
+        ess.getLogger().info(" https://github.com/EssentialsX/Essentials/issues/new/choose");
+        ess.getLogger().info("#===========================================================================#");
     }
 
     public void convertIgnoreList() {
@@ -392,7 +391,7 @@ public class EssentialsUpgrade {
             return;
         }
 
-        LOGGER.info("Attempting to migrate ignore list to UUIDs");
+        ess.getLogger().info("Attempting to migrate ignore list to UUIDs");
 
         final File userdataFolder = new File(ess.getDataFolder(), "userdata");
         if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
@@ -414,7 +413,7 @@ public class EssentialsUpgrade {
                             continue;
                         }
                         if (pattern.matcher(name.trim()).matches()) {
-                            LOGGER.info("Detected already migrated ignore list!");
+                            ess.getLogger().info("Detected already migrated ignore list!");
                             return;
                         }
                         final User user = ess.getOfflineUser(name);
@@ -427,13 +426,13 @@ public class EssentialsUpgrade {
                     config.blockingSave();
                 }
             } catch (final RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file);
+                ess.getLogger().log(Level.INFO, "File: " + file);
                 throw ex;
             }
         }
         doneFile.setProperty("updateUsersIgnoreListUUID", true);
         doneFile.save();
-        LOGGER.info("Done converting ignore list.");
+        ess.getLogger().info("Done converting ignore list.");
     }
 
     public void convertKits() {
@@ -443,25 +442,25 @@ public class EssentialsUpgrade {
             return;
         }
 
-        LOGGER.info("Attempting to convert old kits in config.yml to new kits.yml");
+        ess.getLogger().info("Attempting to convert old kits in config.yml to new kits.yml");
 
         final CommentedConfigurationNode section = ess.getSettings().getKitSection();
         if (section == null) {
-            LOGGER.info("No kits found to migrate.");
+            ess.getLogger().info("No kits found to migrate.");
             return;
         }
 
         final Map<String, Object> legacyKits = ConfigurateUtil.getRawMap(section);
 
         for (final Map.Entry<String, Object> entry : legacyKits.entrySet()) {
-            LOGGER.info("Converting " + entry.getKey());
+            ess.getLogger().info("Converting " + entry.getKey());
             config.setRaw("kits." + entry.getKey(), entry.getValue());
         }
 
         config.save();
         doneFile.setProperty("kitsyml", true);
         doneFile.save();
-        LOGGER.info("Done converting kits.");
+        ess.getLogger().info("Done converting kits.");
     }
 
     private void moveMotdRulesToFile(final String name) {
@@ -494,7 +493,7 @@ public class EssentialsUpgrade {
             doneFile.setProperty("move" + name + "ToFile", true);
             doneFile.save();
         } catch (final IOException e) {
-            LOGGER.log(Level.SEVERE, tl("upgradingFilesError"), e);
+            ess.getLogger().log(Level.SEVERE, tl("upgradingFilesError"), e);
         }
     }
 
@@ -572,7 +571,7 @@ public class EssentialsUpgrade {
                     config.blockingSave();
                 }
             } catch (final RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file);
+                ess.getLogger().log(Level.INFO, "File: " + file);
                 throw ex;
             }
         }
@@ -628,7 +627,7 @@ public class EssentialsUpgrade {
                 }
 
             } catch (final RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file);
+                ess.getLogger().log(Level.INFO, "File: " + file);
                 throw ex;
             }
         }
@@ -657,15 +656,15 @@ public class EssentialsUpgrade {
             final File tmpFile = new File(listOfFile.getParentFile(), sanitizedFilename + ".tmp");
             final File newFile = new File(listOfFile.getParentFile(), sanitizedFilename);
             if (!listOfFile.renameTo(tmpFile)) {
-                LOGGER.log(Level.WARNING, tl("userdataMoveError", filename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, tl("userdataMoveError", filename, sanitizedFilename));
                 continue;
             }
             if (newFile.exists()) {
-                LOGGER.log(Level.WARNING, tl("duplicatedUserdata", filename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, tl("duplicatedUserdata", filename, sanitizedFilename));
                 continue;
             }
             if (!tmpFile.renameTo(newFile)) {
-                LOGGER.log(Level.WARNING, tl("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, tl("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
             }
         }
         doneFile.setProperty("sanitizeAllUserFilenames", true);
@@ -722,7 +721,7 @@ public class EssentialsUpgrade {
                 doneFile.setProperty("deleteOldItemsCsv", true);
                 doneFile.save();
             } catch (final IOException ex) {
-                Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
     }
@@ -748,7 +747,7 @@ public class EssentialsUpgrade {
                     config.blockingSave();
                 }
             } catch (final Exception ex) {
-                Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
         doneFile.setProperty("updateSpawnsToNewSpawnsConfig", true);
@@ -776,7 +775,7 @@ public class EssentialsUpgrade {
                     config.blockingSave();
                 }
             } catch (final Exception ex) {
-                Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
         doneFile.setProperty("updateJailsToNewJailsConfig", true);
@@ -915,74 +914,76 @@ public class EssentialsUpgrade {
         Bukkit.getBanList(BanList.Type.NAME).addBan(playerName, banReason, banTimeout == 0 ? null : new Date(banTimeout), Console.NAME);
     }
 
-    private void repairUserMap() {
-        if (doneFile.getBoolean("userMapRepaired", false)) {
+    public void generateUidCache() {
+        if (doneFile.getBoolean("newUidCacheBuilt", false)) {
             return;
         }
-        ess.getLogger().info("Starting usermap repair");
 
+        final File usermapFile = new File(ess.getDataFolder(), "usermap.bin");
+        final File uidsFile = new File(ess.getDataFolder(), "uuids.bin");
         final File userdataFolder = new File(ess.getDataFolder(), "userdata");
-        if (!userdataFolder.isDirectory()) {
+
+        if (!userdataFolder.isDirectory() || usermapFile.exists() || uidsFile.exists()) {
             ess.getLogger().warning("Missing userdata folder, aborting");
+            doneFile.setProperty("newUidCacheBuilt", true);
+            doneFile.save();
             return;
         }
-        final File[] files = userdataFolder.listFiles(YML_FILTER);
 
-        final DecimalFormat format = new DecimalFormat("#0.00");
-        final Map<String, UUID> names = Maps.newHashMap();
-
-        for (int index = 0; index < files.length; index++) {
-            final File file = files[index];
-            try {
-                UUID uuid = null;
-                final String filename = file.getName();
-                final String configData = new String(java.nio.file.Files.readAllBytes(file.toPath()), Charsets.UTF_8);
-
-                if (filename.length() > 36) {
-                    try {
-                        // ".yml" ending has 4 chars...
-                        uuid = UUID.fromString(filename.substring(0, filename.length() - 4));
-                    } catch (final IllegalArgumentException ignored) {
-                    }
-                }
-
-                final Matcher uuidMatcher = PATTERN_CONFIG_UUID.matcher(configData);
-                if (uuidMatcher.find()) {
-                    try {
-                        uuid = UUID.fromString(uuidMatcher.group(1));
-                    } catch (final IllegalArgumentException ignored) {
-                    }
-                }
-
-                if (uuid == null) {
-                    // Don't import
-                    continue;
-                }
-
-                final Matcher nameMatcher = PATTERN_CONFIG_NAME.matcher(configData);
-                if (nameMatcher.find()) {
-                    final String username = nameMatcher.group(1);
-                    if (username != null && username.length() > 0) {
-                        names.put(StringUtil.safeString(username), uuid);
-                    }
-                }
-
-                if (index % 1000 == 0) {
-                    ess.getLogger().info("Reading: " + format.format((100d * (double) index) / files.length)
-                        + "%");
-                }
-            } catch (final IOException e) {
-                ess.getLogger().log(Level.SEVERE, "Error while reading file: ", e);
+        try {
+            if (!usermapFile.createNewFile() || !uidsFile.createNewFile()) {
+                ess.getLogger().warning("Couldn't create usermap.bin or uuids.bin, aborting");
                 return;
             }
+
+            final Map<UUID, Long> uuids = new HashMap<>();
+            final Map<String, UUID> nameToUuidMap = new HashMap<>();
+
+            final File[] files = userdataFolder.listFiles(YML_FILTER);
+            if (files != null) {
+                for (final File file : files) {
+                    try {
+                        final String fileName = file.getName();
+                        final UUID uuid = UUID.fromString(fileName.substring(0, fileName.length() - 4));
+                        final EssentialsConfiguration config = new EssentialsConfiguration(file);
+                        config.load();
+                        String name = config.getString("last-account-name", null);
+                        name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name;
+                        final long time = config.getLong("timestamps.logout", 0L);
+
+                        if (name != null) {
+                            if (nameToUuidMap.containsKey(name)) {
+                                final UUID oldUuid = nameToUuidMap.get(name);
+                                if (oldUuid.version() < uuid.version() || (oldUuid.version() == uuid.version() && uuids.get(oldUuid) < time)) {
+                                    ess.getLogger().warning("New UUID found for " + name + ": " + uuid + " (old: " + oldUuid + "). Replacing.");
+                                    uuids.remove(oldUuid);
+                                } else {
+                                    ess.getLogger().warning("Found UUID for " + name + ": " + uuid + " (old: " + oldUuid + "). Skipping.");
+                                    continue;
+                                }
+                            }
+
+                            uuids.put(uuid, time);
+                            nameToUuidMap.put(name, uuid);
+                        }
+                    } catch (IllegalArgumentException | IndexOutOfBoundsException ignored) {
+                    }
+                }
+            }
+
+            if (!nameToUuidMap.isEmpty()) {
+                ModernUUIDCache.writeNameUuidMap(usermapFile, nameToUuidMap);
+            }
+
+            if (!uuids.isEmpty()) {
+                ModernUUIDCache.writeUuidCache(uidsFile, uuids.keySet());
+            }
+
+            doneFile.setProperty("newUidCacheBuilt", true);
+            doneFile.save();
+        } catch (final IOException e) {
+            ess.getLogger().log(Level.SEVERE, "Error while generating initial uuids/names cache", e);
         }
-
-        ess.getUserMap().getNames().putAll(names);
-        ess.getUserMap().reloadConfig();
-
-        doneFile.setProperty("userMapRepaired", true);
-        doneFile.save();
-        ess.getLogger().info("Completed usermap repair.");
     }
 
     public void beforeSettings() {
@@ -991,6 +992,10 @@ public class EssentialsUpgrade {
         }
         moveMotdRulesToFile("motd");
         moveMotdRulesToFile("rules");
+    }
+
+    public void preModules() {
+        generateUidCache();
     }
 
     public void afterSettings() {
@@ -1003,7 +1008,6 @@ public class EssentialsUpgrade {
         uuidFileChange();
         banFormatChange();
         warnMetrics();
-        repairUserMap();
         convertIgnoreList();
         convertStupidCamelCaseUserdataKeys();
         convertMailList();

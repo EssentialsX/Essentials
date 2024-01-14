@@ -6,6 +6,7 @@ import net.essentialsx.api.v2.services.discord.InteractionEvent;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.interactions.InteractionCommandImpl;
 import net.essentialsx.discord.util.DiscordCommandSender;
+import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandException;
 
@@ -18,12 +19,12 @@ public class ExecuteCommand extends InteractionCommandImpl {
     }
 
     @Override
-    public void onCommand(InteractionEvent event) {
+    public void onCommand(final InteractionEvent event) {
         final String command = event.getStringArgument("command");
         event.reply(tl("discordCommandExecuteReply", command));
         Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
             try {
-                Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), event::reply).getSender(), command);
+                Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), message -> event.reply(MessageUtil.sanitizeDiscordMarkdown(message))).getSender(), command);
             } catch (CommandException e) {
                 // Check if this is a vanilla command, in which case we have to use a vanilla command sender :(
                 if (e.getMessage().contains("a vanilla command listener") || (e.getCause() != null && e.getCause().getMessage().contains("a vanilla command listener"))) {

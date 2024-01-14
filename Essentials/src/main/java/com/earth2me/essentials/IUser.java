@@ -94,6 +94,15 @@ public interface IUser {
      */
     boolean isHidden();
 
+    /**
+     * Whether the user was hidden before leaving the server.
+     *
+     * @return true if the user was hidden.
+     */
+    boolean isLeavingHidden();
+
+    void setLeavingHidden(boolean leavingHidden);
+
     void setHidden(boolean vanish);
 
     boolean isGodModeEnabled();
@@ -145,6 +154,8 @@ public interface IUser {
     void setHome(String name, Location loc);
 
     void delHome(String name) throws Exception;
+
+    void renameHome(String name, String newName) throws Exception;
 
     boolean hasHome();
 
@@ -321,4 +332,12 @@ public interface IUser {
             this.time = time;
         }
     }
+
+    List<String> getPastUsernames();
+
+    void addPastUsername(String username);
+
+    boolean isFreeze();
+
+    void setFreeze(boolean freeze);
 }

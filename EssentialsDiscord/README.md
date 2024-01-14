@@ -34,13 +34,13 @@ Discord bot at [discord.com/developers/applications](https://discord.com/develop
 
 1. Once on that page, click on "New Application" button on the top right, give your bot a name, and
 then click "Create".
-> ![Creating Application](https://i.imgur.com/8ffp4R1.gif)
+> ![Creating Application](https://i.imgur.com/4VfNpQc.gif)
 > `New Application` -> Give Application a Name -> `Create`
 
 2. Once you create the application, you'll be directed to its overview. From this screen, you'll
-need to copy your "Client ID"/"Application ID" and save it for a later step. To copy your 
-Client ID, click the upper-left most blue "Copy" button. Make sure to save it for a later step.
-> ![Copy Client ID](https://i.imgur.com/W3OMTu5.gif)
+need to copy your "Application ID" and save it for a later step. To copy your 
+Application ID, click the upper-left most blue "Copy" button. Make sure to save it for a later step.
+> ![Copy Application ID](https://i.imgur.com/1QuUYKN.gif)
 > `Copy` -> Paste into Notepad for later step
 
 3. Optionally, you can set an icon for your application as it will be the icon for the bot too.
@@ -49,18 +49,20 @@ Client ID, click the upper-left most blue "Copy" button. Make sure to save it fo
 4. The next step is actually creating a bot user for your application. From the overview screen,
 this is done by going to the "Bot" tab on the left, then clicking the "Add Bot" on the right,
 and finally then clicking "Yes, do it!".
-> ![Create Bot](https://i.imgur.com/S14iAFS.gif)
+> ![Create Bot](https://i.imgur.com/oW47yTu.gif)
 > `Bot` -> `Add Bot` -> `Yes, do it!`
 
-5. Once on this screen, you'll need to uncheck the "Public Bot" setting and then click "Save Changes",
-so other people can't add your bot to servers that are not your own.
-> ![Disable Public Bot](https://i.imgur.com/HHqWvQ1.gif)
-> Uncheck `Public Bot` -> `Save Changes`
+5. Once on this screen, you'll need to uncheck the "Public Bot" setting, enable all the "Privileged
+Intents", and then click "Save Changes". This prevents other people from adding your bot and also
+allows your bot to use more Discord features.
+> ![Update Bot Settings](https://i.imgur.com/eIegfCC.gif)
+> Uncheck `Public Bot` -> Check `Presence Intent` -> Check `Server Members Intent` -> Check `Message Content Intent` -> Save Changes`
 
 6. Finally, you'll need to copy your bot's token and save it for a later step. To copy your bot's token,
-click the blue "Copy" button right of your bot's icon. Make sure to save it for a later step.
-> ![Copy Token](https://i.imgur.com/OqpaSQH.gif)
-> `Copy` -> Paste into Notepad for later step
+click the blue "Reset Token" button right of your bot's icon, then click "Yes, do it!", and finally
+click "Copy". Make sure to save it for a later step.
+> ![Copy Token](https://i.imgur.com/C8Sk0z6.gif)
+> `Reset Token` -> `Yes, do it!` -> `Copy` -> Paste into Notepad for later step
    
 7. Next up is adding your bot to your Discord server. First, go to [essentialsx.net/discord.html](https://essentialsx.net/discord.html)
 and paste your Client ID you copied from step 2 into the text box on that page. Once you do that, click

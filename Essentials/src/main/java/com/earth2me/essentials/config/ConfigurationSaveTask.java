@@ -1,13 +1,12 @@
 package com.earth2me.essentials.config;
 
+import com.earth2me.essentials.Essentials;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
-
-import static com.earth2me.essentials.config.EssentialsConfiguration.LOGGER;
 
 public class ConfigurationSaveTask implements Runnable {
     private final YamlConfigurationLoader loader;
@@ -32,7 +31,7 @@ public class ConfigurationSaveTask implements Runnable {
             try {
                 loader.save(node);
             } catch (ConfigurateException e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
             } finally {
                 pendingWrites.decrementAndGet();
             }

@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
@@ -27,7 +28,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -48,13 +48,11 @@ import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
     private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
-    private static final Logger logger = Logger.getLogger("Essentials");
 
     // User modules
     private final IMessageRecipient messageRecipient;
@@ -70,6 +68,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     // User properties
     private transient boolean vanished;
     private boolean hidden = false;
+    private boolean leavingHidden = false;
     private boolean rightClickJump = false;
     private boolean invSee = false;
     private boolean recipeSee = false;
@@ -91,7 +90,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
     private Boolean toggleShout;
+    private boolean freeze = false;
     private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
+    private transient long lastVanishTime = System.currentTimeMillis();
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -106,7 +107,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         this.messageRecipient = new SimpleMessageRecipient(ess, this);
     }
 
-    void update(final Player base) {
+    public void update(final Player base) {
         setBase(base);
     }
 
@@ -151,7 +152,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isAuthorizedCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return false;
         }
 
@@ -169,7 +170,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isPermSetCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return false;
         }
 
@@ -187,7 +188,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private TriState isAuthorizedExactCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return TriState.UNSET;
         }
 
@@ -310,7 +311,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     private void _dispose() {
         if (!base.isOnline()) {
-            this.base = new OfflinePlayer(getConfigUUID(), ess.getServer());
+            this.base = new OfflinePlayerStub(getConfigUUID(), ess.getServer());
         }
         cleanup();
     }
@@ -464,7 +465,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } else if (nick.equalsIgnoreCase(getName())) {
             nickname = nick;
         } else {
-            nickname = FormatUtil.replaceFormat(ess.getSettings().getNicknamePrefix()) + nick;
+            if (isAuthorized("essentials.nick.hideprefix")) {
+                nickname = nick;
+            } else {
+                nickname = FormatUtil.replaceFormat(ess.getSettings().getNicknamePrefix()) + nick;
+            }
             suffix = "§r";
         }
 
@@ -519,7 +524,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     this.getBase().setPlayerListName(name);
                 } catch (final IllegalArgumentException e) {
                     if (ess.getSettings().isDebug()) {
-                        logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
+                        ess.getLogger().log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
                     }
                 }
             }
@@ -637,7 +642,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || set && ess.getSettings().sleepIgnoresAfkPlayers());
+        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || (set && ess.getSettings().sleepIgnoresAfkPlayers()));
         if (set && !isAfk()) {
             afkPosition = this.getLocation();
             this.afkSince = System.currentTimeMillis();
@@ -674,12 +679,25 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public boolean isHiddenFrom(Player player) {
+        if (getBase() instanceof OfflinePlayerStub || player instanceof OfflinePlayerStub) {
+            return true;
+        }
         return !player.canSee(getBase());
     }
 
     @Override
     public boolean isHidden() {
         return hidden;
+    }
+
+    @Override
+    public boolean isLeavingHidden() {
+        return leavingHidden;
+    }
+
+    @Override
+    public void setLeavingHidden(boolean leavingHidden) {
+        this.leavingHidden = leavingHidden;
     }
 
     @Override
@@ -691,7 +709,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public boolean isHidden(final Player player) {
-        return hidden || !player.canSee(getBase());
+        return hidden || isHiddenFrom(player);
     }
 
     @Override
@@ -964,6 +982,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             }
             setHidden(true);
+            lastVanishTime = System.currentTimeMillis();
             ess.getVanishedPlayersNew().add(getName());
             this.getBase().setMetadata("vanished", new FixedMetadataValue(ess, true));
             if (isAuthorized("essentials.vanish.effect")) {
@@ -1126,12 +1145,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
      * Returns the {@link ItemStack} in the main hand or off-hand. If the main hand is empty then the offhand item is returned - also nullable.
      */
     public ItemStack getItemInHand() {
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
-            return getBase().getInventory().getItemInHand();
-        } else {
-            final PlayerInventory inventory = getBase().getInventory();
-            return inventory.getItemInMainHand() != null ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
-        }
+        return Inventories.getItemInHand(getBase());
     }
 
     @Override
@@ -1181,6 +1195,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return signCopy;
     }
 
+    @Override
+    public boolean isFreeze() {
+        return freeze;
+    }
+
+    @Override
+    public void setFreeze(boolean freeze) {
+        this.freeze = freeze;
+    }
+
     public boolean isBaltopExempt() {
         if (getBase().isOnline()) {
             final boolean exempt = isAuthorized("essentials.balancetop.exclude");
@@ -1188,6 +1212,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return exempt;
         }
         return isBaltopExcludeCache();
+    }
+
+    public long getLastVanishTime() {
+        return lastVanishTime;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.config;
 
+import com.earth2me.essentials.Essentials;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
@@ -33,6 +34,9 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
 
     @Override
     public boolean legacyFileExists() {
+        if (username == null) {
+            return false;
+        }
         return new File(configFile.getParentFile(), username + ".yml").exists();
     }
 
@@ -43,7 +47,7 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
             //noinspection UnstableApiUsage
             Files.move(file, new File(configFile.getParentFile(), uuid + ".yml"));
         } catch (final IOException ex) {
-            LOGGER.log(Level.WARNING, "Failed to migrate user: " + username, ex);
+            Essentials.getWrappedLogger().log(Level.WARNING, "Failed to migrate user: " + username, ex);
         }
 
         setProperty("last-account-name", username);
@@ -51,12 +55,12 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
 
     private File getAltFile() {
         final UUID fn = UUID.nameUUIDFromBytes(("OfflinePlayer:" + username.toLowerCase(Locale.ENGLISH)).getBytes(Charsets.UTF_8));
-        return new File(configFile.getParentFile(), fn.toString() + ".yml");
+        return new File(configFile.getParentFile(), fn + ".yml");
     }
 
     @Override
     public boolean altFileExists() {
-        if (username.equals(username.toLowerCase())) {
+        if (username == null || username.equals(username.toLowerCase())) {
             return false;
         }
         return getAltFile().exists();
@@ -68,7 +72,7 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
             //noinspection UnstableApiUsage
             Files.move(getAltFile(), new File(configFile.getParentFile(), uuid + ".yml"));
         } catch (final IOException ex) {
-            LOGGER.log(Level.WARNING, "Failed to migrate user: " + username, ex);
+            Essentials.getWrappedLogger().log(Level.WARNING, "Failed to migrate user: " + username, ex);
         }
     }
 }

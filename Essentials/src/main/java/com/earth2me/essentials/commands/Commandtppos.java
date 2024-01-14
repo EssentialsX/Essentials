@@ -66,9 +66,9 @@ public class Commandtppos extends EssentialsCommand {
         }
 
         final User user = getPlayer(server, args, 0, true, false);
-        final double x = args[1].startsWith("~") ? user.getLocation().getX() + (args[1].length() > 1 ? Integer.parseInt(args[1].substring(1)) : 0) : Integer.parseInt(args[1]);
-        final double y = args[2].startsWith("~") ? user.getLocation().getY() + (args[2].length() > 1 ? Integer.parseInt(args[2].substring(1)) : 0) : Integer.parseInt(args[2]);
-        final double z = args[3].startsWith("~") ? user.getLocation().getZ() + (args[3].length() > 1 ? Integer.parseInt(args[3].substring(1)) : 0) : Integer.parseInt(args[3]);
+        final double x = args[1].startsWith("~") ? user.getLocation().getX() + (args[1].length() > 1 ? Double.parseDouble(args[1].substring(1)) : 0) : Double.parseDouble(args[1]);
+        final double y = args[2].startsWith("~") ? user.getLocation().getY() + (args[2].length() > 1 ? Double.parseDouble(args[2].substring(1)) : 0) : Double.parseDouble(args[2]);
+        final double z = args[3].startsWith("~") ? user.getLocation().getZ() + (args[3].length() > 1 ? Double.parseDouble(args[3].substring(1)) : 0) : Double.parseDouble(args[3]);
         final Location loc = new Location(user.getWorld(), x, y, z, user.getLocation().getYaw(), user.getLocation().getPitch());
         if (args.length == 5) {
             loc.setWorld(ess.getWorld(args[4]));

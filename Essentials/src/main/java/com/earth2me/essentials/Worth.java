@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -101,7 +102,7 @@ public class Worth implements IConf {
         }
 
         int max = 0;
-        for (final ItemStack s : user.getBase().getInventory().getContents()) {
+        for (final ItemStack s : Inventories.getInventory(user.getBase(), false)) {
             if (s == null || !s.isSimilar(is)) {
                 continue;
             }

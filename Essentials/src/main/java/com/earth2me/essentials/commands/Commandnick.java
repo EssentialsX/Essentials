@@ -53,12 +53,12 @@ public class Commandnick extends EssentialsLoopCommand {
             if (!target.getDisplayName().equalsIgnoreCase(target.getDisplayName())) {
                 target.sendMessage(tl("nickNoMore"));
             }
-            target.sendMessage(tl("nickSet", target.getDisplayName()));
+            target.sendMessage(tl("nickSet", ess.getSettings().changeDisplayName() ? target.getDisplayName() : nick));
         } else if (nickInUse(target, nick)) {
             throw new NotEnoughArgumentsException(tl("nickInUse"));
         } else {
             setNickname(server, sender, target, nick);
-            target.sendMessage(tl("nickSet", target.getDisplayName()));
+            target.sendMessage(tl("nickSet", ess.getSettings().changeDisplayName() ? target.getDisplayName() : nick));
         }
     }
 
@@ -70,7 +70,7 @@ public class Commandnick extends EssentialsLoopCommand {
             throw new Exception(tl("nickTooLong"));
         } else if (FormatUtil.stripFormat(newNick).length() < 1) {
             throw new Exception(tl("nickNamesAlpha"));
-        } else if (user != null && user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass") && !FormatUtil.stripFormat(newNick).equals(user.getName())) {
+        } else if (user != null && user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass") && !FormatUtil.stripFormat(newNick).equals(user.getName()) && !nick.equalsIgnoreCase("off")) {
             throw new Exception(tl("nickNamesOnlyColorChanges"));
         } else if (user != null && !user.isAuthorized("essentials.nick.blacklist.bypass") && isNickBanned(newNick)) {
             throw new Exception(tl("nickNameBlacklist", nick));

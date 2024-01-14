@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.Commandfireball;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
@@ -72,13 +73,11 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsPlayerListener implements Listener, FakeAccessor {
-    private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
     private final ConcurrentHashMap<UUID, Integer> pendingMotdTasks = new ConcurrentHashMap<>();
 
@@ -122,11 +121,24 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
     }
 
+    private static boolean isGameEventEvent() {
+        try {
+            Class.forName("org.bukkit.event.block.BlockReceiveGameEvent");
+            return true;
+        } catch (final ClassNotFoundException ignored) {
+            return false;
+        }
+    }
+
     public void registerEvents() {
         ess.getServer().getPluginManager().registerEvents(this, ess);
 
         if (isArrowPickupEvent()) {
             ess.getServer().getPluginManager().registerEvents(new ArrowPickupListener(), ess);
+        }
+
+        if (isGameEventEvent()) {
+            ess.getServer().getPluginManager().registerEvents(new SculkListener1_17(), ess);
         }
 
         if (isEntityPickupEvent()) {
@@ -166,7 +178,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
 
-            LOGGER.info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
+            ess.getLogger().info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
         }
         try {
             final Iterator<Player> it = event.getRecipients().iterator();
@@ -194,17 +206,26 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             return;
         }
 
-        if (!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers()) {
-            event.getHandlers().unregister(this);
+        final User user = ess.getUser(event.getPlayer());
 
-            if (ess.getSettings().isDebug()) {
-                LOGGER.log(Level.INFO, "Unregistering move listener");
+        if (user.isFreeze()) {
+            final Location from = event.getFrom();
+            final Location to = event.getTo().clone();
+            to.setX(from.getX());
+            to.setY(from.getY());
+            to.setZ(from.getZ());
+            try {
+                event.setTo(LocationUtil.getSafeDestination(ess, to));
+            } catch (final Exception ex) {
+                event.setTo(to);
             }
-
             return;
         }
 
-        final User user = ess.getUser(event.getPlayer());
+        if (!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers()) {
+            return;
+        }
+
         if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers()) {
             final Location from = event.getFrom();
             final Location origTo = event.getTo();
@@ -217,6 +238,10 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             to.setY(from.getY());
             to.setZ(from.getZ());
             try {
+                if (event.getPlayer().getAllowFlight()) {
+                    // Don't teleport to a safe location here, they are either a god or flying
+                    throw new Exception();
+                }
                 event.setTo(LocationUtil.getSafeDestination(ess, to));
             } catch (final Exception ex) {
                 event.setTo(to);
@@ -245,7 +270,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             final String msg = ess.getSettings().getCustomQuitMessage()
                 .replace("{PLAYER}", player.getDisplayName())
                 .replace("{USERNAME}", player.getName())
-                .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
+                .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size() - 1)) // Subtract 1 as the leaving player is still online during this time
                 .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
                 .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
                 .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)));
@@ -258,6 +283,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             user.setGodModeEnabled(false);
         }
         if (user.isVanished()) {
+            user.setLeavingHidden(true);
             user.setVanished(false);
         }
         user.setLogoutLocation();
@@ -305,6 +331,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         ess.getBackup().onPlayerJoin();
         final User dUser = ess.getUser(player);
+        dUser.update(player);
 
         dUser.startTransaction();
         if (dUser.isNPC()) {
@@ -332,6 +359,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 user.setLastLogin(currentTime);
                 user.setDisplayNick();
                 updateCompass(user);
+                user.setLeavingHidden(false);
 
                 // Check for new username. If they don't want the message, let's just say it's false.
                 final boolean newUsername = ess.getSettings().isCustomNewUsernameMessage() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
@@ -363,7 +391,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 } else if (ess.getSettings().isCustomJoinMessage()) {
                     final String msg = (newUsername ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
-                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
+                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUsers().getUserCount()))
                         .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
                         .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
                         .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
@@ -460,9 +488,9 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                             tempInput = new TextInput(user.getSource(), "motd", true, ess);
                         } catch (final IOException ex) {
                             if (ess.getSettings().isDebug()) {
-                                LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+                                ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
                             } else {
-                                LOGGER.log(Level.WARNING, ex.getMessage());
+                                ess.getLogger().log(Level.WARNING, ex.getMessage());
                             }
                         }
                     }
@@ -523,6 +551,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     public void onPlayerLogin(final PlayerLoginEvent event) {
         if (event.getResult() == Result.KICK_FULL) {
             final User kfuser = ess.getUser(event.getPlayer());
+            kfuser.update(event.getPlayer());
             if (kfuser.isAuthorized("essentials.joinfullserver")) {
                 event.allow();
                 return;
@@ -553,7 +582,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         final User user = ess.getUser(event.getPlayer());
         final ItemStack stack = new ItemStack(Material.EGG, 1);
         if (user.hasUnlimited(stack)) {
-            user.getBase().getInventory().addItem(stack);
+            Inventories.addItem(user.getBase(), stack);
             user.getBase().updateInventory();
         }
     }
@@ -622,7 +651,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             } else {
                 player.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
-            LOGGER.info(tl("mutedUserSpeaks", player.getName(), event.getMessage()));
+            ess.getLogger().info(tl("mutedUserSpeaks", player.getName(), event.getMessage()));
             return;
         }
 
@@ -646,7 +675,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
 
         if (ess.getSettings().isCommandCooldownsEnabled()
-            && !user.isAuthorized("essentials.commandcooldowns.bypass")) {
+            && !user.isAuthorized("essentials.commandcooldowns.bypass")
+            && (pluginCommand == null || !user.isAuthorized("essentials.commandcooldowns.bypass." + pluginCommand.getName()))) {
             final int argStartIndex = effectiveCommand.indexOf(" ");
             final String args = argStartIndex == -1 ? "" // No arguments present
                 : " " + effectiveCommand.substring(argStartIndex); // arguments start at argStartIndex; substring from there.
@@ -810,7 +840,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             ess.scheduleSyncDelayedTask(new DelayedClickJumpTask());
         } catch (final Exception ex) {
             if (ess.getSettings().isDebug()) {
-                LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+                ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
             }
         }
     }
@@ -834,7 +864,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     @Override
                     public void run() {
                         user.getBase().chat("/" + command);
-                        LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", user.getName(), command));
+                        ess.getLogger().log(Level.INFO, String.format("[PT] %s issued server command: /%s", user.getName(), command));
                     }
                 }
 
@@ -980,6 +1010,15 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 if (ess.getUser((Player) event.getEntity()).isAfk()) {
                     event.setCancelled(true);
                 }
+            }
+        }
+    }
+
+    private final class SculkListener1_17 implements Listener {
+        @EventHandler
+        public void onGameEvent(final org.bukkit.event.block.BlockReceiveGameEvent event) {
+            if (event.getEntity() instanceof Player && ess.getUser((Player) event.getEntity()).isVanished()) {
+                event.setCancelled(true);
             }
         }
     }

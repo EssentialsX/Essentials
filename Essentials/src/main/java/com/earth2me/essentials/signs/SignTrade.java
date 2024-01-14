@@ -5,6 +5,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.Trade.TradeType;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
@@ -84,10 +85,14 @@ public class SignTrade extends EssentialsSign {
 
     private Trade rechargeSign(final ISign sign, final IEssentials ess, final User player) throws SignException, ChargeException {
         final Trade trade = getTrade(sign, 2, AmountType.COST, false, true, ess);
-        if (trade.getItemStack() != null && player.getBase().getItemInHand() != null && trade.getItemStack().getType() == player.getBase().getItemInHand().getType() && MaterialUtil.getDamage(trade.getItemStack()) == MaterialUtil.getDamage(player.getBase().getItemInHand()) && trade.getItemStack().getEnchantments().equals(player.getBase().getItemInHand().getEnchantments())) {
+        ItemStack stack = Inventories.getItemInHand(player.getBase());
+        if (trade.getItemStack() != null && stack != null && !MaterialUtil.isAir(stack.getType()) && trade.getItemStack().getType() == stack.getType() && MaterialUtil.getDamage(trade.getItemStack()) == MaterialUtil.getDamage(stack) && trade.getItemStack().getEnchantments().equals(stack.getEnchantments())) {
+            if (MaterialUtil.isPotion(trade.getItemStack().getType()) && !trade.getItemStack().isSimilar(stack)) {
+                return null;
+            }
             final int amount = trade.getItemStack().getAmount();
-            if (player.getBase().getInventory().containsAtLeast(trade.getItemStack(), amount)) {
-                final ItemStack stack = player.getBase().getItemInHand().clone();
+            if (Inventories.containsAtLeast(player.getBase(), trade.getItemStack(), amount)) {
+                stack = stack.clone();
                 stack.setAmount(amount);
                 final Trade store = new Trade(stack, ess);
                 addAmount(sign, 2, store, ess);
@@ -174,7 +179,7 @@ public class SignTrade extends EssentialsSign {
                 if (amount.compareTo(MINTRANSACTION) < 0 || money.compareTo(MINTRANSACTION) < 0) {
                     throw new SignException(tl("moreThanZero"));
                 }
-                final String newLine = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(amount, ess).substring(1);
+                final String newLine = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.formatAsCurrency(amount);
                 validateSignLength(newLine);
                 sign.setLine(index, newLine);
                 return;
@@ -328,7 +333,7 @@ public class SignTrade extends EssentialsSign {
             final BigDecimal money = getMoney(split[0], ess);
             final BigDecimal amount = getBigDecimal(split[1], ess);
             if (money != null && amount != null) {
-                final String newline = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(value, ess).substring(1);
+                final String newline = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.formatAsCurrency(value);
                 validateSignLength(newline);
                 sign.setLine(index, newline);
                 return;

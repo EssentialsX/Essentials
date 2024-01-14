@@ -1,5 +1,6 @@
 package com.earth2me.essentials.geoip;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IEssentials;
 import org.bukkit.plugin.PluginManager;
@@ -16,6 +17,7 @@ public class EssentialsGeoIP extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        EssentialsLogger.updatePluginLogger(this);
         final PluginManager pm = getServer().getPluginManager();
         final IEssentials ess = (IEssentials) pm.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
@@ -28,7 +30,7 @@ public class EssentialsGeoIP extends JavaPlugin {
 
         Logger.getLogger(com.fasterxml.jackson.databind.ext.Java7Support.class.getName()).setLevel(Level.SEVERE);
 
-        final EssentialsGeoIPPlayerListener playerListener = new EssentialsGeoIPPlayerListener(getDataFolder(), ess);
+        final EssentialsGeoIPPlayerListener playerListener = new EssentialsGeoIPPlayerListener(getDataFolder(), ess, this);
         pm.registerEvents(playerListener, this);
 
         getLogger().log(Level.INFO, "This product includes GeoLite2 data created by MaxMind, available from http://www.maxmind.com/.");

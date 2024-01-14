@@ -140,6 +140,13 @@ public class KeywordReplacer implements IText {
 
         for (int i = 0; i < input.getLines().size(); i++) {
             String line = input.getLines().get(i);
+
+            // Skip processing b64 encoded items, they will not have keywords in them.
+            if (line.startsWith("@")) {
+                replaced.add(line);
+                continue;
+            }
+
             final Matcher matcher = KEYWORD.matcher(line);
 
             while (matcher.find()) {
@@ -253,7 +260,7 @@ public class KeywordReplacer implements IText {
                         replacer = Integer.toString(ess.getOnlinePlayers().size() - playerHidden);
                         break;
                     case UNIQUE:
-                        replacer = NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers());
+                        replacer = NumberFormat.getInstance().format(ess.getUsers().getUserCount());
                         break;
                     case WORLDS:
                         final StringBuilder worldsBuilder = new StringBuilder();
@@ -375,7 +382,10 @@ public class KeywordReplacer implements IText {
                 }
 
                 if (this.replaceSpacesWithUnderscores) {
-                    replacer = replacer.replaceAll("\\s", "_");
+                    // Don't replace spaces with underscores in command nor escape underscores.
+                    if (!line.startsWith("/")) {
+                        replacer = replacer.replace("_", "\\_").replaceAll("\\s", "_");
+                    }
                 }
 
                 //If this is just a regular keyword, lets throw it into the cache
