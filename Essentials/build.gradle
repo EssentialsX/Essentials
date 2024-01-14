@@ -18,6 +18,7 @@ dependencies {
     // Providers
     api project(':providers:BaseProviders')
     api project(':providers:PaperProvider')
+    api project(':providers:FoliaProvider')
     api(project(':providers:NMSReflectionProvider')) {
         exclude group: "org.bukkit", module: "bukkit"
     }
@@ -45,6 +46,7 @@ shadowJar {
         include (dependency('org.checkerframework:checker-qual'))
         include (project(':providers:BaseProviders'))
         include (project(':providers:PaperProvider'))
+        include (project(':providers:FoliaProvider'))
         include (project(':providers:NMSReflectionProvider'))
         include (project(':providers:1_8Provider'))
         include (project(':providers:1_12Provider'))

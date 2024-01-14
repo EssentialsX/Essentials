@@ -136,7 +136,7 @@ public class AccountLinkManager implements IEssentialsModule, DiscordLinkService
             runnable.run();
             return;
         }
-        ess.getEss().scheduleSyncDelayedTask(runnable);
+        ess.getEss().scheduleGlobalDelayedTask(runnable);
     }
 
     private void ensureAsync(final Runnable runnable) {

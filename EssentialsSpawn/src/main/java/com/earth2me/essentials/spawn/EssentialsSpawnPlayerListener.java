@@ -83,7 +83,7 @@ class EssentialsSpawnPlayerListener implements Listener {
                 final User user = ess.getUser(player);
 
                 if (ess.getSettings().isUserInSpawnOnJoinGroup(user) && !user.isAuthorized("essentials.spawn-on-join.exempt")) {
-                    ess.scheduleSyncDelayedTask(() -> {
+                    ess.scheduleEntityDelayedTask(player, () -> {
                         final Location spawn = spawns.getSpawn(user.getGroup());
                         if (spawn == null) {
                             return;
@@ -104,10 +104,10 @@ class EssentialsSpawnPlayerListener implements Listener {
         final User user = ess.getUser(player);
 
         if (!"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn())) {
-            ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user), 1L);
+            ess.scheduleEntityDelayedTask(player, new NewPlayerTeleport(user), 1L);
         }
 
-        ess.scheduleSyncDelayedTask(() -> {
+        ess.scheduleEntityDelayedTask(player, () -> {
             if (!user.getBase().isOnline()) {
                 return;
             }

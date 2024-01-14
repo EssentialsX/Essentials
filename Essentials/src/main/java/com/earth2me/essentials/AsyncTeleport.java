@@ -141,19 +141,6 @@ public class AsyncTeleport implements IAsyncTeleport {
         paperFuture.exceptionally(future::completeExceptionally);
     }
 
-    private void runOnMain(final Runnable runnable) throws ExecutionException, InterruptedException {
-        if (Bukkit.isPrimaryThread()) {
-            runnable.run();
-            return;
-        }
-        final CompletableFuture<Object> taskLock = new CompletableFuture<>();
-        Bukkit.getScheduler().runTask(ess, () -> {
-            runnable.run();
-            taskLock.complete(new Object());
-        });
-        taskLock.get();
-    }
-
     protected void nowAsync(final IUser teleportee, final ITarget target, final TeleportCause cause, final CompletableFuture<Boolean> future) {
         cancel(false);
 
@@ -171,8 +158,8 @@ public class AsyncTeleport implements IAsyncTeleport {
             }
 
             try {
-                runOnMain(() -> teleportee.getBase().eject()); //EntityDismountEvent requires a sync context.
-            } catch (final ExecutionException | InterruptedException e) {
+                ess.ensureEntity(teleportee.getBase(), () -> teleportee.getBase().eject()); //EntityDismountEvent requires a sync context.
+            } catch (final RuntimeException e) {
                 future.completeExceptionally(e);
                 return;
             }
@@ -192,8 +179,7 @@ public class AsyncTeleport implements IAsyncTeleport {
             if (LocationUtil.isBlockUnsafeForUser(ess, teleportee, chunk.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
                 if (ess.getSettings().isTeleportSafetyEnabled()) {
                     if (ess.getSettings().isForceDisableTeleportSafety()) {
-                        //The chunk we're teleporting to is 100% going to be loaded here, no need to teleport async.
-                        teleportee.getBase().teleport(loc, cause);
+                        PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
                     } else {
                         try {
                             //There's a chance the safer location is outside the loaded chunk so still teleport async here.
@@ -209,8 +195,7 @@ public class AsyncTeleport implements IAsyncTeleport {
                 }
             } else {
                 if (ess.getSettings().isForceDisableTeleportSafety()) {
-                    //The chunk we're teleporting to is 100% going to be loaded here, no need to teleport async.
-                    teleportee.getBase().teleport(loc, cause);
+                    PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
                 } else {
                     if (ess.getSettings().isTeleportToCenterLocation()) {
                         loc = LocationUtil.getRoundedDestination(loc);

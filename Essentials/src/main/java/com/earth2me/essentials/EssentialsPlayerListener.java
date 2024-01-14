@@ -15,6 +15,7 @@ import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.provider.CommandSendListenerProvider;
+import net.ess3.provider.SchedulingProvider;
 import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
 import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
@@ -79,7 +80,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsPlayerListener implements Listener, FakeAccessor {
     private final transient IEssentials ess;
-    private final ConcurrentHashMap<UUID, Integer> pendingMotdTasks = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, SchedulingProvider.EssentialsTask> pendingMotdTasks = new ConcurrentHashMap<>();
 
     public EssentialsPlayerListener(final IEssentials parent) {
         this.ess = parent;
@@ -258,9 +259,9 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
-        final Integer pendingId = pendingMotdTasks.remove(user.getUUID());
-        if (pendingId != null) {
-            ess.getScheduler().cancelTask(pendingId);
+        final SchedulingProvider.EssentialsTask pendingTask = pendingMotdTasks.remove(user.getUUID());
+        if (pendingTask != null) {
+            pendingTask.cancel();
         }
 
         if (hideJoinQuitMessages() || (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit"))) {
@@ -414,7 +415,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     final int motdDelay = ess.getSettings().getMotdDelay() / 50;
                     final DelayMotdTask motdTask = new DelayMotdTask(user);
                     if (motdDelay > 0) {
-                        pendingMotdTasks.put(user.getUUID(), ess.scheduleSyncDelayedTask(motdTask, motdDelay));
+                        pendingMotdTasks.put(user.getUUID(), ess.scheduleEntityDelayedTask(user.getBase(), motdTask, motdDelay));
                     } else {
                         motdTask.run();
                     }
@@ -506,7 +507,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             }
         }
 
-        ess.scheduleSyncDelayedTask(new DelayJoinTask());
+        ess.scheduleEntityDelayedTask(player, new DelayJoinTask());
     }
 
     // Makes the compass item ingame always point to the first essentials home.  #EasterEgg
@@ -592,7 +593,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         final User user = ess.getUser(event.getPlayer());
         if (user.hasUnlimited(new ItemStack(event.getBucket()))) {
             event.getItemStack().setType(event.getBucket());
-            ess.scheduleSyncDelayedTask(user.getBase()::updateInventory);
+            ess.scheduleEntityDelayedTask(user.getBase(), user.getBase()::updateInventory);
         }
     }
 
@@ -837,7 +838,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 }
             }
 
-            ess.scheduleSyncDelayedTask(new DelayedClickJumpTask());
+            ess.scheduleEntityDelayedTask(user.getBase(), new DelayedClickJumpTask());
         } catch (final Exception ex) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
@@ -868,7 +869,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     }
                 }
 
-                ess.scheduleSyncDelayedTask(new PowerToolUseTask());
+                ess.scheduleEntityDelayedTask(user.getBase(), new PowerToolUseTask());
 
             }
         }
@@ -929,7 +930,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
 
         if (refreshPlayer != null) {
-            ess.scheduleSyncDelayedTask(refreshPlayer::updateInventory, 1);
+            ess.scheduleEntityDelayedTask(refreshPlayer, refreshPlayer::updateInventory, 1);
         }
     }
 
@@ -971,7 +972,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
 
         if (refreshPlayer != null) {
-            ess.scheduleSyncDelayedTask(refreshPlayer::updateInventory, 1);
+            ess.scheduleEntityDelayedTask(refreshPlayer, refreshPlayer::updateInventory, 1);
         }
     }
 

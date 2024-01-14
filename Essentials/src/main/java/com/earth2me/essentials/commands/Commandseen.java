@@ -60,7 +60,7 @@ public class Commandseen extends EssentialsCommand {
                     return;
                 }
             }
-            ess.getScheduler().runTaskAsynchronously(ess, new Runnable() {
+            ess.runTaskAsynchronously(new Runnable() {
                 @Override
                 public void run() {
                     final User userFromBukkit = ess.getUsers().getUser(args[0]);

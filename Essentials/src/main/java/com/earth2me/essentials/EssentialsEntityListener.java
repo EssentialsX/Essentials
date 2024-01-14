@@ -112,7 +112,7 @@ public class EssentialsEntityListener implements Listener {
                         }
                     }
 
-                    ess.scheduleSyncDelayedTask(new PowerToolInteractTask());
+                    ess.scheduleEntityDelayedTask(attacker.getBase(), new PowerToolInteractTask());
 
                     event.setCancelled(true);
                     return;

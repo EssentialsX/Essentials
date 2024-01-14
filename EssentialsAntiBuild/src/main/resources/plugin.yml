@@ -8,7 +8,7 @@ description: Provides build protection.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, Iaccidentally, drtshock, mdcfe]
 depend: [Essentials]
 api-version: "1.13"
-
+folia-supported: true
 permissions:
   essentials.exempt.protect:
     default: false

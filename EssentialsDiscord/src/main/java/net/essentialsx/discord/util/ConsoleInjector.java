@@ -4,6 +4,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.base.Splitter;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.utils.TimeFormat;
+import net.ess3.provider.SchedulingProvider;
 import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.JDADiscordService;
 import org.apache.logging.log4j.LogManager;
@@ -11,7 +12,6 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
-import org.bukkit.Bukkit;
 
 import java.time.Instant;
 import java.util.concurrent.BlockingQueue;
@@ -30,7 +30,7 @@ public class ConsoleInjector extends AbstractAppender {
 
     private final JDADiscordService jda;
     private final BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
-    private final int taskId;
+    private final SchedulingProvider.EssentialsTask task;
     private boolean removed = false;
 
     private final AtomicLong lastRateLimitTime = new AtomicLong(0);
@@ -41,7 +41,7 @@ public class ConsoleInjector extends AbstractAppender {
         super("EssentialsX-ConsoleInjector", null, null, false);
         this.jda = jda;
         ((Logger) LogManager.getRootLogger()).addAppender(this);
-        taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(jda.getPlugin(), () -> {
+        task = jda.getPlugin().getEss().runTaskTimerAsynchronously(() -> {
             // Check to see if we're supposed to be backing off, preform backoff if the case.
             if (recentRateLimit.get() < 0) {
                 if (totalBackoffEvents.get() * 20 >= jda.getSettings().getConsoleSkipDelay() * 60) {
@@ -60,7 +60,6 @@ public class ConsoleInjector extends AbstractAppender {
                 }
                 return;
             }
-
             final StringBuilder buffer = new StringBuilder();
             String curLine;
             while ((curLine = messageQueue.peek()) != null) {
@@ -74,7 +73,7 @@ public class ConsoleInjector extends AbstractAppender {
             if (buffer.length() != 0) {
                 sendMessage(buffer.toString());
             }
-        }, 20, 20 * QUEUE_PROCESS_PERIOD_SECONDS).getTaskId();
+        }, 20, 20 * QUEUE_PROCESS_PERIOD_SECONDS);
     }
 
     private void sendMessage(String content) {
@@ -148,7 +147,7 @@ public class ConsoleInjector extends AbstractAppender {
 
     public void remove() {
         ((Logger) LogManager.getRootLogger()).removeAppender(this);
-        Bukkit.getScheduler().cancelTask(taskId);
+        task.cancel();
         messageQueue.clear();
         if (jda.getConsoleWebhook() != null && !jda.getConsoleWebhook().isShutdown()) {
             jda.getConsoleWebhook().close();

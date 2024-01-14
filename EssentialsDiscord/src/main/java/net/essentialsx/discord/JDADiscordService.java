@@ -237,7 +237,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             logger.log(Level.WARNING, "Error while loading the achievement/advancement listener. You will not receive achievement/advancement notifications on Discord.", e);
         }
 
-        getPlugin().getEss().scheduleSyncDelayedTask(() -> DiscordUtil.dispatchDiscordMessage(JDADiscordService.this, MessageType.DefaultTypes.SERVER_START, getSettings().getStartMessage(), true, null, null, null));
+        getPlugin().getEss().scheduleInitTask(() -> DiscordUtil.dispatchDiscordMessage(JDADiscordService.this, MessageType.DefaultTypes.SERVER_START, getSettings().getStartMessage(), true, null, null, null));
 
         Bukkit.getServicesManager().register(DiscordService.class, this, plugin, ServicePriority.Normal);
     }
@@ -266,11 +266,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             logger.warning("Sending message to channel \"" + type.getKey() + "\" which is an unregistered type! If you are a plugin author, you should be registering your MessageType before using them.");
         }
         final DiscordMessageEvent event = new DiscordMessageEvent(type, FormatUtil.stripFormat(message), allowGroupMentions);
-        if (Bukkit.getServer().isPrimaryThread()) {
-            Bukkit.getPluginManager().callEvent(event);
-        } else {
-            Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(event));
-        }
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     @Override

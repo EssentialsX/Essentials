@@ -124,7 +124,7 @@ public class RandomTeleport implements IConf {
 
     // Prompts caching random valid locations, up to a maximum number of attempts
     public void cacheRandomLocations(final Location center, final double minRange, final double maxRange) {
-        ess.getServer().getScheduler().scheduleSyncDelayedTask(ess, () -> {
+        ess.scheduleLocationDelayedTask(center, () -> {
             for (int i = 0; i < this.getFindAttempts(); ++i) {
                 calculateRandomLocation(center, minRange, maxRange).thenAccept(location -> {
                     if (isValidRandomLocation(location)) {

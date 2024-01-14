@@ -8,6 +8,7 @@ description: Provides spawn control commands, utilizing Essentials.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, SupaHam, mdcfe, DoNotSpamPls, JRoy]
 depend: [Essentials]
 api-version: 1.13
+folia-supported: true
 commands:
   setspawn:
     description: Sets the spawn point to your current position.

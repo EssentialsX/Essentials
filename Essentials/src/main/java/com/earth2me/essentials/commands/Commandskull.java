@@ -129,7 +129,7 @@ public class Commandskull extends EssentialsCommand {
             }
             skullMeta.setDisplayName("§fSkull of " + shortOwnerName);
 
-            ess.scheduleSyncDelayedTask(() -> {
+            ess.scheduleEntityDelayedTask(user.getBase(), () -> {
                 stack.setItemMeta(skullMeta);
                 if (spawn) {
                     Inventories.addItem(user.getBase(), stack);
