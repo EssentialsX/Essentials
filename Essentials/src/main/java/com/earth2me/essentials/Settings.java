@@ -13,6 +13,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
+import net.essentialsx.api.v2.ChatType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -29,6 +30,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -39,6 +41,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -51,7 +54,7 @@ public class Settings implements net.ess3.api.ISettings {
     private final transient EssentialsConfiguration config;
     private final transient IEssentials ess;
     private final transient AtomicInteger reloadCount = new AtomicInteger(0);
-    private final Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<>());
+    private final ChatFormats chatFormats = new ChatFormats();
     private int chatRadius = 0;
     // #easteregg
     private char chatShout = '!';
@@ -565,30 +568,145 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public String getChatFormat(final String group) {
-        String mFormat = chatFormats.get(group);
-        if (mFormat == null) {
-            mFormat = config.getString("chat.group-formats." + (group == null ? "Default" : group), config.getString("chat.format", "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}"));
-            mFormat = FormatUtil.replaceFormat(mFormat);
-            mFormat = mFormat.replace("{DISPLAYNAME}", "%1$s");
-            mFormat = mFormat.replace("{MESSAGE}", "%2$s");
-            mFormat = mFormat.replace("{GROUP}", "{0}");
-            mFormat = mFormat.replace("{WORLD}", "{1}");
-            mFormat = mFormat.replace("{WORLDNAME}", "{1}");
-            mFormat = mFormat.replace("{SHORTWORLDNAME}", "{2}");
-            mFormat = mFormat.replace("{TEAMPREFIX}", "{3}");
-            mFormat = mFormat.replace("{TEAMSUFFIX}", "{4}");
-            mFormat = mFormat.replace("{TEAMNAME}", "{5}");
-            mFormat = mFormat.replace("{PREFIX}", "{6}");
-            mFormat = mFormat.replace("{SUFFIX}", "{7}");
-            mFormat = mFormat.replace("{USERNAME}", "{8}");
-            mFormat = mFormat.replace("{NICKNAME}", "{9}");
-            mFormat = "§r".concat(mFormat);
-            chatFormats.put(group, mFormat);
-        }
+        return getChatFormat(group, null);
+    }
+
+    @Override
+    public String getChatFormat(final String group, final ChatType chatType) {
+        final String mFormat = chatFormats.getFormat(group, chatType, new ChatFormatConfigSupplier(config, group, chatType));
         if (isDebug()) {
             ess.getLogger().info(String.format("Found format '%s' for group '%s'", mFormat, group));
         }
         return mFormat;
+    }
+
+    // Idk where these classes should be
+    private static class ChatFormatConfigSupplier implements Supplier<String> {
+
+        private final EssentialsConfiguration config;
+        private final String group;
+        private final ChatType chatType;
+
+        public ChatFormatConfigSupplier(EssentialsConfiguration config, String group, ChatType chatType) {
+            this.config = config;
+            this.group = group;
+            this.chatType = chatType;
+        }
+
+        @Override
+        public String get() {
+            //String configFormat = config.getString("chat.group-formats." + (group == null ? "Default" : group), config.getString("chat.format", "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}"));
+            String configFormat = null;
+            CommentedConfigurationNode node = config.getSection("chat.group-formats." + (group == null ? "Default" : group));
+            if (node != null) {
+                configFormat = getFormat(node, chatType);
+            }
+            // Group format is null, try default format
+            if (configFormat == null) {
+                node = config.getSection("chat.format");
+                if (node != null) {
+                    configFormat = getFormat(node, chatType);
+                }
+            }
+            // Group format is null, get the default one
+            if (configFormat == null) {
+                configFormat = "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}";
+            }
+
+            configFormat = FormatUtil.replaceFormat(configFormat);
+            configFormat = configFormat.replace("{DISPLAYNAME}", "%1$s");
+            configFormat = configFormat.replace("{MESSAGE}", "%2$s");
+            configFormat = configFormat.replace("{GROUP}", "{0}");
+            configFormat = configFormat.replace("{WORLD}", "{1}");
+            configFormat = configFormat.replace("{WORLDNAME}", "{1}");
+            configFormat = configFormat.replace("{SHORTWORLDNAME}", "{2}");
+            configFormat = configFormat.replace("{TEAMPREFIX}", "{3}");
+            configFormat = configFormat.replace("{TEAMSUFFIX}", "{4}");
+            configFormat = configFormat.replace("{TEAMNAME}", "{5}");
+            configFormat = configFormat.replace("{PREFIX}", "{6}");
+            configFormat = configFormat.replace("{SUFFIX}", "{7}");
+            configFormat = configFormat.replace("{USERNAME}", "{8}");
+            configFormat = configFormat.replace("{NICKNAME}", "{9}");
+            configFormat = "§r".concat(configFormat);
+            return configFormat;
+        }
+
+        private String getFormat(CommentedConfigurationNode node, ChatType chatType) {
+            // Try to get the specified chat type
+            CommentedConfigurationNode child = node.node(chatType.key());
+            if (child.virtual()) {
+                // Try to get the default chat type
+                child = node.node("default");
+            }
+            if (child.virtual()) {
+                // Get the current node
+                child = node;
+            }
+            return child.getString();
+        }
+
+    }
+
+    private static class ChatFormats {
+
+        private final Map<String, TypedChatFormat> groupFormats;
+        private TypedChatFormat defaultFormat;
+
+        ChatFormats() {
+            defaultFormat = null;
+            groupFormats = new HashMap<>();
+        }
+
+        public String getFormat(String group, ChatType type, Supplier<String> configSupplier) {
+            // With such a large synchronize block, we synchronize a potential config deserialization
+            // It does not matter as it needs to be done. It's even better as we ensure to do it once
+            // TypedChatFormat is also synchronized
+            synchronized (this) {
+                final TypedChatFormat typedChatFormat;
+                if (group == null) {
+                    if (defaultFormat == null) {
+                        defaultFormat = new TypedChatFormat();
+                    }
+                    typedChatFormat = defaultFormat;
+                } else {
+                    typedChatFormat = groupFormats.computeIfAbsent(group, s -> new TypedChatFormat());
+                }
+                return typedChatFormat.getFormat(type, configSupplier);
+            }
+        }
+
+        public void clear() {
+            synchronized (this) {
+                defaultFormat = null;
+                groupFormats.clear();
+            }
+        }
+
+    }
+
+    private static class TypedChatFormat {
+
+        private final Map<ChatType, String> typedFormats;
+        private String defaultFormat;
+
+        TypedChatFormat() {
+            defaultFormat = null;
+            typedFormats = new EnumMap<>(ChatType.class);
+        }
+
+        public String getFormat(ChatType type, Supplier<String> configSupplier) {
+            final String format;
+            if (type == null) {
+                if (defaultFormat == null) {
+                    defaultFormat = configSupplier.get();
+                }
+                format = defaultFormat;
+            } else {
+                format = typedFormats.computeIfAbsent(type, c -> configSupplier.get());
+            }
+            return format;
+        }
+
     }
 
     @Override

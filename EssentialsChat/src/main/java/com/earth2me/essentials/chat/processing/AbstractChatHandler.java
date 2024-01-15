@@ -90,7 +90,8 @@ public abstract class AbstractChatHandler {
         final String suffix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player));
         final Team team = player.getScoreboard().getPlayerTeam(player);
 
-        String format = ess.getSettings().getChatFormat(group);
+        // chat.getType() can't return ChatType.LOCAL (which can leads to inconsistencies)
+        String format = ess.getSettings().getChatFormat(group, chat.getType());
         format = format.replace("{0}", group);
         format = format.replace("{1}", ess.getSettings().getWorldAlias(world));
         format = format.replace("{2}", world.substring(0, 1).toUpperCase(Locale.ENGLISH));
