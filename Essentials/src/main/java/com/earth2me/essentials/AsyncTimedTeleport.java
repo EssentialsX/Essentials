@@ -2,11 +2,14 @@ package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -113,6 +116,26 @@ public class AsyncTimedTeleport implements Runnable {
                     }
                     try {
                         cancelTimer(false);
+
+                        // the target might change location, so check if they can accept teleports.
+                        if (AsyncTeleport.TeleportType.TPA == teleport.getTpType() && timer_teleportTarget instanceof PlayerTarget) {
+                            final Player targetPlayer = Bukkit.getPlayer(((PlayerTarget) timer_teleportTarget).getUUID());
+                            if (targetPlayer == null) return;
+                            try {
+                                if (!ess.getPermissionsHandler().hasPermission(targetPlayer, "essentials.tpaccept")) {
+                                    teleportOwner.sendMessage(tl("teleportNoAcceptPermission", targetPlayer.getDisplayName()));
+                                    return;
+                                }
+                            } catch (Exception ex) {
+                                if (ess.getSettings().isDebug()) {
+                                    ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+                                } else {
+                                    ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+                                }
+                                return;
+                            }
+                        }
+
                         teleportUser.sendMessage(tl("teleportationCommencing"));
 
                         if (timer_chargeFor != null) {
