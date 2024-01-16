@@ -94,6 +94,8 @@ public interface IEssentials extends Plugin {
 
     Kits getKits();
 
+    CommandFilters getCommandFilters();
+
     RandomTeleport getRandomTeleport();
 
     UpdateChecker getUpdateChecker();

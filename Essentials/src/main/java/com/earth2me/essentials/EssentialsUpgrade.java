@@ -463,6 +463,61 @@ public class EssentialsUpgrade {
         ess.getLogger().info("Done converting kits.");
     }
 
+    public void convertCommandFilters() {
+        final CommandFilters commandFilters = ess.getCommandFilters();
+        final EssentialsConfiguration config = commandFilters.getConfig();
+        if (doneFile.getBoolean("commandFiltersYml", false)) {
+            return;
+        }
+
+        ess.getLogger().info("Attempting to convert old command-cooldowns and -costs in config.yml to new command-filters.yml");
+
+        final CommentedConfigurationNode commandCooldowns = ess.getSettings().getCommandCooldowns();
+        if (commandCooldowns != null) {
+            convertCommandCooldowns(commandCooldowns, config);
+        } else {
+            ess.getLogger().info("No command cooldowns found to migrate.");
+        }
+
+        final Map<String, BigDecimal> commandCosts = ess.getSettings().getCommandCosts();
+        if (commandCosts != null) {
+            convertCommandCosts(commandCosts, config);
+        } else {
+            ess.getLogger().info("No command costs found to migrate.");
+        }
+
+        config.save();
+        doneFile.setProperty("commandFiltersYml", true);
+        doneFile.save();
+        ess.getLogger().info("Done converting command filters.");
+    }
+
+    private void convertCommandCooldowns(CommentedConfigurationNode commandCooldowns, EssentialsConfiguration config) {
+        final boolean persistent = ess.getSettings().isCommandCooldownPersistent("dummy");
+        for (Map.Entry<String, Object> entry : ConfigurateUtil.getRawMap(commandCooldowns).entrySet()) {
+            ess.getLogger().info("Converting cooldown \"" + entry.getKey() + "\"");
+
+            final String key = entry.getKey().replace("\\.", "{dot}"); // Convert periods
+            config.setProperty("filters." + key + ".pattern", entry.getKey());
+            final String cooldownKey = "filters." + key + ".cooldown";
+            if (entry.getValue() instanceof Double) {
+                config.setProperty(cooldownKey, (double) entry.getValue());
+            } else if (entry.getValue() instanceof Integer) {
+                config.setProperty(cooldownKey, (int) entry.getValue());
+            }
+            config.setProperty("filters." + key + ".persistent-cooldown", persistent);
+        }
+    }
+
+    private void convertCommandCosts(Map<String, BigDecimal> commandCosts, EssentialsConfiguration config) {
+        for (Map.Entry<String, BigDecimal> entry : commandCosts.entrySet()) {
+            ess.getLogger().info("Converting cost \"" + entry.getKey() + "\"");
+
+            config.setProperty("filters." + entry.getKey() + ".command", entry.getKey());
+            config.setProperty("filters." + entry.getKey() + ".cost", entry.getValue().toString());
+        }
+    }
+
     private void moveMotdRulesToFile(final String name) {
         if (doneFile.getBoolean("move" + name + "ToFile", false)) {
             return;

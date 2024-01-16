@@ -183,6 +183,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient WorldInfoProvider worldInfoProvider;
     private transient SignDataProvider signDataProvider;
     private transient Kits kits;
+    private transient CommandFilters commandFilters;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
     private transient Map<String, IEssentialsCommand> commandMap = new HashMap<>();
@@ -233,6 +234,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         jails = new Jails(this);
         registerListeners(server.getPluginManager());
         kits = new Kits(this);
+        commandFilters = new CommandFilters(this);
     }
 
     @Override
@@ -321,6 +323,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             confList.add(kits);
             upgrade.convertKits();
             execTimer.mark("Kits");
+
+            commandFilters = new CommandFilters(this);
+            confList.add(commandFilters);
+            upgrade.convertCommandFilters();
+            execTimer.mark("CommandFilters");
 
             upgrade.afterSettings();
             execTimer.mark("Upgrade3");
@@ -909,6 +916,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public Kits getKits() {
         return kits;
+    }
+
+    @Override
+    public CommandFilters getCommandFilters() {
+        return commandFilters;
     }
 
     @Override

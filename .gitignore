@@ -17,6 +17,7 @@
 /Essentials/usermap.csv
 /Essentials/usermap.bin
 /Essentials/uuids.bin
+/Essentials/command-filters.yml
 
 # Build files
 .gradle/
