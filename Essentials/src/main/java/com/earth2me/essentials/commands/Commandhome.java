@@ -10,9 +10,11 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -120,8 +122,8 @@ public class Commandhome extends EssentialsCommand {
         return Integer.toString(ess.getSettings().getHomeLimit(player));
     }
 
-    private void goHome(final User user, final User player, final String home, final Trade charge, final CompletableFuture<Boolean> future) throws Exception {
-        if (home.length() < 1) {
+    public void goHome(final User user, final User player, final String home, final Trade charge, final CompletableFuture<Boolean> future) throws Exception {
+        if (home.isEmpty()) {
             throw new NotEnoughArgumentsException();
         }
         final Location loc = player.getHome(home);
@@ -130,6 +132,9 @@ public class Commandhome extends EssentialsCommand {
         }
         if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions() && !user.isAuthorized("essentials.worlds." + loc.getWorld().getName())) {
             throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
+        }
+        if(!isUserHomeInWorldOrWorldGroupWorld(user.getWorld().getName(), Objects.requireNonNull(loc.getWorld()).getName())) {
+            throw new Exception(tl("teleportNotPossible"));
         }
         final UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, home, loc, UserTeleportHomeEvent.HomeType.HOME);
         user.getServer().getPluginManager().callEvent(event);
@@ -141,6 +146,27 @@ public class Commandhome extends EssentialsCommand {
                 }
             });
         }
+    }
+
+    public boolean isUserHomeInWorldOrWorldGroupWorld(String worldFrom, String worldTo) {
+        final boolean isHomeLimitPerWorldEnabled = ess.getSettings().isHomeLimitPerWorldEnabled();
+        final boolean isHomeLimitPerWorldGroupEnabled = ess.getSettings().isHomeLimitPerWorldGroupEnabled();
+        if(!isHomeLimitPerWorldEnabled) {
+            return true;
+        }
+        if(isHomeLimitPerWorldGroupEnabled) {
+            final Set<String> worldGroups = ess.getSettings().getHomesPerWorldGroup();
+
+            for (String wGroup : worldGroups) {
+                final Set<String> worldsPerWG = ess.getSettings().getWorldGroupHomeList(wGroup);
+
+                if (worldsPerWG.contains(worldFrom) && worldsPerWG.contains(worldTo))
+                    return true;
+            }
+        }else{
+            return worldFrom.equalsIgnoreCase(worldTo);
+        }
+        return false;
     }
 
     @Override

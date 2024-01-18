@@ -35,13 +35,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Objects;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -170,11 +172,26 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public Set<String> getHomesPerWorld() {
+        final CommentedConfigurationNode section = config.getSection("homes-per-world");
+        return section == null ? null : ConfigurateUtil.getKeys(section);
+    }
+
+    @Override
+    public Set<String> getHomesPerWorldGroup() {
+        final CommentedConfigurationNode section = config.getSection("homes-per-world-group");
+        return section == null ? null : ConfigurateUtil.getKeys(section);
+    }
+
+    @Override
     public int getHomeLimit(final User user) {
         int limit = 1;
-        if (user.isAuthorized("essentials.sethome.multiple")) {
-            limit = getHomeLimit("default");
+        final boolean hasMultipleHomeAuthorization = user.isAuthorized("essentials.sethome.multiple");
+        if (!hasMultipleHomeAuthorization) {
+            return limit;
         }
+
+        limit = getHomeLimit("default");
 
         final Set<String> homeList = getMultipleHomes();
         if (homeList != null) {
@@ -184,12 +201,76 @@ public class Settings implements net.ess3.api.ISettings {
                 }
             }
         }
+
+        final boolean homesPerWorldEnabled = isHomeLimitPerWorldEnabled();
+        final boolean homesPerWorldGroupEnabled = isHomeLimitPerWorldGroupEnabled();
+
+        if(!homesPerWorldEnabled)
+            return limit;
+
+        if(homesPerWorldGroupEnabled) {
+            final Set<String> homesPerWorldGroup = getHomesPerWorldGroup();
+            if (homesPerWorldGroup != null) {
+                for (final String set : homesPerWorldGroup) {
+                    if (limit < getWorldGroupHomeLimit(set) && isUserInWorldGroup(user, set)) {
+                        limit = getWorldGroupHomeLimit(set);
+                    }
+                }
+            }
+        }else{
+            final Set<String> homesPerWorld = getHomesPerWorld();
+            if (homesPerWorld != null) {
+                for (final String set : homesPerWorld) {
+                    if (limit < getWorldHomeLimit(set) && isUserInWorld(user, set)) {
+                        limit = getWorldHomeLimit(set);
+                    }
+                }
+            }
+        }
+
         return limit;
+    }
+
+    public boolean isUserInWorld(User user, String worldName) {
+        return Objects.requireNonNull(user.getWorld()).getName().equalsIgnoreCase(worldName);
+    }
+
+    public boolean isUserInWorldGroup(User user, String worldGroup) {
+        return getWorldGroupHomeList(worldGroup).stream().anyMatch(worldName -> isUserInWorld(user, worldName));
     }
 
     @Override
     public int getHomeLimit(final String set) {
         return config.getInt("sethome-multiple." + set, config.getInt("sethome-multiple.default", 3));
+    }
+
+    @Override
+    public int getWorldHomeLimit(String set) {
+        return config.getInt("homes-per-world." + set, config.getInt("sethome-multiple.default", 3));
+    }
+
+    @Override
+    public int getWorldGroupHomeLimit(String set) {
+        return config.getInt("homes-per-world-group." + set + ".home-limit", config.getInt("sethome-multiple.default", 3));
+    }
+
+    @Override
+    public Set<String> getWorldGroupHomeList(String set) {
+        final String worlds = config.getString("homes-per-world-group." + set + ".worlds", null);
+        if(worlds == null) {
+            return new HashSet<>();
+        }
+        return Arrays.stream(worlds.split(",")).collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean isHomeLimitPerWorldEnabled() {
+        return config.getBoolean("home-limit-per-world", false);
+    }
+
+    @Override
+    public boolean isHomeLimitPerWorldGroupEnabled() {
+        return config.getBoolean("home-limit-per-world-group", false);
     }
 
     private int _getChatRadius() {
