@@ -1945,6 +1945,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public String getNickRegex() {
+        return config.getString("nick-regex", "^[a-zA-Z_0-9§]+$");
+    }
+  
+    @Override
     public int getMaxItemLore() {
         return config.getInt("max-itemlore-lines", 10);
     }

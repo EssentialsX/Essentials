@@ -406,6 +406,8 @@ public interface ISettings extends IConf {
 
     boolean showZeroBaltop();
 
+    String getNickRegex();
+
     int getMaxItemLore();
 
     enum KeepInvPolicy {
