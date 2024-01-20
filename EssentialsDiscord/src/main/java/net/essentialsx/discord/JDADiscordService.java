@@ -136,9 +136,14 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     public void sendMessage(DiscordMessageEvent event, String message, boolean groupMentions) {
         final TextChannel channel = getChannel(event.getType().getKey(), true);
 
+        final boolean isSilentMessage = message.startsWith("@silent");
+        
+        if (isSilentMessage) message = message.replace("@silent", "");
+
         final String strippedContent = FormatUtil.stripFormat(message);
 
         final String webhookChannelId = typeToChannelId.get(event.getType());
+
         if (webhookChannelId != null) {
             final WrappedWebhookClient client = channelIdToWebhook.get(webhookChannelId);
             if (client != null) {
@@ -153,8 +158,10 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             logger.warning(tl("discordNoSendPermission", channel.getName()));
             return;
         }
+
         channel.sendMessage(strippedContent)
                 .setAllowedMentions(groupMentions ? null : DiscordUtil.NO_GROUP_MENTIONS)
+                .setSuppressedNotifications(isSilentMessage)
                 .queue();
     }
 
