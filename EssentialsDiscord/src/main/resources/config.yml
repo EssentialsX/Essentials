@@ -144,6 +144,8 @@ message-types:
   kick: staff
   # Message sent when a player's mute state is changed on the Minecraft server.
   mute: staff
+  # Message sent when a private message (/msg, /whisper, etc.) is sent on the Minecraft Server.
+  private-chat: none
   # Message sent when a player talks in local chat.
   # use-essentials-events must be set to "true" for this to work.
   local: none
@@ -432,3 +434,11 @@ messages:
   # - {displayname}: The display name of the user who got kicked
   # - {reason}: The reason the player was kicked
   kick: "{displayname} was kicked with reason: {reason}"
+  # This is the message that is used to relay minecraft private messages in Discord.
+  # The following placeholders can be used here:
+  # - {sender-username}: The username of the player sending the message
+  # - {sender-displayname}: The display name of the player sending the message (This would be their nickname)
+  # - {receiver-username}: The username of the player receiving the message
+  # - {receiver-displayname}: The display name of the player receiving the message (This would be their nickname)
+  # - {message}: The content of the message being sent
+  pms-to-discord: "{sender-username} -> {receiver-username}: {message}"
