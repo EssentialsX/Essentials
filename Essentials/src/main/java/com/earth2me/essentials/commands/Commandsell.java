@@ -91,7 +91,7 @@ public class Commandsell extends EssentialsCommand {
 
     private BigDecimal sellItem(final User user, final ItemStack is, final String[] args, final boolean isBulkSell) throws Exception {
         final int amount = ess.getWorth().getAmount(ess, user, is, args, isBulkSell);
-        final BigDecimal worth = ess.getWorth().getPrice(ess, is);
+        final BigDecimal worth = ess.getWorth().getPrice(ess, is) == null ? null : ess.getWorth().getPrice(ess, is).multiply(ess.getSettings().getMultiplier(user));
 
         if (worth == null) {
             throw new Exception(tl("itemCannotBeSold"));

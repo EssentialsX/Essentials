@@ -854,6 +854,17 @@ show-zero-baltop: true
 # For 1'234,50 use fr-ch
 #currency-symbol-format-locale: en-US
 
+# Settings for /sell multipliers
+# Give multipliers to players with the permission 'essentials.sell.multiplier.{multiplier}'
+# example: 'essentials.sell.multiplier.double', 'essentials.sell.multiplier.triple'
+# You can add as many multipliers as you want.
+# Use the "default" name to set the default multiplier that everyone has. It defaults to 1 if not set.
+# If a player has more than one multiplier permission, it will pick the highest one.
+sell-multipliers:
+  default: 1.0
+  double: 2.0
+  triple: 3.0
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                         Help                         | #
