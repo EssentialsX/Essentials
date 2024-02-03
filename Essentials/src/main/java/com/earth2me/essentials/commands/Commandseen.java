@@ -215,7 +215,7 @@ public class Commandseen extends EssentialsCommand {
 
             if (matches.size() > 0) {
                 sender.sendMessage(tl("matchingIPAddress"));
-                sender.sendMessage(StringUtil.joinList(matches));
+                sender.sendMessage(tl("matchingAccounts", StringUtil.joinList(matches)));
             } else {
                 sender.sendMessage(tl("noMatchingPlayers"));
             }
