@@ -244,6 +244,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         jails = new Jails(this);
         registerListeners(server.getPluginManager());
         kits = new Kits(this);
+        bukkitAudience = BukkitAudiences.create(this);
     }
 
     @Override
