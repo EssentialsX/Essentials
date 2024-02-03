@@ -2,6 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
+import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.TeleportRequestResponseEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -9,8 +11,6 @@ import org.bukkit.Server;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandtpdeny extends EssentialsCommand {
     public Commandtpdeny() {
@@ -27,7 +27,7 @@ public class Commandtpdeny extends EssentialsCommand {
         }
 
         if (!user.hasPendingTpaRequests(false, false)) {
-            throw new Exception(tl("noPendingRequest"));
+            throw new TranslatableException("noPendingRequest");
         }
 
         final IUser.TpaRequest denyRequest;
@@ -42,20 +42,20 @@ public class Commandtpdeny extends EssentialsCommand {
         }
 
         if (denyRequest == null) {
-            throw new Exception(tl("noPendingRequest"));
+            throw new TranslatableException("noPendingRequest");
         }
 
         final User player = ess.getUser(denyRequest.getRequesterUuid());
         if (player == null || !player.getBase().isOnline()) {
-            throw new Exception(tl("noPendingRequest"));
+            throw new TranslatableException("noPendingRequest");
         }
 
         if (sendEvent(user, player, denyRequest)) {
             return;
         }
 
-        user.sendMessage(tl("requestDenied"));
-        player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
+        user.sendTl("requestDenied");
+        player.sendTl("requestDeniedFrom", CommonPlaceholders.displayName(user));
         user.removeTpaRequest(denyRequest.getName());
     }
 
@@ -70,13 +70,13 @@ public class Commandtpdeny extends EssentialsCommand {
             }
 
             if (player != null && player.getBase().isOnline()) {
-                player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
+                player.sendTl("requestDeniedFrom", CommonPlaceholders.displayName(user));
             }
 
             user.removeTpaRequest(request.getName());
             count++;
         }
-        user.sendMessage(tl("requestDeniedAll", count));
+        user.sendTl("requestDeniedAll", count);
     }
 
     private boolean sendEvent(User user, User player, IUser.TpaRequest request) {

@@ -3,12 +3,11 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandback extends EssentialsCommand {
     public Commandback() {
@@ -37,13 +36,13 @@ public class Commandback extends EssentialsCommand {
 
     private void parseOthers(final Server server, final CommandSource sender, final String[] args, final String commandLabel) throws Exception {
         final User player = getPlayer(server, args, 0, true, false);
-        sender.sendMessage(tl("backOther", player.getName()));
+        sender.sendTl("backOther", player.getName());
         teleportBack(sender, player, commandLabel);
     }
 
     private void teleportBack(final CommandSource sender, final User user, final String commandLabel) throws Exception {
         if (user.getLastLocation() == null) {
-            throw new Exception(tl("noLocationFound"));
+            throw new TranslatableException("noLocationFound");
         }
 
         final String lastWorldName = user.getLastLocation().getWorld().getName();
@@ -53,11 +52,11 @@ public class Commandback extends EssentialsCommand {
             requester = ess.getUser(sender.getPlayer());
 
             if (user.getWorld() != user.getLastLocation().getWorld() && this.ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + lastWorldName)) {
-                throw new Exception(tl("noPerm", "essentials.worlds." + lastWorldName));
+                throw new TranslatableException("noPerm", "essentials.worlds." + lastWorldName);
             }
 
             if (!requester.isAuthorized("essentials.back.into." + lastWorldName)) {
-                throw new Exception(tl("noPerm", "essentials.back.into." + lastWorldName));
+                throw new TranslatableException("noPerm", "essentials.back.into." + lastWorldName);
             }
         }
 

@@ -1,11 +1,11 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandtpoffline extends EssentialsCommand {
 
@@ -22,15 +22,15 @@ public class Commandtpoffline extends EssentialsCommand {
             final Location logout = target.getLogoutLocation();
 
             if (logout == null) {
-                user.sendMessage(tl("teleportOfflineUnknown", user.getDisplayName()));
+                user.sendTl("teleportOfflineUnknown", CommonPlaceholders.displayName(user));
                 throw new NoChargeException();
             }
 
             if (user.getWorld() != logout.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + logout.getWorld().getName())) {
-                throw new Exception(tl("noPerm", "essentials.worlds." + logout.getWorld().getName()));
+                throw new TranslatableException("noPerm", "essentials.worlds." + logout.getWorld().getName());
             }
 
-            user.sendMessage(tl("teleporting", logout.getWorld().getName(), logout.getBlockX(), logout.getBlockY(), logout.getBlockZ()));
+            user.sendTl("teleporting", logout.getWorld().getName(), logout.getBlockX(), logout.getBlockY(), logout.getBlockZ());
             user.getAsyncTeleport().now(logout, false, PlayerTeleportEvent.TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), label));
         }
     }

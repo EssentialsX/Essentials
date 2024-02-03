@@ -3,13 +3,13 @@ package com.earth2me.essentials.signs;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import net.ess3.api.IEssentials;
+import net.ess3.api.IUser;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class SignGameMode extends EssentialsSign {
     public SignGameMode() {
@@ -34,13 +34,13 @@ public class SignGameMode extends EssentialsSign {
         final String mode = sign.getLine(1).trim();
 
         if (mode.isEmpty()) {
-            throw new SignException(tl("invalidSignLine", 2));
+            throw new SignException("invalidSignLine", 2);
         }
 
         charge.isAffordableFor(player);
 
         performSetMode(mode.toLowerCase(Locale.ENGLISH), player.getBase());
-        player.sendMessage(tl("gameMode", tl(player.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), player.getDisplayName()));
+        player.sendTl("gameMode", player.playerTl(player.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), CommonPlaceholders.displayName((IUser) player));
         Trade.log("Sign", "gameMode", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
         charge.charge(player);
         return true;
@@ -56,7 +56,7 @@ public class SignGameMode extends EssentialsSign {
         } else if (mode.contains("spec") || mode.equalsIgnoreCase("3")) {
             player.setGameMode(GameMode.SPECTATOR);
         } else {
-            throw new SignException(tl("invalidSignLine", 2));
+            throw new SignException("invalidSignLine", 2);
         }
     }
 }

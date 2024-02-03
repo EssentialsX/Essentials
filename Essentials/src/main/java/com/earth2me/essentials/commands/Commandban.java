@@ -5,6 +5,7 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.TranslatableException;
 import org.bukkit.BanList;
 import org.bukkit.Server;
 
@@ -12,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandban extends EssentialsCommand {
     public Commandban() {
@@ -34,10 +35,10 @@ public class Commandban extends EssentialsCommand {
         }
         if (!user.getBase().isOnline()) {
             if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.ban.offline")) {
-                throw new Exception(tl("banExemptOffline"));
+                throw new TranslatableException("banExemptOffline");
             }
         } else if (user.isAuthorized("essentials.ban.exempt") && sender.isPlayer()) {
-            throw new Exception(tl("banExempt"));
+            throw new TranslatableException("banExempt");
         }
 
         final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
@@ -46,21 +47,21 @@ public class Commandban extends EssentialsCommand {
         if (args.length > 1) {
             banReason = FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
         } else {
-            banReason = tl("defaultBanReason");
+            banReason = tlLiteral("defaultBanReason");
         }
 
         ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, null, senderName);
 
-        final String banDisplay = tl("banFormat", banReason, senderDisplayName);
+        final String banDisplay = tlLiteral("banFormat", banReason, senderDisplayName);
 
         user.getBase().kickPlayer(banDisplay);
-        ess.getLogger().log(Level.INFO, tl("playerBanned", senderDisplayName, user.getName(), banDisplay));
+        ess.getLogger().log(Level.INFO, tlLiteral("playerBanned", senderDisplayName, user.getName(), banDisplay));
 
         if (nomatch) {
-            sender.sendMessage(tl("userUnknown", user.getName()));
+            sender.sendTl("userUnknown", user.getName());
         }
 
-        ess.broadcastMessage("essentials.ban.notify", tl("playerBanned", senderDisplayName, user.getName(), banReason));
+        ess.broadcastTl(null, u -> !u.isAuthorized("essentials.ban.notify"), "playerBanned", senderDisplayName, user.getName(), banReason);
     }
 
     @Override

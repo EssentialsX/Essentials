@@ -10,18 +10,18 @@ import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandException;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class ExecuteCommand extends InteractionCommandImpl {
     public ExecuteCommand(JDADiscordService jda) {
-        super(jda, "execute", tl("discordCommandExecuteDescription"));
-        addArgument(new InteractionCommandArgument("command", tl("discordCommandExecuteArgumentCommand"), InteractionCommandArgumentType.STRING, true));
+        super(jda, "execute", tlLiteral("discordCommandExecuteDescription"));
+        addArgument(new InteractionCommandArgument("command", tlLiteral("discordCommandExecuteArgumentCommand"), InteractionCommandArgumentType.STRING, true));
     }
 
     @Override
     public void onCommand(final InteractionEvent event) {
         final String command = event.getStringArgument("command");
-        event.reply(tl("discordCommandExecuteReply", command));
+        event.reply(tlLiteral("discordCommandExecuteReply", command));
         Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
             try {
                 Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), message -> event.reply(MessageUtil.sanitizeDiscordMarkdown(message))).getSender(), command);

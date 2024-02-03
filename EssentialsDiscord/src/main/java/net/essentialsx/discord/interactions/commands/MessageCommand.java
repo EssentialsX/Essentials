@@ -14,13 +14,13 @@ import org.bukkit.Bukkit;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class MessageCommand extends InteractionCommandImpl {
     public MessageCommand(JDADiscordService jda) {
-        super(jda, "msg", tl("discordCommandMessageDescription"));
-        addArgument(new InteractionCommandArgument("username", tl("discordCommandMessageArgumentUsername"), InteractionCommandArgumentType.STRING, true));
-        addArgument(new InteractionCommandArgument("message", tl("discordCommandMessageArgumentMessage"), InteractionCommandArgumentType.STRING, true));
+        super(jda, "msg", tlLiteral("discordCommandMessageDescription"));
+        addArgument(new InteractionCommandArgument("username", tlLiteral("discordCommandMessageArgumentUsername"), InteractionCommandArgumentType.STRING, true));
+        addArgument(new InteractionCommandArgument("message", tlLiteral("discordCommandMessageArgumentMessage"), InteractionCommandArgumentType.STRING, true));
     }
 
     @Override
@@ -30,28 +30,28 @@ public class MessageCommand extends InteractionCommandImpl {
         try {
             user = jda.getPlugin().getEss().matchUser(Bukkit.getServer(), null, event.getStringArgument("username"), getHidden, false);
         } catch (PlayerNotFoundException e) {
-            event.reply(tl("errorWithMessage", e.getMessage()));
+            event.reply(tlLiteral("errorWithMessage", e.getMessage()));
             return;
         }
 
         if (!getHidden && user.isIgnoreMsg()) {
-            event.reply(tl("msgIgnore", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName())));
+            event.reply(tlLiteral("msgIgnore", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName())));
             return;
         }
 
         if (user.isAfk()) {
             if (user.getAfkMessage() != null) {
-                event.reply(tl("userAFKWithMessage", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()), MessageUtil.sanitizeDiscordMarkdown(user.getAfkMessage())));
+                event.reply(tlLiteral("userAFKWithMessage", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()), MessageUtil.sanitizeDiscordMarkdown(user.getAfkMessage())));
             } else {
-                event.reply(tl("userAFK", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName())));
+                event.reply(tlLiteral("userAFK", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName())));
             }
         }
 
         final String message = event.getMember().hasRoles(jda.getSettings().getPermittedFormattingRoles()) ?
                 FormatUtil.replaceFormat(event.getStringArgument("message")) : FormatUtil.stripFormat(event.getStringArgument("message"));
-        event.reply(tl("msgFormat", tl("meSender"), MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()), MessageUtil.sanitizeDiscordMarkdown(message)));
+        event.reply(tlLiteral("msgFormat", tlLiteral("meSender"), MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()), MessageUtil.sanitizeDiscordMarkdown(message)));
 
-        user.sendMessage(tl("msgFormat", event.getMember().getTag(), tl("meRecipient"), message));
+        user.sendMessage(tlLiteral("msgFormat", event.getMember().getTag(), user.playerTl("meRecipient"), message));
         // We use an atomic reference here so that java will garbage collect the recipient
         final AtomicReference<DiscordMessageRecipient> ref = new AtomicReference<>(new DiscordMessageRecipient(event.getMember()));
         jda.getPlugin().getEss().runTaskLaterAsynchronously(() -> ref.set(null), 6000); // Expires after 5 minutes

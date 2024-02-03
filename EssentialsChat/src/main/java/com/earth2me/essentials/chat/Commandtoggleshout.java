@@ -3,9 +3,9 @@ package com.earth2me.essentials.chat;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsToggleCommand;
+import com.earth2me.essentials.utils.CommonPlaceholders;
+import net.ess3.api.IUser;
 import org.bukkit.Server;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandtoggleshout extends EssentialsToggleCommand {
     public Commandtoggleshout() {
@@ -30,9 +30,9 @@ public class Commandtoggleshout extends EssentialsToggleCommand {
 
         user.setToggleShout(enabled);
 
-        user.sendMessage(enabled ? tl("shoutEnabled") : tl("shoutDisabled"));
+        user.sendTl(enabled ? "shoutEnabled" : "shoutDisabled");
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendMessage(enabled ? tl("shoutEnabledFor", user.getDisplayName()) : tl("shoutDisabledFor", user.getDisplayName()));
+            sender.sendTl(enabled ? "shoutEnabledFor" : "shoutDisabledFor", CommonPlaceholders.displayName((IUser) user));
         }
     }
 }

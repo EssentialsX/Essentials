@@ -1,12 +1,19 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.AdventureUtil;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static com.earth2me.essentials.I18n.tlLiteral;
+
 public class CommandSource {
+    protected Essentials ess;
     protected CommandSender sender;
 
-    public CommandSource(final CommandSender base) {
+    public CommandSource(final Essentials ess, final CommandSender base) {
+        this.ess = ess;
         this.sender = base;
     }
 
@@ -21,7 +28,40 @@ public class CommandSource {
         return null;
     }
 
-    public final net.ess3.api.IUser getUser(final IEssentials ess) {
+    public void sendTl(final String tlKey, final Object... args) {
+        if (isPlayer()) {
+            //noinspection ConstantConditions
+            getUser().sendTl(tlKey, args);
+            return;
+        }
+
+        final String translation = tlLiteral(tlKey, args);
+        sendComponent(AdventureUtil.miniMessage().deserialize(translation));
+    }
+
+    public String tl(final String tlKey, final Object... args) {
+        if (isPlayer()) {
+            //noinspection ConstantConditions
+            return getUser().playerTl(tlKey, args);
+        }
+        return tlLiteral(tlKey, args);
+    }
+
+    public Component tlComponent(final String tlKey, final Object... args) {
+        if (isPlayer()) {
+            //noinspection ConstantConditions
+            return getUser().tlComponent(tlKey, args);
+        }
+        final String translation = tlLiteral(tlKey, args);
+        return AdventureUtil.miniMessage().deserialize(translation);
+    }
+
+    public void sendComponent(final Component component) {
+        final BukkitAudiences audiences = ess.getBukkitAudience();
+        audiences.sender(sender).sendMessage(component);
+    }
+
+    public final net.ess3.api.IUser getUser() {
         if (sender instanceof Player) {
             return ess.getUser((Player) sender);
         }
@@ -42,15 +82,18 @@ public class CommandSource {
         }
     }
 
-    public boolean isAuthorized(final String permission, final IEssentials ess) {
-        return !(sender instanceof Player) || getUser(ess).isAuthorized(permission);
+    public boolean isAuthorized(final String permission) {
+        //noinspection ConstantConditions
+        return !(sender instanceof Player) || getUser().isAuthorized(permission);
     }
 
     public String getSelfSelector() {
+        //noinspection ConstantConditions
         return sender instanceof Player ? getPlayer().getName() : "*";
     }
 
     public String getDisplayName() {
+        //noinspection ConstantConditions
         return sender instanceof Player ? getPlayer().getDisplayName() : getSender().getName();
     }
 }

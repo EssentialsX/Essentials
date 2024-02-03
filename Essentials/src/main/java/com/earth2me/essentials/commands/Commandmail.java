@@ -4,13 +4,16 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.messaging.IMessageRecipient;
-import com.earth2me.essentials.textreader.SimpleTextInput;
-import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.textreader.SimpleTextPager;
+import com.earth2me.essentials.textreader.SimpleTranslatableText;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.IUser;
+import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import org.bukkit.Server;
 
@@ -19,8 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandmail extends EssentialsCommand {
     private static int mailsPerMinute = 0;
@@ -35,11 +36,11 @@ public class Commandmail extends EssentialsCommand {
         if (args.length >= 1 && "read".equalsIgnoreCase(args[0])) {
             final ArrayList<MailMessage> mail = user.getMailMessages();
             if (mail == null || mail.size() == 0) {
-                user.sendMessage(tl("noMail"));
+                user.sendTl("noMail");
                 throw new NoChargeException();
             }
 
-            final SimpleTextInput input = new SimpleTextInput();
+            final SimpleTranslatableText input = new SimpleTranslatableText();
             final ListIterator<MailMessage> iterator = mail.listIterator();
             while (iterator.hasNext()) {
                 final MailMessage mailObj = iterator.next();
@@ -47,46 +48,46 @@ public class Commandmail extends EssentialsCommand {
                     iterator.remove();
                     continue;
                 }
-                input.addLine(ess.getMail().getMailLine(mailObj));
+                input.addLine(ess.getMail().getMailTlKey(mailObj), ess.getMail().getMailTlArgs(mailObj));
                 iterator.set(new MailMessage(true, mailObj.isLegacy(), mailObj.getSenderUsername(),
                         mailObj.getSenderUUID(), mailObj.getTimeSent(), mailObj.getTimeExpire(), mailObj.getMessage()));
             }
 
             if (input.getLines().isEmpty()) {
-                user.sendMessage(tl("noMail"));
+                user.sendTl("noMail");
                 throw new NoChargeException();
             }
 
-            final TextPager pager = new TextPager(input);
-            pager.showPage(args.length > 1 ? args[1] : null, null, commandLabel + " " + args[0], user.getSource());
+            final SimpleTextPager pager = new SimpleTextPager(input);
+            pager.showPage(user.getSource(), args.length > 1 ? args[1] : null, commandLabel + " " + args[0]);
 
-            user.sendMessage(tl("mailClear"));
+            user.sendTl("mailClear");
             user.setMailList(mail);
             return;
         }
         if (args.length >= 3 && "send".equalsIgnoreCase(args[0])) {
             if (!user.isAuthorized("essentials.mail.send")) {
-                throw new Exception(tl("noPerm", "essentials.mail.send"));
+                throw new TranslatableException("noPerm", "essentials.mail.send");
             }
 
             if (user.isMuted()) {
                 final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
                 if (dateDiff == null) {
-                    throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                    throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReason" : "voiceSilenced", user.getMuteReason());
                 }
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+                throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReasonTime" : "voiceSilencedTime", dateDiff, user.getMuteReason());
             }
 
             final User u;
             try {
                 u = getPlayer(server, args[1], true, true);
             } catch (final PlayerNotFoundException e) {
-                throw new Exception(tl("playerNeverOnServer", args[1]));
+                throw new TranslatableException("playerNeverOnServer", args[1]);
             }
 
             final String msg = FormatUtil.formatMessage(user, "essentials.mail", StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2))));
             if (msg.length() > 1000) {
-                throw new Exception(tl("mailTooLong"));
+                throw new TranslatableException("mailTooLong");
             }
 
             if (!u.isIgnoredPlayer(user)) {
@@ -96,40 +97,40 @@ public class Commandmail extends EssentialsCommand {
                 }
                 mailsPerMinute++;
                 if (mailsPerMinute > ess.getSettings().getMailsPerMinute()) {
-                    throw new Exception(tl("mailDelay", ess.getSettings().getMailsPerMinute()));
+                    throw new TranslatableException("mailDelay", ess.getSettings().getMailsPerMinute());
                 }
                 u.sendMail(user, msg);
             }
 
-            user.sendMessage(tl("mailSentTo", u.getDisplayName(), u.getName()));
+            user.sendTl("mailSentTo", CommonPlaceholders.displayName((IUser) u), u.getName());
             user.sendMessage(msg);
             return;
         }
         if (args.length >= 4 && "sendtemp".equalsIgnoreCase(args[0])) {
             if (!user.isAuthorized("essentials.mail.sendtemp")) {
-                throw new Exception(tl("noPerm", "essentials.mail.sendtemp"));
+                throw new TranslatableException("noPerm", "essentials.mail.sendtemp");
             }
 
             if (user.isMuted()) {
                 final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
                 if (dateDiff == null) {
-                    throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                    throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReason" : "voiceSilenced", user.getMuteReason());
                 }
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+                throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReasonTime" : "voiceSilencedTime", dateDiff, user.getMuteReason());
             }
 
             final User u;
             try {
                 u = getPlayer(server, args[1], true, true);
             } catch (final PlayerNotFoundException e) {
-                throw new Exception(tl("playerNeverOnServer", args[1]));
+                throw new TranslatableException("playerNeverOnServer", args[1]);
             }
 
             final long dateDiff = DateUtil.parseDateDiff(args[2], true);
 
             final String msg = FormatUtil.formatMessage(user, "essentials.mail", StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 3))));
             if (msg.length() > 1000) {
-                throw new Exception(tl("mailTooLong"));
+                throw new TranslatableException("mailTooLong");
             }
 
             if (!u.isIgnoredPlayer(user)) {
@@ -139,33 +140,33 @@ public class Commandmail extends EssentialsCommand {
                 }
                 mailsPerMinute++;
                 if (mailsPerMinute > ess.getSettings().getMailsPerMinute()) {
-                    throw new Exception(tl("mailDelay", ess.getSettings().getMailsPerMinute()));
+                    throw new TranslatableException("mailDelay", ess.getSettings().getMailsPerMinute());
                 }
                 u.sendMail(user, msg, dateDiff);
             }
 
-            user.sendMessage(tl("mailSentToExpire", u.getDisplayName(), DateUtil.formatDateDiff(dateDiff), u.getName()));
+            user.sendTl("mailSentToExpire", CommonPlaceholders.displayName((IUser) u), DateUtil.formatDateDiff(dateDiff), u.getName());
             user.sendMessage(msg);
             return;
         }
         if (args.length > 1 && "sendall".equalsIgnoreCase(args[0])) {
             if (!user.isAuthorized("essentials.mail.sendall")) {
-                throw new Exception(tl("noPerm", "essentials.mail.sendall"));
+                throw new TranslatableException("noPerm", "essentials.mail.sendall");
             }
             ess.runTaskAsynchronously(new SendAll(user,
                     FormatUtil.formatMessage(user, "essentials.mail",
                             StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 1)))), 0));
-            user.sendMessage(tl("mailSent"));
+            user.sendTl("mailSent");
             return;
         }
         if (args.length >= 3 && "sendtempall".equalsIgnoreCase(args[0])) {
             if (!user.isAuthorized("essentials.mail.sendtempall")) {
-                throw new Exception(tl("noPerm", "essentials.mail.sendtempall"));
+                throw new TranslatableException("noPerm", "essentials.mail.sendtempall");
             }
             ess.runTaskAsynchronously(new SendAll(user,
                     FormatUtil.formatMessage(user, "essentials.mail",
                             StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2)))), DateUtil.parseDateDiff(args[1], true)));
-            user.sendMessage(tl("mailSent"));
+            user.sendTl("mailSent");
             return;
         }
         if (args.length >= 1 && "clear".equalsIgnoreCase(args[0])) {
@@ -175,7 +176,7 @@ public class Commandmail extends EssentialsCommand {
                 if (NumberUtil.isPositiveInt(args[1])) {
                     toRemove = Integer.parseInt(args[1]);
                 } else if (!user.isAuthorized("essentials.mail.clear.others")) {
-                    throw new Exception(tl("noPerm", "essentials.mail.clear.others"));
+                    throw new TranslatableException("noPerm", "essentials.mail.clear.others");
                 } else {
                     mailUser = getPlayer(ess.getServer(), user, args, 1, true);
                     if (args.length > 2 && NumberUtil.isPositiveInt(args[2])) {
@@ -186,13 +187,13 @@ public class Commandmail extends EssentialsCommand {
 
             final ArrayList<MailMessage> mails = mailUser.getMailMessages();
             if (mails == null || mails.isEmpty()) {
-                user.sendMessage(tl(mailUser == user ? "noMail" : "noMailOther", mailUser.getDisplayName()));
+                user.sendTl(mailUser == user ? "noMail" : "noMailOther", CommonPlaceholders.displayName((IUser) mailUser));
                 throw new NoChargeException();
             }
 
             if (toRemove > 0) {
                 if (toRemove > mails.size()) {
-                    user.sendMessage(tl("mailClearIndex", mails.size()));
+                    user.sendTl("mailClearIndex", mails.size());
                     throw new NoChargeException();
                 }
                 mails.remove(toRemove - 1);
@@ -200,16 +201,16 @@ public class Commandmail extends EssentialsCommand {
             } else {
                 mailUser.setMailList(null);
             }
-            user.sendMessage(tl("mailCleared"));
+            user.sendTl("mailCleared");
             return;
         }
         if (args.length >= 1 && "clearall".equalsIgnoreCase(args[0])){
             if (!user.isAuthorized("essentials.mail.clearall")) {
-                throw new Exception(tl("noPerm", "essentials.mail.clearall"));
+                throw new TranslatableException("noPerm", "essentials.mail.clearall");
             }
 
             ess.runTaskAsynchronously(new ClearAll());
-            user.sendMessage(tl("mailClearedAll"));
+            user.sendTl("mailClearedAll");
             return;
 
         }
@@ -219,20 +220,20 @@ public class Commandmail extends EssentialsCommand {
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length >= 1 && "read".equalsIgnoreCase(args[0])) {
-            throw new Exception(tl("onlyPlayers", commandLabel + " read"));
+            throw new TranslatableException("onlyPlayers", commandLabel + " read");
         } else if (args.length > 1 && "clear".equalsIgnoreCase(args[0])) {
             final User mailUser = getPlayer(server, args[1], true, true);
             final int toRemove = args.length > 2 ? NumberUtil.isPositiveInt(args[2]) ? Integer.parseInt(args[2]) : -1 : -1;
 
             final ArrayList<MailMessage> mails = mailUser.getMailMessages();
             if (mails == null || mails.isEmpty()) {
-                sender.sendMessage(tl("noMailOther", mailUser.getDisplayName()));
+                sender.sendTl("noMailOther", CommonPlaceholders.displayName((IUser) mailUser));
                 throw new NoChargeException();
             }
 
             if (toRemove > 0) {
                 if (toRemove > mails.size()) {
-                    sender.sendMessage(tl("mailClearIndex", mails.size()));
+                    sender.sendTl("mailClearIndex", mails.size());
                     throw new NoChargeException();
                 }
                 mails.remove(toRemove - 1);
@@ -240,41 +241,41 @@ public class Commandmail extends EssentialsCommand {
             } else {
                 mailUser.setMailList(null);
             }
-            sender.sendMessage(tl("mailCleared"));
+            sender.sendTl("mailCleared");
             return;
         } else if (args.length >= 1 && "clearall".equalsIgnoreCase(args[0])){
             ess.runTaskAsynchronously(new ClearAll());
-            sender.sendMessage(tl("mailClearedAll"));
+            sender.sendTl("mailClearedAll");
             return;
         } else if (args.length >= 3 && "send".equalsIgnoreCase(args[0])) {
             final User u;
             try {
                 u = getPlayer(server, args[1], true, true);
             } catch (final PlayerNotFoundException e) {
-                throw new Exception(tl("playerNeverOnServer", args[1]));
+                throw new TranslatableException("playerNeverOnServer", args[1]);
             }
             u.sendMail(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 2)));
-            sender.sendMessage(tl("mailSent"));
+            sender.sendTl("mailSent");
             return;
         } else if (args.length >= 4 && "sendtemp".equalsIgnoreCase(args[0])) {
             final User u;
             try {
                 u = getPlayer(server, args[1], true, true);
             } catch (final PlayerNotFoundException e) {
-                throw new Exception(tl("playerNeverOnServer", args[1]));
+                throw new TranslatableException("playerNeverOnServer", args[1]);
             }
             final long dateDiff = DateUtil.parseDateDiff(args[2], true);
             u.sendMail(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 3)), dateDiff);
-            sender.sendMessage(tl("mailSent"));
+            sender.sendTl("mailSent");
             return;
         } else if (args.length >= 2 && "sendall".equalsIgnoreCase(args[0])) {
             ess.runTaskAsynchronously(new SendAll(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 1)), 0));
-            sender.sendMessage(tl("mailSent"));
+            sender.sendTl("mailSent");
             return;
         } else if (args.length >= 3 && "sendtempall".equalsIgnoreCase(args[0])) {
             final long dateDiff = DateUtil.parseDateDiff(args[1], true);
             ess.runTaskAsynchronously(new SendAll(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 2)), dateDiff));
-            sender.sendMessage(tl("mailSent"));
+            sender.sendTl("mailSent");
             return;
         } else if (args.length >= 2) {
             //allow sending from console without "send" argument, since it's the only thing the console can do
@@ -282,10 +283,10 @@ public class Commandmail extends EssentialsCommand {
             try {
                 u = getPlayer(server, args[0], true, true);
             } catch (final PlayerNotFoundException e) {
-                throw new Exception(tl("playerNeverOnServer", args[0]));
+                throw new TranslatableException("playerNeverOnServer", args[0]);
             }
             u.sendMail(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 1)));
-            sender.sendMessage(tl("mailSent"));
+            sender.sendTl("mailSent");
             return;
         }
         throw new NotEnoughArgumentsException();

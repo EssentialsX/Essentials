@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.UserKickEvent;
 import org.bukkit.Server;
 
@@ -11,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandkick extends EssentialsCommand {
     public Commandkick() {
@@ -33,11 +34,11 @@ public class Commandkick extends EssentialsCommand {
             }
 
             if (target.isAuthorized("essentials.kick.exempt")) {
-                throw new Exception(tl("kickExempt"));
+                throw new TranslatableException("kickExempt");
             }
         }
 
-        String kickReason = args.length > 1 ? getFinalArg(args, 1) : tl("kickDefault");
+        String kickReason = args.length > 1 ? getFinalArg(args, 1) : tlLiteral("kickDefault");
         kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
         final UserKickEvent event = new UserKickEvent(user, target, kickReason);
@@ -51,8 +52,10 @@ public class Commandkick extends EssentialsCommand {
         target.getBase().kickPlayer(kickReason);
         final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
 
-        ess.getLogger().log(Level.INFO, tl("playerKicked", senderDisplayName, target.getName(), kickReason));
-        ess.broadcastMessage("essentials.kick.notify", tl("playerKicked", senderDisplayName, target.getName(), kickReason));
+        final String tlKey = "playerKicked";
+        final Object[] objects = {senderDisplayName, target.getName(), kickReason};
+        ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
+        ess.broadcastTl(null, "essentials.kick.notify", tlKey, objects);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IUser;
+import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.HomeModifyEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -12,8 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandrenamehome extends EssentialsCommand {
     public Commandrenamehome() {
@@ -59,7 +58,7 @@ public class Commandrenamehome extends EssentialsCommand {
         }
 
         if ("bed".equals(newName) || NumberUtil.isInt(newName) || "bed".equals(oldName) || NumberUtil.isInt(oldName)) {
-            throw new NoSuchFieldException(tl("invalidHomeName"));
+            throw new TranslatableException("invalidHomeName");
         }
 
         final HomeModifyEvent event = new HomeModifyEvent(user, usersHome, oldName, newName, usersHome.getHome(oldName));
@@ -72,20 +71,20 @@ public class Commandrenamehome extends EssentialsCommand {
         }
 
         usersHome.renameHome(oldName, newName);
-        user.sendMessage(tl("homeRenamed", oldName, newName));
+        user.sendTl("homeRenamed", oldName, newName);
         usersHome.setLastHomeConfirmation(null);
 
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        final IUser user = sender.getUser(ess);
+        final IUser user = sender.getUser();
         if (args.length != 1) {
             return Collections.emptyList();
         }
 
         final List<String> homes = user == null ? new ArrayList<>() : user.getHomes();
-        final boolean canRenameOthers = sender.isAuthorized("essentials.renamehome.others", ess);
+        final boolean canRenameOthers = sender.isAuthorized("essentials.renamehome.others");
 
         if (canRenameOthers) {
             final int sepIndex = args[0].indexOf(':');

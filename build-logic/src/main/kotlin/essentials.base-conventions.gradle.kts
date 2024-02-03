@@ -34,7 +34,7 @@ afterEvaluate {
     }
     if (baseExtension.injectBstats.get()) {
         dependencies {
-            implementation("org.bstats", "bstats-bukkit", "1.8")
+            implementation("org.bstats", "bstats-bukkit", "2.2.1")
         }
     }
 }

@@ -48,7 +48,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsConfiguration {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
@@ -367,7 +367,7 @@ public class EssentialsConfiguration {
 
         if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
             if (!configFile.getParentFile().mkdirs()) {
-                Essentials.getWrappedLogger().log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
+                Essentials.getWrappedLogger().log(Level.SEVERE, tlLiteral("failedToCreateConfig", configFile.toString()));
                 return;
             }
         }
@@ -379,10 +379,10 @@ public class EssentialsConfiguration {
                 convertAltFile();
             } else if (templateName != null) {
                 try (final InputStream is = resourceClass.getResourceAsStream(templateName)) {
-                    Essentials.getWrappedLogger().log(Level.INFO, tl("creatingConfigFromTemplate", configFile.toString()));
+                    Essentials.getWrappedLogger().log(Level.INFO, tlLiteral("creatingConfigFromTemplate", configFile.toString()));
                     Files.copy(is, configFile.toPath());
                 } catch (IOException e) {
-                    Essentials.getWrappedLogger().log(Level.SEVERE, tl("failedToWriteConfig", configFile.toString()), e);
+                    Essentials.getWrappedLogger().log(Level.SEVERE, tlLiteral("failedToWriteConfig", configFile.toString()), e);
                 }
             }
         }

@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.ess3.api.IEssentials;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -24,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class FlatItemDb extends AbstractItemDb {
     private static final Gson gson = new Gson();
@@ -118,12 +117,12 @@ public class FlatItemDb extends AbstractItemDb {
         final ItemData data = getByName(split[0]);
 
         if (data == null) {
-            throw new Exception(tl("unknownItemName", id));
+            throw new TranslatableException("unknownItemName", id);
         }
 
         final Material material = data.getMaterial();
 
-        if (!material.isItem()) throw new Exception(tl("unableToSpawnItem", id));
+        if (!material.isItem()) throw new TranslatableException("unableToSpawnItem", id);
 
         final ItemStack stack = new ItemStack(material);
         stack.setAmount(material.getMaxStackSize());

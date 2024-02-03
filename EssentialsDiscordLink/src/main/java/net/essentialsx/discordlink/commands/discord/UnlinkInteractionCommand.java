@@ -8,7 +8,7 @@ import net.essentialsx.discordlink.AccountLinkManager;
 
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class UnlinkInteractionCommand implements InteractionCommand {
     private final AccountLinkManager accounts;
@@ -20,10 +20,10 @@ public class UnlinkInteractionCommand implements InteractionCommand {
     @Override
     public void onCommand(InteractionEvent event) {
         if (!accounts.removeAccount(event.getMember(), DiscordLinkStatusChangeEvent.Cause.UNSYNC_PLAYER)) {
-            event.reply(tl("discordCommandUnlinkInvalidCode"));
+            event.reply(tlLiteral("discordCommandUnlinkInvalidCode"));
             return;
         }
-        event.reply(tl("discordCommandUnlinkUnlinked"));
+        event.reply(tlLiteral("discordCommandUnlinkUnlinked"));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class UnlinkInteractionCommand implements InteractionCommand {
 
     @Override
     public String getDescription() {
-        return tl("discordCommandUnlinkDescription");
+        return tlLiteral("discordCommandUnlinkDescription");
     }
 
     @Override

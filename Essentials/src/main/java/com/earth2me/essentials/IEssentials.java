@@ -15,6 +15,7 @@ import net.ess3.provider.ItemUnbreakableProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PersistentDataProvider;
+import net.ess3.provider.PlayerLocaleProvider;
 import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SignDataProvider;
@@ -79,6 +80,16 @@ public interface IEssentials extends Plugin {
     int broadcastMessage(IUser sender, String message, Predicate<IUser> shouldExclude);
 
     int broadcastMessage(String permission, String message);
+
+    void broadcastTl(String tlKey, Object... args);
+
+    void broadcastTl(IUser sender, String tlKey, Object... args);
+
+    void broadcastTl(IUser sender, String permission, String tlKey, Object... args);
+
+    void broadcastTl(IUser sender, Predicate<IUser> shouldExclude, String tlKey, Object... args);
+
+    void broadcastTl(IUser sender, Predicate<IUser> shouldExclude, boolean parseKeywords, String tlKey, Object... args);
 
     ISettings getSettings();
 
@@ -169,6 +180,8 @@ public interface IEssentials extends Plugin {
     WorldInfoProvider getWorldInfoProvider();
 
     SignDataProvider getSignDataProvider();
+
+    PlayerLocaleProvider getPlayerLocaleProvider();
 
     PluginCommand getPluginCommand(String cmd);
 }
