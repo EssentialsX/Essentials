@@ -3,6 +3,8 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.messaging.IMessageRecipient;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.GameMode;
 import org.bukkit.Server;
@@ -10,8 +12,6 @@ import org.bukkit.Server;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandgamemode extends EssentialsLoopCommand {
     private final List<String> STANDARD_OPTIONS = ImmutableList.of("creative", "survival", "adventure", "spectator", "toggle");
@@ -57,26 +57,26 @@ public class Commandgamemode extends EssentialsLoopCommand {
         }
 
         if (isProhibitedChange(user, gameMode)) {
-            user.sendMessage(tl("cantGamemode", gameMode.name()));
+            user.sendTl("cantGamemode", gameMode.name());
             return;
         }
 
         user.getBase().setGameMode(gameMode);
-        user.sendMessage(tl("gameMode", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
+        user.sendTl("gameMode", user.playerTl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), CommonPlaceholders.displayNameRecipient((IMessageRecipient) user));
     }
 
     private void setUserGamemode(final CommandSource sender, final GameMode gameMode, final User user) throws NotEnoughArgumentsException {
         if (gameMode == null) {
-            throw new NotEnoughArgumentsException(tl("gameModeInvalid"));
+            throw new NotEnoughArgumentsException(sender.tl("gameModeInvalid"));
         }
 
-        if (sender.isPlayer() && isProhibitedChange(sender.getUser(ess), gameMode)) {
-            sender.sendMessage(tl("cantGamemode", gameMode.name()));
+        if (sender.isPlayer() && isProhibitedChange(sender.getUser(), gameMode)) {
+            sender.sendTl("cantGamemode", gameMode.name());
             return;
         }
 
         user.getBase().setGameMode(gameMode);
-        sender.sendMessage(tl("gameMode", tl(gameMode.toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
+        sender.sendTl("gameMode", sender.tl(gameMode.toString().toLowerCase(Locale.ENGLISH)), CommonPlaceholders.displayNameRecipient((IMessageRecipient) user));
     }
 
     // essentials.gamemode will let them change to any but essentials.gamemode.survival would only let them change to survival.

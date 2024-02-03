@@ -4,6 +4,8 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
+import com.earth2me.essentials.messaging.IMessageRecipient;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
@@ -13,8 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandexp extends EssentialsLoopCommand {
     public Commandexp() {
         super("exp");
@@ -22,7 +22,7 @@ public class Commandexp extends EssentialsLoopCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        final IUser user = sender.getUser(ess);
+        final IUser user = sender.getUser();
         if (args.length == 0 || (args.length < 2 && user == null)) {
             if (user == null) {
                 throw new NotEnoughArgumentsException();
@@ -39,7 +39,7 @@ public class Commandexp extends EssentialsLoopCommand {
         }
 
         if (!cmd.hasPermission(user)) {
-            user.sendMessage(tl("noAccessSubCommand", "/" + commandLabel + " " + cmd.name().toLowerCase(Locale.ENGLISH)));
+            user.sendTl("noAccessSubCommand", "/" + commandLabel + " " + cmd.name().toLowerCase(Locale.ENGLISH));
             return;
         }
 
@@ -99,7 +99,7 @@ public class Commandexp extends EssentialsLoopCommand {
     }
 
     private void showExp(final CommandSource sender, final IUser target) {
-        sender.sendMessage(tl("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target.getBase()), target.getBase().getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase())));
+        sender.sendTl("exp", CommonPlaceholders.displayNameRecipient((IMessageRecipient) target), SetExpFix.getTotalExperience(target.getBase()), target.getBase().getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase()));
     }
 
     //TODO: Limit who can give negative exp?
@@ -131,7 +131,7 @@ public class Commandexp extends EssentialsLoopCommand {
             amount = 0L;
         }
         SetExpFix.setTotalExperience(target.getBase(), (int) amount);
-        sender.sendMessage(tl("expSet", target.getDisplayName(), amount));
+        sender.sendTl("expSet", CommonPlaceholders.displayNameRecipient((IMessageRecipient) target), amount);
     }
 
     @Override

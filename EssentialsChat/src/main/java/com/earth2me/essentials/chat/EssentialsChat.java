@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsChat extends JavaPlugin {
     private transient IEssentials ess;
@@ -24,7 +24,7 @@ public class EssentialsChat extends JavaPlugin {
         final PluginManager pluginManager = getServer().getPluginManager();
         ess = (IEssentials) pluginManager.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
-            getLogger().log(Level.WARNING, tl("versionMismatchAll"));
+            getLogger().log(Level.WARNING, tlLiteral("versionMismatchAll"));
         }
         if (!ess.isEnabled()) {
             this.setEnabled(false);

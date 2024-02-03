@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Backup implements Runnable {
     private transient final Server server;
@@ -79,7 +79,7 @@ public class Backup implements Runnable {
             taskLock.complete(new Object());
             return;
         }
-        ess.getLogger().log(Level.INFO, tl("backupStarted"));
+        ess.getLogger().log(Level.INFO, tlLiteral("backupStarted"));
         final CommandSender cs = server.getConsoleSender();
         server.dispatchCommand(cs, "save-all");
         server.dispatchCommand(cs, "save-off");
@@ -118,7 +118,7 @@ public class Backup implements Runnable {
                         }
                         active = false;
                         taskLock.complete(new Object());
-                        ess.getLogger().log(Level.INFO, tl("backupFinished"));
+                        ess.getLogger().log(Level.INFO, tlLiteral("backupFinished"));
                     }
                 }
 

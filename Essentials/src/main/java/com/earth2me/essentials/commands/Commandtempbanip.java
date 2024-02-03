@@ -14,7 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandtempbanip extends EssentialsCommand {
     public Commandtempbanip() {
@@ -52,27 +52,27 @@ public class Commandtempbanip extends EssentialsCommand {
 
         final long maxBanLength = ess.getSettings().getMaxTempban() * 1000;
         if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength) && sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.unlimited")) {
-            sender.sendMessage(tl("oversizedTempban"));
+            sender.sendTl("oversizedTempban");
             return;
         }
 
         if (banReason.length() < 2) {
-            banReason = tl("defaultBanReason");
+            banReason = tlLiteral("defaultBanReason");
         }
 
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, new Date(banTimestamp), senderName);
 
-        final String banDisplay = tl("banFormat", banReason, senderDisplayName);
+        final String banDisplay = tlLiteral("banFormat", banReason, senderDisplayName);
         for (final Player player : ess.getServer().getOnlinePlayers()) {
             if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
                 player.kickPlayer(banDisplay);
             }
         }
 
-        final String message = tl("playerTempBanIpAddress", senderDisplayName, ipAddress,
-                DateUtil.formatDateDiff(banTimestamp), banReason);
-        ess.getLogger().log(Level.INFO, message);
-        ess.broadcastMessage("essentials.banip.notify", message);
+        final String tlKey = "playerTempBanIpAddress";
+        final Object[] objects = {senderDisplayName, ipAddress, banReason, DateUtil.formatDateDiff(banTimestamp), banReason};
+        ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
+        ess.broadcastTl(null, "essentials.banip.notify", tlKey, objects);
     }
 
     @Override

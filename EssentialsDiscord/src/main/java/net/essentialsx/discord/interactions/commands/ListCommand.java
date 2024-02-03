@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class ListCommand extends InteractionCommandImpl {
 
     public ListCommand(JDADiscordService jda) {
-        super(jda, "list", tl("discordCommandListDescription"));
-        addArgument(new InteractionCommandArgument("group", tl("discordCommandListArgumentGroup"), InteractionCommandArgumentType.STRING, false));
+        super(jda, "list", tlLiteral("discordCommandListDescription"));
+        addArgument(new InteractionCommandArgument("group", tlLiteral("discordCommandListArgumentGroup"), InteractionCommandArgumentType.STRING, false));
     }
 
     @Override
@@ -37,10 +37,10 @@ public class ListCommand extends InteractionCommandImpl {
             try {
                 output.add(PlayerList.listGroupUsers(ess, playerList, group));
             } catch (Exception e) {
-                output.add(tl("errorWithMessage", e.getMessage()));
+                output.add(tlLiteral("errorWithMessage", e.getMessage()));
             }
         } else {
-            output.addAll(PlayerList.prepareGroupedList(ess, getName(), playerList));
+            output.addAll(PlayerList.prepareGroupedList(ess, null, getName(), playerList));
         }
 
         final StringBuilder stringBuilder = new StringBuilder();

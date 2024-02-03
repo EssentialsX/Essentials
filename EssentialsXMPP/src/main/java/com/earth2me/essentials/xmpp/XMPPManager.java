@@ -32,7 +32,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class XMPPManager extends Handler implements MessageListener, ChatManagerListener, IConf {
     private static final Logger logger = EssentialsXMPP.getWrappedLogger();
@@ -103,7 +103,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     private boolean connect() {
         final String server = config.getString("xmpp.server", null);
         if (server == null || server.equals("example.com")) {
-            logger.log(Level.WARNING, tl("xmppNotConfigured"));
+            logger.log(Level.WARNING, tlLiteral("xmppNotConfigured"));
             return false;
         }
         final int port = config.getInt("xmpp.port", 5222);
@@ -158,7 +158,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 
     final void updatePresence() {
         if (connection == null) {
-            parent.getEss().getLogger().warning(tl("xmppNotConfigured"));
+            parent.getEss().getLogger().warning(tlLiteral("xmppNotConfigured"));
             return;
         }
 

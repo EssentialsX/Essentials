@@ -1,13 +1,12 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import org.bukkit.Server;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandsuicide extends EssentialsCommand {
     public Commandsuicide() {
@@ -20,9 +19,9 @@ public class Commandsuicide extends EssentialsCommand {
         server.getPluginManager().callEvent(ede);
         ede.getEntity().setLastDamageCause(ede);
         user.getBase().setHealth(0);
-        user.sendMessage(tl("suicideMessage"));
+        user.sendTl("suicideMessage");
         user.setDisplayNick();
-        ess.broadcastMessage(user, tl("suicideSuccess", user.getDisplayName()));
+        ess.broadcastTl(user, "suicideSuccess", CommonPlaceholders.displayName(user));
     }
 
     @Override

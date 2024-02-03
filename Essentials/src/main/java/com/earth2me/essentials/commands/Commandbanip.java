@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandbanip extends EssentialsCommand {
     public Commandbanip() {
@@ -48,13 +48,13 @@ public class Commandbanip extends EssentialsCommand {
         if (args.length > 1) {
             banReason = FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
         } else {
-            banReason = tl("defaultBanReason");
+            banReason = tlLiteral("defaultBanReason");
         }
 
-        final String banDisplay = tl("banFormat", banReason, senderDisplayName);
+        final String banDisplay = tlLiteral("banFormat", banReason, senderDisplayName);
 
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
-        ess.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderDisplayName, ipAddress, banReason));
+        ess.getLogger().log(Level.INFO, tlLiteral("playerBanIpAddress", senderDisplayName, ipAddress, banReason));
 
         for (final Player player : ess.getServer().getOnlinePlayers()) {
             if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
@@ -62,7 +62,7 @@ public class Commandbanip extends EssentialsCommand {
             }
         }
 
-        ess.broadcastMessage("essentials.banip.notify", tl("playerBanIpAddress", senderDisplayName, ipAddress, banReason));
+        ess.broadcastTl(null, u -> !u.isAuthorized("essentials.banip.notify"), "playerBanIpAddress", senderDisplayName, ipAddress, banReason);
     }
 
     @Override

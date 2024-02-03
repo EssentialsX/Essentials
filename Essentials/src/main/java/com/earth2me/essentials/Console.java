@@ -2,17 +2,20 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
+import com.earth2me.essentials.utils.AdventureUtil;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public final class Console implements IMessageRecipient {
     public static final String NAME = "Console";
-    public static final String DISPLAY_NAME = tl("consoleName");
+    public static final String DISPLAY_NAME = tlLiteral("consoleName");
     private static Console instance; // Set in essentials
 
     private final IEssentials ess;
@@ -61,6 +64,21 @@ public final class Console implements IMessageRecipient {
     @Override
     public void sendMessage(final String message) {
         getCommandSender().sendMessage(message);
+    }
+
+    @Override
+    public void sendTl(String tlKey, Object... args) {
+        final String translation = tlLiteral(tlKey, args);
+
+        final Audience consoleAudience = ((Essentials) ess).getBukkitAudience().sender(getCommandSender());
+        final Component component = AdventureUtil.miniMessage()
+                .deserialize(translation);
+        consoleAudience.sendMessage(component);
+    }
+
+    @Override
+    public String tlSender(String tlKey, Object... args) {
+        return tlLiteral(tlKey, args);
     }
 
     @Override

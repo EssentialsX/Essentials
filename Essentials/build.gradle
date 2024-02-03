@@ -6,18 +6,21 @@ dependencies {
     compileOnly('com.github.milkbowl:VaultAPI:1.7') {
         exclude group: "org.bukkit", module: "bukkit"
     }
-    compileOnly 'net.luckperms:api:5.0'
+    compileOnly 'net.luckperms:api:5.3'
 
     api 'io.papermc:paperlib:1.0.6'
 
-    api 'org.bstats:bstats-bukkit:2.2.1'
-
     implementation 'org.spongepowered:configurate-yaml:4.1.2'
-    implementation 'org.checkerframework:checker-qual:3.14.0'
+    implementation 'org.checkerframework:checker-qual:3.21.0'
+    implementation 'nu.studer:java-ordered-properties:1.0.4'
+
+    implementation 'net.kyori:adventure-api:4.15.0'
+    implementation 'net.kyori:adventure-text-minimessage:4.15.0'
+    implementation 'net.kyori:adventure-platform-bukkit:4.3.1'
 
     // Providers
     api project(':providers:BaseProviders')
-    api project(':providers:PaperProvider')
+    api project(path: ':providers:PaperProvider', configuration: 'shadow')
     api(project(':providers:NMSReflectionProvider')) {
         exclude group: "org.bukkit", module: "bukkit"
     }
@@ -43,8 +46,25 @@ shadowJar {
         include (dependency('org.yaml:snakeyaml'))
         include (dependency('io.leangen.geantyref:geantyref'))
         include (dependency('org.checkerframework:checker-qual'))
+        include (dependency('nu.studer:java-ordered-properties'))
+        include (dependency('net.kyori:adventure-api'))
+        include (dependency('net.kyori:adventure-key'))
+        include (dependency('net.kyori:examination-api'))
+        include (dependency('net.kyori:examination-string'))
+        include (dependency('net.kyori:option'))
+        include (dependency('net.kyori:adventure-platform-bukkit'))
+        include (dependency('net.kyori:adventure-platform-api'))
+        include (dependency('net.kyori:adventure-platform-facet'))
+        include (dependency('net.kyori:adventure-nbt'))
+        include (dependency('net.kyori:adventure-text-serializer-bungeecord'))
+        include (dependency('net.kyori:adventure-text-serializer-gson'))
+        include (dependency('net.kyori:adventure-text-serializer-gson-legacy-impl'))
+        include (dependency('net.kyori:adventure-text-serializer-json'))
+        include (dependency('net.kyori:adventure-text-serializer-json-legacy-impl'))
+        include (dependency('net.kyori:adventure-text-serializer-legacy'))
+        include (dependency('net.kyori:adventure-text-minimessage'))
         include (project(':providers:BaseProviders'))
-        include (project(':providers:PaperProvider'))
+        include (project(path: ':providers:PaperProvider', configuration: 'shadow'))
         include (project(':providers:NMSReflectionProvider'))
         include (project(':providers:1_8Provider'))
         include (project(':providers:1_12Provider'))
@@ -55,8 +75,13 @@ shadowJar {
     relocate 'org.yaml.snakeyaml', 'com.earth2me.essentials.libs.snakeyaml'
     relocate 'io.leangen.geantyref', 'com.earth2me.essentials.libs.geantyref'
     relocate 'org.checkerframework', 'com.earth2me.essentials.libs.checkerframework'
+    relocate 'net.kyori', 'com.earth2me.essentials.libs.kyori'
+    relocate 'net.essentialsx.temp.adventure', 'net.kyori.adventure'
 
     minimize {
         include(dependency('org.checkerframework:checker-qual'))
+        include(dependency('net.kyori:adventure-api'))
+        include(dependency('net.kyori:adventure-platform-bukkit'))
+        include(dependency('net.kyori:adventure-text-minimessage'))
     }
 }

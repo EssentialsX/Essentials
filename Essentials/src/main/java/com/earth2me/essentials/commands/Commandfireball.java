@@ -5,6 +5,7 @@ import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.DragonFireball;
@@ -26,8 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandfireball extends EssentialsCommand {
 
@@ -78,7 +77,7 @@ public class Commandfireball extends EssentialsCommand {
         }
 
         if (!user.isAuthorized("essentials.fireball." + type)) {
-            throw new Exception(tl("noPerm", "essentials.fireball." + type));
+            throw new TranslatableException("noPerm", "essentials.fireball." + type);
         }
 
         final Vector direction = user.getBase().getEyeLocation().getDirection().multiply(speed);

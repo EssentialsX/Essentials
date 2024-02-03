@@ -9,7 +9,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 class EssentialsConnect {
     private final transient IEssentials ess;
@@ -17,7 +17,7 @@ class EssentialsConnect {
 
     EssentialsConnect(final Plugin essPlugin, final Plugin essProtect) {
         if (!essProtect.getDescription().getVersion().equals(essPlugin.getDescription().getVersion())) {
-            essProtect.getLogger().log(Level.WARNING, tl("versionMismatchAll"));
+            essProtect.getLogger().log(Level.WARNING, tlLiteral("versionMismatchAll"));
         }
         ess = (IEssentials) essPlugin;
         protect = (IAntiBuild) essProtect;
@@ -30,14 +30,13 @@ class EssentialsConnect {
         return ess;
     }
 
-    void alert(final User user, final String item, final String type) {
+    void alert(final User user, final String item, final String tlKey) {
         final Location loc = user.getLocation();
-        final String warnMessage = tl("alertFormat", user.getName(), type, item, loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
-        protect.getLogger().log(Level.WARNING, warnMessage);
+        protect.getLogger().log(Level.WARNING, tlLiteral("alertFormat", user.getName(), tlLiteral(tlKey), item, loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ()));
         for (final Player p : ess.getServer().getOnlinePlayers()) {
             final User alertUser = ess.getUser(p);
             if (alertUser.isAuthorized("essentials.protect.alerts")) {
-                alertUser.sendMessage(warnMessage);
+                alertUser.sendTl("alertFormat", user.getName(), alertUser.playerTl(tlKey), item, loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
             }
         }
     }

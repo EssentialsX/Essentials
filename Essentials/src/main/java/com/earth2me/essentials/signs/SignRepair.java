@@ -7,8 +7,6 @@ import com.earth2me.essentials.commands.Commandrepair;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import net.ess3.api.IEssentials;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class SignRepair extends EssentialsSign {
     public SignRepair() {
         super("Repair");
@@ -21,7 +19,7 @@ public class SignRepair extends EssentialsSign {
             sign.setLine(1, "Hand");
         } else if (!repairTarget.equalsIgnoreCase("all") && !repairTarget.equalsIgnoreCase("hand")) {
             sign.setLine(1, "§c<hand|all>");
-            throw new SignException(tl("invalidSignLine", 2));
+            throw new SignException("invalidSignLine", 2);
         }
         validateTrade(sign, 2, ess);
         return true;
@@ -45,7 +43,7 @@ public class SignRepair extends EssentialsSign {
             }
 
         } catch (final Exception ex) {
-            throw new SignException(ex.getMessage(), ex);
+            throw new SignException(ex, ex.getMessage());
         }
 
         charge.charge(player);

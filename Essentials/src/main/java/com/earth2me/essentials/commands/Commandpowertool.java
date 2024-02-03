@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -12,8 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandpowertool extends EssentialsCommand {
     public Commandpowertool() {
@@ -43,12 +42,12 @@ public class Commandpowertool extends EssentialsCommand {
         // check to see if this is a clear all command
         if (command != null && command.equalsIgnoreCase("d:")) {
             user.clearAllPowertools();
-            sender.sendMessage(tl("powerToolClearAll"));
+            sender.sendTl("powerToolClearAll");
             return;
         }
 
         if (itemStack == null || itemStack.getType() == Material.AIR) {
-            throw new Exception(tl("powerToolAir"));
+            throw new TranslatableException("powerToolAir");
         }
 
         final String itemName = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replaceAll("_", " ");
@@ -57,28 +56,28 @@ public class Commandpowertool extends EssentialsCommand {
         if (command != null && !command.isEmpty()) {
             if (command.equalsIgnoreCase("l:")) {
                 if (powertools.isEmpty()) {
-                    throw new Exception(tl("powerToolListEmpty", itemName));
+                    throw new TranslatableException("powerToolListEmpty", itemName);
                 } else {
-                    sender.sendMessage(tl("powerToolList", StringUtil.joinList(powertools), itemName));
+                    sender.sendTl("powerToolList", StringUtil.joinList(powertools), itemName);
                 }
                 throw new NoChargeException();
             }
             if (command.startsWith("r:")) {
                 command = command.substring(2);
                 if (!powertools.contains(command)) {
-                    throw new Exception(tl("powerToolNoSuchCommandAssigned", command, itemName));
+                    throw new TranslatableException("powerToolNoSuchCommandAssigned", command, itemName);
                 }
 
                 powertools.remove(command);
-                sender.sendMessage(tl("powerToolRemove", command, itemName));
+                sender.sendTl("powerToolRemove", command, itemName);
             } else {
                 if (command.startsWith("a:")) {
                     if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.powertool.append")) {
-                        throw new Exception(tl("noPerm", "essentials.powertool.append"));
+                        throw new TranslatableException("noPerm", "essentials.powertool.append");
                     }
                     command = command.substring(2);
                     if (powertools.contains(command)) {
-                        throw new Exception(tl("powerToolAlreadySet", command, itemName));
+                        throw new TranslatableException("powerToolAlreadySet", command, itemName);
                     }
                 } else if (!powertools.isEmpty()) {
                     // Replace all commands with this one
@@ -86,16 +85,16 @@ public class Commandpowertool extends EssentialsCommand {
                 }
 
                 powertools.add(command);
-                sender.sendMessage(tl("powerToolAttach", StringUtil.joinList(powertools), itemName));
+                sender.sendTl("powerToolAttach", StringUtil.joinList(powertools), itemName);
             }
         } else {
             powertools.clear();
-            sender.sendMessage(tl("powerToolRemoveAll", itemName));
+            sender.sendTl("powerToolRemoveAll", itemName);
         }
 
         if (!user.arePowerToolsEnabled()) {
             user.setPowerToolsEnabled(true);
-            user.sendMessage(tl("powerToolsEnabled"));
+            user.sendTl("powerToolsEnabled");
         }
         user.setPowertool(itemStack, powertools);
     }

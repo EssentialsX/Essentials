@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.MaterialUtil;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -20,8 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandskull extends EssentialsCommand {
 
@@ -62,14 +61,14 @@ public class Commandskull extends EssentialsCommand {
                     owner = url.substring(url.lastIndexOf("/") + 1);
                 } catch (final Exception e) {
                     // Any exception that can realistically happen here is caused by an invalid texture value
-                    throw new IllegalArgumentException(tl("skullInvalidBase64"));
+                    throw new TranslatableException("skullInvalidBase64");
                 }
 
                 if (!URL_VALUE_PATTERN.matcher(owner).matches()) {
-                    throw new IllegalArgumentException(tl("skullInvalidBase64"));
+                    throw new TranslatableException("skullInvalidBase64");
                 }
             } else if (!NAME_PATTERN.matcher(args[0]).matches()) {
-                throw new IllegalArgumentException(tl("alphaNames"));
+                throw new TranslatableException("alphaNames");
             } else {
                 owner = args[0];
             }
@@ -88,11 +87,11 @@ public class Commandskull extends EssentialsCommand {
             metaSkull = (SkullMeta) itemSkull.getItemMeta();
             spawn = true;
         } else {
-            throw new Exception(tl("invalidSkull"));
+            throw new TranslatableException("invalidSkull");
         }
 
         if (metaSkull.hasOwner() && !user.isAuthorized("essentials.skull.modify")) {
-            throw new Exception(tl("noPermissionSkull"));
+            throw new TranslatableException("noPermissionSkull");
         }
 
         editSkull(user, itemSkull, metaSkull, owner, spawn);
@@ -105,7 +104,7 @@ public class Commandskull extends EssentialsCommand {
             final String shortOwnerName;
             if (URL_VALUE_PATTERN.matcher(owner).matches()) {
                 if (!playerProfileSupported) {
-                    user.sendMessage(tl("unsupportedFeature"));
+                    user.sendTl("unsupportedFeature");
                     return;
                 }
 
@@ -133,10 +132,10 @@ public class Commandskull extends EssentialsCommand {
                 stack.setItemMeta(skullMeta);
                 if (spawn) {
                     Inventories.addItem(user.getBase(), stack);
-                    user.sendMessage(tl("givenSkull", shortOwnerName));
+                    user.sendTl("givenSkull", shortOwnerName);
                     return;
                 }
-                user.sendMessage(tl("skullChanged", shortOwnerName));
+                user.sendTl("skullChanged", shortOwnerName);
             });
         });
     }

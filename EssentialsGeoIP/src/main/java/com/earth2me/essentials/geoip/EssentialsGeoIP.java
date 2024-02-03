@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsGeoIP extends JavaPlugin {
 
@@ -21,7 +21,7 @@ public class EssentialsGeoIP extends JavaPlugin {
         final PluginManager pm = getServer().getPluginManager();
         final IEssentials ess = (IEssentials) pm.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
-            getLogger().log(Level.WARNING, tl("versionMismatchAll"));
+            getLogger().log(Level.WARNING, tlLiteral("versionMismatchAll"));
         }
         if (!ess.isEnabled()) {
             this.setEnabled(false);

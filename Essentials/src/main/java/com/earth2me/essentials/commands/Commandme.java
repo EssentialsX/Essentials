@@ -2,8 +2,11 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.IUser;
+import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.UserActionEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,7 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandme extends EssentialsCommand {
     public Commandme() {
@@ -28,9 +31,9 @@ public class Commandme extends EssentialsCommand {
         if (user.isMuted()) {
             final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
             if (dateDiff == null) {
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReason" : "voiceSilenced", user.getMuteReason());
             }
-            throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+            throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReasonTime" : "voiceSilencedTime", dateDiff, user.getMuteReason());
         }
 
         if (args.length < 1) {
@@ -42,7 +45,7 @@ public class Commandme extends EssentialsCommand {
 
         user.setDisplayNick();
         long radius = ess.getSettings().getChatRadius();
-        final String toSend = tl("action", user.getDisplayName(), message);
+        final String toSend = tlLiteral("action", CommonPlaceholders.displayName((IUser) user), message);
         if (radius < 1) {
             ess.broadcastMessage(user, toSend);
             ess.getServer().getPluginManager().callEvent(new UserActionEvent(user, message, Collections.unmodifiableCollection(ess.getServer().getOnlinePlayers())));
@@ -82,7 +85,7 @@ public class Commandme extends EssentialsCommand {
         }
 
         if (outList.size() < 2) {
-            user.sendMessage(tl("localNoOne"));
+            user.sendTl("localNoOne");
         }
 
         for (final Player onlinePlayer : outList) {
@@ -100,7 +103,7 @@ public class Commandme extends EssentialsCommand {
         String message = getFinalArg(args, 0);
         message = FormatUtil.replaceFormat(message);
 
-        ess.getServer().broadcastMessage(tl("action", "@", message));
+        ess.getServer().broadcastMessage(tlLiteral("action", "@", message));
     }
 
     @Override

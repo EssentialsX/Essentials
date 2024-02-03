@@ -2,14 +2,15 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
+import net.ess3.api.IUser;
+import net.ess3.api.TranslatableException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.Server;
 
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandafk extends EssentialsCommand {
     public Commandafk() {
@@ -50,17 +51,23 @@ public class Commandafk extends EssentialsCommand {
             if (sender.isMuted()) {
                 final String dateDiff = sender.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(sender.getMuteTimeout()) : null;
                 if (dateDiff == null) {
-                    throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReason", sender.getMuteReason()) : tl("voiceSilenced"));
+                    if (sender.hasMuteReason()) {
+                        throw new TranslatableException("voiceSilencedReason", sender.getMuteReason());
+                    } else {
+                        throw new TranslatableException("voiceSilenced");
+                    }
                 }
-                throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, sender.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+                if (sender.hasMuteReason()) {
+                    throw new TranslatableException("voiceSilencedReasonTime", dateDiff, sender.getMuteReason());
+                } else {
+                    throw new TranslatableException("voiceSilencedTime", dateDiff);
+                }
             }
             if (!sender.isAuthorized("essentials.afk.message")) {
-                throw new Exception(tl("noPermToAFKMessage"));
+                throw new TranslatableException("noPermToAFKMessage");
             }
         }
         user.setDisplayNick();
-        String msg = "";
-        String selfmsg = "";
 
         final boolean currentStatus = user.isAfk();
         final boolean afterStatus = user.toggleAfk(AfkStatusChangeEvent.Cause.COMMAND);
@@ -68,37 +75,39 @@ public class Commandafk extends EssentialsCommand {
             return;
         }
 
+        String tlKey = "";
+        String selfTlKey = "";
         if (!afterStatus) {
             if (!user.isHidden()) {
-                msg = tl("userIsNotAway", user.getDisplayName());
-                selfmsg = tl("userIsNotAwaySelf", user.getDisplayName());
+                tlKey = "userIsNotAway";
+                selfTlKey = "userIsNotAwaySelf";
             }
             user.updateActivity(false, AfkStatusChangeEvent.Cause.COMMAND);
         } else {
             if (!user.isHidden()) {
                 if (message != null) {
-                    msg = tl("userIsAwayWithMessage", user.getDisplayName(), message);
-                    selfmsg = tl("userIsAwaySelfWithMessage", user.getDisplayName(), message);
+                    tlKey = "userIsAwayWithMessage";
+                    selfTlKey = "userIsAwaySelfWithMessage";
                 } else {
-                    msg = tl("userIsAway", user.getDisplayName());
-                    selfmsg = tl("userIsAwaySelf", user.getDisplayName());
+                    tlKey = "userIsAway";
+                    selfTlKey = "userIsAwaySelf";
                 }
             }
             user.setAfkMessage(message);
         }
-        if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
+        if (!tlKey.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
             // exclude user from receiving general AFK announcement in favor of personal message
-            ess.broadcastMessage(user, msg, u -> u == user);
+            ess.broadcastTl(user, u -> u == user, tlKey, CommonPlaceholders.displayName((IUser) user), message);
         }
-        if (!selfmsg.isEmpty()) {
-            user.sendMessage(selfmsg);
+        if (!selfTlKey.isEmpty()) {
+            user.sendTl(selfTlKey, CommonPlaceholders.displayName((IUser) user), message);
         }
         user.setDisplayNick(); // Set this again after toggling
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1 && sender.isAuthorized("essentials.afk.others", ess)) {
+        if (args.length == 1 && sender.isAuthorized("essentials.afk.others")) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

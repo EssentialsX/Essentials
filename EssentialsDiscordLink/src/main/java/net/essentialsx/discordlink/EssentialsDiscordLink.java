@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsDiscordLink extends JavaPlugin {
     private transient IEssentials ess;
@@ -44,7 +44,7 @@ public class EssentialsDiscordLink extends JavaPlugin {
             return;
         }
         if (!getDescription().getVersion().equals(ess.getDescription().getVersion())) {
-            getLogger().log(Level.WARNING, tl("versionMismatchAll"));
+            getLogger().log(Level.WARNING, tlLiteral("versionMismatchAll"));
         }
 
         api = getServer().getServicesManager().load(DiscordService.class);

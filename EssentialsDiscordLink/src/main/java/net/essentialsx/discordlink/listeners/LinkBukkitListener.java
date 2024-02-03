@@ -18,7 +18,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class LinkBukkitListener implements Listener {
     private final EssentialsDiscordLink ess;
@@ -42,7 +42,7 @@ public class LinkBukkitListener implements Listener {
         final String sanitizedMessage = MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripFormat(event.getMessage().getMessage()));
 
         ess.getApi().getMemberById(discordId).thenAccept(member -> {
-            member.sendPrivateMessage(tl("discordMailLine", sanitizedName, sanitizedMessage));
+            member.sendPrivateMessage(tlLiteral("discordMailLine", sanitizedName, sanitizedMessage));
         });
     }
 
@@ -59,7 +59,7 @@ public class LinkBukkitListener implements Listener {
             } catch (IllegalArgumentException e) {
                 code = e.getMessage();
             }
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, tl("discordLinkLoginKick", "/link " + code, ess.getApi().getInviteUrl()));
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, tlLiteral("discordLinkLoginKick", "/link " + code, ess.getApi().getInviteUrl()));
         }
     }
 
@@ -89,7 +89,7 @@ public class LinkBukkitListener implements Listener {
             } catch (IllegalArgumentException e) {
                 code = e.getMessage();
             }
-            event.getPlayer().sendMessage(tl("discordLinkLoginPrompt", "/link " + code, ess.getApi().getInviteUrl()));
+            ess.getEss().getUser(event.getPlayer()).sendTl("discordLinkLoginPrompt", "/link " + code, ess.getApi().getInviteUrl());
         }
     }
 
@@ -107,7 +107,7 @@ public class LinkBukkitListener implements Listener {
             } catch (IllegalArgumentException e) {
                 code = e.getMessage();
             }
-            event.getPlayer().sendMessage(tl("discordLinkLoginPrompt", "/link " + code, ess.getApi().getInviteUrl()));
+            ess.getEss().getUser(event.getPlayer()).sendTl("discordLinkLoginPrompt", "/link " + code, ess.getApi().getInviteUrl());
         }
     }
 
@@ -125,7 +125,7 @@ public class LinkBukkitListener implements Listener {
             } catch (IllegalArgumentException e) {
                 code = e.getMessage();
             }
-            event.getUser().sendMessage(tl("discordLinkLoginPrompt", "/link " + code, ess.getApi().getInviteUrl()));
+            event.getUser().sendTl("discordLinkLoginPrompt", "/link " + code, ess.getApi().getInviteUrl());
         }
     }
 
@@ -153,7 +153,7 @@ public class LinkBukkitListener implements Listener {
 
         switch (ess.getSettings().getLinkPolicy()) {
             case KICK: {
-                final Runnable kickTask = () -> event.getUser().getBase().kickPlayer(tl("discordLinkLoginKick", "/link " + finalCode, ess.getApi().getInviteUrl()));
+                final Runnable kickTask = () -> event.getUser().getBase().kickPlayer(event.getUser().playerTl("discordLinkLoginKick", "/link " + finalCode, ess.getApi().getInviteUrl()));
                 if (Bukkit.isPrimaryThread()) {
                     kickTask.run();
                 } else {
@@ -162,7 +162,7 @@ public class LinkBukkitListener implements Listener {
                 break;
             }
             case FREEZE: {
-                event.getUser().sendMessage(tl("discordLinkLoginPrompt", "/link " + code, ess.getApi().getInviteUrl()));
+                event.getUser().sendTl("discordLinkLoginPrompt", "/link " + code, ess.getApi().getInviteUrl());
                 event.getUser().setFreeze(true);
                 break;
             }
