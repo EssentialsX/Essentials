@@ -51,6 +51,7 @@ shadowJar {
         include (dependency('net.kyori:adventure-key'))
         include (dependency('net.kyori:examination-api'))
         include (dependency('net.kyori:examination-string'))
+        include (dependency('net.kyori:option'))
         include (dependency('net.kyori:adventure-platform-bukkit'))
         include (dependency('net.kyori:adventure-platform-api'))
         include (dependency('net.kyori:adventure-platform-facet'))
