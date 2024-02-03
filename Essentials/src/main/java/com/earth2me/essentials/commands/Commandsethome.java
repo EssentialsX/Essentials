@@ -53,8 +53,11 @@ public class Commandsethome extends EssentialsCommand {
         }
 
         final Location location = user.getLocation();
-        if ((!ess.getSettings().isTeleportSafetyEnabled() || !ess.getSettings().isForceDisableTeleportSafety()) && LocationUtil.isBlockUnsafeForUser(ess, usersHome, location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ())) {
-            throw new Exception(tl("unsafeTeleportDestination", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+        if (LocationUtil.isBlockUnsafeForUser(ess, usersHome, location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ())) {
+            if (!ess.getSettings().isTeleportSafetyEnabled()
+                    || !ess.getSettings().isForceDisableTeleportSafety()) {
+                throw new Exception(tl("unsafeTeleportDestination", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+            }
         }
 
         if (ess.getSettings().isConfirmHomeOverwrite() && usersHome.hasHome(name) && (!name.equals(usersHome.getLastHomeConfirmation()) || name.equals(usersHome.getLastHomeConfirmation()) && System.currentTimeMillis() - usersHome.getLastHomeConfirmationTimestamp() > TimeUnit.MINUTES.toMillis(2))) {
