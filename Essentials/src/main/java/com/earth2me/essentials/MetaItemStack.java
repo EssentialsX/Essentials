@@ -543,9 +543,9 @@ public class MetaItemStack {
                 pmeta.addCustomEffect(pEffect, true);
                 stack.setItemMeta(pmeta);
                 if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
-                    if (isSplashPotion && stack.getType() != Material.SPLASH_POTION && stack.getType() != Material.TIPPED_ARROW) {
+                    if (isSplashPotion && stack.getType() == Material.POTION) {
                         stack.setType(Material.SPLASH_POTION);
-                    } else if (!isSplashPotion && stack.getType() != Material.POTION && stack.getType() != Material.TIPPED_ARROW) {
+                    } else if (!isSplashPotion && stack.getType() == Material.SPLASH_POTION) {
                         stack.setType(Material.POTION);
                     }
                 } else {
