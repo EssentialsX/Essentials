@@ -95,10 +95,10 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         final MessageResponse messageResponse = recipient.onReceiveMessage(this.parent, message);
         switch (messageResponse) {
             case UNREACHABLE:
-                sendTl("recentlyForeverAlone", CommonPlaceholders.displayNameRecipient(recipient));
+                sendTl("recentlyForeverAlone", recipient.getDisplayName());
                 break;
             case MESSAGES_IGNORED:
-                sendTl("msgIgnore", CommonPlaceholders.displayNameRecipient(recipient));
+                sendTl("msgIgnore", recipient.getDisplayName());
                 break;
             case SENDER_IGNORED:
                 break;
@@ -106,13 +106,13 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             case SUCCESS_BUT_AFK:
                 // Currently, only IUser can be afk, so we unsafely cast to get the afk message.
                 if (((IUser) recipient).getAfkMessage() != null) {
-                    sendTl("userAFKWithMessage", CommonPlaceholders.displayNameRecipient(recipient), ((IUser) recipient).getAfkMessage());
+                    sendTl("userAFKWithMessage", recipient.getDisplayName(), ((IUser) recipient).getAfkMessage());
                 } else {
-                    sendTl("userAFK", CommonPlaceholders.displayNameRecipient(recipient));
+                    sendTl("userAFK", recipient.getDisplayName());
                 }
                 // fall through
             default:
-                sendTl("msgFormat", AdventureUtil.parsed(tlSender("meSender")), CommonPlaceholders.displayNameRecipient(recipient), message);
+                sendTl("msgFormat", AdventureUtil.parsed(tlSender("meSender")), recipient.getDisplayName(), message);
 
                 // Better Social Spy
                 if (ess.getSettings().isSocialSpyMessages()) {
@@ -170,7 +170,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             }
         }
         // Display the formatted message to this recipient.
-        sendTl("msgFormat", CommonPlaceholders.displayNameRecipient(sender), tlSender("meRecipient"), message);
+        sendTl("msgFormat", sender.getDisplayName(), AdventureUtil.parsed(tlSender("meRecipient")), message);
 
         if (isLastMessageReplyRecipient) {
             // If this recipient doesn't have a reply recipient, initiate by setting the first
