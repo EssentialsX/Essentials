@@ -41,6 +41,7 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
@@ -904,7 +905,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public void showError(final CommandSource sender, final Throwable exception, final String commandLabel) {
         if (exception instanceof TranslatableException) {
-            sender.sendTl(((TranslatableException) exception).getTlKey(), ((TranslatableException) exception).getArgs());
+            final String tlMessage = sender.tl(((TranslatableException) exception).getTlKey(), ((TranslatableException) exception).getArgs());
+            sender.sendTl("errorWithMessage", AdventureUtil.parsed(tlMessage));
         } else {
             sender.sendTl("errorWithMessage", exception.getMessage());
         }
