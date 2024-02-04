@@ -542,9 +542,9 @@ public class MetaItemStack {
                 pmeta.addCustomEffect(pEffect, true);
                 stack.setItemMeta(pmeta);
                 if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
-                    if (isSplashPotion && stack.getType() != Material.SPLASH_POTION) {
+                    if (isSplashPotion && stack.getType() == Material.POTION) {
                         stack.setType(Material.SPLASH_POTION);
-                    } else if (!isSplashPotion && stack.getType() != Material.POTION) {
+                    } else if (!isSplashPotion && stack.getType() == Material.SPLASH_POTION) {
                         stack.setType(Material.POTION);
                     }
                 } else {
