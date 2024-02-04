@@ -30,7 +30,7 @@ public class SignSpawnmob extends EssentialsSign {
             final List<String> mobData = SpawnMob.mobData(sign.getLine(2));
             SpawnMob.spawnmob(ess, ess.getServer(), player.getSource(), player, mobParts, mobData, Integer.parseInt(sign.getLine(1)));
         } catch (final Exception ex) {
-            throw new SignException(ex, ex.getMessage());
+            throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
 
         charge.charge(player);

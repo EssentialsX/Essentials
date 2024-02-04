@@ -40,7 +40,7 @@ public class SignEnchant extends EssentialsSign {
                 level = Integer.parseInt(enchantLevel[1]);
             } catch (final NumberFormatException ex) {
                 sign.setLine(2, "§c<enchant>");
-                throw new SignException(ex, ex.getMessage());
+                throw new SignException(ex, "errorWithMessage", ex.getMessage());
             }
         }
         final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && player.isAuthorized("essentials.enchantments.allowunsafe") && player.isAuthorized("essentials.signs.enchant.allowunsafe");
@@ -57,7 +57,7 @@ public class SignEnchant extends EssentialsSign {
                 }
             }
         } catch (final Throwable ex) {
-            throw new SignException(ex, ex.getMessage());
+            throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
         getTrade(sign, 3, ess);
         return true;
@@ -81,7 +81,7 @@ public class SignEnchant extends EssentialsSign {
             try {
                 level = Integer.parseInt(enchantLevel[1]);
             } catch (final NumberFormatException ex) {
-                throw new SignException(ex, ex.getMessage());
+                throw new SignException(ex, "errorWithMessage", ex.getMessage());
             }
         }
 
@@ -103,7 +103,7 @@ public class SignEnchant extends EssentialsSign {
                 }
             }
         } catch (final Exception ex) {
-            throw new SignException(ex, ex.getMessage());
+            throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
 
         final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);

@@ -43,7 +43,7 @@ public class SignRepair extends EssentialsSign {
             }
 
         } catch (final Exception ex) {
-            throw new SignException(ex, ex.getMessage());
+            throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
 
         charge.charge(player);

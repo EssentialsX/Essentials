@@ -110,11 +110,11 @@ public class Commandbalancetop extends EssentialsCommand {
             future.thenRun(() -> {
                 if (fresh) {
                     final SimpleTextInput newCache = new SimpleTextInput();
-                    newCache.getLines().add(tlLiteral("serverTotal", NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)));
+                    newCache.getLines().add(AdventureUtil.miniToLegacy(tlLiteral("serverTotal", NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess))));
                     int pos = 1;
                     for (final Map.Entry<UUID, BalanceTop.Entry> entry : ess.getBalanceTop().getBalanceTopCache().entrySet()) {
                         if (ess.getSettings().showZeroBaltop() || entry.getValue().getBalance().compareTo(BigDecimal.ZERO) > 0) {
-                            newCache.getLines().add(tlLiteral("balanceTopLine", pos, AdventureUtil.parsed(AdventureUtil.legacyToMini(entry.getValue().getDisplayName())), NumberUtil.displayCurrency(entry.getValue().getBalance(), ess)));
+                            newCache.getLines().add(AdventureUtil.miniToLegacy(tlLiteral("balanceTopLine", pos, entry.getValue().getDisplayName(), NumberUtil.displayCurrency(entry.getValue().getBalance(), ess))));
                         }
                         pos++;
                     }
