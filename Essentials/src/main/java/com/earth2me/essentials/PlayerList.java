@@ -1,9 +1,9 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.TranslatableException;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
@@ -39,13 +39,13 @@ public final class PlayerList {
                 groupString.append(tlLiteral("listHiddenTag"));
             }
             user.setDisplayNick();
-            groupString.append(user.getDisplayName());
+            groupString.append(AdventureUtil.legacyToMini(user.getDisplayName()));
 
             final String strippedNick = FormatUtil.stripFormat(user.getNickname());
             if (ess.getSettings().realNamesOnList() && strippedNick != null && !strippedNick.equals(user.getName())) {
                 groupString.append(" ").append(tlLiteral("listRealName",user.getName()));
             }
-            groupString.append(ChatColor.WHITE);
+            groupString.append("<white>");
         }
         return groupString.toString();
     }

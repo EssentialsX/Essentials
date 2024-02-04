@@ -27,7 +27,7 @@ public class SignKit extends EssentialsSign {
             try {
                 ess.getKits().getKit(kitName);
             } catch (final Exception ex) {
-                throw new SignException(ex, ex.getMessage());
+                throw new SignException(ex, "errorWithMessage", ex.getMessage());
             }
             final String group = sign.getLine(2);
             if ("Everyone".equalsIgnoreCase(group) || "Everybody".equalsIgnoreCase(group)) {
@@ -55,7 +55,7 @@ public class SignKit extends EssentialsSign {
             } catch (final NoChargeException ex) {
                 return false;
             } catch (final Exception ex) {
-                throw new SignException(ex, ex.getMessage());
+                throw new SignException(ex, "errorWithMessage", ex.getMessage());
             }
             return true;
         } else {
