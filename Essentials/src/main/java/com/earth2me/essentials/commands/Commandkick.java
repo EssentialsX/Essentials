@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.UserKickEvent;
@@ -54,7 +55,7 @@ public class Commandkick extends EssentialsCommand {
 
         final String tlKey = "playerKicked";
         final Object[] objects = {senderDisplayName, target.getName(), kickReason};
-        ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
+        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral(tlKey, objects)));
         ess.broadcastTl(null, "essentials.kick.notify", tlKey, objects);
     }
 

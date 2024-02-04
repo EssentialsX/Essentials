@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.IEssentials;
 
 import java.io.BufferedInputStream;
@@ -45,7 +46,7 @@ public class ManagedFile {
             try {
                 copyResourceAscii("/" + filename, file);
             } catch (final IOException ex) {
-                Essentials.getWrappedLogger().log(Level.SEVERE, tlLiteral("itemsCsvNotLoaded", filename), ex);
+                Essentials.getWrappedLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("itemsCsvNotLoaded", filename)), ex);
             }
         }
     }

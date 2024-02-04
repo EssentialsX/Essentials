@@ -12,6 +12,7 @@ import com.earth2me.essentials.config.serializers.CommandCooldownSerializer;
 import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
 import com.earth2me.essentials.config.serializers.MailMessageSerializer;
 import com.earth2me.essentials.config.serializers.MaterialTypeSerializer;
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.InvalidWorldException;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import org.bukkit.Location;
@@ -367,7 +368,7 @@ public class EssentialsConfiguration {
 
         if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
             if (!configFile.getParentFile().mkdirs()) {
-                Essentials.getWrappedLogger().log(Level.SEVERE, tlLiteral("failedToCreateConfig", configFile.toString()));
+                Essentials.getWrappedLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("failedToCreateConfig", configFile.toString())));
                 return;
             }
         }
@@ -379,10 +380,10 @@ public class EssentialsConfiguration {
                 convertAltFile();
             } else if (templateName != null) {
                 try (final InputStream is = resourceClass.getResourceAsStream(templateName)) {
-                    Essentials.getWrappedLogger().log(Level.INFO, tlLiteral("creatingConfigFromTemplate", configFile.toString()));
+                    Essentials.getWrappedLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("creatingConfigFromTemplate", configFile.toString())));
                     Files.copy(is, configFile.toPath());
                 } catch (IOException e) {
-                    Essentials.getWrappedLogger().log(Level.SEVERE, tlLiteral("failedToWriteConfig", configFile.toString()), e);
+                    Essentials.getWrappedLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("failedToWriteConfig", configFile.toString())), e);
                 }
             }
         }

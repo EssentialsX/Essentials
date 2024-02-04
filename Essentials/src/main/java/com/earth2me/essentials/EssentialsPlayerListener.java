@@ -6,6 +6,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -188,7 +189,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 }
             }
 
-            ess.getLogger().info(tlLiteral("mutedUserSpeaks", user.getName(), event.getMessage()));
+            ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("mutedUserSpeaks", user.getName(), event.getMessage())));
         }
         try {
             final Iterator<Player> it = event.getRecipients().iterator();
@@ -669,7 +670,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     user.sendTl("voiceSilencedTime", dateDiff);
                 }
             }
-            ess.getLogger().info(tlLiteral("mutedUserSpeaks", player.getName(), event.getMessage()));
+            ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("mutedUserSpeaks", player.getName(), event.getMessage())));
             return;
         }
 

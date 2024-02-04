@@ -232,7 +232,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         i18n.updateLocale("en");
         Console.setInstance(this);
 
-        LOGGER.log(Level.INFO, tlLiteral("usingTempFolderForTesting"));
+        LOGGER.log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("usingTempFolderForTesting")));
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
         mail = new MailServiceImpl(this);
@@ -282,33 +282,33 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             switch (VersionUtil.getServerSupportStatus()) {
                 case NMS_CLEANROOM:
-                    getLogger().severe(tlLiteral("serverUnsupportedCleanroom"));
+                    getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedCleanroom")));
                     break;
                 case DANGEROUS_FORK:
-                    getLogger().severe(tlLiteral("serverUnsupportedDangerous"));
+                    getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedDangerous")));
                     break;
                 case STUPID_PLUGIN:
-                    getLogger().severe(tlLiteral("serverUnsupportedDumbPlugins"));
+                    getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedDumbPlugins")));
                     break;
                 case UNSTABLE:
-                    getLogger().severe(tlLiteral("serverUnsupportedMods"));
+                    getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedMods")));
                     break;
                 case OUTDATED:
-                    getLogger().severe(tlLiteral("serverUnsupported"));
+                    getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupported")));
                     break;
                 case LIMITED:
-                    getLogger().info(tlLiteral("serverUnsupportedLimitedApi"));
+                    getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedLimitedApi")));
                     break;
             }
 
             if (VersionUtil.getSupportStatusClass() != null) {
-                getLogger().info(tlLiteral("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
+                getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedClass", VersionUtil.getSupportStatusClass())));
             }
 
             final PluginManager pm = getServer().getPluginManager();
             for (final Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
-                    getLogger().warning(tlLiteral("versionMismatch", plugin.getDescription().getName()));
+                    getLogger().warning(AdventureUtil.miniToLegacy(tlLiteral("versionMismatch", plugin.getDescription().getName())));
                 }
             }
 
@@ -582,7 +582,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public void onDisable() {
         final boolean stopping = getServerStateProvider().isStopping();
         if (!stopping) {
-            LOGGER.log(Level.SEVERE, tlLiteral("serverReloading"));
+            LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("serverReloading")));
         }
         getBackup().setPendingShutdown(true);
         for (final User user : getOnlineUsers()) {
@@ -602,7 +602,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
         cleanupOpenInventories();
         if (getBackup().getTaskLock() != null && !getBackup().getTaskLock().isDone()) {
-            LOGGER.log(Level.SEVERE, tlLiteral("backupInProgress"));
+            LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("backupInProgress")));
             getBackup().getTaskLock().join();
         }
         if (i18n != null) {
@@ -709,7 +709,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
                 sender.sendTl("commandNotLoaded", commandLabel);
-                LOGGER.log(Level.SEVERE, tlLiteral("commandNotLoaded", commandLabel), ex);
+                LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("commandNotLoaded", commandLabel)), ex);
                 return Collections.emptyList();
             }
 
@@ -732,11 +732,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             } catch (final Exception ex) {
                 showError(sender, ex, commandLabel);
                 // Tab completion shouldn't fail
-                LOGGER.log(Level.SEVERE, tlLiteral("commandFailed", commandLabel), ex);
+                LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("commandFailed", commandLabel)), ex);
                 return Collections.emptyList();
             }
         } catch (final Throwable ex) {
-            LOGGER.log(Level.SEVERE, tlLiteral("commandFailed", commandLabel), ex);
+            LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("commandFailed", commandLabel)), ex);
             return Collections.emptyList();
         }
     }
@@ -820,13 +820,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
                 sender.sendTl("commandNotLoaded", commandLabel);
-                LOGGER.log(Level.SEVERE, tlLiteral("commandNotLoaded", commandLabel), ex);
+                LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("commandNotLoaded", commandLabel)), ex);
                 return true;
             }
 
             // Check authorization
             if (user != null && !user.isAuthorized(cmd, permissionPrefix)) {
-                LOGGER.log(Level.INFO, tlLiteral("deniedAccessCommand", user.getName()));
+                LOGGER.log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("deniedAccessCommand", user.getName())));
                 user.sendTl("noAccessCommand");
                 return true;
             }
@@ -877,7 +877,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return true;
             }
         } catch (final Throwable ex) {
-            LOGGER.log(Level.SEVERE, tlLiteral("commandFailed", commandLabel), ex);
+            LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("commandFailed", commandLabel)), ex);
             return true;
         }
     }
@@ -909,7 +909,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             sender.sendTl("errorWithMessage", exception.getMessage());
         }
         if (getSettings().isDebug()) {
-            LOGGER.log(Level.INFO, tlLiteral("errorCallingCommand", commandLabel), exception);
+            LOGGER.log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("errorCallingCommand", commandLabel)), exception);
         }
     }
 

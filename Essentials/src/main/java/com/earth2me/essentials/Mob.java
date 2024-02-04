@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -171,7 +172,7 @@ public enum Mob {
     public Entity spawn(final World world, final Server server, final Location loc) throws MobException {
         final Entity entity = world.spawn(loc, this.bukkitType.getEntityClass());
         if (entity == null) {
-            Essentials.getWrappedLogger().log(Level.WARNING, tlLiteral("unableToSpawnMob"));
+            Essentials.getWrappedLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("unableToSpawnMob")));
             throw new MobException();
         }
         return entity;

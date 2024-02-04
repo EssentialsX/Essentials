@@ -3,9 +3,9 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
-import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import org.bukkit.Server;
@@ -87,18 +87,18 @@ public class Commandmute extends EssentialsCommand {
             if (muted) {
                 if (muteTimestamp > 0) {
                     if (!user.hasMuteReason()) {
-                        sender.sendTl("mutedPlayerFor", CommonPlaceholders.displayName((IUser) user), muteTime);
+                        sender.sendTl("mutedPlayerFor", CommonPlaceholders.displayName(user), muteTime);
                         user.sendTl("playerMutedFor", muteTime);
                     } else {
-                        sender.sendTl("mutedPlayerForReason", CommonPlaceholders.displayName((IUser) user), muteTime, user.getMuteReason());
+                        sender.sendTl("mutedPlayerForReason", CommonPlaceholders.displayName(user), muteTime, user.getMuteReason());
                         user.sendTl("playerMutedForReason", muteTime, user.getMuteReason());
                     }
                 } else {
                     if (!user.hasMuteReason()) {
-                        sender.sendTl("mutedPlayer", CommonPlaceholders.displayName((IUser) user));
+                        sender.sendTl("mutedPlayer", CommonPlaceholders.displayName(user));
                         user.sendTl("playerMuted");
                     } else {
-                        sender.sendTl("mutedPlayerReason", CommonPlaceholders.displayName((IUser) user), user.getMuteReason());
+                        sender.sendTl("mutedPlayerReason", CommonPlaceholders.displayName(user), user.getMuteReason());
                         user.sendTl("playerMutedReason", user.getMuteReason());
                     }
                 }
@@ -118,10 +118,10 @@ public class Commandmute extends EssentialsCommand {
                     objects = new Object[]{sender.getSender().getName(), user.getName(), muteTime};
                 }
 
-                ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
+                ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral(tlKey, objects)));
                 ess.broadcastTl(null, "essentials.mute.notify", tlKey, objects);
             } else {
-                sender.sendTl("unmutedPlayer", CommonPlaceholders.displayName((IUser) user));
+                sender.sendTl("unmutedPlayer", CommonPlaceholders.displayName(user));
                 user.sendTl("playerUnmuted");
             }
         }

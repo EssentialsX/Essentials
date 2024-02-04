@@ -7,6 +7,7 @@ import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.userstorage.ModernUserMap;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommandMapUtil;
 import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
@@ -464,8 +465,8 @@ public class Commandessentials extends EssentialsCommand {
                     sender.sendTl("dumpUrl", dumpUrl);
                     sender.sendTl("dumpDeleteKey", result.getDeletionKey());
                     if (sender.isPlayer()) {
-                        ess.getLogger().info(tlLiteral("dumpConsoleUrl", dumpUrl));
-                        ess.getLogger().info(tlLiteral("dumpDeleteKey", result.getDeletionKey()));
+                        ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpConsoleUrl", dumpUrl)));
+                        ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpDeleteKey", result.getDeletionKey())));
                     }
                 }
                 files.clear();

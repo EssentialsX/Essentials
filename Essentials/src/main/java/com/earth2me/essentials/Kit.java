@@ -6,6 +6,7 @@ import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
@@ -193,7 +194,7 @@ public class Kit {
 
                 if (kitItem.startsWith("@")) {
                     if (ess.getSerializationProvider() == null) {
-                        ess.getLogger().log(Level.WARNING, tlLiteral("kitError3", kitName, user.getName()));
+                        ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("kitError3", kitName, user.getName())));
                         continue;
                     }
                     stack = ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));

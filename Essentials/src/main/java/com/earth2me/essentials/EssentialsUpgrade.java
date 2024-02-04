@@ -495,7 +495,7 @@ public class EssentialsUpgrade {
             doneFile.setProperty("move" + name + "ToFile", true);
             doneFile.save();
         } catch (final IOException e) {
-            ess.getLogger().log(Level.SEVERE, tlLiteral("upgradingFilesError"), e);
+            ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("upgradingFilesError")), e);
         }
     }
 
@@ -658,15 +658,15 @@ public class EssentialsUpgrade {
             final File tmpFile = new File(listOfFile.getParentFile(), sanitizedFilename + ".tmp");
             final File newFile = new File(listOfFile.getParentFile(), sanitizedFilename);
             if (!listOfFile.renameTo(tmpFile)) {
-                ess.getLogger().log(Level.WARNING, tlLiteral("userdataMoveError", filename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("userdataMoveError", filename, sanitizedFilename)));
                 continue;
             }
             if (newFile.exists()) {
-                ess.getLogger().log(Level.WARNING, tlLiteral("duplicatedUserdata", filename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("duplicatedUserdata", filename, sanitizedFilename)));
                 continue;
             }
             if (!tmpFile.renameTo(newFile)) {
-                ess.getLogger().log(Level.WARNING, tlLiteral("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("userdataMoveBackError", sanitizedFilename, sanitizedFilename)));
             }
         }
         doneFile.setProperty("sanitizeAllUserFilenames", true);
