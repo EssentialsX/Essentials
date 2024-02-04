@@ -90,11 +90,11 @@ public class Commandtogglejail extends EssentialsCommand {
                         final Object[] objects;
                         if (timeDiff > 0) {
                             tlKey = "jailNotifyJailedFor";
-                            objects = new Object[]{player.getName(), DateUtil.formatDateDiff(finalDisplayTime)};
+                            objects = new Object[]{player.getName(), DateUtil.formatDateDiff(finalDisplayTime), sender.getSender().getName()};
                             sender.sendTl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime));
                         } else {
                             tlKey = "jailNotifyJailed";
-                            objects = new Object[]{player.getName(), sender.getSender().getName()};
+                            objects = new Object[]{player.getName(), sender.getSender().getName(), sender.getSender().getName()};
                             sender.sendTl("playerJailed", player.getName());
                         }
 
