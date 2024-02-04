@@ -3,6 +3,7 @@ package com.earth2me.essentials.xmpp;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IUser;
 import org.bukkit.entity.Player;
@@ -158,7 +159,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 
     final void updatePresence() {
         if (connection == null) {
-            parent.getEss().getLogger().warning(tlLiteral("xmppNotConfigured"));
+            parent.getEss().getLogger().warning(AdventureUtil.miniToLegacy(tlLiteral("xmppNotConfigured")));
             return;
         }
 

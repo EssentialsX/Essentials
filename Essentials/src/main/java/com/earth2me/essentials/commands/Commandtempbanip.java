@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.BanList;
@@ -71,7 +72,7 @@ public class Commandtempbanip extends EssentialsCommand {
 
         final String tlKey = "playerTempBanIpAddress";
         final Object[] objects = {senderDisplayName, ipAddress, banReason, DateUtil.formatDateDiff(banTimestamp), banReason};
-        ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
+        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral(tlKey, objects)));
         ess.broadcastTl(null, "essentials.banip.notify", tlKey, objects);
     }
 

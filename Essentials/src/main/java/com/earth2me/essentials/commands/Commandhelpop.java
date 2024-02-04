@@ -41,7 +41,7 @@ public class Commandhelpop extends EssentialsCommand {
 
         final String message = FormatUtil.stripFormat(getFinalArg(args, 0));
         final AdventureUtil.ParsedPlaceholder displayName = CommonPlaceholders.displayNameRecipient(from);
-        ess.getLogger().log(Level.INFO, tlLiteral("helpOp", displayName, message));
+        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("helpOp", displayName, message)));
 
         final List<IUser> recipients = new ArrayList<>();
         for (IUser user : ess.getOnlineUsers()) {

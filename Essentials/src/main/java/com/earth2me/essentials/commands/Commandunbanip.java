@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.BanList;
 import org.bukkit.Server;
@@ -41,7 +42,7 @@ public class Commandunbanip extends EssentialsCommand {
 
         ess.getServer().getBanList(BanList.Type.IP).pardon(ipAddress);
         final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
-        ess.getLogger().log(Level.INFO, tlLiteral("playerUnbanIpAddress", senderDisplayName, ipAddress));
+        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("playerUnbanIpAddress", senderDisplayName, ipAddress)));
 
         ess.broadcastTl((IUser) null, "essentials.banip.notify", "playerUnbanIpAddress", senderDisplayName, ipAddress);
     }

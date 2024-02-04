@@ -4,6 +4,7 @@ import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.metrics.MetricsWrapper;
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.essentialsx.discord.interactions.InteractionControllerImpl;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,7 +36,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
             return;
         }
         if (!getDescription().getVersion().equals(ess.getDescription().getVersion())) {
-            getLogger().log(Level.WARNING, tlLiteral("versionMismatchAll"));
+            getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("versionMismatchAll")));
         }
 
         // JDK-8274349 - Mitigation for a regression in Java 17 on 1 core systems which was fixed in 17.0.2
@@ -62,7 +63,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
                 jda.startup();
                 ess.scheduleSyncDelayedTask(() -> ((InteractionControllerImpl) jda.getInteractionController()).processBatchRegistration());
             } catch (Exception e) {
-                getLogger().log(Level.SEVERE, tlLiteral("discordErrorLogin", e.getMessage()));
+                getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("discordErrorLogin", e.getMessage())));
                 if (ess.getSettings().isDebug()) {
                     e.printStackTrace();
                 }

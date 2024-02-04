@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.ISettings;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.google.common.collect.Iterables;
@@ -97,7 +98,7 @@ public class Commandtogglejail extends EssentialsCommand {
                             sender.sendTl("playerJailed", player.getName());
                         }
 
-                        ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
+                        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral(tlKey, objects)));
                         ess.broadcastTl(null, "essentials.jail.notify", tlKey, objects);
                     }
                 });
@@ -125,7 +126,7 @@ public class Commandtogglejail extends EssentialsCommand {
 
             final String tlKey = "jailNotifySentenceExtended";
             final Object[] objects = new Object[]{player.getName(), DateUtil.formatDateDiff(displayTimeDiff), sender.getSender().getName()};
-            ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
+            ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral(tlKey, objects)));
             ess.broadcastTl(null, "essentials.jail.notify", tlKey, objects);
             return;
         }

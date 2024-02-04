@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.TranslatableException;
 import org.bukkit.BanList;
 import org.bukkit.OfflinePlayer;
@@ -39,7 +40,7 @@ public class Commandunban extends EssentialsCommand {
         }
 
         final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
-        ess.getLogger().log(Level.INFO, tlLiteral("playerUnbanned", senderDisplayName, name));
+        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("playerUnbanned", senderDisplayName, name)));
 
         ess.broadcastTl((IUser) null, "essentials.ban.notify", "playerUnbanned", senderDisplayName, name);
     }

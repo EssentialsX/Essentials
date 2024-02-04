@@ -1,6 +1,7 @@
 package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.plugin.Plugin;
 
@@ -14,7 +15,7 @@ class EssentialsConnect {
 
     EssentialsConnect(final Plugin essPlugin, final Plugin essProtect) {
         if (!essProtect.getDescription().getVersion().equals(essPlugin.getDescription().getVersion())) {
-            essProtect.getLogger().log(Level.WARNING, tlLiteral("versionMismatchAll"));
+            essProtect.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("versionMismatchAll")));
         }
         ess = (IEssentials) essPlugin;
         protect = (IProtect) essProtect;

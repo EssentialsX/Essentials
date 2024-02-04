@@ -3,6 +3,7 @@ package net.essentialsx.discord;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -457,7 +458,7 @@ public class DiscordSettings implements IConf {
     @Override
     public void reloadConfig() {
         if (plugin.isInvalidStartup()) {
-            plugin.getLogger().warning(tlLiteral("discordReloadInvalid"));
+            plugin.getLogger().warning(AdventureUtil.miniToLegacy(tlLiteral("discordReloadInvalid")));
             return;
         }
 
