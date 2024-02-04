@@ -1,5 +1,6 @@
 package net.essentialsx.discordlink.listeners;
 
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import net.essentialsx.api.v2.events.UserMailEvent;
@@ -153,7 +154,7 @@ public class LinkBukkitListener implements Listener {
 
         switch (ess.getSettings().getLinkPolicy()) {
             case KICK: {
-                final Runnable kickTask = () -> event.getUser().getBase().kickPlayer(event.getUser().playerTl("discordLinkLoginKick", "/link " + finalCode, ess.getApi().getInviteUrl()));
+                final Runnable kickTask = () -> event.getUser().getBase().kickPlayer(AdventureUtil.miniToLegacy(event.getUser().playerTl("discordLinkLoginKick", "/link " + finalCode, ess.getApi().getInviteUrl())));
                 if (Bukkit.isPrimaryThread()) {
                     kickTask.run();
                 } else {

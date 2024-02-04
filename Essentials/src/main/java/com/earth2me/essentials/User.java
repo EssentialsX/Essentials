@@ -834,7 +834,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void checkActivity() {
-        // Graceful time before the first afk check call. 
+        // Graceful time before the first afk check call.
         if (System.currentTimeMillis() - lastActivity <= 10000) {
             return;
         }
@@ -847,7 +847,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             lastActivity = 0;
             final double kickTime = autoafkkick / 60.0;
 
-            this.getBase().kickPlayer(playerTl("autoAfkKickReason", kickTime));
+            this.getBase().kickPlayer(AdventureUtil.miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
 
             for (final User user : ess.getOnlineUsers()) {
                 if (user.isAuthorized("essentials.kick.notify")) {
