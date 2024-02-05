@@ -645,7 +645,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                             final Component base = (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers())
                                     ? spyer.tlComponent("socialSpyMutedPrefix")
                                     : spyer.tlComponent("socialSpyPrefix");
-                            spyer.sendComponent(base.append(Component.text(AdventureUtil.legacyToAdventure(player.getDisplayName()) + ": " + event.getMessage())));
+                            spyer.sendComponent(base.append(AdventureUtil.legacyToAdventure(player.getDisplayName())).append(Component.text(": " + event.getMessage())));
                         }
                     }
                 }
