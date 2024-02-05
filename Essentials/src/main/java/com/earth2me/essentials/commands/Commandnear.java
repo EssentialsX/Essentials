@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.google.common.collect.Lists;
 import net.ess3.api.IUser;
@@ -74,7 +75,7 @@ public class Commandnear extends EssentialsCommand {
             } catch (final NumberFormatException ignored) {
             }
         }
-        sender.sendTl("nearbyPlayers", getLocal(sender, otherUser, radius));
+        sender.sendTl("nearbyPlayers", AdventureUtil.parsed(getLocal(sender, otherUser, radius)));
     }
 
     private String getLocal(final CommandSource source, final User user, final long radius) {

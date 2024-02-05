@@ -39,7 +39,7 @@ public class Commandkick extends EssentialsCommand {
             }
         }
 
-        String kickReason = args.length > 1 ? getFinalArg(args, 1) : tlLiteral("kickDefault");
+        String kickReason = args.length > 1 ? getFinalArg(args, 1) : AdventureUtil.miniToLegacy(tlLiteral("kickDefault"));
         kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
         final UserKickEvent event = new UserKickEvent(user, target, kickReason);

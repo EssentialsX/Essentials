@@ -28,7 +28,7 @@ public class HelpInput implements IText {
         String pluginName = "";
         String pluginNameLow = "";
         if (!match.equalsIgnoreCase("")) {
-            lines.add(user.playerTl("helpMatching", match));
+            lines.add(AdventureUtil.miniToLegacy(user.playerTl("helpMatching", match)));
         }
 
         final Multimap<Plugin, Command> pluginCommands = HashMultimap.create();
@@ -50,7 +50,7 @@ public class HelpInput implements IText {
                 if (pluginNameLow.equals(match)) {
                     lines.clear();
                     newLines.clear();
-                    lines.add(user.playerTl("helpFrom", p.getDescription().getName()));
+                    lines.add(AdventureUtil.miniToLegacy(user.playerTl("helpFrom", p.getDescription().getName())));
                 }
                 final boolean isOnWhitelist = user.isAuthorized("essentials.help." + pluginNameLow);
 
@@ -69,7 +69,7 @@ public class HelpInput implements IText {
                         if (pluginNameLow.contains("essentials")) {
                             final String node = "essentials." + commandName;
                             if (!ess.getSettings().isCommandDisabled(commandName) && user.isAuthorized(node)) {
-                                pluginLines.add(user.playerTl("helpLine", commandName, commandDescription));
+                                pluginLines.add(AdventureUtil.miniToLegacy(user.playerTl("helpLine", commandName, commandDescription)));
                             }
                         } else {
                             if (ess.getSettings().showNonEssCommandsInHelp()) {
@@ -82,7 +82,7 @@ public class HelpInput implements IText {
                                 }
 
                                 if (isOnWhitelist || user.isAuthorized("essentials.help." + pluginNameLow + "." + commandName)) {
-                                    pluginLines.add(user.playerTl("helpLine", commandName, commandDescription));
+                                    pluginLines.add(AdventureUtil.miniToLegacy(user.playerTl("helpLine", commandName, commandDescription)));
                                 } else if (permissions.length != 0) {
                                     boolean enabled = false;
 
@@ -94,11 +94,11 @@ public class HelpInput implements IText {
                                     }
 
                                     if (enabled) {
-                                        pluginLines.add(user.playerTl("helpLine", commandName, commandDescription));
+                                        pluginLines.add(AdventureUtil.miniToLegacy(user.playerTl("helpLine", commandName, commandDescription)));
                                     }
                                 } else {
                                     if (!ess.getSettings().hidePermissionlessHelp()) {
-                                        pluginLines.add(user.playerTl("helpLine", commandName, commandDescription));
+                                        pluginLines.add(AdventureUtil.miniToLegacy(user.playerTl("helpLine", commandName, commandDescription)));
                                     }
                                 }
                             }
@@ -112,7 +112,7 @@ public class HelpInput implements IText {
                         break;
                     }
                     if (match.equalsIgnoreCase("")) {
-                        lines.add(user.playerTl("helpPlugin", pluginName, pluginNameLow));
+                        lines.add(AdventureUtil.miniToLegacy(user.playerTl("helpPlugin", pluginName, pluginNameLow)));
                     }
                 }
             } catch (final NullPointerException ignored) {
