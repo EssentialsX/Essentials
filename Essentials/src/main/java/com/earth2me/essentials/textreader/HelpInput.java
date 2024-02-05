@@ -28,7 +28,7 @@ public class HelpInput implements IText {
         String pluginName = "";
         String pluginNameLow = "";
         if (!match.equalsIgnoreCase("")) {
-            lines.add(user.playerTl("helpMatching", match));
+            lines.add(AdventureUtil.miniToLegacy(user.playerTl("helpMatching", match)));
         }
 
         final Multimap<Plugin, Command> pluginCommands = HashMultimap.create();
