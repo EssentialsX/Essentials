@@ -52,7 +52,7 @@ public class Commandbanip extends EssentialsCommand {
             banReason = tlLiteral("defaultBanReason");
         }
 
-        final String banDisplay = tlLiteral("banFormat", banReason, senderDisplayName);
+        final String banDisplay = AdventureUtil.miniToLegacy(tlLiteral("banFormat", banReason, senderDisplayName));
 
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
         ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("playerBanIpAddress", senderDisplayName, ipAddress, banReason)));

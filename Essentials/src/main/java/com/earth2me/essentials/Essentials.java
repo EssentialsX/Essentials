@@ -904,7 +904,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public void showError(final CommandSource sender, final Throwable exception, final String commandLabel) {
         if (exception instanceof TranslatableException) {
-            sender.sendTl(((TranslatableException) exception).getTlKey(), ((TranslatableException) exception).getArgs());
+            final String tlMessage = sender.tl(((TranslatableException) exception).getTlKey(), ((TranslatableException) exception).getArgs());
+            sender.sendTl("errorWithMessage", AdventureUtil.parsed(tlMessage));
         } else {
             sender.sendTl("errorWithMessage", exception.getMessage());
         }

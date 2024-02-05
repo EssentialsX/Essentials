@@ -53,7 +53,8 @@ public class Commandtempban extends EssentialsCommand {
         ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, new Date(banTimestamp), senderName);
         final String expiry = DateUtil.formatDateDiff(banTimestamp);
 
-        user.getBase().kickPlayer(user.playerTl("tempBanned", expiry, senderDisplayName, banReason));
+        final String banDisplay = user.playerTl("tempBanned", expiry, senderDisplayName, banReason);
+        user.getBase().kickPlayer(AdventureUtil.miniToLegacy(banDisplay));
 
         ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("playerTempBanned", senderDisplayName, user.getName(), expiry, banReason)));
         ess.broadcastTl((IUser) null, "essentials.ban.notify", "playerTempBanned", senderDisplayName, user.getName(), expiry, banReason);
