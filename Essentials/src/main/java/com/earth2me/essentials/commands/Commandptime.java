@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
@@ -82,7 +83,7 @@ public class Commandptime extends EssentialsLoopCommand {
         }
 
         final String formattedTime = DescParseTickFormat.format(ticks);
-        sender.sendTl(fixed ? "pTimeSetFixed" : "pTimeSet", formattedTime, joiner.toString());
+        sender.sendTl(fixed ? "pTimeSetFixed" : "pTimeSet", AdventureUtil.parsed(formattedTime), joiner.toString());
     }
 
     public void getUserTime(final CommandSource sender, final IUser user) {
@@ -96,7 +97,7 @@ public class Commandptime extends EssentialsLoopCommand {
         }
 
         final String time = DescParseTickFormat.format(user.getBase().getPlayerTime());
-        sender.sendTl(user.getBase().isPlayerTimeRelative() ? "pTimeCurrent" : "pTimeCurrentFixed", user.getName(), time);
+        sender.sendTl(user.getBase().isPlayerTimeRelative() ? "pTimeCurrent" : "pTimeCurrentFixed", user.getName(), AdventureUtil.parsed(time));
     }
 
     private void setUserTime(final User user, final Long ticks, final Boolean relative) {
