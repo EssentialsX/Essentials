@@ -28,9 +28,9 @@ public class Commandsocialspy extends EssentialsToggleCommand {
 
         user.setSocialSpyEnabled(enabled);
 
-        user.sendTl("socialSpy", CommonPlaceholders.displayName(user), CommonPlaceholders.enableDisable(user.getSource(), enabled));
+        user.sendTl("socialSpy", user.getDisplayName(), CommonPlaceholders.enableDisable(user.getSource(), enabled));
         if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase())) {
-            sender.sendTl("socialSpy", CommonPlaceholders.displayName(user), CommonPlaceholders.enableDisable(user.getSource(), enabled));
+            sender.sendTl("socialSpy", user.getDisplayName(), CommonPlaceholders.enableDisable(user.getSource(), enabled));
         }
     }
 }

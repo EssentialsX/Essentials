@@ -3,9 +3,7 @@ package com.earth2me.essentials.signs;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import net.ess3.api.IEssentials;
-import net.ess3.api.IUser;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
@@ -40,7 +38,7 @@ public class SignGameMode extends EssentialsSign {
         charge.isAffordableFor(player);
 
         performSetMode(mode.toLowerCase(Locale.ENGLISH), player.getBase());
-        player.sendTl("gameMode", player.playerTl(player.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), CommonPlaceholders.displayName((IUser) player));
+        player.sendTl("gameMode", player.playerTl(player.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), player.getDisplayName());
         Trade.log("Sign", "gameMode", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
         charge.charge(player);
         return true;

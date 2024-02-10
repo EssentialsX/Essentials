@@ -3,9 +3,8 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.CommonPlaceholders;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.StringUtil;
-import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 
@@ -24,7 +23,7 @@ public class Commandkit extends EssentialsCommand {
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
             final String kitList = ess.getKits().listKits(ess, user);
-            user.sendTl(kitList.length() > 0 ? "kits" : "noKits", kitList);
+            user.sendTl(kitList.length() > 0 ? "kits" : "noKits", AdventureUtil.parsed(kitList));
             throw new NoChargeException();
         } else if (args.length > 1 && user.isAuthorized("essentials.kit.others")) {
             giveKits(getPlayer(server, user, args, 1), user, StringUtil.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim());
@@ -37,7 +36,7 @@ public class Commandkit extends EssentialsCommand {
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
             final String kitList = ess.getKits().listKits(ess, null);
-            sender.sendTl(kitList.length() > 0 ? "kits" : "noKits", kitList);
+            sender.sendTl(kitList.length() > 0 ? "kits" : "noKits", AdventureUtil.parsed(kitList));
             throw new NoChargeException();
         } else {
             final User userTo = getPlayer(server, args, 1, true, false);
@@ -45,7 +44,7 @@ public class Commandkit extends EssentialsCommand {
             for (final String kitName : args[0].toLowerCase(Locale.ENGLISH).split(",")) {
                 new Kit(kitName, ess).expandItems(userTo);
 
-                sender.sendTl("kitGiveTo", kitName, CommonPlaceholders.displayName((IUser) userTo));
+                sender.sendTl("kitGiveTo", kitName, userTo.getDisplayName());
                 userTo.sendTl("kitReceive", kitName);
             }
         }
@@ -81,7 +80,7 @@ public class Commandkit extends EssentialsCommand {
                 kit.chargeUser(userTo);
 
                 if (!userFrom.equals(userTo)) {
-                    userFrom.sendTl("kitGiveTo", kit.getName(), CommonPlaceholders.displayName((IUser) userTo));
+                    userFrom.sendTl("kitGiveTo", kit.getName(), userTo.getDisplayName());
                 }
 
                 userTo.sendTl("kitReceive", kit.getName());

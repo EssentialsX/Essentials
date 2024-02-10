@@ -10,7 +10,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.ess3.api.IEssentials;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -67,7 +66,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final Matcher matcher = ARGUMENT_PATTERN.matcher(usage);
         while (matcher.find()) {
             final String color = matcher.group(3).equals("<") ? tlLiteral("commandArgumentRequired") : tlLiteral("commandArgumentOptional");
-            matcher.appendReplacement(buffer, "$1" + color + matcher.group(2).replace("|", tlLiteral("commandArgumentOr") + "|" + color) + ChatColor.RESET);
+            matcher.appendReplacement(buffer, "$1" + color + matcher.group(2).replace("|", tlLiteral("commandArgumentOr") + "|" + color) + "<reset>");
         }
         matcher.appendTail(buffer);
         usageStrings.put(buffer.toString(), description);
