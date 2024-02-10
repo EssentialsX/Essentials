@@ -4,7 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.AdventureUtil;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.MuteStatusChangeEvent;
@@ -87,18 +86,18 @@ public class Commandmute extends EssentialsCommand {
             if (muted) {
                 if (muteTimestamp > 0) {
                     if (!user.hasMuteReason()) {
-                        sender.sendTl("mutedPlayerFor", CommonPlaceholders.displayName(user), muteTime);
+                        sender.sendTl("mutedPlayerFor", user.getDisplayName(), muteTime);
                         user.sendTl("playerMutedFor", muteTime);
                     } else {
-                        sender.sendTl("mutedPlayerForReason", CommonPlaceholders.displayName(user), muteTime, user.getMuteReason());
+                        sender.sendTl("mutedPlayerForReason", user.getDisplayName(), muteTime, user.getMuteReason());
                         user.sendTl("playerMutedForReason", muteTime, user.getMuteReason());
                     }
                 } else {
                     if (!user.hasMuteReason()) {
-                        sender.sendTl("mutedPlayer", CommonPlaceholders.displayName(user));
+                        sender.sendTl("mutedPlayer", user.getDisplayName());
                         user.sendTl("playerMuted");
                     } else {
-                        sender.sendTl("mutedPlayerReason", CommonPlaceholders.displayName(user), user.getMuteReason());
+                        sender.sendTl("mutedPlayerReason", user.getDisplayName(), user.getMuteReason());
                         user.sendTl("playerMutedReason", user.getMuteReason());
                     }
                 }
@@ -121,7 +120,7 @@ public class Commandmute extends EssentialsCommand {
                 ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral(tlKey, objects)));
                 ess.broadcastTl(null, "essentials.mute.notify", tlKey, objects);
             } else {
-                sender.sendTl("unmutedPlayer", CommonPlaceholders.displayName(user));
+                sender.sendTl("unmutedPlayer", user.getDisplayName());
                 user.sendTl("playerUnmuted");
             }
         }

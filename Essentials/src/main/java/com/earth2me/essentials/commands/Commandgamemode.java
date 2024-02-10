@@ -3,8 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.messaging.IMessageRecipient;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.GameMode;
 import org.bukkit.Server;
@@ -62,7 +60,7 @@ public class Commandgamemode extends EssentialsLoopCommand {
         }
 
         user.getBase().setGameMode(gameMode);
-        user.sendTl("gameMode", user.playerTl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), CommonPlaceholders.displayNameRecipient((IMessageRecipient) user));
+        user.sendTl("gameMode", user.playerTl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName());
     }
 
     private void setUserGamemode(final CommandSource sender, final GameMode gameMode, final User user) throws NotEnoughArgumentsException {
@@ -76,7 +74,7 @@ public class Commandgamemode extends EssentialsLoopCommand {
         }
 
         user.getBase().setGameMode(gameMode);
-        sender.sendTl("gameMode", sender.tl(gameMode.toString().toLowerCase(Locale.ENGLISH)), CommonPlaceholders.displayNameRecipient((IMessageRecipient) user));
+        sender.sendTl("gameMode", sender.tl(gameMode.toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName());
     }
 
     // essentials.gamemode will let them change to any but essentials.gamemode.survival would only let them change to survival.
