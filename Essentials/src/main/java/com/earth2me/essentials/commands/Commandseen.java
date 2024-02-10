@@ -102,7 +102,7 @@ public class Commandseen extends EssentialsCommand {
     private void seenOnline(final CommandSource sender, final User user, final boolean showIp) {
 
         user.setDisplayNick();
-        sender.sendTl("seenOnline", CommonPlaceholders.displayName(user), DateUtil.formatDateDiff(user.getLastLogin()));
+        sender.sendTl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin()));
 
         final List<String> history = user.getPastUsernames();
         if (history != null && !history.isEmpty()) {

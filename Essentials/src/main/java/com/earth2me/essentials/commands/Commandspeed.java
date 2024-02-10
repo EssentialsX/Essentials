@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.AdventureUtil;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.FloatUtil;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -54,11 +53,11 @@ public class Commandspeed extends EssentialsCommand {
 
         if (isFly) {
             user.getBase().setFlySpeed(getRealMoveSpeed(speed, true, isBypass));
-            user.sendTl("moveSpeed", AdventureUtil.parsed(user.playerTl("flying")), speed, CommonPlaceholders.displayName(user));
+            user.sendTl("moveSpeed", AdventureUtil.parsed(user.playerTl("flying")), speed, user.getDisplayName());
             return;
         }
         user.getBase().setWalkSpeed(getRealMoveSpeed(speed, false, isBypass));
-        user.sendTl("moveSpeed", AdventureUtil.parsed(user.playerTl("walking")), speed, CommonPlaceholders.displayName(user));
+        user.sendTl("moveSpeed", AdventureUtil.parsed(user.playerTl("walking")), speed, user.getDisplayName());
     }
 
     private void speedOtherPlayers(final Server server, final CommandSource sender, final boolean isFly, final boolean isBypass, final float speed, final String name) throws PlayerNotFoundException {

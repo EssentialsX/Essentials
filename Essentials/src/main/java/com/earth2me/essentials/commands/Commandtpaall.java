@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import net.ess3.api.events.TPARequestEvent;
 import org.bukkit.Server;
 
@@ -45,11 +44,11 @@ public class Commandtpaall extends EssentialsCommand {
                 final TPARequestEvent tpaEvent = new TPARequestEvent(sender, player, true);
                 ess.getServer().getPluginManager().callEvent(tpaEvent);
                 if (tpaEvent.isCancelled()) {
-                    sender.sendTl("teleportRequestCancelled", CommonPlaceholders.displayName(player));
+                    sender.sendTl("teleportRequestCancelled", player.getDisplayName());
                     continue;
                 }
                 player.requestTeleport(target, true);
-                player.sendTl("teleportHereRequest", CommonPlaceholders.displayName(target));
+                player.sendTl("teleportHereRequest", target.getDisplayName());
                 player.sendTl("typeTpaccept");
                 if (ess.getSettings().getTpaAcceptCancellation() != 0) {
                     player.sendTl("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation());

@@ -6,13 +6,11 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.textreader.SimpleTextPager;
 import com.earth2me.essentials.textreader.SimpleTranslatableText;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.Lists;
-import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import org.bukkit.Server;
@@ -102,7 +100,7 @@ public class Commandmail extends EssentialsCommand {
                 u.sendMail(user, msg);
             }
 
-            user.sendTl("mailSentTo", CommonPlaceholders.displayName((IUser) u), u.getName());
+            user.sendTl("mailSentTo", u.getDisplayName(), u.getName());
             user.sendMessage(msg);
             return;
         }
@@ -145,7 +143,7 @@ public class Commandmail extends EssentialsCommand {
                 u.sendMail(user, msg, dateDiff);
             }
 
-            user.sendTl("mailSentToExpire", CommonPlaceholders.displayName((IUser) u), DateUtil.formatDateDiff(dateDiff), u.getName());
+            user.sendTl("mailSentToExpire", u.getDisplayName(), DateUtil.formatDateDiff(dateDiff), u.getName());
             user.sendMessage(msg);
             return;
         }
@@ -187,7 +185,7 @@ public class Commandmail extends EssentialsCommand {
 
             final ArrayList<MailMessage> mails = mailUser.getMailMessages();
             if (mails == null || mails.isEmpty()) {
-                user.sendTl(mailUser == user ? "noMail" : "noMailOther", CommonPlaceholders.displayName((IUser) mailUser));
+                user.sendTl(mailUser == user ? "noMail" : "noMailOther", mailUser.getDisplayName());
                 throw new NoChargeException();
             }
 
@@ -227,7 +225,7 @@ public class Commandmail extends EssentialsCommand {
 
             final ArrayList<MailMessage> mails = mailUser.getMailMessages();
             if (mails == null || mails.isEmpty()) {
-                sender.sendTl("noMailOther", CommonPlaceholders.displayName((IUser) mailUser));
+                sender.sendTl("noMailOther", mailUser.getDisplayName());
                 throw new NoChargeException();
             }
 

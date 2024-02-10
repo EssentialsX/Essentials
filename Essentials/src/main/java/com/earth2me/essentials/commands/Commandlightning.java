@@ -2,9 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.google.common.collect.Lists;
-import net.ess3.api.IUser;
 import org.bukkit.Server;
 import org.bukkit.entity.LightningStrike;
 
@@ -35,7 +33,7 @@ public class Commandlightning extends EssentialsLoopCommand {
         }
         final int finalPower = power;
         loopOnlinePlayersConsumer(server, sender, false, true, args[0], player -> {
-            sender.sendTl("lightningUse", CommonPlaceholders.displayName((IUser) player));
+            sender.sendTl("lightningUse", player.getDisplayName());
             final LightningStrike strike = player.getBase().getWorld().strikeLightningEffect(player.getBase().getLocation());
 
             if (!player.isGodModeEnabled()) {
