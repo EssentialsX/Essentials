@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.TranslatableException;
@@ -97,7 +98,7 @@ public class Commandhome extends EssentialsCommand {
                             homes.add(user.playerTl("bedNull"));
                         }
                     }
-                    user.sendTl("homes", StringUtil.joinList(homes), count, getHomeLimit(finalPlayer));
+                    user.sendTl("homes", AdventureUtil.parsed(StringUtil.joinList(homes)), count, getHomeLimit(finalPlayer));
                 }
             });
             if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayerStub) {
