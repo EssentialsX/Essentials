@@ -45,7 +45,7 @@ public class Commandhelp extends EssentialsCommand {
                         final IEssentialsCommand essCommand = isEssCommand ? ess.getCommandMap().get(knownCmd.getValue().getName()) : null;
                         if (essCommand != null && !essCommand.getUsageStrings().isEmpty()) {
                             for (Map.Entry<String, String> usage : essCommand.getUsageStrings().entrySet()) {
-                                user.sendTl("commandHelpLineUsage", usage.getKey().replace("<command>", cmd), AdventureUtil.parsed(usage.getValue()));
+                                user.sendTl("commandHelpLineUsage", AdventureUtil.parsed(usage.getKey().replace("<command>", cmd)), AdventureUtil.parsed(usage.getValue()));
                             }
                         } else {
                             user.sendMessage(knownCmd.getValue().getUsage());
