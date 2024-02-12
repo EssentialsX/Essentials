@@ -19,7 +19,7 @@ public class Commandsuicide extends EssentialsCommand {
         user.getBase().setHealth(0);
         user.sendTl("suicideMessage");
         user.setDisplayNick();
-        ess.broadcastTl(user, "suicideSuccess", user.getDisplayName());
+        ess.broadcastTl(user, "suicideSuccess", new Object[]{user.getDisplayName()});
     }
 
     @Override
