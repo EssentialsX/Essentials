@@ -5,8 +5,6 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class SignWeather extends EssentialsSign {
     public SignWeather() {
         super("Weather");
@@ -29,16 +27,16 @@ public class SignWeather extends EssentialsSign {
             return true;
         }
         sign.setLine(1, "§c<sun|storm>");
-        throw new SignException(tl("onlySunStorm"));
+        throw new SignException("onlySunStorm");
     }
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         if (sign.getLine(1).isEmpty() && sign.getLine(2).isEmpty() && sign.getLine(3).isEmpty()) {
             if (player.getWorld().hasStorm()) {
-                player.sendMessage(tl("weatherSignStorm"));
+                player.sendTl("weatherSignStorm");
             } else {
-                player.sendMessage(tl("weatherSignSun"));
+                player.sendTl("weatherSignSun");
             }
             return true;
         }
@@ -58,6 +56,6 @@ public class SignWeather extends EssentialsSign {
             Trade.log("Sign", "WeatherStorm", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
             return true;
         }
-        throw new SignException(tl("onlySunStorm"));
+        throw new SignException("onlySunStorm");
     }
 }

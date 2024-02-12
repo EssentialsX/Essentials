@@ -6,6 +6,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.api.TranslatableException;
 import net.ess3.provider.PersistentDataProvider;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.SpawnEggProvider;
@@ -23,8 +24,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class LegacyItemDb extends AbstractItemDb {
     private final transient Map<String, Integer> items = new HashMap<>();
@@ -171,12 +170,12 @@ public class LegacyItemDb extends AbstractItemDb {
         }
 
         if (itemid < 1) {
-            throw new Exception(tl("unknownItemName", itemname));
+            throw new TranslatableException("unknownItemName", itemname);
         }
 
         final ItemData data = legacyIds.get(itemid);
         if (data == null) {
-            throw new Exception(tl("unknownItemId", itemid));
+            throw new TranslatableException("unknownItemId", itemid);
         }
 
         final Material mat = getFromLegacy(itemid, (byte) metaData);

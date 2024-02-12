@@ -5,6 +5,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -30,7 +31,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsSign {
     private static final String SIGN_OWNER_KEY = "sign-owner";
@@ -104,7 +105,7 @@ public class EssentialsSign {
             // they won't change it to §1[Signname]
             return true;
         }
-        sign.setLine(0, tl("signFormatFail", this.signName));
+        sign.setLine(0, AdventureUtil.miniToLegacy(tlLiteral("signFormatFail", this.signName)));
 
         final SignCreateEvent signEvent = new SignCreateEvent(sign, this, user);
         ess.getServer().getPluginManager().callEvent(signEvent);
@@ -138,7 +139,7 @@ public class EssentialsSign {
     }
 
     public String getSuccessName() {
-        String successName = tl("signFormatSuccess", this.signName);
+        String successName = AdventureUtil.miniToLegacy(tlLiteral("signFormatSuccess", this.signName));
         if (successName.isEmpty() || !successName.contains(this.signName)) {
             // Set to null to cause an error in place of no functionality. This makes an error obvious as opposed to leaving users baffled by lack of
             // functionality.
@@ -148,7 +149,7 @@ public class EssentialsSign {
     }
 
     public String getTemplateName() {
-        return tl("signFormatTemplate", this.signName);
+        return AdventureUtil.miniToLegacy(tlLiteral("signFormatTemplate", this.signName));
     }
 
     public String getName() {
@@ -362,7 +363,7 @@ public class EssentialsSign {
         final ItemStack item = getItemStack(itemType, 1, allowId, ess);
         final int amount = Math.min(getIntegerPositive(getSignText(sign, amountIndex)), item.getType().getMaxStackSize() * player.getBase().getInventory().getSize());
         if (item.getType() == Material.AIR || amount < 1) {
-            throw new SignException(tl("moreThanZero"));
+            throw new SignException("moreThanZero");
         }
         item.setAmount(amount);
         return new Trade(item, ess);
@@ -371,7 +372,7 @@ public class EssentialsSign {
     protected final void validateInteger(final ISign sign, final int index) throws SignException {
         final String line = getSignText(sign, index);
         if (line.isEmpty()) {
-            throw new SignException("Empty line " + index);
+            throw new SignException("emptySignLine", index + 1);
         }
         final int quantity = getIntegerPositive(line);
         sign.setLine(index, Integer.toString(quantity));
@@ -380,7 +381,7 @@ public class EssentialsSign {
     protected final int getIntegerPositive(final String line) throws SignException {
         final int quantity = getInteger(line);
         if (quantity < 1) {
-            throw new SignException(tl("moreThanZero"));
+            throw new SignException("moreThanZero");
         }
         return quantity;
     }
@@ -389,7 +390,7 @@ public class EssentialsSign {
         try {
             return Integer.parseInt(line);
         } catch (final NumberFormatException ex) {
-            throw new SignException("Invalid sign", ex);
+            throw new SignException("invalidSign");
         }
     }
 
@@ -410,7 +411,7 @@ public class EssentialsSign {
             item.setAmount(quantity);
             return item;
         } catch (final Exception ex) {
-            throw new SignException(ex.getMessage(), ex);
+            throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
     }
 
@@ -428,7 +429,7 @@ public class EssentialsSign {
                 stack = metaStack.getItemStack();
             }
         } catch (final Exception ex) {
-            throw new SignException(ex.getMessage(), ex);
+            throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
         return stack;
     }
@@ -441,7 +442,7 @@ public class EssentialsSign {
     protected final BigDecimal getBigDecimalPositive(final String line, final IEssentials ess) throws SignException {
         final BigDecimal quantity = getBigDecimal(line, ess);
         if (quantity.compareTo(MINTRANSACTION) < 0) {
-            throw new SignException(tl("moreThanZero"));
+            throw new SignException("moreThanZero");
         }
         return quantity;
     }
@@ -450,7 +451,7 @@ public class EssentialsSign {
         try {
             return new BigDecimal(NumberUtil.sanitizeCurrencyString(line, ess));
         } catch (final ArithmeticException | NumberFormatException ex) {
-            throw new SignException(ex.getMessage(), ex);
+            throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
     }
 
@@ -472,7 +473,7 @@ public class EssentialsSign {
         if (money == null) {
             final String[] split = line.split("[ :]+", 2);
             if (split.length != 2) {
-                throw new SignException(tl("invalidCharge"));
+                throw new SignException("invalidCharge");
             }
             final int quantity = getIntegerPositive(split[0]);
 

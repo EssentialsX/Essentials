@@ -7,6 +7,7 @@ import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -16,8 +17,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandgive extends EssentialsLoopCommand {
     public Commandgive() {
@@ -34,7 +33,7 @@ public class Commandgive extends EssentialsLoopCommand {
         final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
         if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).canSpawnItem(stack.getType())) {
-            throw new Exception(tl("cantSpawnItem", itemname));
+            throw new TranslatableException("cantSpawnItem", itemname);
         }
 
         try {
@@ -45,7 +44,7 @@ public class Commandgive extends EssentialsLoopCommand {
                 stack.setAmount(Integer.parseInt(args[2]));
             } else if (ess.getSettings().getDefaultStackSize() > 0) {
                 stack.setAmount(ess.getSettings().getDefaultStackSize());
-            } else if (ess.getSettings().getOversizedStackSize() > 0 && sender.isAuthorized("essentials.oversizedstacks", ess)) {
+            } else if (ess.getSettings().getOversizedStackSize() > 0 && sender.isAuthorized("essentials.oversizedstacks")) {
                 stack.setAmount(ess.getSettings().getOversizedStackSize());
             }
         } catch (final NumberFormatException e) {
@@ -54,7 +53,7 @@ public class Commandgive extends EssentialsLoopCommand {
 
         final MetaItemStack metaStack = new MetaItemStack(stack);
         if (!metaStack.canSpawn(ess)) {
-            throw new Exception(tl("unableToSpawnItem", itemname));
+            throw new TranslatableException("unableToSpawnItem", itemname);
         }
 
         if (args.length > 3) {
@@ -73,14 +72,14 @@ public class Commandgive extends EssentialsLoopCommand {
         }
 
         if (stack.getType() == Material.AIR) {
-            throw new Exception(tl("cantSpawnItem", "Air"));
+            throw new TranslatableException("cantSpawnItem", "Air");
         }
 
         final String itemName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
         final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
         final ItemStack finalStack = stack;
         loopOnlinePlayersConsumer(server, sender, false, true, args[0], player -> {
-            sender.sendMessage(tl("giveSpawn", finalStack.getAmount(), itemName, player.getDisplayName()));
+            sender.sendTl("giveSpawn", finalStack.getAmount(), itemName, player.getDisplayName());
 
             final Map<Integer, ItemStack> leftovers = Inventories.addItem(player.getBase(), player.isAuthorized("essentials.oversizedstacks") ? ess.getSettings().getOversizedStackSize() : 0, finalStack);
 
@@ -89,7 +88,7 @@ public class Commandgive extends EssentialsLoopCommand {
                     final World w = player.getWorld();
                     w.dropItemNaturally(player.getLocation(), item);
                 } else {
-                    sender.sendMessage(tl("giveSpawnFailure", item.getAmount(), itemName, player.getDisplayName()));
+                    sender.sendTl("giveSpawnFailure", item.getAmount(), itemName, player.getDisplayName());
                 }
             }
 

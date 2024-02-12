@@ -67,6 +67,16 @@ public interface IEssentials extends Plugin {
 
     int broadcastMessage(String permission, String message);
 
+    void broadcastTl(String tlKey, Object... args);
+
+    void broadcastTl(IUser sender, String tlKey, Object... args);
+
+    void broadcastTl(IUser sender, String permission, String tlKey, Object... args);
+
+    void broadcastTl(IUser sender, Predicate<IUser> shouldExclude, String tlKey, Object... args);
+
+    void broadcastTl(IUser sender, Predicate<IUser> shouldExclude, boolean parseKeywords, String tlKey, Object... args);
+
     ISettings getSettings();
 
     BukkitScheduler getScheduler();

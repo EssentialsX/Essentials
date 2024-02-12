@@ -4,6 +4,7 @@ import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import net.ess3.api.TranslatableException;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
@@ -37,8 +38,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.stream.Collectors;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public enum MobData {
 
@@ -328,14 +327,14 @@ public enum MobData {
                 }
                 this.matched = rawData;
             } catch (final Exception e) {
-                throw new Exception(tl("sheepMalformedColor"), e);
+                throw new TranslatableException(e, "sheepMalformedColor");
             }
         } else if (this.value.equals(Data.EXP)) {
             try {
                 ((ExperienceOrb) spawned).setExperience(Integer.parseInt(rawData));
                 this.matched = rawData;
             } catch (final NumberFormatException e) {
-                throw new Exception(tl("invalidNumber"), e);
+                throw new TranslatableException(e, "invalidNumber");
             }
         } else if (this.value.equals(Data.SIZE)) {
             try {
@@ -347,7 +346,7 @@ public enum MobData {
                 }
                 this.matched = rawData;
             } catch (final NumberFormatException e) {
-                throw new Exception(tl("slimeMalformedSize"), e);
+                throw new TranslatableException(e, "slimeMalformedSize");
             }
         } else if (this.value instanceof Horse.Color) {
             ((Horse) spawned).setColor((Horse.Color) this.value);

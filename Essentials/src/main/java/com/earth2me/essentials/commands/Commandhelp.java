@@ -7,6 +7,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.provider.KnownCommandsProvider;
 import org.bukkit.Server;
@@ -18,8 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandhelp extends EssentialsCommand {
     public Commandhelp() {
@@ -39,15 +38,15 @@ public class Commandhelp extends EssentialsCommand {
                 final String cmd = pageStr.substring(1);
                 for (final Map.Entry<String, Command> knownCmd : ess.provider(KnownCommandsProvider.class).getKnownCommands().entrySet()) {
                     if (knownCmd.getKey().equalsIgnoreCase(cmd)) {
-                        user.sendMessage(tl("commandHelpLine1", cmd));
-                        user.sendMessage(tl("commandHelpLine2", knownCmd.getValue().getDescription()));
-                        user.sendMessage(tl("commandHelpLine4", knownCmd.getValue().getAliases().toString()));
-                        user.sendMessage(tl("commandHelpLine3"));
+                        user.sendTl("commandHelpLine1", cmd);
+                        user.sendTl("commandHelpLine2", knownCmd.getValue().getDescription());
+                        user.sendTl("commandHelpLine4", knownCmd.getValue().getAliases().toString());
+                        user.sendTl("commandHelpLine3");
                         final boolean isEssCommand = knownCmd.getValue() instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) knownCmd.getValue()).getPlugin().equals(ess);
                         final IEssentialsCommand essCommand = isEssCommand ? ess.getCommandMap().get(knownCmd.getValue().getName()) : null;
                         if (essCommand != null && !essCommand.getUsageStrings().isEmpty()) {
                             for (Map.Entry<String, String> usage : essCommand.getUsageStrings().entrySet()) {
-                                user.sendMessage(tl("commandHelpLineUsage", usage.getKey().replace("<command>", cmd), usage.getValue()));
+                                user.sendTl("commandHelpLineUsage", AdventureUtil.parsed(usage.getKey().replace("<command>", cmd)), AdventureUtil.parsed(usage.getValue()));
                             }
                         } else {
                             user.sendMessage(knownCmd.getValue().getUsage());
@@ -78,7 +77,7 @@ public class Commandhelp extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        sender.sendMessage(tl("helpConsole"));
+        sender.sendTl("helpConsole");
     }
 
     @Override

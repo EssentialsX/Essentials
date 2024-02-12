@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.ISettings;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.google.common.collect.Iterables;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandtogglejail extends EssentialsCommand {
     private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
@@ -38,13 +39,13 @@ public class Commandtogglejail extends EssentialsCommand {
         if (!player.isJailed()) {
             if (!player.getBase().isOnline()) {
                 if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.togglejail.offline")) {
-                    sender.sendMessage(tl("mayNotJailOffline"));
+                    sender.sendTl("mayNotJailOffline");
                     return;
                 }
             }
 
             if (player.isAuthorized("essentials.jail.exempt")) {
-                sender.sendMessage(tl("mayNotJail"));
+                sender.sendTl("mayNotJail");
                 return;
             }
 
@@ -76,7 +77,7 @@ public class Commandtogglejail extends EssentialsCommand {
                 future.thenAccept(success -> {
                     if (success) {
                         player.setJailed(true);
-                        player.sendMessage(tl("userJailed"));
+                        player.sendTl("userJailed");
                         player.setJail(null);
                         player.setJail(jailName);
                         if (args.length > 2) {
@@ -84,11 +85,21 @@ public class Commandtogglejail extends EssentialsCommand {
                             // 50 MSPT (milliseconds per tick)
                             player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
                         }
-                        sender.sendMessage(timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime)) : tl("playerJailed", player.getName()));
 
-                        final String notifyMessage = timeDiff > 0 ? tl("jailNotifyJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime), sender.getSender().getName()) : tl("jailNotifyJailed", player.getName(), sender.getSender().getName());
-                        ess.getLogger().log(Level.INFO, notifyMessage);
-                        ess.broadcastMessage("essentials.jail.notify", notifyMessage);
+                        final String tlKey;
+                        final Object[] objects;
+                        if (timeDiff > 0) {
+                            tlKey = "jailNotifyJailedFor";
+                            objects = new Object[]{player.getName(), DateUtil.formatDateDiff(finalDisplayTime), sender.getSender().getName()};
+                            sender.sendTl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime));
+                        } else {
+                            tlKey = "jailNotifyJailed";
+                            objects = new Object[]{player.getName(), sender.getSender().getName(), sender.getSender().getName()};
+                            sender.sendTl("playerJailed", player.getName());
+                        }
+
+                        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral(tlKey, objects)));
+                        ess.broadcastTl(null, "essentials.jail.notify", tlKey, objects);
                     }
                 });
                 if (player.getBase().isOnline()) {
@@ -101,7 +112,7 @@ public class Commandtogglejail extends EssentialsCommand {
         }
 
         if (args.length >= 2 && player.isJailed() && !args[1].equalsIgnoreCase(player.getJail())) {
-            sender.sendMessage(tl("jailAlreadyIncarcerated", player.getJail()));
+            sender.sendTl("jailAlreadyIncarcerated", player.getJail());
             return;
         }
 
@@ -111,11 +122,12 @@ public class Commandtogglejail extends EssentialsCommand {
             final long timeDiff = DateUtil.parseDateDiff(unparsedTime, true, ess.getSettings().isJailOnlineTime());
             player.setJailTimeout(timeDiff);
             player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
-            sender.sendMessage(tl("jailSentenceExtended", DateUtil.formatDateDiff(displayTimeDiff)));
+            sender.sendTl("jailSentenceExtended", DateUtil.formatDateDiff(displayTimeDiff));
 
-            final String notifyMessage = tl("jailNotifySentenceExtended", player.getName(), DateUtil.formatDateDiff(displayTimeDiff), sender.getSender().getName());
-            ess.getLogger().log(Level.INFO, notifyMessage);
-            ess.broadcastMessage("essentials.jail.notify", notifyMessage);
+            final String tlKey = "jailNotifySentenceExtended";
+            final Object[] objects = new Object[]{player.getName(), DateUtil.formatDateDiff(displayTimeDiff), sender.getSender().getName()};
+            ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral(tlKey, objects)));
+            ess.broadcastTl(null, "essentials.jail.notify", tlKey, objects);
             return;
         }
 
@@ -130,20 +142,20 @@ public class Commandtogglejail extends EssentialsCommand {
             if (!event.isCancelled()) {
                 player.setJailed(false);
                 player.setJailTimeout(0);
-                player.sendMessage(tl("jailReleasedPlayerNotify"));
+                player.sendTl("jailReleasedPlayerNotify");
                 player.setJail(null);
                 if (player.getBase().isOnline()) {
                     final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                     future.thenAccept(success -> {
                         if (success) {
-                            sender.sendMessage(tl("jailReleased", player.getName()));
+                            sender.sendTl("jailReleased", player.getName());
                         }
                     });
                     if (ess.getSettings().getTeleportWhenFreePolicy() == ISettings.TeleportWhenFreePolicy.BACK) {
                         player.getAsyncTeleport().back(future);
                         future.exceptionally(e -> {
                             player.getAsyncTeleport().respawn(null, PlayerTeleportEvent.TeleportCause.PLUGIN, new CompletableFuture<>());
-                            sender.sendMessage(tl("jailReleased", player.getName()));
+                            sender.sendTl("jailReleased", player.getName());
                             return false;
                         });
                     } else if (ess.getSettings().getTeleportWhenFreePolicy() == ISettings.TeleportWhenFreePolicy.SPAWN) {
@@ -151,7 +163,7 @@ public class Commandtogglejail extends EssentialsCommand {
                     }
                     return;
                 }
-                sender.sendMessage(tl("jailReleased", player.getName()));
+                sender.sendTl("jailReleased", player.getName());
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.earth2me.essentials.textreader;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.ess3.api.IEssentials;
@@ -17,8 +18,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class HelpInput implements IText {
     private final transient List<String> lines = new ArrayList<>();
     private final transient List<String> chapters = new ArrayList<>();
@@ -30,7 +29,7 @@ public class HelpInput implements IText {
         String pluginName = "";
         String pluginNameLow = "";
         if (!match.equalsIgnoreCase("")) {
-            lines.add(tl("helpMatching", match));
+            lines.add(AdventureUtil.miniToLegacy(user.playerTl("helpMatching", match)));
         }
 
         final Multimap<Plugin, Command> pluginCommands = HashMultimap.create();
@@ -52,7 +51,7 @@ public class HelpInput implements IText {
                 if (pluginNameLow.equals(match)) {
                     lines.clear();
                     newLines.clear();
-                    lines.add(tl("helpFrom", p.getDescription().getName()));
+                    lines.add(AdventureUtil.miniToLegacy(user.playerTl("helpFrom", p.getDescription().getName())));
                 }
                 final boolean isOnWhitelist = user.isAuthorized("essentials.help." + pluginNameLow);
 
@@ -71,7 +70,7 @@ public class HelpInput implements IText {
                         if (pluginNameLow.contains("essentials")) {
                             final String node = "essentials." + commandName;
                             if (!ess.getSettings().isCommandDisabled(commandName) && user.isAuthorized(node)) {
-                                pluginLines.add(tl("helpLine", commandName, commandDescription));
+                                pluginLines.add(AdventureUtil.miniToLegacy(user.playerTl("helpLine", commandName, commandDescription)));
                             }
                         } else {
                             if (ess.getSettings().showNonEssCommandsInHelp()) {
@@ -84,7 +83,7 @@ public class HelpInput implements IText {
                                 }
 
                                 if (isOnWhitelist || user.isAuthorized("essentials.help." + pluginNameLow + "." + commandName)) {
-                                    pluginLines.add(tl("helpLine", commandName, commandDescription));
+                                    pluginLines.add(AdventureUtil.miniToLegacy(user.playerTl("helpLine", commandName, commandDescription)));
                                 } else if (permissions.length != 0) {
                                     boolean enabled = false;
 
@@ -96,11 +95,11 @@ public class HelpInput implements IText {
                                     }
 
                                     if (enabled) {
-                                        pluginLines.add(tl("helpLine", commandName, commandDescription));
+                                        pluginLines.add(AdventureUtil.miniToLegacy(user.playerTl("helpLine", commandName, commandDescription)));
                                     }
                                 } else {
                                     if (!ess.getSettings().hidePermissionlessHelp()) {
-                                        pluginLines.add(tl("helpLine", commandName, commandDescription));
+                                        pluginLines.add(AdventureUtil.miniToLegacy(user.playerTl("helpLine", commandName, commandDescription)));
                                     }
                                 }
                             }
@@ -114,13 +113,13 @@ public class HelpInput implements IText {
                         break;
                     }
                     if (match.equalsIgnoreCase("")) {
-                        lines.add(tl("helpPlugin", pluginName, pluginNameLow));
+                        lines.add(AdventureUtil.miniToLegacy(user.playerTl("helpPlugin", pluginName, pluginNameLow)));
                     }
                 }
             } catch (final NullPointerException ignored) {
             } catch (final Exception ex) {
                 if (!reported) {
-                    ess.getLogger().log(Level.WARNING, tl("commandHelpFailedForPlugin", pluginNameLow), ex);
+                    ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(user.playerTl("commandHelpFailedForPlugin", pluginNameLow)), ex);
                 }
                 reported = true;
             }

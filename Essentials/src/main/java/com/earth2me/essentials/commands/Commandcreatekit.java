@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.PasteUtil;
+import net.ess3.api.TranslatableException;
 import net.ess3.provider.SerializationProvider;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandcreatekit extends EssentialsCommand {
     public Commandcreatekit() {
@@ -46,7 +47,7 @@ public class Commandcreatekit extends EssentialsCommand {
         boolean useSerializationProvider = ess.getSettings().isUseBetterKits();
 
         if (useSerializationProvider && serializationProvider == null) {
-            ess.showError(user.getSource(), new Exception(tl("createKitUnsupported")), commandLabel);
+            ess.showError(user.getSource(), new TranslatableException("createKitUnsupported"), commandLabel);
             useSerializationProvider = false;
         }
 
@@ -64,7 +65,7 @@ public class Commandcreatekit extends EssentialsCommand {
         // Some users might want to directly write to config knowing the consequences. *shrug*
         if (!ess.getSettings().isPastebinCreateKit()) {
             ess.getKits().addKit(kitname, list, delay);
-            user.sendMessage(tl("createdKit", kitname, list.size(), delay));
+            user.sendTl("createdKit", kitname, list.size(), delay);
         } else {
             uploadPaste(user.getSource(), kitname, delay, list);
         }
@@ -88,10 +89,10 @@ public class Commandcreatekit extends EssentialsCommand {
                 final CompletableFuture<PasteUtil.PasteResult> future = PasteUtil.createPaste(Collections.singletonList(new PasteUtil.PasteFile("kit_" + kitName + ".yml", fileContents)));
                 future.thenAccept(result -> {
                     if (result != null) {
-                        final String separator = tl("createKitSeparator");
+                        final String separator = tlLiteral("createKitSeparator");
                         final String delayFormat = delay <= 0 ? "0" : DateUtil.formatDateDiff(System.currentTimeMillis() + (delay * 1000));
                         sender.sendMessage(separator);
-                        sender.sendMessage(tl("createKitSuccess", kitName, delayFormat, result.getPasteUrl()));
+                        sender.sendTl("createKitSuccess", kitName, delayFormat, result.getPasteUrl());
                         sender.sendMessage(separator);
                         if (ess.getSettings().isDebug()) {
                             ess.getLogger().info(sender.getSender().getName() + " created a kit: " + result.getPasteUrl());
@@ -99,12 +100,12 @@ public class Commandcreatekit extends EssentialsCommand {
                     }
                 });
                 future.exceptionally(throwable -> {
-                    sender.sendMessage(tl("createKitFailed", kitName));
+                    sender.sendTl("createKitFailed", kitName);
                     ess.getLogger().log(Level.SEVERE, "Error creating kit: ", throwable);
                     return null;
                 });
             } catch (Exception e) {
-                sender.sendMessage(tl("createKitFailed", kitName));
+                sender.sendTl("createKitFailed", kitName);
                 ess.getLogger().log(Level.SEVERE, "Error creating kit: ", e);
             }
         });

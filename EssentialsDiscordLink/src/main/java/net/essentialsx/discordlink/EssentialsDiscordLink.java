@@ -3,6 +3,7 @@ package net.essentialsx.discordlink;
 import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.metrics.MetricsWrapper;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.google.common.collect.ImmutableSet;
 import net.essentialsx.api.v2.services.discord.DiscordService;
 import net.essentialsx.api.v2.services.discord.InteractionException;
@@ -23,7 +24,7 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsDiscordLink extends JavaPlugin {
     private transient IEssentials ess;
@@ -44,7 +45,7 @@ public class EssentialsDiscordLink extends JavaPlugin {
             return;
         }
         if (!getDescription().getVersion().equals(ess.getDescription().getVersion())) {
-            getLogger().log(Level.WARNING, tl("versionMismatchAll"));
+            getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("versionMismatchAll")));
         }
 
         api = getServer().getServicesManager().load(DiscordService.class);

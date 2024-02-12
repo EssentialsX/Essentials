@@ -6,9 +6,11 @@ import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.api.TranslatableException;
 import net.ess3.api.events.KitClaimEvent;
 import net.ess3.provider.SerializationProvider;
 import net.essentialsx.api.v2.events.KitPreExpandItemsEvent;
@@ -26,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Kit {
     final IEssentials ess;
@@ -41,7 +43,7 @@ public class Kit {
         this.charge = new Trade("kit-" + kitName, new Trade("kit-kit", ess), ess);
 
         if (kit == null) {
-            throw new Exception(tl("kitNotFound"));
+            throw new TranslatableException("kitNotFound");
         }
     }
 
@@ -51,7 +53,7 @@ public class Kit {
 
     public void checkPerms(final User user) throws Exception {
         if (!user.isAuthorized("essentials.kits." + kitName)) {
-            throw new Exception(tl("noKitPermission", "essentials.kits." + kitName));
+            throw new TranslatableException("noKitPermission", "essentials.kits." + kitName);
         }
     }
 
@@ -60,10 +62,10 @@ public class Kit {
 
         if (nextUse == 0L) {
         } else if (nextUse < 0L) {
-            user.sendMessage(tl("kitOnce"));
+            user.sendTl("kitOnce");
             throw new NoChargeException();
         } else {
-            user.sendMessage(tl("kitTimed", DateUtil.formatDateDiff(nextUse)));
+            user.sendTl("kitTimed", DateUtil.formatDateDiff(nextUse));
             throw new NoChargeException();
         }
     }
@@ -97,7 +99,7 @@ public class Kit {
             // Make sure delay is valid
             delay = kit.containsKey("delay") ? ((Number) kit.get("delay")).doubleValue() : 0.0d;
         } catch (final Exception e) {
-            throw new Exception(tl("kitError2"));
+            throw new TranslatableException("kitError2");
         }
 
         // When was the last kit used?
@@ -131,7 +133,7 @@ public class Kit {
 
     public List<String> getItems() throws Exception {
         if (kit == null) {
-            throw new Exception(tl("kitNotFound"));
+            throw new TranslatableException("kitNotFound");
         }
         try {
             final List<String> itemList = new ArrayList<>();
@@ -149,7 +151,7 @@ public class Kit {
             throw new Exception("Invalid item list");
         } catch (final Exception e) {
             ess.getLogger().log(Level.WARNING, "Error parsing kit " + kitName + ": " + e.getMessage());
-            throw new Exception(tl("kitError2"), e);
+            throw new TranslatableException(e,"kitError2");
         }
     }
 
@@ -194,7 +196,7 @@ public class Kit {
 
                 if (kitItem.startsWith("@")) {
                     if (serializationProvider == null) {
-                        ess.getLogger().log(Level.WARNING, tl("kitError3", kitName, user.getName()));
+                        ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("kitError3", kitName, user.getName())));
                         continue;
                     }
                     stack = serializationProvider.deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
@@ -228,7 +230,7 @@ public class Kit {
             final ItemStack[] itemArray = itemList.toArray(new ItemStack[0]);
 
             if (!isDropItemsIfFull && !Inventories.hasSpace(user.getBase(), maxStackSize, autoEquip, itemArray)) {
-                user.sendMessage(tl("kitInvFullNoDrop"));
+                user.sendTl("kitInvFullNoDrop");
                 return false;
             }
 
@@ -265,12 +267,12 @@ public class Kit {
             }
 
             if (spew) {
-                user.sendMessage(tl("kitInvFull"));
+                user.sendTl("kitInvFull");
             }
         } catch (final Exception e) {
             user.getBase().updateInventory();
             ess.getLogger().log(Level.WARNING, e.getMessage());
-            throw new Exception(tl("kitError2"), e);
+            throw new TranslatableException(e, "kitError2");
         }
         return true;
     }

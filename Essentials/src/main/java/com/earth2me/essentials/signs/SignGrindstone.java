@@ -4,8 +4,6 @@ import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 import net.ess3.provider.ContainerProvider;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class SignGrindstone extends EssentialsSign {
     public SignGrindstone() {
         super("Grindstone");
@@ -14,7 +12,7 @@ public class SignGrindstone extends EssentialsSign {
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) {
         if (ess.provider(ContainerProvider.class) == null) {
-            player.sendMessage(tl("unsupportedBrand"));
+            player.sendTl("unsupportedBrand");
             return false;
         }
         return true;

@@ -444,8 +444,22 @@ debug: false
 # If you don't set this, the default locale of the server will be used.
 # For example, to set language to English, set locale to en, to use the file "messages_en.properties".
 # Don't forget to remove the # in front of the line.
-# For more information, visit http://wiki.ess3.net/wiki/Locale
+# For more information, visit https://essentialsx.net/wiki/Locale.html
 #locale: en
+
+# Should EssentialsX use player's language instead of the server's when sending messages?
+# This is useful if you want to use a different language for your server than for your players.
+# For example, if you have your server set to English and a player who speaks French, you can set this to true
+# and EssentialsX will send messages in French to the player and messages in the console as English.
+# If a player's language is not known, the server's language (or one defined above) will be used.
+per-player-locale: false
+
+# Change the default primary and secondary colours used in EssentialsX messages.
+# Some messages may use custom colours, which will need to be edited in the appropriate message files.
+# For more information on customising messages, see https://essentialsx.net/wiki/Locale.html
+message-colors:
+  primary: '#ffaa00'
+  secondary: '#ff5555'
 
 # Turn off god mode when people leave the server.
 remove-god-on-disconnect: false

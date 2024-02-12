@@ -10,8 +10,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandbottom extends EssentialsCommand {
 
     public Commandbottom() {
@@ -29,7 +27,7 @@ public class Commandbottom extends EssentialsCommand {
         final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
         future.thenAccept(success -> {
             if (success) {
-                user.sendMessage(tl("teleportBottom", safe.getWorld().getName(), safe.getBlockX(), safe.getBlockY(), safe.getBlockZ()));
+                user.sendTl("teleportBottom", safe.getWorld().getName(), safe.getBlockX(), safe.getBlockY(), safe.getBlockZ());
             }
         });
         user.getAsyncTeleport().teleport(safe, new Trade(this.getName(), ess), PlayerTeleportEvent.TeleportCause.COMMAND, future);

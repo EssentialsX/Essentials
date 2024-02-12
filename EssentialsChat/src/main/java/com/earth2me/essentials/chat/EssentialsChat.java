@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.chat.processing.ChatHandler;
 import com.earth2me.essentials.metrics.MetricsWrapper;
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsChat extends JavaPlugin {
     private transient IEssentials ess;
@@ -24,7 +25,7 @@ public class EssentialsChat extends JavaPlugin {
         final PluginManager pluginManager = getServer().getPluginManager();
         ess = (IEssentials) pluginManager.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
-            getLogger().log(Level.WARNING, tl("versionMismatchAll"));
+            getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("versionMismatchAll")));
         }
         if (!ess.isEnabled()) {
             this.setEnabled(false);

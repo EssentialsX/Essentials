@@ -8,6 +8,7 @@ import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
@@ -15,7 +16,11 @@ import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.SyncCommandsProvider;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.event.EventPriority;
@@ -45,7 +50,7 @@ import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Settings implements net.ess3.api.ISettings {
     private static final BigDecimal DEFAULT_MAX_MONEY = new BigDecimal("10000000000000");
@@ -138,6 +143,8 @@ public class Settings implements net.ess3.api.ISettings {
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
     private Map<String, String> worldAliases;
+    private Tag primaryColor = Tag.styling(NamedTextColor.GOLD);
+    private Tag secondaryColor = Tag.styling(NamedTextColor.RED);
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -787,6 +794,8 @@ public class Settings implements net.ess3.api.ISettings {
         bindingItemPolicy = _getBindingItemsPolicy();
         currencySymbol = _getCurrencySymbol();
         worldAliases = _getWorldAliases();
+        primaryColor = _getPrimaryColor();
+        secondaryColor = _getSecondaryColor();
 
         reloadCount.incrementAndGet();
     }
@@ -817,7 +826,7 @@ public class Settings implements net.ess3.api.ISettings {
                 final ItemStack iStack = itemDb.get(itemName);
                 epItemSpwn.add(iStack.getType());
             } catch (final Exception ex) {
-                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
+                ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("unknownItemInList", itemName, "item-spawn-blacklist")), ex);
             }
         }
         return epItemSpwn;
@@ -845,7 +854,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (final Exception ex) {
-                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", signName, "enabledSigns"));
+                ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("unknownItemInList", signName, "enabledSigns")));
                 continue;
             }
             signsEnabled = true;
@@ -889,6 +898,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public String getLocale() {
         return config.getString("locale", "");
+    }
+
+    @Override
+    public boolean isPerPlayerLocale() {
+        return config.getBoolean("per-player-locale", false);
     }
 
     private String currencySymbol = "$";
@@ -959,7 +973,7 @@ public class Settings implements net.ess3.api.ISettings {
             }
 
             if (mat == null) {
-                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
+                ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("unknownItemInList", itemName, configName)));
             } else {
                 list.add(mat);
             }
@@ -1707,7 +1721,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (final Exception ex) {
-                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", signName, "unprotected-sign-names"));
+                ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("unknownItemInList", signName, "unprotected-sign-names")));
             }
         }
         return newSigns;
@@ -1955,5 +1969,43 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public int getMaxItemLore() {
         return config.getInt("max-itemlore-lines", 10);
+    }
+
+    @Override
+    public Tag getPrimaryColor() {
+        return primaryColor;
+    }
+
+    private Tag _getPrimaryColor() {
+        final String color = config.getString("message-colors.primary", "#ffaa00");
+        return Tag.styling(_getTagColor(color, NamedTextColor.GOLD));
+    }
+
+    @Override
+    public Tag getSecondaryColor() {
+        return secondaryColor;
+    }
+
+    private Tag _getSecondaryColor() {
+        final String color = config.getString("message-colors.secondary", "#ff5555");
+        return Tag.styling(_getTagColor(color, NamedTextColor.RED));
+    }
+
+    private TextColor _getTagColor(final String color, final TextColor def) {
+        try {
+            if (color.startsWith("#") && color.length() == 7 && NumberUtil.isNumeric(color.substring(1))) {
+                return TextColor.color(Color.fromRGB(Integer.decode(color)).asRGB());
+            }
+
+            if (color.length() == 1) {
+                final NamedTextColor named = AdventureUtil.fromChar(color.charAt(0));
+                return named != null ? named : def;
+            }
+
+            final NamedTextColor named = NamedTextColor.NAMES.value(color.toLowerCase(Locale.ENGLISH));
+            return named != null ? named : def;
+        } catch (IllegalArgumentException ignored) {
+        }
+        return def;
     }
 }

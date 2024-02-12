@@ -12,8 +12,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class SignEnchant extends EssentialsSign {
     public SignEnchant() {
         super("Enchant");
@@ -35,14 +33,14 @@ public class SignEnchant extends EssentialsSign {
         final Enchantment enchantment = Enchantments.getByName(enchantLevel[0]);
         if (enchantment == null) {
             sign.setLine(2, "§c<enchant>");
-            throw new SignException(tl("enchantmentNotFound"));
+            throw new SignException("enchantmentNotFound");
         }
         if (enchantLevel.length > 1) {
             try {
                 level = Integer.parseInt(enchantLevel[1]);
             } catch (final NumberFormatException ex) {
                 sign.setLine(2, "§c<enchant>");
-                throw new SignException(ex.getMessage(), ex);
+                throw new SignException(ex, "errorWithMessage", ex.getMessage());
             }
         }
         final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && player.isAuthorized("essentials.enchantments.allowunsafe") && player.isAuthorized("essentials.signs.enchant.allowunsafe");
@@ -59,7 +57,7 @@ public class SignEnchant extends EssentialsSign {
                 }
             }
         } catch (final Throwable ex) {
-            throw new SignException(ex.getMessage(), ex);
+            throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
         getTrade(sign, 3, ess);
         return true;
@@ -76,22 +74,22 @@ public class SignEnchant extends EssentialsSign {
         final String[] enchantLevel = sign.getLine(2).split(":");
         final Enchantment enchantment = Enchantments.getByName(enchantLevel[0]);
         if (enchantment == null) {
-            throw new SignException(tl("enchantmentNotFound"));
+            throw new SignException("enchantmentNotFound");
         }
         int level = 1;
         if (enchantLevel.length > 1) {
             try {
                 level = Integer.parseInt(enchantLevel[1]);
             } catch (final NumberFormatException ex) {
-                throw new SignException(ex.getMessage(), ex);
+                throw new SignException(ex, "errorWithMessage", ex.getMessage());
             }
         }
 
         if (playerHand == null || playerHand.getAmount() != 1 || (playerHand.containsEnchantment(enchantment) && playerHand.getEnchantmentLevel(enchantment) == level)) {
-            throw new SignException(tl("missingItems", 1, sign.getLine(1)));
+            throw new SignException("missingItems", 1, sign.getLine(1));
         }
         if (search != null && playerHand.getType() != search.getType()) {
-            throw new SignException(tl("missingItems", 1, search.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ')));
+            throw new SignException("missingItems", 1, search.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' '));
         }
 
         try {
@@ -105,14 +103,14 @@ public class SignEnchant extends EssentialsSign {
                 }
             }
         } catch (final Exception ex) {
-            throw new SignException(ex.getMessage(), ex);
+            throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
 
         final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
         if (level == 0) {
-            player.sendMessage(tl("enchantmentRemoved", enchantmentName.replace('_', ' ')));
+            player.sendTl("enchantmentRemoved", enchantmentName.replace('_', ' '));
         } else {
-            player.sendMessage(tl("enchantmentApplied", enchantmentName.replace('_', ' ')));
+            player.sendTl("enchantmentApplied", enchantmentName.replace('_', ' '));
         }
 
         charge.charge(player);

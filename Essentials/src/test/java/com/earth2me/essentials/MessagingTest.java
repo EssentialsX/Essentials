@@ -63,7 +63,7 @@ public class MessagingTest {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
                 .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
-            cmd.run(server, new CommandSource(sender), command, null, args);
+            cmd.run(server, new CommandSource(ess, sender), command, null, args);
         } catch (final NoChargeException ignored) {
         }
     }

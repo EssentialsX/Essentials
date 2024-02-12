@@ -6,6 +6,8 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
@@ -20,6 +22,7 @@ import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
 import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.GameMode;
@@ -77,7 +80,7 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsPlayerListener implements Listener, FakeAccessor {
     private final transient IEssentials ess;
@@ -175,12 +178,20 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
             final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
             if (dateDiff == null) {
-                user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                if (user.hasMuteReason()) {
+                    user.sendTl("voiceSilencedReason", user.getMuteReason());
+                } else {
+                    user.sendTl("voiceSilenced");
+                }
             } else {
-                user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+                if (user.hasMuteReason()) {
+                    user.sendTl("voiceSilencedReasonTime", dateDiff, user.getMuteReason());
+                } else {
+                    user.sendTl("voiceSilencedTime", dateDiff);
+                }
             }
 
-            ess.getLogger().info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
+            ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("mutedUserSpeaks", user.getName(), event.getMessage())));
         }
         try {
             final Iterator<Player> it = event.getRecipients().iterator();
@@ -425,7 +436,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail")) {
                     if (user.getUnreadMailAmount() == 0) {
                         if (ess.getSettings().isNotifyNoNewMail()) {
-                            user.sendMessage(tl("noNewMail")); // Only notify if they want us to.
+                            user.sendTl("noNewMail"); // Only notify if they want us to.
                         }
                     } else {
                         user.notifyOfMail();
@@ -434,8 +445,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
                 if (user.isAuthorized("essentials.updatecheck")) {
                     ess.runTaskAsynchronously(() -> {
-                        for (String str : ess.getUpdateChecker().getVersionMessages(false, false)) {
-                            user.sendMessage(str);
+                        for (final Component component : ess.getUpdateChecker().getVersionMessages(false, false, user.getSource())) {
+                            user.sendComponent(component);
                         }
                     });
                 }
@@ -446,7 +457,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         user.getBase().setAllowFlight(true);
                         user.getBase().setFlying(true);
                         if (ess.getSettings().isSendFlyEnableOnJoin()) {
-                            user.getBase().sendMessage(tl("flyMode", tl("enabled"), user.getDisplayName()));
+                            user.sendTl("flyMode", CommonPlaceholders.enableDisable(user.getSource(), true), user.getDisplayName());
                         }
                     }
                 }
@@ -536,14 +547,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 final Date banExpiry = banEntry.getExpiration();
                 if (banExpiry != null) {
                     final String expiry = DateUtil.formatDateDiff(banExpiry.getTime());
-                    event.setKickMessage(tl("tempbanJoin", expiry, banEntry.getReason()));
+                    event.setKickMessage(tlLiteral("tempbanJoin", expiry, banEntry.getReason()));
                 } else {
-                    event.setKickMessage(tl("banJoin", banEntry.getReason()));
+                    event.setKickMessage(tlLiteral("banJoin", banEntry.getReason()));
                 }
             } else {
                 banEntry = ess.getServer().getBanList(BanList.Type.IP).getBanEntry(event.getAddress().getHostAddress());
                 if (banEntry != null) {
-                    event.setKickMessage(tl("banIpJoin", banEntry.getReason()));
+                    event.setKickMessage(tlLiteral("banIpJoin", banEntry.getReason()));
                 }
             }
         }
@@ -559,7 +570,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 return;
             }
             if (ess.getSettings().isCustomServerFullMessage()) {
-                event.disallow(Result.KICK_FULL, tl("serverFull"));
+                event.disallow(Result.KICK_FULL, tlLiteral("serverFull"));
             }
         }
     }
@@ -633,11 +644,10 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 if (!user.isAuthorized("essentials.chat.spy.exempt")) {
                     for (final User spyer : ess.getOnlineUsers()) {
                         if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
-                            if (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
-                                spyer.sendMessage(tl("socialSpyMutedPrefix") + player.getDisplayName() + ": " + event.getMessage());
-                            } else {
-                                spyer.sendMessage(tl("socialSpyPrefix") + player.getDisplayName() + ": " + event.getMessage());
-                            }
+                            final Component base = (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers())
+                                    ? spyer.tlComponent("socialSpyMutedPrefix")
+                                    : spyer.tlComponent("socialSpyPrefix");
+                            spyer.sendComponent(base.append(AdventureUtil.legacyToAdventure(player.getDisplayName())).append(Component.text(": " + event.getMessage())));
                         }
                     }
                 }
@@ -649,11 +659,19 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             event.setCancelled(true);
             final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
             if (dateDiff == null) {
-                player.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                if (user.hasMuteReason()) {
+                    user.sendTl("voiceSilencedReason", user.getMuteReason());
+                } else {
+                    user.sendTl("voiceSilenced");
+                }
             } else {
-                player.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+                if (user.hasMuteReason()) {
+                    user.sendTl("voiceSilencedReasonTime", dateDiff, user.getMuteReason());
+                } else {
+                    user.sendTl("voiceSilencedTime", dateDiff);
+                }
             }
-            ess.getLogger().info(tl("mutedUserSpeaks", player.getName(), event.getMessage()));
+            ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("mutedUserSpeaks", player.getName(), event.getMessage())));
             return;
         }
 
@@ -698,7 +716,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     // User's current cooldown hasn't expired, inform and terminate cooldown code.
                     if (entry.getValue() > System.currentTimeMillis()) {
                         final String commandCooldownTime = DateUtil.formatDateDiff(entry.getValue());
-                        user.sendMessage(tl("commandCooldown", commandCooldownTime));
+                        user.sendTl("commandCooldown", commandCooldownTime);
                         cooldownFound = true;
                         event.setCancelled(true);
                         break;
@@ -761,11 +779,11 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         if (ess.getSettings().getNoGodWorlds().contains(newWorld) && user.isGodModeEnabledRaw()) {
             // Player god mode is never disabled in order to retain it when changing worlds once more.
             // With that said, players will still take damage as per the result of User#isGodModeEnabled()
-            user.sendMessage(tl("noGodWorldWarning"));
+            user.sendTl("noGodWorldWarning");
         }
 
         if (!user.getWorld().getName().equals(newWorld)) {
-            user.sendMessage(tl("currentWorld", newWorld));
+            user.sendTl("currentWorld", newWorld);
         }
         if (user.isVanished()) {
             user.setVanished(user.isAuthorized("essentials.vanish"));
@@ -787,7 +805,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
                         // In 1.15 and above, vanilla sends its own bed spawn message.
                         if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_15_R01)) {
-                            player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
+                            player.sendTl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ());
                         }
                     }
                 }
