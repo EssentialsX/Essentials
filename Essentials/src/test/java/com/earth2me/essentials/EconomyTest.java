@@ -127,7 +127,7 @@ public class EconomyTest {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
                 .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
-            cmd.run(server, new CommandSource(sender), command, null, args);
+            cmd.run(server, new CommandSource(ess, sender), command, null, args);
         } catch (final NoChargeException ignored) {
         }
     }
@@ -138,7 +138,7 @@ public class EconomyTest {
         try {
             runCommand("pay", user1, PLAYERNAME2 + " -123");
         } catch (final Exception e) {
-            Assert.assertEquals(I18n.tl("payMustBePositive"), e.getMessage());
+            Assert.assertEquals(I18n.tlLiteral("payMustBePositive"), e.getMessage());
         }
     }
 }

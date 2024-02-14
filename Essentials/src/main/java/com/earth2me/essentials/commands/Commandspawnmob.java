@@ -6,12 +6,11 @@ import com.earth2me.essentials.SpawnMob;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandspawnmob extends EssentialsCommand {
     public Commandspawnmob() {
@@ -21,7 +20,7 @@ public class Commandspawnmob extends EssentialsCommand {
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0) {
-            throw new NotEnoughArgumentsException(tl("mobsAvailable", StringUtil.joinList(Mob.getMobList())));
+            throw new NotEnoughArgumentsException(user.playerTl("mobsAvailable", StringUtil.joinList(Mob.getMobList())));
         }
 
         final List<String> mobParts = SpawnMob.mobParts(args[0]);
@@ -33,7 +32,7 @@ public class Commandspawnmob extends EssentialsCommand {
         }
 
         if (mobParts.size() > 1 && !user.isAuthorized("essentials.spawnmob.stack")) {
-            throw new Exception(tl("cannotStackMob"));
+            throw new TranslatableException("cannotStackMob");
         }
 
         if (args.length >= 3) {
@@ -47,7 +46,7 @@ public class Commandspawnmob extends EssentialsCommand {
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 3) {
-            throw new NotEnoughArgumentsException(tl("mobsAvailable", StringUtil.joinList(Mob.getMobList())));
+            throw new NotEnoughArgumentsException(sender.tl("mobsAvailable", StringUtil.joinList(Mob.getMobList())));
         }
 
         final List<String> mobParts = SpawnMob.mobParts(args[0]);

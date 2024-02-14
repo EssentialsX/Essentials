@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -10,8 +11,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandworld extends EssentialsCommand {
     public Commandworld() {
@@ -40,15 +39,15 @@ public class Commandworld extends EssentialsCommand {
         } else {
             world = ess.getWorld(getFinalArg(args, 0));
             if (world == null) {
-                user.sendMessage(tl("invalidWorld"));
-                user.sendMessage(tl("possibleWorlds", server.getWorlds().size() - 1));
-                user.sendMessage(tl("typeWorldName"));
+                user.sendTl("invalidWorld");
+                user.sendTl("possibleWorlds", server.getWorlds().size() - 1);
+                user.sendTl("typeWorldName");
                 throw new NoChargeException();
             }
         }
 
         if (ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + world.getName())) {
-            throw new Exception(tl("noPerm", "essentials.worlds." + world.getName()));
+            throw new TranslatableException("noPerm", "essentials.worlds." + world.getName());
         }
 
         final double factor;

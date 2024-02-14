@@ -8,8 +8,6 @@ import org.bukkit.Server;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commanddelkit extends EssentialsCommand {
     public Commanddelkit() {
         super("delkit");
@@ -19,7 +17,7 @@ public class Commanddelkit extends EssentialsCommand {
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0) {
             final String kitList = ess.getKits().listKits(ess, null);
-            sender.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
+            sender.sendTl(kitList.length() > 0 ? "kits" : "noKits", kitList);
             throw new NoChargeException();
         } else {
             final String kitName = ess.getKits().matchKit(args[0]);
@@ -30,7 +28,7 @@ public class Commanddelkit extends EssentialsCommand {
             }
 
             ess.getKits().removeKit(kitName);
-            sender.sendMessage(tl("deleteKit", kitName));
+            sender.sendTl("deleteKit", kitName);
         }
     }
 

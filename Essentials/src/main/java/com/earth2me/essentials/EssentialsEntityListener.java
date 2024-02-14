@@ -32,8 +32,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class EssentialsEntityListener implements Listener {
     private static final transient Pattern powertoolPlayer = Pattern.compile("\\{player\\}");
     private final IEssentials ess;
@@ -167,11 +165,11 @@ public class EssentialsEntityListener implements Listener {
         final User user = ess.getUser(event.getEntity());
         if (ess.getSettings().infoAfterDeath()) {
             final Location loc = user.getLocation();
-            user.sendMessage(tl("infoAfterDeath", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+            user.sendTl("infoAfterDeath", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         }
         if (user.isAuthorized("essentials.back.ondeath") && !ess.getSettings().isCommandDisabled("back")) {
             user.setLastLocation();
-            user.sendMessage(tl("backAfterDeath"));
+            user.sendTl("backAfterDeath");
         }
         if (!ess.getSettings().areDeathMessagesEnabled()) {
             event.setDeathMessage("");

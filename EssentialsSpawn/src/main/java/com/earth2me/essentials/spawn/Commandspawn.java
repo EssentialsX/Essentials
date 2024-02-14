@@ -16,8 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandspawn extends EssentialsCommand {
     public Commandspawn() {
         super("spawn");
@@ -33,7 +31,7 @@ public class Commandspawn extends EssentialsCommand {
             future.thenAccept(success -> {
                 if (success) {
                     if (!otherUser.equals(user)) {
-                        otherUser.sendMessage(tl("teleportAtoB", user.getDisplayName(), "spawn"));
+                        otherUser.sendTl("teleportAtoB", user.getDisplayName(), "spawn");
                     }
                 }
             });
@@ -55,14 +53,14 @@ public class Commandspawn extends EssentialsCommand {
         respawn(sender, null, user, null, commandLabel, future);
         future.thenAccept(success -> {
             if (success) {
-                user.sendMessage(tl("teleportAtoB", Console.DISPLAY_NAME, "spawn"));
+                user.sendTl("teleportAtoB", Console.DISPLAY_NAME, "spawn");
             }
         });
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1 && sender.isAuthorized("essentials.spawn.others", ess)) {
+        if (args.length == 1 && sender.isAuthorized("essentials.spawn.others")) {
             return getPlayers(server, sender);
         }
         return Collections.emptyList();
@@ -73,7 +71,7 @@ public class Commandspawn extends EssentialsCommand {
         if (spawn == null) {
             return;
         }
-        sender.sendMessage(tl("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ()));
+        sender.sendTl("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ());
         future.exceptionally(e -> {
             showError(sender.getSender(), e, commandLabel);
             return false;

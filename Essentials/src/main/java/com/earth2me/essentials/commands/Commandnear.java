@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -11,8 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandnear extends EssentialsCommand {
     public Commandnear() {
@@ -51,14 +50,14 @@ public class Commandnear extends EssentialsCommand {
         radius = Math.abs(radius);
 
         if (radius > maxRadius && !user.isAuthorized("essentials.near.maxexempt")) {
-            user.sendMessage(tl("radiusTooBig", maxRadius));
+            user.sendTl("radiusTooBig", maxRadius);
             radius = maxRadius;
         }
 
         if (otherUser == null || !user.isAuthorized("essentials.near.others")) {
             otherUser = user;
         }
-        user.sendMessage(tl("nearbyPlayers", getLocal(otherUser, radius)));
+        user.sendTl("nearbyPlayers", AdventureUtil.parsed(getLocal(user.getSource(), otherUser, radius)));
     }
 
     @Override
@@ -74,10 +73,10 @@ public class Commandnear extends EssentialsCommand {
             } catch (final NumberFormatException ignored) {
             }
         }
-        sender.sendMessage(tl("nearbyPlayers", getLocal(otherUser, radius)));
+        sender.sendTl("nearbyPlayers", AdventureUtil.parsed(getLocal(sender, otherUser, radius)));
     }
 
-    private String getLocal(final User user, final long radius) {
+    private String getLocal(final CommandSource source, final User user, final long radius) {
         final Location loc = user.getLocation();
         final World world = loc.getWorld();
         final StringBuilder output = new StringBuilder();
@@ -108,10 +107,10 @@ public class Commandnear extends EssentialsCommand {
             if (nearbyPlayer == null) {
                 continue;
             }
-            output.append(tl("nearbyPlayersList", nearbyPlayer.getDisplayName(), (long)nearbyPlayer.getLocation().distance(loc)));
+            output.append(user.playerTl("nearbyPlayersList", nearbyPlayer.getDisplayName(), (long)nearbyPlayer.getLocation().distance(loc)));
         }
 
-        return output.length() > 1 ? output.toString() : tl("none");
+        return output.length() > 1 ? output.toString() : source.tl("none");
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.UserActionEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandme extends EssentialsCommand {
     public Commandme() {
@@ -28,9 +29,9 @@ public class Commandme extends EssentialsCommand {
         if (user.isMuted()) {
             final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
             if (dateDiff == null) {
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReason" : "voiceSilenced", user.getMuteReason());
             }
-            throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+            throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReasonTime" : "voiceSilencedTime", dateDiff, user.getMuteReason());
         }
 
         if (args.length < 1) {
@@ -42,9 +43,8 @@ public class Commandme extends EssentialsCommand {
 
         user.setDisplayNick();
         long radius = ess.getSettings().getChatRadius();
-        final String toSend = tl("action", user.getDisplayName(), message);
         if (radius < 1) {
-            ess.broadcastMessage(user, toSend);
+            ess.broadcastTl("action", user.getDisplayName(), message);
             ess.getServer().getPluginManager().callEvent(new UserActionEvent(user, message, Collections.unmodifiableCollection(ess.getServer().getOnlinePlayers())));
             return;
         }
@@ -52,7 +52,7 @@ public class Commandme extends EssentialsCommand {
 
         final World world = user.getWorld();
         final Location loc = user.getLocation();
-        final Set<Player> outList = new HashSet<>();
+        final Set<User> outList = new HashSet<>();
 
         for (final Player player : Bukkit.getOnlinePlayers()) {
             final User onlineUser = ess.getUser(player);
@@ -71,24 +71,33 @@ public class Commandme extends EssentialsCommand {
                 }
                 if (abort) {
                     if (onlineUser.isAuthorized("essentials.chat.spy")) {
-                        outList.add(player); // Just use the same list unless we wanted to format spyying for this.
+                        outList.add(onlineUser); // Just use the same list unless we wanted to format spyying for this.
                     }
                 } else {
-                    outList.add(player);
+                    outList.add(onlineUser);
                 }
             } else {
-                outList.add(player); // Add yourself to the list.
+                outList.add(onlineUser); // Add yourself to the list.
             }
         }
 
         if (outList.size() < 2) {
-            user.sendMessage(tl("localNoOne"));
+            user.sendTl("localNoOne");
         }
 
-        for (final Player onlinePlayer : outList) {
-            onlinePlayer.sendMessage(toSend);
+        for (final User onlineUser : outList) {
+            onlineUser.sendTl("action", user.getDisplayName(), message);
         }
-        ess.getServer().getPluginManager().callEvent(new UserActionEvent(user, message, Collections.unmodifiableCollection(outList)));
+
+        // Only take the time to generate this list if there are listeners.
+        if (UserActionEvent.getHandlerList().getRegisteredListeners().length > 0) {
+            final Set<Player> outListPlayers = new HashSet<>();
+            for (final User onlineUser : outList) {
+                outListPlayers.add(onlineUser.getBase());
+            }
+
+            ess.getServer().getPluginManager().callEvent(new UserActionEvent(user, message, Collections.unmodifiableCollection(outListPlayers)));
+        }
     }
 
     @Override
@@ -100,7 +109,7 @@ public class Commandme extends EssentialsCommand {
         String message = getFinalArg(args, 0);
         message = FormatUtil.replaceFormat(message);
 
-        ess.getServer().broadcastMessage(tl("action", "@", message));
+        ess.getServer().broadcastMessage(tlLiteral("action", "@", message));
     }
 
     @Override

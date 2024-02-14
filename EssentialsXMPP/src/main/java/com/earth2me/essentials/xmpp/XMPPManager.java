@@ -3,6 +3,7 @@ package com.earth2me.essentials.xmpp;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IUser;
 import org.bukkit.entity.Player;
@@ -32,7 +33,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class XMPPManager extends Handler implements MessageListener, ChatManagerListener, IConf {
     private static final Logger logger = EssentialsXMPP.getWrappedLogger();
@@ -103,7 +104,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     private boolean connect() {
         final String server = config.getString("xmpp.server", null);
         if (server == null || server.equals("example.com")) {
-            logger.log(Level.WARNING, tl("xmppNotConfigured"));
+            logger.log(Level.WARNING, tlLiteral("xmppNotConfigured"));
             return false;
         }
         final int port = config.getInt("xmpp.port", 5222);
@@ -158,7 +159,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 
     final void updatePresence() {
         if (connection == null) {
-            parent.getEss().getLogger().warning(tl("xmppNotConfigured"));
+            parent.getEss().getLogger().warning(AdventureUtil.miniToLegacy(tlLiteral("xmppNotConfigured")));
             return;
         }
 

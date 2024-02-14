@@ -5,7 +5,6 @@ import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
-import com.earth2me.essentials.textreader.SimpleTextPager;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
@@ -21,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 class EssentialsSpawnPlayerListener implements Listener {
     private static final Logger logger = EssentialsSpawn.getWrappedLogger();
@@ -115,9 +114,8 @@ class EssentialsSpawnPlayerListener implements Listener {
             //This method allows for multiple line player announce messages using multiline yaml syntax #EasterEgg
             if (ess.getSettings().getAnnounceNewPlayers()) {
                 final IText output = new KeywordReplacer(ess.getSettings().getAnnounceNewPlayerFormat(), user.getSource(), ess);
-                final SimpleTextPager pager = new SimpleTextPager(output);
 
-                for (final String line : pager.getLines()) {
+                for (final String line : output.getLines()) {
                     ess.broadcastMessage(user, line);
                 }
             }
@@ -153,7 +151,7 @@ class EssentialsSpawnPlayerListener implements Listener {
             if (spawn != null) {
                 final CompletableFuture<Boolean> future = new CompletableFuture<>();
                 future.exceptionally(e -> {
-                    logger.log(Level.WARNING, tl("teleportNewPlayerError"), e);
+                    logger.log(Level.WARNING, tlLiteral("teleportNewPlayerError"), e);
                     return false;
                 });
                 user.getAsyncTeleport().now(spawn, false, TeleportCause.PLUGIN, future);
