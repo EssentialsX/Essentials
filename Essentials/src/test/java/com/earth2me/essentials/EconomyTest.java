@@ -21,6 +21,7 @@ public class EconomyTest {
     private final FakeServer server;
 
     public EconomyTest() {
+        //Assert.fail("Force fail this test");
         this.server = FakeServer.getServer();
         ess = new Essentials(server);
         try {
