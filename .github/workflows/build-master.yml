@@ -38,7 +38,7 @@ jobs:
       uses: mikepenz/action-junit-report@v4
       if: success() || failure() # Run even if the previous step fails
       with:
-        report_paths: '**/build/test-results/test/TEST-*.xml'
+        report_paths: '**/build/test-results/test*/TEST-*.xml'
 
     - name: Archive plugin jars on GitHub
       uses: actions/upload-artifact@v3
