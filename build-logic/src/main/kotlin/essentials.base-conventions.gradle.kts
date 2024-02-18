@@ -117,6 +117,8 @@ indra {
     javaVersions {
         target(8)
         minimumToolchain(17)
+        // Don't enforce running tests on Java 8; we only care about the release for compiling, not running tests
+        strictVersions(false)
     }
 }
 
