@@ -2,6 +2,7 @@ package net.essentialsx.discord.interactions.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.PlayerNotFoundException;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgumentType;
@@ -51,7 +52,7 @@ public class MessageCommand extends InteractionCommandImpl {
                 FormatUtil.replaceFormat(event.getStringArgument("message")) : FormatUtil.stripFormat(event.getStringArgument("message"));
         event.reply(tlLiteral("msgFormat", tlLiteral("meSender"), MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()), MessageUtil.sanitizeDiscordMarkdown(message)));
 
-        user.sendMessage(tlLiteral("msgFormat", event.getMember().getTag(), user.playerTl("meRecipient"), message));
+        user.sendTl("msgFormat", event.getMember().getTag(), AdventureUtil.parsed(user.playerTl("meRecipient")), message);
         // We use an atomic reference here so that java will garbage collect the recipient
         final AtomicReference<DiscordMessageRecipient> ref = new AtomicReference<>(new DiscordMessageRecipient(event.getMember()));
         jda.getPlugin().getEss().runTaskLaterAsynchronously(() -> ref.set(null), 6000); // Expires after 5 minutes
