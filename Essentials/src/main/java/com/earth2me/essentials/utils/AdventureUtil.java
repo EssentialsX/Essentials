@@ -126,6 +126,13 @@ public final class AdventureUtil {
     }
 
     /**
+     * Convenience method for submodules to escape MiniMessage tags.
+     */
+    public static String escapeTags(final String input) {
+        return miniMessage().escapeTags(input);
+    }
+
+    /**
      * Parameters for a translation message are not parsed for MiniMessage by default to avoid injection. If you want
      * a parameter to be parsed for MiniMessage you must wrap it in a ParsedPlaceholder by using this method.
      */
