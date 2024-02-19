@@ -60,7 +60,7 @@ public class Commandspawner extends EssentialsCommand {
             final CreatureSpawner spawner = (CreatureSpawner) target.getBlock().getState();
             spawner.setSpawnedType(mob.getType());
             if (delay > 0) {
-                final SpawnerBlockProvider spawnerBlockProvider = ess.getSpawnerBlockProvider();
+                final SpawnerBlockProvider spawnerBlockProvider = ess.provider(SpawnerBlockProvider.class);
                 spawnerBlockProvider.setMinSpawnDelay(spawner, 1);
                 spawnerBlockProvider.setMaxSpawnDelay(spawner, Integer.MAX_VALUE);
                 spawnerBlockProvider.setMinSpawnDelay(spawner, delay);

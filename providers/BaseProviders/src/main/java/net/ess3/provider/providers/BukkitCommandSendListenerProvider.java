@@ -17,9 +17,4 @@ public class BukkitCommandSendListenerProvider extends CommandSendListenerProvid
         final Predicate<String> filter = filter(event.getPlayer());
         event.getCommands().removeIf(filter);
     }
-
-    @Override
-    public String getDescription() {
-        return "Bukkit synchronous command send listener";
-    }
 }

@@ -17,6 +17,8 @@ import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.provider.CommandSendListenerProvider;
+import net.ess3.provider.FormattedCommandAliasProvider;
+import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
 import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
@@ -616,10 +618,10 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         // If the plugin command does not exist, check if it is an alias from commands.yml
         if (ess.getServer().getPluginCommand(cmd) == null) {
-            final Command knownCommand = ess.getKnownCommandsProvider().getKnownCommands().get(cmd);
+            final Command knownCommand = ess.provider(KnownCommandsProvider.class).getKnownCommands().get(cmd);
             if (knownCommand instanceof FormattedCommandAlias) {
                 final FormattedCommandAlias command = (FormattedCommandAlias) knownCommand;
-                for (String fullCommand : ess.getFormattedCommandAliasProvider().createCommands(command, event.getPlayer(), args.split(" "))) {
+                for (String fullCommand : ess.provider(FormattedCommandAliasProvider.class).createCommands(command, event.getPlayer(), args.split(" "))) {
                     handlePlayerCommandPreprocess(event, fullCommand);
                 }
                 return;

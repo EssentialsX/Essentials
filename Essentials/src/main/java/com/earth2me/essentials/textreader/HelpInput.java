@@ -5,6 +5,7 @@ import com.earth2me.essentials.utils.AdventureUtil;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.KnownCommandsProvider;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;
@@ -32,7 +33,7 @@ public class HelpInput implements IText {
         }
 
         final Multimap<Plugin, Command> pluginCommands = HashMultimap.create();
-        for (final Command command : ess.getKnownCommandsProvider().getKnownCommands().values()) {
+        for (final Command command : ess.provider(KnownCommandsProvider.class).getKnownCommands().values()) {
             if (!(command instanceof PluginIdentifiableCommand)) {
                 continue;
             }

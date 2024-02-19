@@ -2,6 +2,7 @@ package net.ess3.nms.refl.providers;
 
 import net.ess3.nms.refl.ReflUtil;
 import net.ess3.provider.FormattedCommandAliasProvider;
+import net.essentialsx.providers.ProviderData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.FormattedCommandAlias;
 
@@ -12,13 +13,14 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+@ProviderData(description = "Reflection Formatted Command Alias Provider")
 public class ReflFormattedCommandAliasProvider implements FormattedCommandAliasProvider {
 
     private final boolean paper;
     private final Field formatStringsField;
     private final MethodHandle buildCommandMethodHandle;
 
-    public ReflFormattedCommandAliasProvider(boolean paper) {
+    public ReflFormattedCommandAliasProvider(final boolean paper) {
         this.paper = paper;
 
         final Class<? extends FormattedCommandAlias> formattedCommandAliasClass;
@@ -85,8 +87,4 @@ public class ReflFormattedCommandAliasProvider implements FormattedCommandAliasP
         }
     }
 
-    @Override
-    public String getDescription() {
-        return "NMS Reflection Provider for FormattedCommandAlias methods";
-    }
 }

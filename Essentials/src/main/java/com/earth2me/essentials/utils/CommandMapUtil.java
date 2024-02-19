@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.FormattedCommandAliasProvider;
 import org.bukkit.command.Command;
 import org.bukkit.command.FormattedCommandAlias;
 import org.bukkit.command.PluginCommand;
@@ -60,7 +61,7 @@ public final class CommandMapUtil {
         } else if (value instanceof FormattedCommandAlias) {
             json.addProperty("source", "commands.yml");
             final JsonArray formatStrings = new JsonArray();
-            for (final String entry : ess.getFormattedCommandAliasProvider().getFormatStrings((FormattedCommandAlias) value)) {
+            for (final String entry : ess.provider(FormattedCommandAliasProvider.class).getFormatStrings((FormattedCommandAlias) value)) {
                 formatStrings.add(new JsonPrimitive(entry));
             }
             json.add("bukkit_aliases", formatStrings);

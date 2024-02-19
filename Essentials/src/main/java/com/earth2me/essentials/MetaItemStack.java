@@ -11,6 +11,7 @@ import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
 import net.ess3.api.TranslatableException;
+import net.ess3.provider.ItemUnbreakableProvider;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -700,7 +701,7 @@ public class MetaItemStack {
 
     private void setUnbreakable(final IEssentials ess, final ItemStack is, final boolean unbreakable) {
         final ItemMeta meta = is.getItemMeta();
-        ess.getItemUnbreakableProvider().setUnbreakable(meta, unbreakable);
+        ess.provider(ItemUnbreakableProvider.class).setUnbreakable(meta, unbreakable);
         is.setItemMeta(meta);
     }
 }

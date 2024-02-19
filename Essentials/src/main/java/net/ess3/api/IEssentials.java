@@ -1,8 +1,6 @@
 package net.ess3.api;
 
 import com.earth2me.essentials.items.CustomItemResolver;
-import net.ess3.provider.PotionMetaProvider;
-import net.ess3.provider.SpawnEggProvider;
 
 import java.util.Collection;
 
@@ -18,20 +16,6 @@ public interface IEssentials extends com.earth2me.essentials.IEssentials {
      * @return A list of players who are vanished
      */
     Collection<String> getVanishedPlayersNew();
-
-    /**
-     * Get the spawn egg provider for the current platform.
-     *
-     * @return The current active spawn egg provider
-     */
-    SpawnEggProvider getSpawnEggProvider();
-
-    /**
-     * Get the potion meta provider for the current platform.
-     *
-     * @return The current active potion meta provider
-     */
-    PotionMetaProvider getPotionMetaProvider();
 
     /**
      * Get the {@link CustomItemResolver} that is currently in use.
