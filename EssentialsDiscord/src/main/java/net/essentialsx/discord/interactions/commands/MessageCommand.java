@@ -31,26 +31,26 @@ public class MessageCommand extends InteractionCommandImpl {
         try {
             user = jda.getPlugin().getEss().matchUser(Bukkit.getServer(), null, event.getStringArgument("username"), getHidden, false);
         } catch (PlayerNotFoundException e) {
-            event.reply(tlLiteral("errorWithMessage", e.getMessage()));
+            event.replyTl("errorWithMessage", e.getMessage());
             return;
         }
 
         if (!getHidden && user.isIgnoreMsg()) {
-            event.reply(tlLiteral("msgIgnore", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName())));
+            event.replyTl("msgIgnore", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()));
             return;
         }
 
         if (user.isAfk()) {
             if (user.getAfkMessage() != null) {
-                event.reply(tlLiteral("userAFKWithMessage", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()), MessageUtil.sanitizeDiscordMarkdown(user.getAfkMessage())));
+                event.replyTl("userAFKWithMessage", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()), MessageUtil.sanitizeDiscordMarkdown(user.getAfkMessage()));
             } else {
-                event.reply(tlLiteral("userAFK", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName())));
+                event.replyTl("userAFK", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()));
             }
         }
 
         final String message = event.getMember().hasRoles(jda.getSettings().getPermittedFormattingRoles()) ?
                 FormatUtil.replaceFormat(event.getStringArgument("message")) : FormatUtil.stripFormat(event.getStringArgument("message"));
-        event.reply(tlLiteral("msgFormat", tlLiteral("meSender"), MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()), MessageUtil.sanitizeDiscordMarkdown(message)));
+        event.replyTl("msgFormat", tlLiteral("meSender"), MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()), MessageUtil.sanitizeDiscordMarkdown(message));
 
         user.sendTl("msgFormat", event.getMember().getTag(), AdventureUtil.parsed(user.playerTl("meRecipient")), message);
         // We use an atomic reference here so that java will garbage collect the recipient
