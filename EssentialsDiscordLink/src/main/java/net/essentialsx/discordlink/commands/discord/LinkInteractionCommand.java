@@ -25,18 +25,18 @@ public class LinkInteractionCommand implements InteractionCommand {
     @Override
     public void onCommand(InteractionEvent event) {
         if (accounts.isLinked(event.getMember().getId())) {
-            event.reply(tlLiteral("discordCommandLinkHasAccount"));
+            event.replyTl("discordCommandLinkHasAccount");
             return;
         }
 
         final UUID uuid = accounts.getPendingUUID(event.getStringArgument("code"));
         if (uuid == null) {
-            event.reply(tlLiteral("discordCommandLinkInvalidCode"));
+            event.replyTl("discordCommandLinkInvalidCode");
             return;
         }
 
         accounts.registerAccount(uuid, event.getMember(), DiscordLinkStatusChangeEvent.Cause.SYNC_PLAYER);
-        event.reply(tlLiteral("discordCommandLinkLinked"));
+        event.replyTl("discordCommandLinkLinked");
     }
 
     @Override
