@@ -225,7 +225,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             cooldownTime.add(Calendar.SECOND, (int) cooldown);
             cooldownTime.add(Calendar.MILLISECOND, (int) ((cooldown * 1000.0) % 1000.0));
             if (cooldownTime.after(now) && !isAuthorized("essentials.heal.cooldown.bypass")) {
-                throw new Exception(playerTl("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis())));
+                throw new TranslatableException("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis()));
             }
         }
         setLastHealTimestamp(now.getTimeInMillis());
