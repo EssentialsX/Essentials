@@ -635,6 +635,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public void reload() {
         Trade.closeLog();
 
+        if (bukkitAudience != null) {
+            bukkitAudience.close();
+            bukkitAudience = null;
+        }
+
         for (final IConf iConf : confList) {
             iConf.reloadConfig();
             execTimer.mark("Reload(" + iConf.getClass().getSimpleName() + ")");
