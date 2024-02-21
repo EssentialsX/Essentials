@@ -60,6 +60,7 @@ import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
 import net.ess3.nms.refl.providers.ReflSyncCommandsProvider;
 import net.ess3.provider.ContainerProvider;
+import net.ess3.provider.DamageEventProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.ItemUnbreakableProvider;
 import net.ess3.provider.KnownCommandsProvider;
@@ -83,10 +84,12 @@ import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
 import net.ess3.provider.providers.FixedHeightWorldInfoProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
+import net.ess3.provider.providers.LegacyDamageEventProvider;
 import net.ess3.provider.providers.LegacyItemUnbreakableProvider;
 import net.ess3.provider.providers.LegacyPlayerLocaleProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
+import net.ess3.provider.providers.ModernDamageEventProvider;
 import net.ess3.provider.providers.ModernDataWorldInfoProvider;
 import net.ess3.provider.providers.ModernItemUnbreakableProvider;
 import net.ess3.provider.providers.ModernPersistentDataProvider;
@@ -193,6 +196,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient WorldInfoProvider worldInfoProvider;
     private transient PlayerLocaleProvider playerLocaleProvider;
     private transient SignDataProvider signDataProvider;
+    private transient DamageEventProvider damageEventProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
@@ -475,6 +479,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 playerLocaleProvider = new LegacyPlayerLocaleProvider();
             }
 
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_4_R01)) {
+                damageEventProvider = new ModernDamageEventProvider();
+            } else {
+                damageEventProvider = new LegacyDamageEventProvider();
+            }
+
             execTimer.mark("Init(Providers)");
             reload();
 
@@ -624,6 +634,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public void reload() {
         Trade.closeLog();
+
+        if (bukkitAudience != null) {
+            bukkitAudience.close();
+            bukkitAudience = null;
+        }
 
         for (final IConf iConf : confList) {
             iConf.reloadConfig();
@@ -863,7 +878,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     sender.sendMessage(command.getUsage().replace("<command>", commandLabel));
                 }
                 if (!ex.getMessage().isEmpty()) {
-                    sender.sendMessage(ex.getMessage());
+                    sender.sendComponent(AdventureUtil.miniMessage().deserialize(ex.getMessage()));
                 }
                 if (ex.getCause() != null && settings.isDebug()) {
                     ex.getCause().printStackTrace();
@@ -1403,6 +1418,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public PlayerLocaleProvider getPlayerLocaleProvider() {
         return playerLocaleProvider;
+    }
+
+    @Override
+    public DamageEventProvider getDamageEventProvider() {
+        return damageEventProvider;
     }
 
     @Override

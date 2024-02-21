@@ -11,8 +11,8 @@ val baseExtension = extensions.create<EssentialsBaseExtension>("essentials", pro
 
 val checkstyleVersion = "8.36.2"
 val spigotVersion = "1.20.4-R0.1-SNAPSHOT"
-val junit5Version = "5.7.0"
-val mockitoVersion = "3.2.0"
+val junit5Version = "5.10.2"
+val mockitoVersion = "3.12.4"
 
 dependencies {
     testImplementation("org.junit.jupiter", "junit-jupiter", junit5Version)
@@ -23,6 +23,12 @@ dependencies {
         implementation("org.yaml:snakeyaml:1.28") {
             because("Bukkit API ships old versions, Configurate requires modern versions")
         }
+    }
+}
+
+tasks.test {
+    testLogging {
+        events("PASSED", "SKIPPED", "FAILED")
     }
 }
 

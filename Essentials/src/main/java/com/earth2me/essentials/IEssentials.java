@@ -10,6 +10,7 @@ import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.IUserMap;
 import net.ess3.nms.refl.providers.ReflOnlineModeProvider;
 import net.ess3.provider.ContainerProvider;
+import net.ess3.provider.DamageEventProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.ItemUnbreakableProvider;
 import net.ess3.provider.KnownCommandsProvider;
@@ -182,6 +183,8 @@ public interface IEssentials extends Plugin {
     SignDataProvider getSignDataProvider();
 
     PlayerLocaleProvider getPlayerLocaleProvider();
+
+    DamageEventProvider getDamageEventProvider();
 
     PluginCommand getPluginCommand(String cmd);
 }
