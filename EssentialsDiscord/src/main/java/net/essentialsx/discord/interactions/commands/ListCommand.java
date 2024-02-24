@@ -48,6 +48,6 @@ public class ListCommand extends InteractionCommandImpl {
         for (final String str : output) {
             stringBuilder.append(FormatUtil.stripMiniFormat(str)).append("\n");
         }
-        event.reply(MessageUtil.sanitizeDiscordMarkdown(stringBuilder.substring(0, stringBuilder.length() - 2)));
+        event.reply(MessageUtil.sanitizeDiscordMarkdown(stringBuilder.substring(0, stringBuilder.length() - 1)));
     }
 }
