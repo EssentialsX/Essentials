@@ -1,6 +1,6 @@
 package com.earth2me.essentials.utils;
 
-import net.ess3.api.IEssentials;
+import com.earth2me.essentials.Essentials;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -9,6 +9,7 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,7 +17,6 @@ import java.util.regex.Pattern;
 public final class AdventureUtil {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER;
     private static final MiniMessage MINI_MESSAGE_INSTANCE;
-    private static IEssentials ess;
     private static final Pattern NAMED_PATTERN = Pattern.compile(ChatColor.COLOR_CHAR + "[0-9a-fk-orA-FK-OR]");
     private static final Pattern HEX_PATTERN = Pattern.compile(ChatColor.COLOR_CHAR + "x((?:" + ChatColor.COLOR_CHAR + "[0-9a-fA-F]){6})");
     private static final String LOOKUP = "0123456789abcdefklmnor";
@@ -41,10 +41,6 @@ public final class AdventureUtil {
     }
 
     private AdventureUtil() {
-    }
-
-    public static void setEss(final IEssentials ess) {
-        AdventureUtil.ess = ess;
     }
 
     public static MiniMessage miniMessage() {
@@ -141,10 +137,11 @@ public final class AdventureUtil {
     }
 
     private static Tag supplyTag(final boolean primary) {
+        final Essentials ess = JavaPlugin.getPlugin(Essentials.class);
         if (primary) {
-            return ess != null ? ess.getSettings().getPrimaryColor() : Tag.styling(NamedTextColor.GOLD);
+            return ess.getSettings().getPrimaryColor();
         }
-        return ess != null ? ess.getSettings().getSecondaryColor() : Tag.styling(NamedTextColor.RED);
+        return ess.getSettings().getSecondaryColor();
     }
 
     public static class ParsedPlaceholder {
