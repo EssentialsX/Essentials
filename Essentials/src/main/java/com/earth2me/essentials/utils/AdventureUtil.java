@@ -15,13 +15,13 @@ import java.util.regex.Pattern;
 
 public final class AdventureUtil {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER;
-    private static final MiniMessage MINI_MESSAGE_INSTANCE;
-    private static IEssentials ess;
     private static final Pattern NAMED_PATTERN = Pattern.compile(ChatColor.COLOR_CHAR + "[0-9a-fk-orA-FK-OR]");
     private static final Pattern HEX_PATTERN = Pattern.compile(ChatColor.COLOR_CHAR + "x((?:" + ChatColor.COLOR_CHAR + "[0-9a-fA-F]){6})");
     private static final String LOOKUP = "0123456789abcdefklmnor";
     private static final String[] MINI_TAGS = new String[] {"black", "dark_blue", "dark_green", "dark_aqua", "dark_red", "dark_purple", "gold", "gray", "dark_gray", "blue", "green", "aqua", "red", "light_purple", "yellow", "white", "obf", "b", "st", "u", "i", "reset"};
     private static final NamedTextColor[] COLORS = new NamedTextColor[] {NamedTextColor.BLACK, NamedTextColor.DARK_BLUE, NamedTextColor.DARK_GREEN, NamedTextColor.DARK_AQUA, NamedTextColor.DARK_RED, NamedTextColor.DARK_PURPLE, NamedTextColor.GOLD, NamedTextColor.GRAY, NamedTextColor.DARK_GRAY, NamedTextColor.BLUE, NamedTextColor.GREEN, NamedTextColor.AQUA, NamedTextColor.RED, NamedTextColor.LIGHT_PURPLE, NamedTextColor.YELLOW, NamedTextColor.WHITE};
+    private static IEssentials ess;
+    private static MiniMessage miniMessageInstance;
 
     static {
         final LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder().flattener(ComponentFlattener.basic()).useUnusualXRepeatedCharacterHexFormat();
@@ -29,15 +29,7 @@ public final class AdventureUtil {
             builder.hexColors();
         }
         LEGACY_SERIALIZER = builder.build();
-
-        MINI_MESSAGE_INSTANCE = MiniMessage.builder()
-                .tags(TagResolver.builder()
-                        .resolvers(TagResolver.standard())
-                        .resolver(TagResolver.resolver("primary", supplyTag(true)))
-                        .resolver(TagResolver.resolver("secondary", supplyTag(false)))
-                        .build())
-                .build();
-
+        miniMessageInstance = createMiniMessageInstance();
     }
 
     private AdventureUtil() {
@@ -45,10 +37,21 @@ public final class AdventureUtil {
 
     public static void setEss(final IEssentials ess) {
         AdventureUtil.ess = ess;
+        miniMessageInstance = createMiniMessageInstance();
+    }
+
+    private static MiniMessage createMiniMessageInstance() {
+        return MiniMessage.builder()
+                .tags(TagResolver.builder()
+                        .resolvers(TagResolver.standard())
+                        .resolver(TagResolver.resolver("primary", supplyTag(true)))
+                        .resolver(TagResolver.resolver("secondary", supplyTag(false)))
+                        .build())
+                .build();
     }
 
     public static MiniMessage miniMessage() {
-        return MINI_MESSAGE_INSTANCE;
+        return miniMessageInstance;
     }
 
     /**
