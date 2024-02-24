@@ -53,14 +53,14 @@ public class AccountInteractionCommand implements InteractionCommand {
         final InteractionMember effectiveUser = userArg == null ? event.getMember() : userArg;
         final IUser user = accounts.getUser(effectiveUser.getId());
         if (user == null) {
-            event.reply(tlLiteral(event.getMember().getId().equals(effectiveUser.getId()) ? "discordCommandAccountResponseNotLinked" : "discordCommandAccountResponseNotLinkedOther", effectiveUser.getAsMention()));
+            event.replyTl(event.getMember().getId().equals(effectiveUser.getId()) ? "discordCommandAccountResponseNotLinked" : "discordCommandAccountResponseNotLinkedOther", effectiveUser.getAsMention());
             return;
         }
 
         if (event.getMember().getId().equals(effectiveUser.getId())) {
-            event.reply(tlLiteral("discordCommandAccountResponseLinked", user.getName()));
+            event.replyTl("discordCommandAccountResponseLinked", user.getName());
             return;
         }
-        event.reply(tlLiteral("discordCommandAccountResponseLinkedOther", effectiveUser.getAsMention(), user.getName()));
+        event.replyTl("discordCommandAccountResponseLinkedOther", effectiveUser.getAsMention(), user.getName());
     }
 }
