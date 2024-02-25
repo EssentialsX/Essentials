@@ -129,6 +129,15 @@ public final class NumberUtil {
         return true;
     }
 
+    public static boolean isHexadecimal(final String sNum) {
+        try {
+            Integer.parseInt(sNum, 16);
+            return true;
+        } catch (final NumberFormatException e) {
+            return false;
+        }
+    }
+
     /**
      * Backport from Guava.
      */
