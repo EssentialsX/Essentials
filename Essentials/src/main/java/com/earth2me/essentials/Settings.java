@@ -53,6 +53,8 @@ import static com.earth2me.essentials.I18n.tlLiteral;
 public class Settings implements net.ess3.api.ISettings {
     private static final BigDecimal DEFAULT_MAX_MONEY = new BigDecimal("10000000000000");
     private static final BigDecimal DEFAULT_MIN_MONEY = new BigDecimal("-10000000000000");
+    private static final Tag DEFAULT_PRIMARY_COLOR = Tag.styling(NamedTextColor.GOLD);
+    private static final Tag DEFAULT_SECONDARY_COLOR = Tag.styling(NamedTextColor.RED);
     private final transient EssentialsConfiguration config;
     private final transient IEssentials ess;
     private final transient AtomicInteger reloadCount = new AtomicInteger(0);
@@ -141,8 +143,8 @@ public class Settings implements net.ess3.api.ISettings {
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
     private Map<String, String> worldAliases;
-    private Tag primaryColor = Tag.styling(NamedTextColor.GOLD);
-    private Tag secondaryColor = Tag.styling(NamedTextColor.RED);
+    private Tag primaryColor = DEFAULT_PRIMARY_COLOR;
+    private Tag secondaryColor = DEFAULT_SECONDARY_COLOR;
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -1970,7 +1972,8 @@ public class Settings implements net.ess3.api.ISettings {
 
     private Tag _getPrimaryColor() {
         final String color = config.getString("message-colors.primary", "#ffaa00");
-        return Tag.styling(_getTagColor(color, NamedTextColor.GOLD));
+        final TextColor textColor = _getTagColor(color);
+        return textColor != null ? Tag.styling(textColor) : DEFAULT_PRIMARY_COLOR;
     }
 
     @Override
@@ -1980,24 +1983,23 @@ public class Settings implements net.ess3.api.ISettings {
 
     private Tag _getSecondaryColor() {
         final String color = config.getString("message-colors.secondary", "#ff5555");
-        return Tag.styling(_getTagColor(color, NamedTextColor.RED));
+        final TextColor textColor = _getTagColor(color);
+        return textColor != null ? Tag.styling(textColor) : DEFAULT_SECONDARY_COLOR;
     }
 
-    private TextColor _getTagColor(final String color, final TextColor def) {
+    private TextColor _getTagColor(final String color) {
         try {
-            if (color.startsWith("#") && color.length() == 7 && NumberUtil.isNumeric(color.substring(1))) {
+            if (color.startsWith("#") && color.length() == 7 && NumberUtil.isHexadecimal(color.substring(1))) {
                 return TextColor.color(Color.fromRGB(Integer.decode(color)).asRGB());
             }
 
             if (color.length() == 1) {
-                final NamedTextColor named = AdventureUtil.fromChar(color.charAt(0));
-                return named != null ? named : def;
+                return AdventureUtil.fromChar(color.charAt(0));
             }
 
-            final NamedTextColor named = NamedTextColor.NAMES.value(color.toLowerCase(Locale.ENGLISH));
-            return named != null ? named : def;
+            return NamedTextColor.NAMES.value(color.toLowerCase(Locale.ENGLISH));
         } catch (IllegalArgumentException ignored) {
         }
-        return def;
+        return null;
     }
 }

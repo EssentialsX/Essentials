@@ -664,6 +664,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         final PluginManager pm = getServer().getPluginManager();
         registerListeners(pm);
 
+        AdventureUtil.setEss(this);
         bukkitAudience = BukkitAudiences.create(this);
     }
 

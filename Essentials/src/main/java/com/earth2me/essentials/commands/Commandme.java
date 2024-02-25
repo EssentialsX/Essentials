@@ -17,8 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.earth2me.essentials.I18n.tlLiteral;
-
 public class Commandme extends EssentialsCommand {
     public Commandme() {
         super("me");
@@ -109,7 +107,7 @@ public class Commandme extends EssentialsCommand {
         String message = getFinalArg(args, 0);
         message = FormatUtil.replaceFormat(message);
 
-        ess.getServer().broadcastMessage(tlLiteral("action", "@", message));
+        ess.broadcastTl("action", "@", message);
     }
 
     @Override
