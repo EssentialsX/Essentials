@@ -64,8 +64,8 @@ import java.util.Set;
 import java.util.UUID;
 
 public class OfflinePlayerStub implements Player {
+    protected final transient org.bukkit.OfflinePlayer base;
     private final transient Server server;
-    private final transient org.bukkit.OfflinePlayer base;
     private transient Location location = new Location(null, 0, 0, 0, 0, 0);
     private transient World world;
     private boolean allowFlight = false;
