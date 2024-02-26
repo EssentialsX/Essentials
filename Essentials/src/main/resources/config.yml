@@ -213,6 +213,10 @@ socialspy-listen-muted-players: true
 # If false, social spy will only monitor commands from the list above.
 socialspy-messages: true
 
+# Whether social spy should use formatted display names which may include color.
+# If false, social spy will use only the actual player names.
+socialspy-uses-displaynames: true
+
 # The following settings listen for when a player changes worlds.
 # If you use another plugin to control speed and flight, you should change these to false.
 
