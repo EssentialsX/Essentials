@@ -34,6 +34,9 @@ public class PlayerExtension {
     }
 
     public OfflinePlayer getOffline() {
-        return base.getServer().getOfflinePlayer(base.getUniqueId());
+        if (base instanceof OfflinePlayerStub) {
+            return ((OfflinePlayerStub) base).base;
+        }
+        return base;
     }
 }
