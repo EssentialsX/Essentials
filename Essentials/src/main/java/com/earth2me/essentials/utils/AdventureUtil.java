@@ -104,16 +104,15 @@ public final class AdventureUtil {
         final int length = text.length();
         final char[] chars = text.toCharArray();
         final StringBuilder normalized = new StringBuilder();
-        for (int i = 0; i < length - 1; ++i) {
+        for (int i = 0; i < length; ++i) {
             final char current = chars[i];
             normalized.append(current);
-            if (current == LEGACY_CHARACTER) {
+            if (current == LEGACY_CHARACTER && i < length - 1) {
                 final char next = chars[i + 1];
                 normalized.append(Character.toLowerCase(next));
                 ++i;
             }
         }
-        normalized.append(chars[length - 1]);
         return normalized.toString();
     }
 
