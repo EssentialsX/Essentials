@@ -40,7 +40,6 @@ public final class AdventureUtil {
                 CharacterAndFormat.characterAndFormat('N', TextDecoration.UNDERLINED),
                 CharacterAndFormat.characterAndFormat('O', TextDecoration.ITALIC),
                 CharacterAndFormat.characterAndFormat('R', Reset.INSTANCE)
-
         ));
         final LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder()
                 .flattener(ComponentFlattener.basic())
