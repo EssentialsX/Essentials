@@ -12,6 +12,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 public final class AdventureUtil {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER;
     private static final MiniMessage MINI_MESSAGE_NO_TAGS;
+    private static final char LEGACY_CHARACTER = '§';
     private static final String LOOKUP = "0123456789abcdefklmnor";
     private static final NamedTextColor[] COLORS = new NamedTextColor[]{NamedTextColor.BLACK, NamedTextColor.DARK_BLUE, NamedTextColor.DARK_GREEN, NamedTextColor.DARK_AQUA, NamedTextColor.DARK_RED, NamedTextColor.DARK_PURPLE, NamedTextColor.GOLD, NamedTextColor.GRAY, NamedTextColor.DARK_GRAY, NamedTextColor.BLUE, NamedTextColor.GREEN, NamedTextColor.AQUA, NamedTextColor.RED, NamedTextColor.LIGHT_PURPLE, NamedTextColor.YELLOW, NamedTextColor.WHITE};
     private static IEssentials ess;
@@ -85,12 +86,34 @@ public final class AdventureUtil {
      * @param useCustomTags true if gold and red colors should use primary and secondary tags instead.
      */
     public static String legacyToMini(String text, boolean useCustomTags) {
-        final Component deserializedText = LEGACY_SERIALIZER.deserialize(text);
+        final Component deserializedText = LEGACY_SERIALIZER.deserialize(normalizeLegacyText(text));
         if (useCustomTags) {
             return miniMessageInstance.serialize(deserializedText);
         } else {
             return MINI_MESSAGE_NO_TAGS.serialize(deserializedText);
         }
+    }
+
+    /**
+     * Normalizes formatting codes within a section sign legacy string
+     */
+    private static String normalizeLegacyText(String text) {
+        if (text == null) {
+            return null;
+        }
+        final int length = text.length();
+        final char[] chars = text.toCharArray();
+        final StringBuilder normalized = new StringBuilder();
+        for (int i = 0; i < length - 1; ++i) {
+            final char current = chars[i];
+            normalized.append(current);
+            if (current == LEGACY_CHARACTER) {
+                final char next = chars[i + 1];
+                normalized.append(Character.toLowerCase(next));
+                ++i;
+            }
+        }
+        return normalized.toString();
     }
 
     /**
