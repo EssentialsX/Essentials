@@ -98,7 +98,7 @@ public final class AdventureUtil {
      * Normalizes formatting codes within a section sign legacy string
      */
     private static String normalizeLegacyText(String text) {
-        if (text == null) {
+        if (text == null || text.isEmpty()) {
             return null;
         }
         final int length = text.length();
@@ -113,6 +113,7 @@ public final class AdventureUtil {
                 ++i;
             }
         }
+        normalized.append(chars[length - 1]);
         return normalized.toString();
     }
 
