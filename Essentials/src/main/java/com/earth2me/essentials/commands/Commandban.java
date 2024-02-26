@@ -55,7 +55,7 @@ public class Commandban extends EssentialsCommand {
 
         final String banDisplay = tlLiteral("banFormat", banReason, senderDisplayName);
 
-        user.getBase().kickPlayer(banDisplay);
+        user.getBase().kickPlayer(AdventureUtil.miniToLegacy(banDisplay));
         ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("playerBanned", senderDisplayName, user.getName(), banDisplay)));
 
         if (nomatch) {

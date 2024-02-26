@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import org.bukkit.Server;
 
 public class Commandtptoggle extends EssentialsToggleCommand {
@@ -30,7 +29,7 @@ public class Commandtptoggle extends EssentialsToggleCommand {
 
         user.sendTl(enabled ? "teleportationEnabled" : "teleportationDisabled");
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendTl(enabled ? "teleportationEnabledFor" : "teleportationDisabledFor", CommonPlaceholders.displayName(user));
+            sender.sendTl(enabled ? "teleportationEnabledFor" : "teleportationDisabledFor", user.getDisplayName());
         }
     }
 }

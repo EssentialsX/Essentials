@@ -83,18 +83,18 @@ public class Commandtogglejail extends EssentialsCommand {
                         if (args.length > 2) {
                             player.setJailTimeout(timeDiff);
                             // 50 MSPT (milliseconds per tick)
-                            player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
+                            player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getOffline().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
                         }
 
                         final String tlKey;
                         final Object[] objects;
                         if (timeDiff > 0) {
                             tlKey = "jailNotifyJailedFor";
-                            objects = new Object[]{player.getName(), DateUtil.formatDateDiff(finalDisplayTime)};
+                            objects = new Object[]{player.getName(), DateUtil.formatDateDiff(finalDisplayTime), sender.getSender().getName()};
                             sender.sendTl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime));
                         } else {
                             tlKey = "jailNotifyJailed";
-                            objects = new Object[]{player.getName(), sender.getSender().getName()};
+                            objects = new Object[]{player.getName(), sender.getSender().getName(), sender.getSender().getName()};
                             sender.sendTl("playerJailed", player.getName());
                         }
 
@@ -121,7 +121,7 @@ public class Commandtogglejail extends EssentialsCommand {
             final long displayTimeDiff = DateUtil.parseDateDiff(unparsedTime, true);
             final long timeDiff = DateUtil.parseDateDiff(unparsedTime, true, ess.getSettings().isJailOnlineTime());
             player.setJailTimeout(timeDiff);
-            player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
+            player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getOffline().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
             sender.sendTl("jailSentenceExtended", DateUtil.formatDateDiff(displayTimeDiff));
 
             final String tlKey = "jailNotifySentenceExtended";

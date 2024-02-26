@@ -2,10 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
-import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.UserActionEvent;
 import org.bukkit.Bukkit;
@@ -18,8 +16,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandme extends EssentialsCommand {
     public Commandme() {
@@ -45,9 +41,8 @@ public class Commandme extends EssentialsCommand {
 
         user.setDisplayNick();
         long radius = ess.getSettings().getChatRadius();
-        final String toSend = tlLiteral("action", CommonPlaceholders.displayName((IUser) user), message);
         if (radius < 1) {
-            ess.broadcastMessage(user, toSend);
+            ess.broadcastTl("action", user.getDisplayName(), message);
             ess.getServer().getPluginManager().callEvent(new UserActionEvent(user, message, Collections.unmodifiableCollection(ess.getServer().getOnlinePlayers())));
             return;
         }
@@ -55,7 +50,7 @@ public class Commandme extends EssentialsCommand {
 
         final World world = user.getWorld();
         final Location loc = user.getLocation();
-        final Set<Player> outList = new HashSet<>();
+        final Set<User> outList = new HashSet<>();
 
         for (final Player player : Bukkit.getOnlinePlayers()) {
             final User onlineUser = ess.getUser(player);
@@ -74,13 +69,13 @@ public class Commandme extends EssentialsCommand {
                 }
                 if (abort) {
                     if (onlineUser.isAuthorized("essentials.chat.spy")) {
-                        outList.add(player); // Just use the same list unless we wanted to format spyying for this.
+                        outList.add(onlineUser); // Just use the same list unless we wanted to format spyying for this.
                     }
                 } else {
-                    outList.add(player);
+                    outList.add(onlineUser);
                 }
             } else {
-                outList.add(player); // Add yourself to the list.
+                outList.add(onlineUser); // Add yourself to the list.
             }
         }
 
@@ -88,10 +83,19 @@ public class Commandme extends EssentialsCommand {
             user.sendTl("localNoOne");
         }
 
-        for (final Player onlinePlayer : outList) {
-            onlinePlayer.sendMessage(toSend);
+        for (final User onlineUser : outList) {
+            onlineUser.sendTl("action", user.getDisplayName(), message);
         }
-        ess.getServer().getPluginManager().callEvent(new UserActionEvent(user, message, Collections.unmodifiableCollection(outList)));
+
+        // Only take the time to generate this list if there are listeners.
+        if (UserActionEvent.getHandlerList().getRegisteredListeners().length > 0) {
+            final Set<Player> outListPlayers = new HashSet<>();
+            for (final User onlineUser : outList) {
+                outListPlayers.add(onlineUser.getBase());
+            }
+
+            ess.getServer().getPluginManager().callEvent(new UserActionEvent(user, message, Collections.unmodifiableCollection(outListPlayers)));
+        }
     }
 
     @Override
@@ -103,7 +107,7 @@ public class Commandme extends EssentialsCommand {
         String message = getFinalArg(args, 0);
         message = FormatUtil.replaceFormat(message);
 
-        ess.getServer().broadcastMessage(tlLiteral("action", "@", message));
+        ess.broadcastTl("action", "@", message);
     }
 
     @Override

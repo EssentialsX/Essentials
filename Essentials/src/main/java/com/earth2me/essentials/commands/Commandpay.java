@@ -3,11 +3,9 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.Lists;
-import net.ess3.api.IUser;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserBalanceUpdateEvent;
@@ -88,7 +86,7 @@ public class Commandpay extends EssentialsLoopCommand {
                 }
 
                 if (!player.isAcceptingPay() || (ess.getSettings().isPayExcludesIgnoreList() && player.isIgnoredPlayer(user))) {
-                    user.sendTl("notAcceptingPay", CommonPlaceholders.displayName((IUser) player));
+                    user.sendTl("notAcceptingPay", player.getDisplayName());
                     return;
                 }
                 if (user.isPromptingPayConfirm() && !amount.equals(user.getConfirmingPayments().get(player))) { // checks if exists and if command needs to be repeated.

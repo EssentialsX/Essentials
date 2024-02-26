@@ -455,7 +455,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         user.getBase().setAllowFlight(true);
                         user.getBase().setFlying(true);
                         if (ess.getSettings().isSendFlyEnableOnJoin()) {
-                            user.sendTl("flyMode", CommonPlaceholders.enableDisable(user.getSource(), true), CommonPlaceholders.displayName(user));
+                            user.sendTl("flyMode", CommonPlaceholders.enableDisable(user.getSource(), true), user.getDisplayName());
                         }
                     }
                 }
@@ -642,11 +642,10 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 if (!user.isAuthorized("essentials.chat.spy.exempt")) {
                     for (final User spyer : ess.getOnlineUsers()) {
                         if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
-                            if (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
-                                spyer.sendMessage(spyer.playerTl("socialSpyMutedPrefix") + player.getDisplayName() + ": " + event.getMessage());
-                            } else {
-                                spyer.sendMessage(spyer.playerTl("socialSpyPrefix") + player.getDisplayName() + ": " + event.getMessage());
-                            }
+                            final Component base = (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers())
+                                    ? spyer.tlComponent("socialSpyMutedPrefix")
+                                    : spyer.tlComponent("socialSpyPrefix");
+                            spyer.sendComponent(base.append(AdventureUtil.legacyToAdventure(player.getDisplayName())).append(Component.text(": " + event.getMessage())));
                         }
                     }
                 }

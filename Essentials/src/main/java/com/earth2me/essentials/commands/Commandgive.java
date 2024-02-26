@@ -4,11 +4,9 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
-import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -81,7 +79,7 @@ public class Commandgive extends EssentialsLoopCommand {
         final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
         final ItemStack finalStack = stack;
         loopOnlinePlayersConsumer(server, sender, false, true, args[0], player -> {
-            sender.sendTl("giveSpawn", finalStack.getAmount(), itemName, CommonPlaceholders.displayName((IUser) player));
+            sender.sendTl("giveSpawn", finalStack.getAmount(), itemName, player.getDisplayName());
 
             final Map<Integer, ItemStack> leftovers = Inventories.addItem(player.getBase(), player.isAuthorized("essentials.oversizedstacks") ? ess.getSettings().getOversizedStackSize() : 0, finalStack);
 
@@ -90,7 +88,7 @@ public class Commandgive extends EssentialsLoopCommand {
                     final World w = player.getWorld();
                     w.dropItemNaturally(player.getLocation(), item);
                 } else {
-                    sender.sendTl("giveSpawnFailure", item.getAmount(), itemName, CommonPlaceholders.displayName((IUser) player));
+                    sender.sendTl("giveSpawnFailure", item.getAmount(), itemName, player.getDisplayName());
                 }
             }
 

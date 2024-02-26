@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
-import com.earth2me.essentials.utils.CommonPlaceholders;
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -30,7 +30,7 @@ public class Commandunlimited extends EssentialsCommand {
         }
 
         if (args[0].equalsIgnoreCase("list")) {
-            user.sendMessage(getList(user, target));
+            user.sendComponent(AdventureUtil.miniMessage().deserialize(getList(user, target)));
         } else if (args[0].equalsIgnoreCase("clear")) {
             for (final Material m : new HashSet<>(target.getUnlimited())) {
                 if (m == null) {
@@ -57,7 +57,7 @@ public class Commandunlimited extends EssentialsCommand {
             }
             joiner.add(material.toString().toLowerCase(Locale.ENGLISH).replace("_", ""));
         }
-        output.append(joiner.toString());
+        output.append(joiner);
 
         return output.toString();
     }
@@ -82,9 +82,9 @@ public class Commandunlimited extends EssentialsCommand {
         }
 
         if (user != target) {
-            user.sendTl(message, itemname, CommonPlaceholders.displayName(target));
+            user.sendTl(message, itemname, target.getDisplayName());
         }
-        target.sendTl(message, itemname, CommonPlaceholders.displayName(target));
+        target.sendTl(message, itemname, target.getDisplayName());
         target.setUnlimited(stack, enableUnlimited);
     }
 }

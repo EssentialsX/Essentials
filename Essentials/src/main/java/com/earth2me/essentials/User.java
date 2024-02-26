@@ -7,7 +7,6 @@ import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
 import com.earth2me.essentials.utils.AdventureUtil;
-import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -16,8 +15,8 @@ import com.earth2me.essentials.utils.TriState;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.IEssentials;
-import net.ess3.api.IUser;
 import net.ess3.api.MaxMoneyException;
+import net.ess3.api.TranslatableException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
@@ -227,7 +226,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             cooldownTime.add(Calendar.SECOND, (int) cooldown);
             cooldownTime.add(Calendar.MILLISECOND, (int) ((cooldown * 1000.0) % 1000.0));
             if (cooldownTime.after(now) && !isAuthorized("essentials.heal.cooldown.bypass")) {
-                throw new Exception(playerTl("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis())));
+                throw new TranslatableException("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis()));
             }
         }
         setLastHealTimestamp(now.getTimeInMillis());
@@ -250,7 +249,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         setMoney(getMoney().add(value), cause);
         sendTl("addedToAccount", NumberUtil.displayCurrency(value, ess));
         if (initiator != null) {
-            initiator.sendTl("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), CommonPlaceholders.displayName((IUser) this), NumberUtil.displayCurrency(getMoney(), ess));
+            initiator.sendTl("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess));
         }
     }
 
@@ -267,8 +266,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (canAfford(value)) {
             setMoney(getMoney().subtract(value), cause);
             reciever.setMoney(reciever.getMoney().add(value), cause);
-            sendTl("moneySentTo", NumberUtil.displayCurrency(value, ess), CommonPlaceholders.displayName((IUser) reciever));
-            reciever.sendTl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), CommonPlaceholders.displayName((IUser) this));
+            sendTl("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName());
+            reciever.sendTl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName());
             final TransactionEvent transactionEvent = new TransactionEvent(this.getSource(), reciever, value);
             ess.getServer().getPluginManager().callEvent(transactionEvent);
         } else {
@@ -297,7 +296,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         sendTl("takenFromAccount", NumberUtil.displayCurrency(value, ess));
         if (initiator != null) {
-            initiator.sendTl("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), CommonPlaceholders.displayName((IUser) this), NumberUtil.displayCurrency(getMoney(), ess));
+            initiator.sendTl("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess));
         }
     }
 
@@ -409,7 +408,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         teleportRequestQueue.remove(playerUsername);
         if (inform) {
-            sendTl("requestTimedOutFrom", CommonPlaceholders.displayName((IUser) ess.getUser(request.getRequesterUuid())));
+            sendTl("requestTimedOutFrom", ess.getUser(request.getRequesterUuid()).getDisplayName());
         }
         return null;
     }
@@ -443,7 +442,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             } else {
                 if (inform) {
-                    sendTl("requestTimedOutFrom", CommonPlaceholders.displayName((IUser) ess.getUser(request.getRequesterUuid())));
+                    sendTl("requestTimedOutFrom", ess.getUser(request.getRequesterUuid()).getDisplayName());
                 }
                 teleportRequestQueue.remove(key);
             }
@@ -806,9 +805,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (broadcast && !isHidden() && !isAfk()) {
                 setDisplayNick();
                 if (ess.getSettings().broadcastAfkMessage()) {
-                    ess.broadcastTl(this, u -> u == this, "userIsNotAway", CommonPlaceholders.displayName((IUser) this));
+                    ess.broadcastTl(this, u -> u == this, "userIsNotAway", getDisplayName());
                 }
-                sendTl("userIsNotAwaySelf", CommonPlaceholders.displayName((IUser) this));
+                sendTl("userIsNotAwaySelf", getDisplayName());
             }
         }
         lastActivity = System.currentTimeMillis();
@@ -834,7 +833,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void checkActivity() {
-        // Graceful time before the first afk check call. 
+        // Graceful time before the first afk check call.
         if (System.currentTimeMillis() - lastActivity <= 10000) {
             return;
         }
@@ -847,7 +846,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             lastActivity = 0;
             final double kickTime = autoafkkick / 60.0;
 
-            this.getBase().kickPlayer(playerTl("autoAfkKickReason", kickTime));
+            this.getBase().kickPlayer(AdventureUtil.miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
 
             for (final User user : ess.getOnlineUsers()) {
                 if (user.isAuthorized("essentials.kick.notify")) {
@@ -861,9 +860,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (isAfk() && !isHidden()) {
                 setDisplayNick();
                 if (ess.getSettings().broadcastAfkMessage()) {
-                    ess.broadcastTl(this, u -> u == this, "userIsAway", CommonPlaceholders.displayName((IUser) this));
+                    ess.broadcastTl(this, u -> u == this, "userIsAway", getDisplayName());
                 }
-                sendTl("userIsAwaySelf", CommonPlaceholders.displayName((IUser) this));
+                sendTl("userIsAwaySelf", getDisplayName());
             }
         }
     }

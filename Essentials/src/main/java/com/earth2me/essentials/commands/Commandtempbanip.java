@@ -63,7 +63,7 @@ public class Commandtempbanip extends EssentialsCommand {
 
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, new Date(banTimestamp), senderName);
 
-        final String banDisplay = tlLiteral("banFormat", banReason, senderDisplayName);
+        final String banDisplay = AdventureUtil.miniToLegacy(tlLiteral("banFormat", banReason, senderDisplayName));
         for (final Player player : ess.getServer().getOnlinePlayers()) {
             if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
                 player.kickPlayer(banDisplay);
