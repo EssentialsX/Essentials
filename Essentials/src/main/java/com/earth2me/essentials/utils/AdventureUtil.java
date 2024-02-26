@@ -19,7 +19,6 @@ import java.util.List;
 public final class AdventureUtil {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER;
     private static final MiniMessage MINI_MESSAGE_NO_TAGS;
-    private static final char LEGACY_CHARACTER = '§';
     private static final String LOOKUP = "0123456789abcdefklmnor";
     private static final NamedTextColor[] COLORS = new NamedTextColor[]{NamedTextColor.BLACK, NamedTextColor.DARK_BLUE, NamedTextColor.DARK_GREEN, NamedTextColor.DARK_AQUA, NamedTextColor.DARK_RED, NamedTextColor.DARK_PURPLE, NamedTextColor.GOLD, NamedTextColor.GRAY, NamedTextColor.DARK_GRAY, NamedTextColor.BLUE, NamedTextColor.GREEN, NamedTextColor.AQUA, NamedTextColor.RED, NamedTextColor.LIGHT_PURPLE, NamedTextColor.YELLOW, NamedTextColor.WHITE};
     private static IEssentials ess;
