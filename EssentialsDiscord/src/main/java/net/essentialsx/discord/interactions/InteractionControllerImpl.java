@@ -61,7 +61,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
         final InteractionEvent interactionEvent = new InteractionEventImpl(event);
         final List<String> commandSnowflakes = jda.getSettings().getCommandSnowflakes(command.getName());
         if (commandSnowflakes != null && !DiscordUtil.hasRoles(event.getMember(), commandSnowflakes)) {
-            interactionEvent.reply(tlLiteral("noAccessCommand"));
+            interactionEvent.replyTl("noAccessCommand");
             return;
         }
         jda.getPlugin().getEss().scheduleSyncDelayedTask(() -> command.onCommand(interactionEvent));

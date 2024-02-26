@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
@@ -95,12 +96,12 @@ public class Commandtime extends EssentialsCommand {
     private void getWorldsTime(final CommandSource sender, final Collection<World> worlds) {
         if (worlds.size() == 1) {
             final Iterator<World> iter = worlds.iterator();
-            sender.sendMessage(DescParseTickFormat.format(iter.next().getTime()));
+            sender.sendComponent(AdventureUtil.miniMessage().deserialize(DescParseTickFormat.format(iter.next().getTime())));
             return;
         }
 
         for (final World world : worlds) {
-            sender.sendTl("timeWorldCurrent", world.getName(), DescParseTickFormat.format(world.getTime()));
+            sender.sendTl("timeWorldCurrent", world.getName(), AdventureUtil.parsed(DescParseTickFormat.format(world.getTime())));
         }
     }
 

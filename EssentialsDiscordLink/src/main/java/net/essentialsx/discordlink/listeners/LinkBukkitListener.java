@@ -60,7 +60,7 @@ public class LinkBukkitListener implements Listener {
             } catch (IllegalArgumentException e) {
                 code = e.getMessage();
             }
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, tlLiteral("discordLinkLoginKick", "/link " + code, ess.getApi().getInviteUrl()));
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, AdventureUtil.miniToLegacy(tlLiteral("discordLinkLoginKick", "/link " + code, ess.getApi().getInviteUrl())));
         }
     }
 
