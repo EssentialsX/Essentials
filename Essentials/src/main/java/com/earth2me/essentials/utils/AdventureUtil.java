@@ -99,7 +99,7 @@ public final class AdventureUtil {
      */
     private static String normalizeLegacyText(String text) {
         if (text == null || text.isEmpty()) {
-            return null;
+            return text;
         }
         final int length = text.length();
         final char[] chars = text.toCharArray();
