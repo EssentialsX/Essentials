@@ -2,6 +2,7 @@ package com.earth2me.essentials.utils;
 
 import com.earth2me.essentials.IEssentials;
 import net.ess3.api.IUser;
+import net.ess3.api.TranslatableException;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,8 +16,6 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public final class LocationUtil {
     public static final int RADIUS = 3;
@@ -212,7 +211,7 @@ public final class LocationUtil {
 
     public static Location getSafeDestination(IEssentials ess, final Location loc) throws Exception {
         if (loc == null || loc.getWorld() == null) {
-            throw new Exception(tl("destinationNotSet"));
+            throw new TranslatableException("destinationNotSet");
         }
         final World world = loc.getWorld();
         final int worldMinY = ess.getWorldInfoProvider().getMinHeight(world);
@@ -266,7 +265,7 @@ public final class LocationUtil {
                 // Allow spawning at the top of the world, but not above the nether roof
                 y = Math.min(world.getHighestBlockYAt(x, z) + 1, worldMaxY);
                 if (x - 48 > loc.getBlockX()) {
-                    throw new Exception(tl("holeInFloor"));
+                    throw new TranslatableException("holeInFloor");
                 }
             }
         }

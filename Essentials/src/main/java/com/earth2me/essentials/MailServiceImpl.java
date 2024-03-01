@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class MailServiceImpl implements MailService {
     private final transient ThreadLocal<SimpleDateFormat> df = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy/MM/dd HH:mm"));
@@ -52,10 +52,28 @@ public class MailServiceImpl implements MailService {
     public String getMailLine(MailMessage mail) {
         final String message = mail.getMessage();
         if (mail.isLegacy()) {
-            return tl("mailMessage", message);
+            return tlLiteral("mailMessage", message);
         }
 
         final String expire = mail.getTimeExpire() != 0 ? "Timed" : "";
-        return tl((mail.isRead() ? "mailFormatNewRead" : "mailFormatNew") + expire, df.get().format(new Date(mail.getTimeSent())), mail.getSenderUsername(), message);
+        return tlLiteral((mail.isRead() ? "mailFormatNewRead" : "mailFormatNew") + expire, df.get().format(new Date(mail.getTimeSent())), mail.getSenderUsername(), message);
+    }
+
+    @Override
+    public String getMailTlKey(MailMessage message) {
+        if (message.isLegacy()) {
+            return "mailMessage";
+        }
+
+        final String expire = message.getTimeExpire() != 0 ? "Timed" : "";
+        return (message.isRead() ? "mailFormatNewRead" : "mailFormatNew") + expire;
+    }
+
+    @Override
+    public Object[] getMailTlArgs(MailMessage message) {
+        if (message.isLegacy()) {
+            return new Object[] {message.getMessage()};
+        }
+        return new Object[] {df.get().format(new Date(message.getTimeSent())), message.getSenderUsername(), message.getMessage()};
     }
 }

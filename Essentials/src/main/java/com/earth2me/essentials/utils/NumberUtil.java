@@ -9,7 +9,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public final class NumberUtil {
 
@@ -73,9 +73,9 @@ public final class NumberUtil {
             sign = "-";
         }
         if (ess.getSettings().isCurrencySymbolSuffixed()) {
-            return sign + tl("currency", currency, ess.getSettings().getCurrencySymbol());
+            return sign + tlLiteral("currency", currency, ess.getSettings().getCurrencySymbol());
         }
-        return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);
+        return sign + tlLiteral("currency", ess.getSettings().getCurrencySymbol(), currency);
     }
 
     public static String displayCurrencyExactly(final BigDecimal value, final IEssentials ess) {
@@ -86,9 +86,9 @@ public final class NumberUtil {
             sign = "-";
         }
         if (ess.getSettings().isCurrencySymbolSuffixed()) {
-            return sign + tl("currency", currency, ess.getSettings().getCurrencySymbol());
+            return sign + tlLiteral("currency", currency, ess.getSettings().getCurrencySymbol());
         }
-        return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);
+        return sign + tlLiteral("currency", ess.getSettings().getCurrencySymbol(), currency);
     }
 
     public static String sanitizeCurrencyString(final String input, final IEssentials ess) {
@@ -127,6 +127,15 @@ public final class NumberUtil {
             }
         }
         return true;
+    }
+
+    public static boolean isHexadecimal(final String sNum) {
+        try {
+            Integer.parseInt(sNum, 16);
+            return true;
+        } catch (final NumberFormatException e) {
+            return false;
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FloatUtil;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -9,8 +10,6 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandspeed extends EssentialsCommand {
     private static final List<String> types = Arrays.asList("walk", "fly", "1", "1.5", "1.75", "2");
@@ -54,11 +53,11 @@ public class Commandspeed extends EssentialsCommand {
 
         if (isFly) {
             user.getBase().setFlySpeed(getRealMoveSpeed(speed, true, isBypass));
-            user.sendMessage(tl("moveSpeed", tl("flying"), speed, user.getDisplayName()));
+            user.sendTl("moveSpeed", AdventureUtil.parsed(user.playerTl("flying")), speed, user.getDisplayName());
             return;
         }
         user.getBase().setWalkSpeed(getRealMoveSpeed(speed, false, isBypass));
-        user.sendMessage(tl("moveSpeed", tl("walking"), speed, user.getDisplayName()));
+        user.sendTl("moveSpeed", AdventureUtil.parsed(user.playerTl("walking")), speed, user.getDisplayName());
     }
 
     private void speedOtherPlayers(final Server server, final CommandSource sender, final boolean isFly, final boolean isBypass, final float speed, final String name) throws PlayerNotFoundException {
@@ -73,10 +72,10 @@ public class Commandspeed extends EssentialsCommand {
             foundUser = true;
             if (isFly) {
                 matchPlayer.setFlySpeed(getRealMoveSpeed(speed, true, isBypass));
-                sender.sendMessage(tl("moveSpeed", tl("flying"), speed, matchPlayer.getDisplayName()));
+                sender.sendTl("moveSpeed", AdventureUtil.parsed(sender.tl("flying")), speed, matchPlayer.getDisplayName());
             } else {
                 matchPlayer.setWalkSpeed(getRealMoveSpeed(speed, false, isBypass));
-                sender.sendMessage(tl("moveSpeed", tl("walking"), speed, matchPlayer.getDisplayName()));
+                sender.sendTl("moveSpeed", AdventureUtil.parsed(sender.tl("walking")), speed, matchPlayer.getDisplayName());
             }
         }
         if (!foundUser) {
@@ -140,7 +139,7 @@ public class Commandspeed extends EssentialsCommand {
             return types;
         } else if (args.length == 2) {
             return speeds;
-        } else if (args.length == 3 && sender.isAuthorized("essentials.speed.others", ess)) {
+        } else if (args.length == 3 && sender.isAuthorized("essentials.speed.others")) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

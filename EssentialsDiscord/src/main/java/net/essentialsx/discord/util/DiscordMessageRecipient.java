@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class DiscordMessageRecipient implements IMessageRecipient {
     private final InteractionMember member;
@@ -20,6 +20,15 @@ public class DiscordMessageRecipient implements IMessageRecipient {
 
     @Override
     public void sendMessage(String message) {
+    }
+
+    @Override
+    public void sendTl(String tlKey, Object... args) {
+    }
+
+    @Override
+    public String tlSender(String tlKey, Object... args) {
+        return "";
     }
 
     @Override
@@ -36,7 +45,7 @@ public class DiscordMessageRecipient implements IMessageRecipient {
 
         final String cleanMessage = MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripFormat(message));
 
-        member.sendPrivateMessage(tl("replyFromDiscord", sender.getName(), cleanMessage)).thenAccept(success -> {
+        member.sendPrivateMessage(tlLiteral("replyFromDiscord", sender.getName(), cleanMessage)).thenAccept(success -> {
             if (!success) {
                 died.set(true);
             }

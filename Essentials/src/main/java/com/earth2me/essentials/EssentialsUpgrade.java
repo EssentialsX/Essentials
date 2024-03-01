@@ -5,12 +5,14 @@ import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.userstorage.ModernUUIDCache;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.google.gson.reflect.TypeToken;
 import net.ess3.api.IEssentials;
 import net.essentialsx.api.v2.services.mail.MailMessage;
+import nu.studer.java.util.OrderedProperties;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -49,7 +51,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsUpgrade {
     public static final FileFilter YML_FILTER = pathname -> pathname.isFile() && pathname.getName().endsWith(".yml");
@@ -493,7 +495,7 @@ public class EssentialsUpgrade {
             doneFile.setProperty("move" + name + "ToFile", true);
             doneFile.save();
         } catch (final IOException e) {
-            ess.getLogger().log(Level.SEVERE, tl("upgradingFilesError"), e);
+            ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("upgradingFilesError")), e);
         }
     }
 
@@ -528,10 +530,10 @@ public class EssentialsUpgrade {
         bWriter.close();
         if (needUpdate) {
             if (!file.renameTo(new File(file.getParentFile(), file.getName().concat("." + System.currentTimeMillis() + ".upgradebackup")))) {
-                throw new Exception(tl("configFileMoveError"));
+                throw new Exception(tlLiteral("configFileMoveError"));
             }
             if (!tempFile.renameTo(file)) {
-                throw new Exception(tl("configFileRenameError"));
+                throw new Exception(tlLiteral("configFileRenameError"));
             }
         } else {
             tempFile.delete();
@@ -656,15 +658,15 @@ public class EssentialsUpgrade {
             final File tmpFile = new File(listOfFile.getParentFile(), sanitizedFilename + ".tmp");
             final File newFile = new File(listOfFile.getParentFile(), sanitizedFilename);
             if (!listOfFile.renameTo(tmpFile)) {
-                ess.getLogger().log(Level.WARNING, tl("userdataMoveError", filename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("userdataMoveError", filename, sanitizedFilename)));
                 continue;
             }
             if (newFile.exists()) {
-                ess.getLogger().log(Level.WARNING, tl("duplicatedUserdata", filename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("duplicatedUserdata", filename, sanitizedFilename)));
                 continue;
             }
             if (!tmpFile.renameTo(newFile)) {
-                ess.getLogger().log(Level.WARNING, tl("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("userdataMoveBackError", sanitizedFilename, sanitizedFilename)));
             }
         }
         doneFile.setProperty("sanitizeAllUserFilenames", true);
@@ -742,7 +744,7 @@ public class EssentialsUpgrade {
                         config.setProperty(entry.getKey(), loc);
                     }
                     if (!configFile.renameTo(new File(ess.getDataFolder(), "spawn.yml.old"))) {
-                        throw new Exception(tl("fileRenameError", "spawn.yml"));
+                        throw new Exception(tlLiteral("fileRenameError", "spawn.yml"));
                     }
                     config.blockingSave();
                 }
@@ -770,7 +772,7 @@ public class EssentialsUpgrade {
                         config.setProperty(entry.getKey(), loc);
                     }
                     if (!configFile.renameTo(new File(ess.getDataFolder(), "jail.yml.old"))) {
-                        throw new Exception(tl("fileRenameError", "jail.yml"));
+                        throw new Exception(tlLiteral("fileRenameError", "jail.yml"));
                     }
                     config.blockingSave();
                 }
@@ -983,6 +985,60 @@ public class EssentialsUpgrade {
             doneFile.save();
         } catch (final IOException e) {
             ess.getLogger().log(Level.SEVERE, "Error while generating initial uuids/names cache", e);
+        }
+    }
+
+    public void upgradeLang() {
+        if (doneFile.getBoolean("updateLegacyToAdventure", false)) {
+            return;
+        }
+
+        ess.getLogger().log(Level.WARNING, "Beginning Adventure locale file conversion.");
+
+        try {
+            final File dataFolder = ess.getDataFolder();
+            if (!dataFolder.exists() || !dataFolder.isDirectory()) {
+                return;
+            }
+
+            final File backDir = new File(dataFolder, "msg-backups-" + System.currentTimeMillis());
+            if (backDir.exists() || !backDir.mkdir()) {
+                ess.getLogger().log(Level.SEVERE, "Unable to make msg-backups dir?!");
+                return;
+            }
+
+            final File messagesDir = new File(dataFolder, "messages");
+            //noinspection ResultOfMethodCallIgnored
+            messagesDir.mkdir();
+
+            final File[] files = dataFolder.listFiles();
+            boolean isThereAtLeastOneBackup = false;
+            if (files != null) {
+                for (final File file : files) {
+                    if (file.getName().endsWith(".properties")) {
+                        final File newFile = new File(messagesDir, file.getName());
+                        final File backup = new File(backDir, file.getName());
+                        Files.move(file, backup);
+                        isThereAtLeastOneBackup = true;
+                        final OrderedProperties properties = new OrderedProperties();
+                        properties.load(Files.newReader(backup, Charsets.UTF_8));
+                        for (final String key : properties.stringPropertyNames()) {
+                            final String value = properties.getProperty(key);
+                            properties.setProperty(key, AdventureUtil.legacyToMini(AdventureUtil.miniMessage().escapeTags(value), true));
+                        }
+                        properties.store(Files.newWriter(newFile, Charsets.UTF_8), null);
+                    }
+                }
+            }
+
+            if (!isThereAtLeastOneBackup) {
+                backDir.delete();
+            }
+
+            doneFile.setProperty("updateLegacyToAdventure", true);
+            doneFile.save();
+        } catch (final Throwable e) {
+            ess.getLogger().log(Level.SEVERE, "Error while upgrading custom locales", e);
         }
     }
 

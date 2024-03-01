@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
@@ -12,8 +13,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandptime extends EssentialsLoopCommand {
     private static final List<String> getAliases = Arrays.asList("get", "list", "show", "display");
@@ -27,7 +26,7 @@ public class Commandptime extends EssentialsLoopCommand {
         if (args.length == 0 || getAliases.contains(args[0].toLowerCase())) {
             if (args.length > 1) { // /ptime get md_5 || /ptime get *
                 if (args[1].equals("*") || args[1].equals("**")) {
-                    sender.sendMessage(tl("pTimePlayers"));
+                    sender.sendTl("pTimePlayers");
                 }
                 loopOnlinePlayersConsumer(server, sender, false, true, args[1], player -> getUserTime(sender, player));
                 return;
@@ -35,7 +34,7 @@ public class Commandptime extends EssentialsLoopCommand {
 
             if (args.length == 1 || sender.isPlayer()) { // /ptime get
                 if (sender.isPlayer()) {
-                    getUserTime(sender, sender.getUser(ess));
+                    getUserTime(sender, sender.getUser());
                     return;
                 }
                 throw new NotEnoughArgumentsException(); // We cannot imply the target for console
@@ -43,15 +42,15 @@ public class Commandptime extends EssentialsLoopCommand {
 
             // Default to showing the player times of all online users for console when no arguments are provided
             if (ess.getOnlinePlayers().size() > 1) {
-                sender.sendMessage(tl("pTimePlayers"));
+                sender.sendTl("pTimePlayers");
             }
             for (final User player : ess.getOnlineUsers()) {
                 getUserTime(sender, player);
             }
         }
 
-        if (args.length > 1 && !sender.isAuthorized("essentials.ptime.others", ess) && !args[1].equalsIgnoreCase(sender.getSelfSelector())) {
-            sender.sendMessage(tl("pTimeOthersPermission"));
+        if (args.length > 1 && !sender.isAuthorized("essentials.ptime.others") && !args[1].equalsIgnoreCase(sender.getSelfSelector())) {
+            sender.sendTl("pTimeOthersPermission");
             return;
         }
 
@@ -79,12 +78,12 @@ public class Commandptime extends EssentialsLoopCommand {
         });
 
         if (ticks == null) {
-            sender.sendMessage(tl("pTimeReset", joiner.toString()));
+            sender.sendTl("pTimeReset", joiner.toString());
             return;
         }
 
         final String formattedTime = DescParseTickFormat.format(ticks);
-        sender.sendMessage(fixed ? tl("pTimeSetFixed", formattedTime, joiner.toString()) : tl("pTimeSet", formattedTime, joiner.toString()));
+        sender.sendTl(fixed ? "pTimeSetFixed" : "pTimeSet", AdventureUtil.parsed(formattedTime), joiner.toString());
     }
 
     public void getUserTime(final CommandSource sender, final IUser user) {
@@ -93,12 +92,12 @@ public class Commandptime extends EssentialsLoopCommand {
         }
 
         if (user.getBase().getPlayerTimeOffset() == 0) {
-            sender.sendMessage(tl("pTimeNormal", user.getName()));
+            sender.sendTl("pTimeNormal", user.getName());
             return;
         }
 
         final String time = DescParseTickFormat.format(user.getBase().getPlayerTime());
-        sender.sendMessage(user.getBase().isPlayerTimeRelative() ? tl("pTimeCurrent", user.getName(), time) : tl("pTimeCurrentFixed", user.getName(), time));
+        sender.sendTl(user.getBase().isPlayerTimeRelative() ? "pTimeCurrent" : "pTimeCurrentFixed", user.getName(), AdventureUtil.parsed(time));
     }
 
     private void setUserTime(final User user, final Long ticks, final Boolean relative) {

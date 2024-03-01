@@ -3,14 +3,13 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.TreeType;
 
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandbigtree extends EssentialsCommand {
     public Commandbigtree() {
@@ -34,13 +33,13 @@ public class Commandbigtree extends EssentialsCommand {
 
         final Location loc = LocationUtil.getTarget(user.getBase(), ess.getSettings().getMaxTreeCommandRange()).add(0, 1, 0);
         if (loc.getBlock().getType().isSolid()) {
-            throw new Exception(tl("bigTreeFailure"));
+            throw new TranslatableException("bigTreeFailure");
         }
         final boolean success = user.getWorld().generateTree(loc, tree);
         if (success) {
-            user.sendMessage(tl("bigTreeSuccess"));
+            user.sendTl("bigTreeSuccess");
         } else {
-            throw new Exception(tl("bigTreeFailure"));
+            throw new TranslatableException("bigTreeFailure");
         }
     }
 

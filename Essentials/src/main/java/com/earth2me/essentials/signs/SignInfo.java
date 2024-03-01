@@ -39,7 +39,7 @@ public class SignInfo extends EssentialsSign {
             pager.showPage(chapter, page, null, player.getSource());
 
         } catch (final IOException ex) {
-            throw new SignException(ex.getMessage(), ex);
+            throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
 
         charge.charge(player);

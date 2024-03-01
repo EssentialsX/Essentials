@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class InteractionControllerImpl extends ListenerAdapter implements InteractionController {
     private static final Logger logger = EssentialsDiscord.getWrappedLogger();
@@ -52,7 +52,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
         final InteractionCommand command = commandMap.get(event.getName());
 
         if (command.isDisabled()) {
-            event.reply(tl("discordErrorCommandDisabled")).setEphemeral(true).queue();
+            event.reply(tlLiteral("discordErrorCommandDisabled")).setEphemeral(true).queue();
             return;
         }
 
@@ -61,7 +61,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
         final InteractionEvent interactionEvent = new InteractionEventImpl(event);
         final List<String> commandSnowflakes = jda.getSettings().getCommandSnowflakes(command.getName());
         if (commandSnowflakes != null && !DiscordUtil.hasRoles(event.getMember(), commandSnowflakes)) {
-            interactionEvent.reply(tl("noAccessCommand"));
+            interactionEvent.replyTl("noAccessCommand");
             return;
         }
         jda.getPlugin().getEss().scheduleSyncDelayedTask(() -> command.onCommand(interactionEvent));
@@ -108,7 +108,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
                 }
             }, failure -> {
                 if (failure instanceof ErrorResponseException && ((ErrorResponseException) failure).getErrorResponse() == ErrorResponse.MISSING_ACCESS) {
-                    logger.severe(tl("discordErrorCommand"));
+                    logger.severe(tlLiteral("discordErrorCommand"));
                     return;
                 }
                 logger.log(Level.SEVERE, "Error while registering command", failure);
@@ -148,7 +148,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
             }
         }, failure -> {
             if (failure instanceof ErrorResponseException && ((ErrorResponseException) failure).getErrorResponse() == ErrorResponse.MISSING_ACCESS) {
-                logger.severe(tl("discordErrorCommand"));
+                logger.severe(tlLiteral("discordErrorCommand"));
                 return;
             }
             logger.log(Level.SEVERE, "Error while registering command", failure);

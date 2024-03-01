@@ -2,10 +2,9 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import net.ess3.api.events.VanishStatusChangeEvent;
 import org.bukkit.Server;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandvanish extends EssentialsToggleCommand {
     public Commandvanish() {
@@ -35,13 +34,13 @@ public class Commandvanish extends EssentialsToggleCommand {
         }
 
         user.setVanished(enabled);
-        user.sendMessage(tl("vanish", user.getDisplayName(), enabled ? tl("enabled") : tl("disabled")));
+        user.sendTl("vanish", user.getDisplayName(), CommonPlaceholders.enableDisable(user.getSource(), enabled));
 
         if (enabled) {
-            user.sendMessage(tl("vanished"));
+            user.sendTl("vanished");
         }
         if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase())) {
-            sender.sendMessage(tl("vanish", user.getDisplayName(), enabled ? tl("enabled") : tl("disabled")));
+            sender.sendTl("vanish", user.getDisplayName(), CommonPlaceholders.enableDisable(user.getSource(), enabled));
         }
     }
 }
