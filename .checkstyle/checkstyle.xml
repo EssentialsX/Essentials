@@ -37,14 +37,6 @@
         <!-- https://checkstyle.org/config_imports.html#AvoidStarImport -->
         <module name="AvoidStarImport"/>
 
-        <!-- https://checkstyle.org/config_misc.html#AvoidEscapedUnicodeCharacters -->
-        <module name="AvoidEscapedUnicodeCharacters">
-            <property name="allowByTailComment" value="true"/>
-            <property name="allowEscapesForControlCharacters" value="true"/>
-            <property name="allowNonPrintableEscapes" value="true"/>
-            <property name="severity" value="info"/>
-        </module>
-
         <!-- https://checkstyle.org/config_misc.html#CommentsIndentation -->
         <module name="CommentsIndentation"/>
 

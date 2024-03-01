@@ -12,6 +12,7 @@ import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
 import net.ess3.api.TranslatableException;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -357,7 +358,7 @@ public class MetaItemStack {
     }
 
     private void transformItem(String key, String data){
-        PluginItemTransformer transformer = itemTransformers.get(key);
+        final PluginItemTransformer transformer = itemTransformers.get(key);
 
         //Ignore, the plugin is disabled.
         if(!transformer.getPlugin().isEnabled())
