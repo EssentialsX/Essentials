@@ -545,14 +545,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 final Date banExpiry = banEntry.getExpiration();
                 if (banExpiry != null) {
                     final String expiry = DateUtil.formatDateDiff(banExpiry.getTime());
-                    event.setKickMessage(tlLiteral("tempbanJoin", expiry, banEntry.getReason()));
+                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("tempbanJoin", expiry, banEntry.getReason())));
                 } else {
-                    event.setKickMessage(tlLiteral("banJoin", banEntry.getReason()));
+                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("banJoin", banEntry.getReason())));
                 }
             } else {
                 banEntry = ess.getServer().getBanList(BanList.Type.IP).getBanEntry(event.getAddress().getHostAddress());
                 if (banEntry != null) {
-                    event.setKickMessage(tlLiteral("banIpJoin", banEntry.getReason()));
+                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("banIpJoin", banEntry.getReason())));
                 }
             }
         }
