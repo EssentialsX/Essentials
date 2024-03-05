@@ -47,7 +47,8 @@ public class BalanceTopImpl implements BalanceTop {
                     } else {
                         name = user.getDisplayName();
                     }
-                    entries.add(new BalanceTop.Entry(user.getUUID(), name, userMoney));
+                    final String nameColorLimiter = "§f";
+                    entries.add(new BalanceTop.Entry(user.getUUID(), name + nameColorLimiter, userMoney));
                 }
             }
         }
