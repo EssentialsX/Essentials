@@ -633,7 +633,7 @@ public class MetaItemStack {
 
             PatternType patternType = null;
             try {
-                patternType = PatternType.valueOf(split[0]);
+                patternType = PatternType.getByIdentifier(split[0]);
             } catch (final Exception ignored) {
             }
 
@@ -642,7 +642,7 @@ public class MetaItemStack {
                 final Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 meta.setBaseColor(DyeColor.getByColor(color));
             } else if (patternType != null) {
-                final PatternType type = PatternType.valueOf(split[0]);
+                final PatternType type = PatternType.getByIdentifier(split[0]);
                 final DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
                 final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
                 meta.addPattern(pattern);
@@ -658,7 +658,7 @@ public class MetaItemStack {
 
             PatternType patternType = null;
             try {
-                patternType = PatternType.valueOf(split[0]);
+                patternType = PatternType.getByIdentifier(split[0]);
             } catch (final Exception ignored) {
             }
 
@@ -669,7 +669,7 @@ public class MetaItemStack {
                 final Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 banner.setBaseColor(DyeColor.getByColor(color));
             } else if (patternType != null) {
-                final PatternType type = PatternType.valueOf(split[0]);
+                final PatternType type = PatternType.getByIdentifier(split[0]);
                 final DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
                 final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
                 banner.addPattern(pattern);
