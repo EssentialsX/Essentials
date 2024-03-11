@@ -50,7 +50,7 @@ public final class AdventureUtil {
         }
         LEGACY_SERIALIZER = builder.build();
 
-        MINI_MESSAGE_NO_TAGS = MiniMessage.miniMessage();
+        MINI_MESSAGE_NO_TAGS = MiniMessage.builder().strict(true).build();
 
         miniMessageInstance = createMiniMessageInstance();
     }
