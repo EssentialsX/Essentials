@@ -1200,7 +1200,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void broadcastTl(final String tlKey, final Object... args) {
-        broadcastTl(null, null, true, tlKey, args);
+        broadcastTl(null, null, false, tlKey, args);
     }
 
     @Override
