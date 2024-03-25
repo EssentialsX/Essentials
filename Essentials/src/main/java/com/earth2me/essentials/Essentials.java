@@ -209,6 +209,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         EconomyLayers.init();
     }
 
+    private ItemGroups itemGroups;
+
     public Essentials() {
     }
 
@@ -380,6 +382,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             jails = new Jails(this);
             confList.add(jails);
             execTimer.mark("Init(Jails)");
+
+            itemGroups = new ItemGroups(this);
+            confList.add(itemGroups);
+            execTimer.mark("Init(ItemGroups)");
 
             EconomyLayers.onEnable(this);
 
