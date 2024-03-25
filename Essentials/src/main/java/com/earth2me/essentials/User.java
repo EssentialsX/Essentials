@@ -271,7 +271,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             final TransactionEvent transactionEvent = new TransactionEvent(this.getSource(), reciever, value);
             ess.getServer().getPluginManager().callEvent(transactionEvent);
         } else {
-            throw new ChargeException(tlLocale(playerLocale, "notEnoughMoney", NumberUtil.displayCurrency(value, ess)));
+            throw new ChargeException("notEnoughMoney", NumberUtil.displayCurrency(value, ess));
         }
     }
 
