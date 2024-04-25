@@ -59,6 +59,7 @@ import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
 import net.ess3.nms.refl.providers.ReflSyncCommandsProvider;
+import net.ess3.provider.BannerDataProvider;
 import net.ess3.provider.BiomeKeyProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.DamageEventProvider;
@@ -78,8 +79,10 @@ import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.SyncCommandsProvider;
 import net.ess3.provider.WorldInfoProvider;
+import net.ess3.provider.providers.BaseBannerDataProvider;
 import net.ess3.provider.providers.BaseLoggerProvider;
-import net.ess3.provider.providers.BasePotionDataProvider;
+import net.ess3.provider.providers.LegacyBannerDataProvider;
+import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
 import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
@@ -88,7 +91,8 @@ import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyDamageEventProvider;
 import net.ess3.provider.providers.LegacyItemUnbreakableProvider;
 import net.ess3.provider.providers.LegacyPlayerLocaleProvider;
-import net.ess3.provider.providers.LegacyPotionMetaProvider;
+import net.ess3.provider.providers.ModernPotionMetaProvider;
+import net.ess3.provider.providers.PrehistoricPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
 import net.ess3.provider.providers.ModernDamageEventProvider;
 import net.ess3.provider.providers.ModernDataWorldInfoProvider;
@@ -184,6 +188,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient SpawnerBlockProvider spawnerBlockProvider;
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
+    private transient BannerDataProvider bannerDataProvider;
     private transient ServerStateProvider serverStateProvider;
     private transient ContainerProvider containerProvider;
     private transient SerializationProvider serializationProvider;
@@ -403,10 +408,19 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
 
             //Potion Meta Provider
-            if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
-                potionMetaProvider = new LegacyPotionMetaProvider();
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_5_R01)) {
+                potionMetaProvider = new ModernPotionMetaProvider();
+            } else if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
+                potionMetaProvider = new PrehistoricPotionMetaProvider();
             } else {
-                potionMetaProvider = new BasePotionDataProvider();
+                potionMetaProvider = new LegacyPotionMetaProvider();
+            }
+
+            //Banner Meta Provider
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_5_R01)) {
+                bannerDataProvider = new BaseBannerDataProvider();
+            } else {
+                bannerDataProvider = new LegacyBannerDataProvider();
             }
 
             //Server State Provider
@@ -1362,6 +1376,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public PotionMetaProvider getPotionMetaProvider() {
         return potionMetaProvider;
+    }
+
+    @Override
+    public BannerDataProvider getBannerDataProvider() {
+        return bannerDataProvider;
     }
 
     @Override

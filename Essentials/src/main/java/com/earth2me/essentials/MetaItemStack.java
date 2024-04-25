@@ -640,7 +640,7 @@ public class MetaItemStack {
             final BannerMeta meta = (BannerMeta) stack.getItemMeta();
             if (split[0].equalsIgnoreCase("basecolor")) {
                 final Color color = Color.fromRGB(Integer.parseInt(split[1]));
-                meta.setBaseColor(DyeColor.getByColor(color));
+                ess.getBannerDataProvider().setBaseColor(stack, DyeColor.getByColor(color));
             } else if (patternType != null) {
                 final PatternType type = PatternType.getByIdentifier(split[0]);
                 final DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
