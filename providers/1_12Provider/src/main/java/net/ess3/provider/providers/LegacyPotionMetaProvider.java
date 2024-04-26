@@ -68,17 +68,45 @@ public class LegacyPotionMetaProvider implements PotionMetaProvider {
     }
 
     @Override
-    public boolean isSplash(ItemStack stack) {
-        //noinspection deprecation
-        final Potion potion = Potion.fromDamage(stack.getDurability());
-        return potion.isSplash();
+    public AbstractPotionData getPotionData(ItemStack stack) {
+        return new AbstractPotionData() {
+            final Potion potion = Potion.fromDamage(stack.getDurability());
+
+            @Override
+            public boolean isSplash() {
+                return potion.isSplash();
+            }
+
+            @Override
+            public Collection<PotionEffect> getEffects() {
+                return potion.getEffects();
+            }
+
+            @Override
+            public PotionType getType() {
+                return ((PotionMeta) stack.getItemMeta()).getBasePotionData().getType();
+            }
+
+            @Override
+            public void setType(PotionType type) {
+                final PotionMeta itemMeta = (PotionMeta) stack.getItemMeta();
+                final PotionData data = itemMeta.getBasePotionData();
+                itemMeta.setBasePotionData(new PotionData(type, data.isExtended(), data.isUpgraded()));
+                stack.setItemMeta(itemMeta);
+            }
+
+            @Override
+            public int hashCode() {
+                return (31 * stack.getType().hashCode()) ^ ((PotionMeta) stack.getItemMeta()).getBasePotionData().hashCode();
+            }
+        };
     }
 
     @Override
-    public Collection<PotionEffect> getEffects(ItemStack stack) {
-        //noinspection deprecation
-        final Potion potion = Potion.fromDamage(stack.getDurability());
-        return potion.getEffects();
+    public void updatePotionStack(ItemStack stack, AbstractPotionData data) {
+        return;
+        //todo
+        return;
     }
 
     @Override

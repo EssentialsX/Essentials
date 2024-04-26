@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.ess3.api.IEssentials;
 import net.ess3.api.TranslatableException;
+import net.ess3.provider.PotionMetaProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -127,12 +128,12 @@ public class FlatItemDb extends AbstractItemDb {
         final ItemStack stack = new ItemStack(material);
         stack.setAmount(material.getMaxStackSize());
 
-        final PotionData potionData = data.getPotionData();
+        final PotionMetaProvider.AbstractPotionData potionData = data.getPotionData();
         final ItemMeta meta = stack.getItemMeta();
 
         if (potionData != null && meta instanceof PotionMeta) {
             final PotionMeta potionMeta = (PotionMeta) meta;
-            potionMeta.setBasePotionData(potionData);
+            potionMeta.setBasePotionType(potionData);
         }
 
         // For some reason, Damageable doesn't extend ItemMeta but CB implements them in the same
@@ -204,7 +205,7 @@ public class FlatItemDb extends AbstractItemDb {
         final Material type = item.getType();
 
         if (MaterialUtil.isPotion(type) && item.getItemMeta() instanceof PotionMeta) {
-            final PotionData potion = ((PotionMeta) item.getItemMeta()).getBasePotionData();
+            final PotionMetaProvider.AbstractPotionData potion = ess.getPotionMetaProvider().getPotionData(item);
             return new ItemData(type, potion);
         } else if (type.toString().contains("SPAWNER")) {
             final EntityType entity = ess.getSpawnerItemProvider().getEntityType(item);
@@ -224,14 +225,14 @@ public class FlatItemDb extends AbstractItemDb {
     public static class ItemData {
         private Material material;
         private String[] fallbacks = null;
-        private PotionData potionData = null;
+        private PotionMetaProvider.AbstractPotionData potionData = null;
         private EntityType entity = null;
 
         ItemData(final Material material) {
             this.material = material;
         }
 
-        ItemData(final Material material, final PotionData potionData) {
+        ItemData(final Material material, final PotionMetaProvider.AbstractPotionData potionData) {
             this.material = material;
             this.potionData = potionData;
         }
@@ -267,7 +268,7 @@ public class FlatItemDb extends AbstractItemDb {
             return material;
         }
 
-        public PotionData getPotionData() {
+        public PotionMetaProvider.AbstractPotionData getPotionData() {
             return this.potionData;
         }
 
