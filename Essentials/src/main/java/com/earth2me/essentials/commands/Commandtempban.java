@@ -6,6 +6,7 @@ import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.BanList;
 import org.bukkit.Server;
 
@@ -36,7 +37,7 @@ public class Commandtempban extends EssentialsCommand {
         }
         final String time = getFinalArg(args, 1);
         final long banTimestamp = DateUtil.parseDateDiff(time, true);
-        String banReason = DateUtil.removeTimePattern(time);
+        String banReason = FormatUtil.replaceFormat(DateUtil.removeTimePattern(time));
 
         final long maxBanLength = ess.getSettings().getMaxTempban() * 1000;
         if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength) && sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.unlimited")) {
