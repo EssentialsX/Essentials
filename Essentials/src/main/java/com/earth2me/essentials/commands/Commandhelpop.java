@@ -51,7 +51,10 @@ public class Commandhelpop extends EssentialsCommand {
         final HelpopMessageSendEvent sendEvent = new HelpopMessageSendEvent(from, recipients, message);
         ess.getServer().getPluginManager().callEvent(sendEvent);
 
-        from.sendTl("helpOp", from.getDisplayName(), message);
+        final IUser sender = (IUser) from;
+        if(!recipients.contains(sender)){
+            from.sendTl("helpOp", from.getDisplayName(), message);
+        }
 
         for (IUser recipient : sendEvent.getRecipients()) {
             recipient.sendTl("helpOp", from.getDisplayName(), message);
