@@ -75,6 +75,9 @@ tasks {
     }
     withType<Jar> {
         archiveVersion.set(rootProject.ext["FULL_VERSION"] as String)
+        manifest {
+            attributes("paperweight-mappings-namespace" to "mojang")
+        }
     }
     withType<Sign> {
         onlyIf { project.hasProperty("forceSign") }
