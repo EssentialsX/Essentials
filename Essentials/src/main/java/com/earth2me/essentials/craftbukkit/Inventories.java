@@ -21,6 +21,7 @@ public final class Inventories {
     private static final int BOOT_SLOT = 36;
     private static final boolean HAS_OFFHAND = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01);
     private static final int INVENTORY_SIZE = HAS_OFFHAND ? 41 : 40;
+    private static final int BASIC_INVENTORY_SIZE = 36;
 
     private Inventories() {
     }
@@ -132,6 +133,24 @@ public final class Inventories {
         return true;
     }
 
+    public static List<ItemStack> addGear(final Player player, final ItemStack... items) {
+        final List<ItemStack> leftovers = new ArrayList<>();
+
+        for (int i = 0; i < items.length; i++) {
+            if (items[i] != null) {
+                final ItemStack playerCurrentGear = player.getInventory().getItem(BASIC_INVENTORY_SIZE + i);
+
+                if (!isEmpty(playerCurrentGear)) {
+                    leftovers.add(items[i]);
+                }
+
+                player.getInventory().setItem(BASIC_INVENTORY_SIZE + i, items[i]);
+            }
+        }
+
+        return leftovers;
+    }
+
     public static Map<Integer, ItemStack> addItem(final Player player, final ItemStack... items) {
         return addItem(player, 0, false, items);
     }
@@ -207,6 +226,24 @@ public final class Inventories {
             }
 
             items[i] = player.getInventory().getItem(i);
+        }
+
+        return items;
+    }
+
+    public static ItemStack[] getInventoryBasicContents(final Player player) {
+        final ItemStack[] items = new ItemStack[BASIC_INVENTORY_SIZE];
+        for (int i = 0; i < items.length; i++) {
+            items[i] = player.getInventory().getItem(i);
+        }
+
+        return items;
+    }
+
+    public static ItemStack[] getInventoryGear(final Player player) {
+        final ItemStack[] items = new ItemStack[INVENTORY_SIZE - BASIC_INVENTORY_SIZE];
+        for (int i = 0; i < items.length; i++) {
+            items[i] = player.getInventory().getItem(BASIC_INVENTORY_SIZE + i);
         }
 
         return items;
