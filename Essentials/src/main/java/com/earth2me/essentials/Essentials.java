@@ -158,6 +158,7 @@ import static com.earth2me.essentials.I18n.tlLocale;
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private static final Logger BUKKIT_LOGGER = Logger.getLogger("Essentials");
     private static Logger LOGGER = null;
+    public static boolean TESTING = false;
     private final transient TNTExplodeListener tntListener = new TNTExplodeListener();
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
     private final transient Map<String, IEssentialsCommand> commandMap = new HashMap<>();
@@ -226,6 +227,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     public void setupForTesting(final Server server) throws IOException, InvalidDescriptionException {
+        TESTING = true;
         LOGGER = new BaseLoggerProvider(this, BUKKIT_LOGGER);
         final File dataFolder = File.createTempFile("essentialstest", "");
         if (!dataFolder.delete()) {
