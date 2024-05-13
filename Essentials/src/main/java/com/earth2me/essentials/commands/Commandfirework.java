@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.MetaItemStack;
+import com.earth2me.essentials.MobCompat;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -9,7 +10,6 @@ import net.ess3.api.TranslatableException;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Server;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -81,7 +81,7 @@ public class Commandfirework extends EssentialsCommand {
                 }
             }
             for (int i = 0; i < amount; i++) {
-                final Firework firework = (Firework) user.getWorld().spawnEntity(user.getLocation(), EntityType.FIREWORK);
+                final Firework firework = (Firework) user.getWorld().spawnEntity(user.getLocation(), MobCompat.FIREWORK_ROCKET);
                 final FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
                 if (direction) {
                     final Vector vector = user.getBase().getEyeLocation().getDirection().multiply(0.070);
