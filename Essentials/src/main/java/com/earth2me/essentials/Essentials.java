@@ -81,7 +81,6 @@ import net.ess3.provider.SyncCommandsProvider;
 import net.ess3.provider.WorldInfoProvider;
 import net.ess3.provider.providers.BaseBannerDataProvider;
 import net.ess3.provider.providers.BaseLoggerProvider;
-import net.ess3.provider.providers.BasePotionDataProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
 import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
@@ -98,6 +97,7 @@ import net.ess3.provider.providers.ModernDataWorldInfoProvider;
 import net.ess3.provider.providers.ModernItemUnbreakableProvider;
 import net.ess3.provider.providers.ModernPersistentDataProvider;
 import net.ess3.provider.providers.ModernPlayerLocaleProvider;
+import net.ess3.provider.providers.ModernPotionMetaProvider;
 import net.ess3.provider.providers.ModernSignDataProvider;
 import net.ess3.provider.providers.PaperBiomeKeyProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
@@ -106,6 +106,7 @@ import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperSerializationProvider;
 import net.ess3.provider.providers.PaperServerStateProvider;
+import net.ess3.provider.providers.PrehistoricPotionMetaProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -409,10 +410,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
 
             //Potion Meta Provider
-            if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
-                potionMetaProvider = new LegacyPotionMetaProvider();
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_6_R01)) {
+                potionMetaProvider = new ModernPotionMetaProvider();
+            } else if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
+                potionMetaProvider = new PrehistoricPotionMetaProvider();
             } else {
-                potionMetaProvider = new BasePotionDataProvider();
+                potionMetaProvider = new LegacyPotionMetaProvider();
             }
 
             //Banner Meta Provider
