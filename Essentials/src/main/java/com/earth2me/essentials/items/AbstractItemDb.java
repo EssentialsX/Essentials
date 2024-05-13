@@ -317,6 +317,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                     sb.append("basecolor:").append(basecolor).append(" ");
                 }
                 for (final org.bukkit.block.banner.Pattern p : shieldBannerMeta.getPatterns()) {
+                    //noinspection removal
                     final String type = p.getPattern().getIdentifier();
                     final int color = p.getColor().getColor().asRGB();
                     sb.append(type).append(",").append(color).append(" ");
@@ -324,7 +325,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             } else {
                 final BannerMeta bannerMeta = (BannerMeta) is.getItemMeta();
                 if (bannerMeta != null) {
-                    DyeColor baseDyeColor = bannerMeta.getBaseColor();
+                    DyeColor baseDyeColor = ess.getBannerDataProvider().getBaseColor(is);
                     if (baseDyeColor == null) {
                         baseDyeColor = MaterialUtil.getColorOf(material);
                     }
@@ -335,6 +336,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                         sb.append("basecolor:").append(basecolor).append(" ");
                     }
                     for (final org.bukkit.block.banner.Pattern p : bannerMeta.getPatterns()) {
+                        //noinspection removal
                         final String type = p.getPattern().getIdentifier();
                         final int color = p.getColor().getColor().asRGB();
                         sb.append(type).append(",").append(color).append(" ");
