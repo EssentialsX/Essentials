@@ -30,7 +30,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -541,17 +540,7 @@ public class MetaItemStack {
                 }
                 pmeta.addCustomEffect(pEffect, true);
                 stack.setItemMeta(pmeta);
-                if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
-                    if (isSplashPotion && stack.getType() == Material.POTION) {
-                        stack.setType(Material.SPLASH_POTION);
-                    } else if (!isSplashPotion && stack.getType() == Material.SPLASH_POTION) {
-                        stack.setType(Material.POTION);
-                    }
-                } else {
-                    final Potion potion = Potion.fromDamage(stack.getDurability());
-                    potion.setSplash(isSplashPotion);
-                    potion.apply(stack);
-                }
+                ess.getPotionMetaProvider().setSplashPotion(stack, isSplashPotion);
                 resetPotionMeta();
             }
         }
@@ -633,6 +622,7 @@ public class MetaItemStack {
 
             PatternType patternType = null;
             try {
+                //noinspection removal
                 patternType = PatternType.getByIdentifier(split[0]);
             } catch (final Exception ignored) {
             }
@@ -642,6 +632,7 @@ public class MetaItemStack {
                 final Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 ess.getBannerDataProvider().setBaseColor(stack, DyeColor.getByColor(color));
             } else if (patternType != null) {
+                //noinspection removal
                 final PatternType type = PatternType.getByIdentifier(split[0]);
                 final DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
                 final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
@@ -658,6 +649,7 @@ public class MetaItemStack {
 
             PatternType patternType = null;
             try {
+                //noinspection removal
                 patternType = PatternType.getByIdentifier(split[0]);
             } catch (final Exception ignored) {
             }
@@ -669,6 +661,7 @@ public class MetaItemStack {
                 final Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 banner.setBaseColor(DyeColor.getByColor(color));
             } else if (patternType != null) {
+                //noinspection removal
                 final PatternType type = PatternType.getByIdentifier(split[0]);
                 final DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
                 final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);

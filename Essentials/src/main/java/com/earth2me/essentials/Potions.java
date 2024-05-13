@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.RegistryUtil;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
@@ -21,50 +22,68 @@ public final class Potions {
         ALIASPOTIONS.put("sprint", PotionEffectType.SPEED);
         ALIASPOTIONS.put("swift", PotionEffectType.SPEED);
 
-        POTIONS.put("slowness", PotionEffectType.SLOW);
-        ALIASPOTIONS.put("slow", PotionEffectType.SLOW);
-        ALIASPOTIONS.put("sluggish", PotionEffectType.SLOW);
+        final PotionEffectType SLOWNESS = RegistryUtil.valueOf(PotionEffectType.class, "SLOW", "SLOWNESS");
 
-        POTIONS.put("haste", PotionEffectType.FAST_DIGGING);
-        ALIASPOTIONS.put("superpick", PotionEffectType.FAST_DIGGING);
-        ALIASPOTIONS.put("quickmine", PotionEffectType.FAST_DIGGING);
-        ALIASPOTIONS.put("digspeed", PotionEffectType.FAST_DIGGING);
-        ALIASPOTIONS.put("digfast", PotionEffectType.FAST_DIGGING);
-        ALIASPOTIONS.put("sharp", PotionEffectType.FAST_DIGGING);
+        POTIONS.put("slowness", SLOWNESS);
+        ALIASPOTIONS.put("slow", SLOWNESS);
+        ALIASPOTIONS.put("sluggish", SLOWNESS);
 
-        POTIONS.put("fatigue", PotionEffectType.SLOW_DIGGING);
-        ALIASPOTIONS.put("slow", PotionEffectType.SLOW_DIGGING);
-        ALIASPOTIONS.put("dull", PotionEffectType.SLOW_DIGGING);
+        final PotionEffectType HASTE = RegistryUtil.valueOf(PotionEffectType.class, "FAST_DIGGING", "HASTE");
 
-        POTIONS.put("strength", PotionEffectType.INCREASE_DAMAGE);
-        ALIASPOTIONS.put("strong", PotionEffectType.INCREASE_DAMAGE);
-        ALIASPOTIONS.put("bull", PotionEffectType.INCREASE_DAMAGE);
-        ALIASPOTIONS.put("attack", PotionEffectType.INCREASE_DAMAGE);
+        POTIONS.put("haste", HASTE);
+        ALIASPOTIONS.put("superpick", HASTE);
+        ALIASPOTIONS.put("quickmine", HASTE);
+        ALIASPOTIONS.put("digspeed", HASTE);
+        ALIASPOTIONS.put("digfast", HASTE);
+        ALIASPOTIONS.put("sharp", HASTE);
 
-        POTIONS.put("heal", PotionEffectType.HEAL);
-        ALIASPOTIONS.put("healthy", PotionEffectType.HEAL);
-        ALIASPOTIONS.put("instaheal", PotionEffectType.HEAL);
+        final PotionEffectType MINING_FATIGUE = RegistryUtil.valueOf(PotionEffectType.class, "SLOW_DIGGING", "MINING_FATIGUE");
 
-        POTIONS.put("harm", PotionEffectType.HARM);
-        ALIASPOTIONS.put("harming", PotionEffectType.HARM);
-        ALIASPOTIONS.put("injure", PotionEffectType.HARM);
-        ALIASPOTIONS.put("damage", PotionEffectType.HARM);
-        ALIASPOTIONS.put("inflict", PotionEffectType.HARM);
+        POTIONS.put("fatigue", MINING_FATIGUE);
+        ALIASPOTIONS.put("slow", MINING_FATIGUE);
+        ALIASPOTIONS.put("dull", MINING_FATIGUE);
 
-        POTIONS.put("jump", PotionEffectType.JUMP);
-        ALIASPOTIONS.put("leap", PotionEffectType.JUMP);
+        final PotionEffectType STRENGTH = RegistryUtil.valueOf(PotionEffectType.class, "INCREASE_DAMAGE", "STRENGTH");
 
-        POTIONS.put("nausea", PotionEffectType.CONFUSION);
-        ALIASPOTIONS.put("sick", PotionEffectType.CONFUSION);
-        ALIASPOTIONS.put("sickness", PotionEffectType.CONFUSION);
-        ALIASPOTIONS.put("confusion", PotionEffectType.CONFUSION);
+        POTIONS.put("strength", STRENGTH);
+        ALIASPOTIONS.put("strong", STRENGTH);
+        ALIASPOTIONS.put("bull", STRENGTH);
+        ALIASPOTIONS.put("attack", STRENGTH);
+
+        final PotionEffectType INSTANT_HEALTH = RegistryUtil.valueOf(PotionEffectType.class, "HEAL", "INSTANT_HEALTH");
+
+        POTIONS.put("heal", INSTANT_HEALTH);
+        ALIASPOTIONS.put("healthy", INSTANT_HEALTH);
+        ALIASPOTIONS.put("instaheal", INSTANT_HEALTH);
+
+        final PotionEffectType INSTANT_DAMAGE = RegistryUtil.valueOf(PotionEffectType.class, "HARM", "INSTANT_DAMAGE");
+
+        POTIONS.put("harm", INSTANT_DAMAGE);
+        ALIASPOTIONS.put("harming", INSTANT_DAMAGE);
+        ALIASPOTIONS.put("injure", INSTANT_DAMAGE);
+        ALIASPOTIONS.put("damage", INSTANT_DAMAGE);
+        ALIASPOTIONS.put("inflict", INSTANT_DAMAGE);
+
+        final PotionEffectType JUMP_BOOST = RegistryUtil.valueOf(PotionEffectType.class, "JUMP", "JUMP_BOOST");
+
+        POTIONS.put("jump", JUMP_BOOST);
+        ALIASPOTIONS.put("leap", JUMP_BOOST);
+
+        final PotionEffectType NAUSEA = RegistryUtil.valueOf(PotionEffectType.class, "CONFUSION", "NAUSEA");
+
+        POTIONS.put("nausea", NAUSEA);
+        ALIASPOTIONS.put("sick", NAUSEA);
+        ALIASPOTIONS.put("sickness", NAUSEA);
+        ALIASPOTIONS.put("confusion", NAUSEA);
 
         POTIONS.put("regeneration", PotionEffectType.REGENERATION);
         ALIASPOTIONS.put("regen", PotionEffectType.REGENERATION);
 
-        POTIONS.put("resistance", PotionEffectType.DAMAGE_RESISTANCE);
-        ALIASPOTIONS.put("dmgresist", PotionEffectType.DAMAGE_RESISTANCE);
-        ALIASPOTIONS.put("armor", PotionEffectType.DAMAGE_RESISTANCE);
+        final PotionEffectType RESISTANCE = RegistryUtil.valueOf(PotionEffectType.class, "DAMAGE_RESISTANCE", "RESISTANCE");
+
+        POTIONS.put("resistance", RESISTANCE);
+        ALIASPOTIONS.put("dmgresist", RESISTANCE);
+        ALIASPOTIONS.put("armor", RESISTANCE);
 
         POTIONS.put("fireresist", PotionEffectType.FIRE_RESISTANCE);
         ALIASPOTIONS.put("fireresistance", PotionEffectType.FIRE_RESISTANCE);
