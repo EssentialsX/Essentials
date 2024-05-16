@@ -129,17 +129,20 @@ public class MetaItemStack {
     }
 
     public boolean canSpawn(final IEssentials ess) {
-        try {
-            ess.getServer().getUnsafe().modifyItemStack(stack.clone(), "{}");
-            return true;
-        } catch (final NoSuchMethodError nsme) {
-            return true;
-        } catch (final Throwable npe) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
+        if (VersionUtil.PRE_FLATTENING) {
+            try {
+                ess.getServer().getUnsafe().modifyItemStack(stack.clone(), "{}");
+                return true;
+            } catch (final NoSuchMethodError nsme) {
+                return true;
+            } catch (final Throwable npe) {
+                if (ess.getSettings().isDebug()) {
+                    ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
+                }
+                return false;
             }
-            return false;
         }
+        return stack.getType().isItem();
     }
 
     public void parseStringMeta(final CommandSource sender, final boolean allowUnsafe, final String[] string, final int fromArg, final IEssentials ess) throws Exception {
