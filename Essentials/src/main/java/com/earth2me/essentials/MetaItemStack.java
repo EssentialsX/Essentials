@@ -146,7 +146,13 @@ public class MetaItemStack {
     }
 
     public void parseStringMeta(final CommandSource sender, final boolean allowUnsafe, final String[] string, final int fromArg, final IEssentials ess) throws Exception {
+        final boolean nbtIsKill = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_6_R01);
+
         if (string[fromArg].startsWith("{") && hasMetaPermission(sender, "vanilla", false, true, ess)) {
+            if (nbtIsKill) {
+                throw new TranslatableException("noMetaNbtKill");
+            }
+
             try {
                 stack = ess.getServer().getUnsafe().modifyItemStack(stack, Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length)));
             } catch (final NullPointerException npe) {
@@ -155,6 +161,22 @@ public class MetaItemStack {
                 }
             } catch (final NoSuchMethodError nsme) {
                 throw new TranslatableException(nsme, "noMetaJson");
+            } catch (final Throwable throwable) {
+                throw new Exception(throwable.getMessage(), throwable);
+            }
+        } else if (string[fromArg].startsWith("[") && hasMetaPermission(sender, "vanilla", false, true, ess)) {
+            if (!nbtIsKill) {
+                throw new TranslatableException("noMetaComponents");
+            }
+
+            try {
+                final String components = Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length));
+                // modifyItemStack requires that the item namespaced key is prepended to the components for some reason
+                stack = ess.getServer().getUnsafe().modifyItemStack(stack, stack.getType().getKey() + components);
+            } catch (final NullPointerException npe) {
+                if (ess.getSettings().isDebug()) {
+                    ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
+                }
             } catch (final Throwable throwable) {
                 throw new Exception(throwable.getMessage(), throwable);
             }
