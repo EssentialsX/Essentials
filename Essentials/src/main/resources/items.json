@@ -3044,6 +3044,11 @@
   "chiseledshelf": "chiseled_bookshelf",
   "cshelfbook": "chiseled_bookshelf",
   "minecraft:chiseled_bookshelf": "chiseled_bookshelf",
+  "chiseled_copper": {
+    "material": "CHISELED_COPPER"
+  },
+  "chiseledcopper": "chiseled_copper",
+  "minecraft:chiseled_copper": "chiseled_copper",
   "chiseled_deepslate": {
     "material": "CHISELED_DEEPSLATE"
   },
