@@ -1,5 +1,6 @@
 plugins {
     id("essentials.base-conventions")
+    id("com.github.johnrengelman.shadow")
 }
 
 java {
@@ -10,11 +11,15 @@ dependencies {
     implementation(project(':providers:BaseProviders')) {
         exclude(module: 'spigot-api')
     }
-    compileOnly 'io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT'
-    compileOnly 'io.papermc.paper:paper-mojangapi:1.18.2-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-mojangapi:1.20.4-R0.1-SNAPSHOT'
 }
 
 essentials {
     injectBukkitApi.set(false)
     injectBstats.set(false)
+}
+
+shadowJar {
+    relocate 'net.kyori.adventure', 'net.essentialsx.temp.adventure'
 }

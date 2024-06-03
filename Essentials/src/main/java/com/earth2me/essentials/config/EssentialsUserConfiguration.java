@@ -34,6 +34,9 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
 
     @Override
     public boolean legacyFileExists() {
+        if (username == null) {
+            return false;
+        }
         return new File(configFile.getParentFile(), username + ".yml").exists();
     }
 
@@ -57,7 +60,7 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
 
     @Override
     public boolean altFileExists() {
-        if (username.equals(username.toLowerCase())) {
+        if (username == null || username.equals(username.toLowerCase())) {
             return false;
         }
         return getAltFile().exists();

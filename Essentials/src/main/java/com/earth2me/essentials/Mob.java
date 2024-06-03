@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -14,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 // Suffixes can be appended on the end of a mob name to make it plural
 // Entities without a suffix, will default to 's'
@@ -41,9 +42,9 @@ public enum Mob {
     ENDERDRAGON("EnderDragon", Enemies.ENEMY, EntityType.ENDER_DRAGON),
     VILLAGER("Villager", Enemies.FRIENDLY, EntityType.VILLAGER),
     BLAZE("Blaze", Enemies.ENEMY, EntityType.BLAZE),
-    MUSHROOMCOW("MushroomCow", Enemies.FRIENDLY, EntityType.MUSHROOM_COW),
+    MUSHROOMCOW("MushroomCow", Enemies.FRIENDLY, MobCompat.MOOSHROOM),
     MAGMACUBE("MagmaCube", Enemies.ENEMY, EntityType.MAGMA_CUBE),
-    SNOWMAN("Snowman", Enemies.FRIENDLY, "", EntityType.SNOWMAN),
+    SNOWMAN("Snowman", Enemies.FRIENDLY, "", MobCompat.SNOW_GOLEM),
     OCELOT("Ocelot", Enemies.NEUTRAL, EntityType.OCELOT),
     IRONGOLEM("IronGolem", Enemies.NEUTRAL, EntityType.IRON_GOLEM),
     WITHER("Wither", Enemies.ENEMY, EntityType.WITHER),
@@ -51,12 +52,12 @@ public enum Mob {
     WITCH("Witch", Enemies.ENEMY, EntityType.WITCH),
     BOAT("Boat", Enemies.NEUTRAL, EntityType.BOAT),
     MINECART("Minecart", Enemies.NEUTRAL, EntityType.MINECART),
-    MINECART_CHEST("ChestMinecart", Enemies.NEUTRAL, EntityType.MINECART_CHEST),
-    MINECART_FURNACE("FurnaceMinecart", Enemies.NEUTRAL, EntityType.MINECART_FURNACE),
-    MINECART_TNT("TNTMinecart", Enemies.NEUTRAL, EntityType.MINECART_TNT),
-    MINECART_HOPPER("HopperMinecart", Enemies.NEUTRAL, EntityType.MINECART_HOPPER),
-    MINECART_MOB_SPAWNER("SpawnerMinecart", Enemies.NEUTRAL, EntityType.MINECART_MOB_SPAWNER),
-    ENDERCRYSTAL("EnderCrystal", Enemies.NEUTRAL, EntityType.ENDER_CRYSTAL),
+    MINECART_CHEST("ChestMinecart", Enemies.NEUTRAL, MobCompat.CHEST_MINECART),
+    MINECART_FURNACE("FurnaceMinecart", Enemies.NEUTRAL, MobCompat.FURNACE_MINECART),
+    MINECART_TNT("TNTMinecart", Enemies.NEUTRAL, MobCompat.TNT_MINECART),
+    MINECART_HOPPER("HopperMinecart", Enemies.NEUTRAL, MobCompat.HOPPER_MINECART),
+    MINECART_MOB_SPAWNER("SpawnerMinecart", Enemies.NEUTRAL, MobCompat.SPAWNER_MINECART),
+    ENDERCRYSTAL("EnderCrystal", Enemies.NEUTRAL, MobCompat.END_CRYSTAL),
     EXPERIENCEORB("ExperienceOrb", Enemies.NEUTRAL, "EXPERIENCE_ORB"),
     ARMOR_STAND("ArmorStand", Enemies.NEUTRAL, "ARMOR_STAND"),
     ENDERMITE("Endermite", Enemies.ENEMY, "ENDERMITE"),
@@ -109,6 +110,9 @@ public enum Mob {
     TADPOLE("Tadpole", Enemies.FRIENDLY, "TADPOLE"),
     WARDEN("Warden", Enemies.ENEMY, "WARDEN"),
     CHEST_BOAT("ChestBoat", Enemies.NEUTRAL, "CHEST_BOAT"),
+    CAMEL("Camel", Enemies.FRIENDLY, "CAMEL"),
+    SNIFFER("Sniffer", Enemies.FRIENDLY, "SNIFFER"),
+    ARMADILLO("Armadillo", Enemies.FRIENDLY, "ARMADILLO"),
     ;
 
     private static final Map<String, Mob> hashMap = new HashMap<>();
@@ -169,7 +173,7 @@ public enum Mob {
     public Entity spawn(final World world, final Server server, final Location loc) throws MobException {
         final Entity entity = world.spawn(loc, this.bukkitType.getEntityClass());
         if (entity == null) {
-            Essentials.getWrappedLogger().log(Level.WARNING, tl("unableToSpawnMob"));
+            Essentials.getWrappedLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("unableToSpawnMob")));
             throw new MobException();
         }
         return entity;

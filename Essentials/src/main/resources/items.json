@@ -60,6 +60,17 @@
   "gateac": "acacia_fence_gate",
   "gateacacia": "acacia_fence_gate",
   "minecraft:acacia_fence_gate": "acacia_fence_gate",
+  "acacia_hanging_sign": {
+    "material": "ACACIA_HANGING_SIGN"
+  },
+  "acaciahangingsign": "acacia_hanging_sign",
+  "acaciahangsign": "acacia_hanging_sign",
+  "acaciahsign": "acacia_hanging_sign",
+  "achangsign": "acacia_hanging_sign",
+  "achsign": "acacia_hanging_sign",
+  "ahangsign": "acacia_hanging_sign",
+  "ahsign": "acacia_hanging_sign",
+  "minecraft:acacia_hanging_sign": "acacia_hanging_sign",
   "acacia_leaves": {
     "material": "ACACIA_LEAVES"
   },
@@ -462,6 +473,11 @@
   "wallandesite": "andesite_wall",
   "wallandstone": "andesite_wall",
   "wallastone": "andesite_wall",
+  "angler_pottery_sherd": {
+    "material": "ANGLER_POTTERY_SHERD"
+  },
+  "anglerpotterysherd": "angler_pottery_sherd",
+  "minecraft:angler_pottery_sherd": "angler_pottery_sherd",
   "anvil": {
     "material": "ANVIL"
   },
@@ -470,11 +486,34 @@
     "material": "APPLE"
   },
   "minecraft:apple": "apple",
+  "archer_pottery_sherd": {
+    "material": "ARCHER_POTTERY_SHERD"
+  },
+  "archerpotterysherd": "archer_pottery_sherd",
+  "archersherd": "archer_pottery_sherd",
+  "minecraft:archer_pottery_sherd": "archer_pottery_sherd",
+  "armadillo_scute": {
+    "material": "ARMADILLO_SCUTE"
+  },
+  "armadilloscute": "armadillo_scute",
+  "minecraft:armadillo_scute": "armadillo_scute",
+  "armadillo_spawn_egg": {
+    "material": "ARMADILLO_SPAWN_EGG"
+  },
+  "armadillospawnegg": "armadillo_spawn_egg",
+  "minecraft:armadillo_spawn_egg": "armadillo_spawn_egg",
   "armor_stand": {
     "material": "ARMOR_STAND"
   },
   "armorstand": "armor_stand",
   "minecraft:armor_stand": "armor_stand",
+  "arms_up_pottery_sherd": {
+    "material": "ARMS_UP_POTTERY_SHERD"
+  },
+  "armssherd": "arms_up_pottery_sherd",
+  "armsuppotterysherd": "arms_up_pottery_sherd",
+  "armsupsherd": "arms_up_pottery_sherd",
+  "minecraft:arms_up_pottery_sherd": "arms_up_pottery_sherd",
   "arrow": {
     "material": "ARROW"
   },
@@ -674,6 +713,238 @@
     "material": "BAMBOO"
   },
   "minecraft:bamboo": "bamboo",
+  "bamboo_block": {
+    "material": "BAMBOO_BLOCK"
+  },
+  "bamblock": "bamboo_block",
+  "bambooblock": "bamboo_block",
+  "bbblock": "bamboo_block",
+  "minecraft:bamboo_block": "bamboo_block",
+  "bamboo_button": {
+    "material": "BAMBOO_BUTTON"
+  },
+  "bambbutton": "bamboo_button",
+  "bamboobutton": "bamboo_button",
+  "bambutton": "bamboo_button",
+  "buttonbam": "bamboo_button",
+  "buttonbamb": "bamboo_button",
+  "buttonbamboo": "bamboo_button",
+  "minecraft:bamboo_button": "bamboo_button",
+  "bamboo_chest_raft": {
+    "material": "BAMBOO_CHEST_RAFT"
+  },
+  "bambchboat": "bamboo_chest_raft",
+  "bamboochboat": "bamboo_chest_raft",
+  "bamboochestraft": "bamboo_chest_raft",
+  "bamchboat": "bamboo_chest_raft",
+  "minecraft:bamboo_chest_raft": "bamboo_chest_raft",
+  "bamboo_door": {
+    "material": "BAMBOO_DOOR"
+  },
+  "bambdoor": "bamboo_door",
+  "bamboodoor": "bamboo_door",
+  "bamdoor": "bamboo_door",
+  "minecraft:bamboo_door": "bamboo_door",
+  "bamboo_fence": {
+    "material": "BAMBOO_FENCE"
+  },
+  "bambfence": "bamboo_fence",
+  "bamboofence": "bamboo_fence",
+  "bamfence": "bamboo_fence",
+  "minecraft:bamboo_fence": "bamboo_fence",
+  "bamboo_fence_gate": {
+    "material": "BAMBOO_FENCE_GATE"
+  },
+  "bambfencegate": "bamboo_fence_gate",
+  "bambgate": "bamboo_fence_gate",
+  "bamboofencegate": "bamboo_fence_gate",
+  "bamboogate": "bamboo_fence_gate",
+  "bamfencegate": "bamboo_fence_gate",
+  "bamgate": "bamboo_fence_gate",
+  "gatebam": "bamboo_fence_gate",
+  "gatebamb": "bamboo_fence_gate",
+  "gatebamboo": "bamboo_fence_gate",
+  "minecraft:bamboo_fence_gate": "bamboo_fence_gate",
+  "bamboo_hanging_sign": {
+    "material": "BAMBOO_HANGING_SIGN"
+  },
+  "bambhangsign": "bamboo_hanging_sign",
+  "bambhsign": "bamboo_hanging_sign",
+  "bamboohangingsign": "bamboo_hanging_sign",
+  "bamboohangsign": "bamboo_hanging_sign",
+  "bamboohsign": "bamboo_hanging_sign",
+  "bamhangsign": "bamboo_hanging_sign",
+  "bamhsign": "bamboo_hanging_sign",
+  "minecraft:bamboo_hanging_sign": "bamboo_hanging_sign",
+  "bamboo_mosaic": {
+    "material": "BAMBOO_MOSAIC"
+  },
+  "bamboomosaic": "bamboo_mosaic",
+  "minecraft:bamboo_mosaic": "bamboo_mosaic",
+  "bamboo_mosaic_slab": {
+    "material": "BAMBOO_MOSAIC_SLAB"
+  },
+  "bamboomosaicslab": "bamboo_mosaic_slab",
+  "minecraft:bamboo_mosaic_slab": "bamboo_mosaic_slab",
+  "bamboo_mosaic_stairs": {
+    "material": "BAMBOO_MOSAIC_STAIRS"
+  },
+  "bamboomosaicstairs": "bamboo_mosaic_stairs",
+  "minecraft:bamboo_mosaic_stairs": "bamboo_mosaic_stairs",
+  "bamboo_planks": {
+    "material": "BAMBOO_PLANKS"
+  },
+  "bambooplank": "bamboo_planks",
+  "bambooplanks": "bamboo_planks",
+  "bambooplankw": "bamboo_planks",
+  "bambooplankwood": "bamboo_planks",
+  "bambooplankwooden": "bamboo_planks",
+  "bamboowoodenplank": "bamboo_planks",
+  "bamboowoodplank": "bamboo_planks",
+  "bamboowplank": "bamboo_planks",
+  "bambplank": "bamboo_planks",
+  "bambplankw": "bamboo_planks",
+  "bambplankwood": "bamboo_planks",
+  "bambplankwooden": "bamboo_planks",
+  "bambwoodenplank": "bamboo_planks",
+  "bambwoodplank": "bamboo_planks",
+  "bambwplank": "bamboo_planks",
+  "bamplank": "bamboo_planks",
+  "bamplankw": "bamboo_planks",
+  "bamplankwood": "bamboo_planks",
+  "bamplankwooden": "bamboo_planks",
+  "bamwoodenplank": "bamboo_planks",
+  "bamwoodplank": "bamboo_planks",
+  "bamwplank": "bamboo_planks",
+  "minecraft:bamboo_planks": "bamboo_planks",
+  "bamboo_pressure_plate": {
+    "material": "BAMBOO_PRESSURE_PLATE"
+  },
+  "bambooplate": "bamboo_pressure_plate",
+  "bamboopplate": "bamboo_pressure_plate",
+  "bamboopressplate": "bamboo_pressure_plate",
+  "bamboopressureplate": "bamboo_pressure_plate",
+  "bambplate": "bamboo_pressure_plate",
+  "bambpplate": "bamboo_pressure_plate",
+  "bambpressplate": "bamboo_pressure_plate",
+  "bambpressureplate": "bamboo_pressure_plate",
+  "bamplate": "bamboo_pressure_plate",
+  "bampplate": "bamboo_pressure_plate",
+  "bampressplate": "bamboo_pressure_plate",
+  "bampressureplate": "bamboo_pressure_plate",
+  "minecraft:bamboo_pressure_plate": "bamboo_pressure_plate",
+  "platebam": "bamboo_pressure_plate",
+  "platebamb": "bamboo_pressure_plate",
+  "platebamboo": "bamboo_pressure_plate",
+  "bamboo_raft": {
+    "material": "BAMBOO_RAFT"
+  },
+  "bambboat": "bamboo_raft",
+  "bamboat": "bamboo_raft",
+  "bambooboat": "bamboo_raft",
+  "bambooraft": "bamboo_raft",
+  "bambraft": "bamboo_raft",
+  "bamraft": "bamboo_raft",
+  "boatbam": "bamboo_raft",
+  "boatbamb": "bamboo_raft",
+  "boatbamboo": "bamboo_raft",
+  "minecraft:bamboo_raft": "bamboo_raft",
+  "bamboo_sign": {
+    "material": "BAMBOO_SIGN"
+  },
+  "bamboosign": "bamboo_sign",
+  "bambsign": "bamboo_sign",
+  "bamsign": "bamboo_sign",
+  "minecraft:bamboo_sign": "bamboo_sign",
+  "bamboo_slab": {
+    "material": "BAMBOO_SLAB"
+  },
+  "bambhalfblock": "bamboo_slab",
+  "bamboohalfblock": "bamboo_slab",
+  "bambooslab": "bamboo_slab",
+  "bamboostep": "bamboo_slab",
+  "bamboowhalfblock": "bamboo_slab",
+  "bamboowoodenhalfblock": "bamboo_slab",
+  "bamboowoodenslab": "bamboo_slab",
+  "bamboowoodenstep": "bamboo_slab",
+  "bamboowoodhalfblock": "bamboo_slab",
+  "bamboowoodslab": "bamboo_slab",
+  "bamboowoodstep": "bamboo_slab",
+  "bamboowslab": "bamboo_slab",
+  "bamboowstep": "bamboo_slab",
+  "bambstep": "bamboo_slab",
+  "bambwhalfblock": "bamboo_slab",
+  "bambwoodenhalfblock": "bamboo_slab",
+  "bambwoodenslab": "bamboo_slab",
+  "bambwoodenstep": "bamboo_slab",
+  "bambwoodhalfblock": "bamboo_slab",
+  "bambwoodslab": "bamboo_slab",
+  "bambwoodstep": "bamboo_slab",
+  "bambwslab": "bamboo_slab",
+  "bambwstep": "bamboo_slab",
+  "bamhalfblock": "bamboo_slab",
+  "bamstep": "bamboo_slab",
+  "bamwhalfblock": "bamboo_slab",
+  "bamwoodenhalfblock": "bamboo_slab",
+  "bamwoodenslab": "bamboo_slab",
+  "bamwoodenstep": "bamboo_slab",
+  "bamwoodhalfblock": "bamboo_slab",
+  "bamwoodslab": "bamboo_slab",
+  "bamwoodstep": "bamboo_slab",
+  "bamwslab": "bamboo_slab",
+  "bamwstep": "bamboo_slab",
+  "minecraft:bamboo_slab": "bamboo_slab",
+  "bamboo_stairs": {
+    "material": "BAMBOO_STAIRS"
+  },
+  "bamboostair": "bamboo_stairs",
+  "bamboostairs": "bamboo_stairs",
+  "bamboowoodenstair": "bamboo_stairs",
+  "bamboowoodenstairs": "bamboo_stairs",
+  "bamboowoodstair": "bamboo_stairs",
+  "bamboowoodstairs": "bamboo_stairs",
+  "bamboowstair": "bamboo_stairs",
+  "bamboowstairs": "bamboo_stairs",
+  "bambstair": "bamboo_stairs",
+  "bambwoodenstair": "bamboo_stairs",
+  "bambwoodenstairs": "bamboo_stairs",
+  "bambwoodstair": "bamboo_stairs",
+  "bambwoodstairs": "bamboo_stairs",
+  "bambwstair": "bamboo_stairs",
+  "bambwstairs": "bamboo_stairs",
+  "bamstair": "bamboo_stairs",
+  "bamwoodenstair": "bamboo_stairs",
+  "bamwoodenstairs": "bamboo_stairs",
+  "bamwoodstair": "bamboo_stairs",
+  "bamwoodstairs": "bamboo_stairs",
+  "bamwstair": "bamboo_stairs",
+  "bamwstairs": "bamboo_stairs",
+  "minecraft:bamboo_stairs": "bamboo_stairs",
+  "bamboo_trapdoor": {
+    "material": "BAMBOO_TRAPDOOR"
+  },
+  "bambdoort": "bamboo_trapdoor",
+  "bambdoortrap": "bamboo_trapdoor",
+  "bambdtrap": "bamboo_trapdoor",
+  "bambhatch": "bamboo_trapdoor",
+  "bamboodoort": "bamboo_trapdoor",
+  "bamboodoortrap": "bamboo_trapdoor",
+  "bamboodtrap": "bamboo_trapdoor",
+  "bamboohatch": "bamboo_trapdoor",
+  "bambootdoor": "bamboo_trapdoor",
+  "bambootrapd": "bamboo_trapdoor",
+  "bambootrapdoor": "bamboo_trapdoor",
+  "bambtdoor": "bamboo_trapdoor",
+  "bambtrapd": "bamboo_trapdoor",
+  "bambtrapdoor": "bamboo_trapdoor",
+  "bamdoort": "bamboo_trapdoor",
+  "bamdoortrap": "bamboo_trapdoor",
+  "bamdtrap": "bamboo_trapdoor",
+  "bamhatch": "bamboo_trapdoor",
+  "bamtdoor": "bamboo_trapdoor",
+  "bamtrapd": "bamboo_trapdoor",
+  "bamtrapdoor": "bamboo_trapdoor",
+  "minecraft:bamboo_trapdoor": "bamboo_trapdoor",
   "barrel": {
     "material": "BARREL"
   },
@@ -929,6 +1200,23 @@
   "wgate": "birch_fence_gate",
   "whitefencegate": "birch_fence_gate",
   "whitegate": "birch_fence_gate",
+  "birch_hanging_sign": {
+    "material": "BIRCH_HANGING_SIGN"
+  },
+  "bhangsign": "birch_hanging_sign",
+  "bhsign": "birch_hanging_sign",
+  "birchhangingsign": "birch_hanging_sign",
+  "birchhangsign": "birch_hanging_sign",
+  "birchhsign": "birch_hanging_sign",
+  "lhangsign": "birch_hanging_sign",
+  "lhsign": "birch_hanging_sign",
+  "lighthangsign": "birch_hanging_sign",
+  "lighthsign": "birch_hanging_sign",
+  "minecraft:birch_hanging_sign": "birch_hanging_sign",
+  "whangsign": "birch_hanging_sign",
+  "whitehangsign": "birch_hanging_sign",
+  "whitehsign": "birch_hanging_sign",
+  "whsign": "birch_hanging_sign",
   "birch_leaves": {
     "material": "BIRCH_LEAVES"
   },
@@ -1602,6 +1890,12 @@
   "wallblackstone": "blackstone_wall",
   "wallblst": "blackstone_wall",
   "wallblstone": "blackstone_wall",
+  "blade_pottery_sherd": {
+    "material": "BLADE_POTTERY_SHERD"
+  },
+  "bladepotterysherd": "blade_pottery_sherd",
+  "bladesherd": "blade_pottery_sherd",
+  "minecraft:blade_pottery_sherd": "blade_pottery_sherd",
   "blast_furnace": {
     "material": "BLAST_FURNACE"
   },
@@ -1842,6 +2136,13 @@
     "material": "BREAD"
   },
   "minecraft:bread": "bread",
+  "brewer_pottery_sherd": {
+    "material": "BREWER_POTTERY_SHERD"
+  },
+  "brewerpotterysherd": "brewer_pottery_sherd",
+  "brewersherd": "brewer_pottery_sherd",
+  "brewsherd": "brewer_pottery_sherd",
+  "minecraft:brewer_pottery_sherd": "brewer_pottery_sherd",
   "brewing_stand": {
     "material": "BREWING_STAND"
   },
@@ -2046,6 +2347,10 @@
   "browool": "brown_wool",
   "brwool": "brown_wool",
   "minecraft:brown_wool": "brown_wool",
+  "brush": {
+    "material": "BRUSH"
+  },
+  "minecraft:brush": "brush",
   "bubble_coral": {
     "material": "BUBBLE_CORAL"
   },
@@ -2074,6 +2379,12 @@
     "material": "BUNDLE"
   },
   "minecraft:bundle": "bundle",
+  "burn_pottery_sherd": {
+    "material": "BURN_POTTERY_SHERD"
+  },
+  "burnpotterysherd": "burn_pottery_sherd",
+  "burnsherd": "burn_pottery_sherd",
+  "minecraft:burn_pottery_sherd": "burn_pottery_sherd",
   "cactus": {
     "material": "CACTUS"
   },
@@ -2088,6 +2399,36 @@
     "material": "CALCITE"
   },
   "minecraft:calcite": "calcite",
+  "calibrated_sculk_sensor": {
+    "material": "CALIBRATED_SCULK_SENSOR"
+  },
+  "calibratedsculksensor": "calibrated_sculk_sensor",
+  "cscsensor": "calibrated_sculk_sensor",
+  "minecraft:calibrated_sculk_sensor": "calibrated_sculk_sensor",
+  "camel_spawn_egg": {
+    "material": "CAMEL_SPAWN_EGG"
+  },
+  "camelegg": "camel_spawn_egg",
+  "camelsegg": "camel_spawn_egg",
+  "camelspawn": "camel_spawn_egg",
+  "camelspawnegg": "camel_spawn_egg",
+  "eggcamel": "camel_spawn_egg",
+  "minecraft:camel_spawn_egg": "camel_spawn_egg",
+  "seggcamel": "camel_spawn_egg",
+  "spawncamel": "camel_spawn_egg",
+  "spawneggcamel": "camel_spawn_egg",
+  "camel_spawner": {
+    "entity": "CAMEL",
+    "material": "SPAWNER"
+  },
+  "camelcage": "camel_spawner",
+  "camelmcage": "camel_spawner",
+  "camelmobcage": "camel_spawner",
+  "camelmobspawner": "camel_spawner",
+  "camelmonstercage": "camel_spawner",
+  "camelmonsterspawner": "camel_spawner",
+  "camelmspawner": "camel_spawner",
+  "camelspawner": "camel_spawner",
   "campfire": {
     "material": "CAMPFIRE"
   },
@@ -2307,6 +2648,325 @@
     "material": "CHARCOAL"
   },
   "minecraft:charcoal": "charcoal",
+  "cherry_boat": {
+    "material": "CHERRY_BOAT"
+  },
+  "boatc": "cherry_boat",
+  "boatcher": "cherry_boat",
+  "boatcherry": "cherry_boat",
+  "cboat": "cherry_boat",
+  "cherboat": "cherry_boat",
+  "cherraft": "cherry_boat",
+  "cherryboat": "cherry_boat",
+  "cherryraft": "cherry_boat",
+  "craft": "cherry_boat",
+  "minecraft:cherry_boat": "cherry_boat",
+  "cherry_button": {
+    "material": "CHERRY_BUTTON"
+  },
+  "buttonc": "cherry_button",
+  "buttoncher": "cherry_button",
+  "buttoncherry": "cherry_button",
+  "cbutton": "cherry_button",
+  "cherbutton": "cherry_button",
+  "cherrybutton": "cherry_button",
+  "minecraft:cherry_button": "cherry_button",
+  "cherry_chest_boat": {
+    "material": "CHERRY_CHEST_BOAT"
+  },
+  "cchboat": "cherry_chest_boat",
+  "cherchboat": "cherry_chest_boat",
+  "cherrychboat": "cherry_chest_boat",
+  "cherrychestboat": "cherry_chest_boat",
+  "minecraft:cherry_chest_boat": "cherry_chest_boat",
+  "cherry_door": {
+    "material": "CHERRY_DOOR"
+  },
+  "cdoor": "cherry_door",
+  "cherdoor": "cherry_door",
+  "cherrydoor": "cherry_door",
+  "minecraft:cherry_door": "cherry_door",
+  "cherry_fence": {
+    "material": "CHERRY_FENCE"
+  },
+  "cfence": "cherry_fence",
+  "cherfence": "cherry_fence",
+  "cherryfence": "cherry_fence",
+  "minecraft:cherry_fence": "cherry_fence",
+  "cherry_fence_gate": {
+    "material": "CHERRY_FENCE_GATE"
+  },
+  "cfencegate": "cherry_fence_gate",
+  "cgate": "cherry_fence_gate",
+  "cherfencegate": "cherry_fence_gate",
+  "chergate": "cherry_fence_gate",
+  "cherryfencegate": "cherry_fence_gate",
+  "cherrygate": "cherry_fence_gate",
+  "gatec": "cherry_fence_gate",
+  "gatecher": "cherry_fence_gate",
+  "gatecherry": "cherry_fence_gate",
+  "minecraft:cherry_fence_gate": "cherry_fence_gate",
+  "cherry_hanging_sign": {
+    "material": "CHERRY_HANGING_SIGN"
+  },
+  "changsign": "cherry_hanging_sign",
+  "cherhangsign": "cherry_hanging_sign",
+  "cherhsign": "cherry_hanging_sign",
+  "cherryhangingsign": "cherry_hanging_sign",
+  "cherryhangsign": "cherry_hanging_sign",
+  "cherryhsign": "cherry_hanging_sign",
+  "chsign": "cherry_hanging_sign",
+  "minecraft:cherry_hanging_sign": "cherry_hanging_sign",
+  "cherry_leaves": {
+    "material": "CHERRY_LEAVES"
+  },
+  "cherleaf": "cherry_leaves",
+  "cherleave": "cherry_leaves",
+  "cherleaves": "cherry_leaves",
+  "cherlogleaf": "cherry_leaves",
+  "cherlogleave": "cherry_leaves",
+  "cherlogleaves": "cherry_leaves",
+  "cherryleaf": "cherry_leaves",
+  "cherryleave": "cherry_leaves",
+  "cherryleaves": "cherry_leaves",
+  "cherrylogleaf": "cherry_leaves",
+  "cherrylogleave": "cherry_leaves",
+  "cherrylogleaves": "cherry_leaves",
+  "cherrytreeleaf": "cherry_leaves",
+  "cherrytreeleave": "cherry_leaves",
+  "cherrytreeleaves": "cherry_leaves",
+  "cherrytrunkleaf": "cherry_leaves",
+  "cherrytrunkleave": "cherry_leaves",
+  "cherrytrunkleaves": "cherry_leaves",
+  "cherrywoodleaf": "cherry_leaves",
+  "cherrywoodleave": "cherry_leaves",
+  "cherrywoodleaves": "cherry_leaves",
+  "chertreeleaf": "cherry_leaves",
+  "chertreeleave": "cherry_leaves",
+  "chertreeleaves": "cherry_leaves",
+  "chertrunkleaf": "cherry_leaves",
+  "chertrunkleave": "cherry_leaves",
+  "chertrunkleaves": "cherry_leaves",
+  "cherwoodleaf": "cherry_leaves",
+  "cherwoodleave": "cherry_leaves",
+  "cherwoodleaves": "cherry_leaves",
+  "cleaf": "cherry_leaves",
+  "cleave": "cherry_leaves",
+  "cleaves": "cherry_leaves",
+  "clogleaf": "cherry_leaves",
+  "clogleave": "cherry_leaves",
+  "clogleaves": "cherry_leaves",
+  "ctreeleaf": "cherry_leaves",
+  "ctreeleave": "cherry_leaves",
+  "ctreeleaves": "cherry_leaves",
+  "ctrunkleaf": "cherry_leaves",
+  "ctrunkleave": "cherry_leaves",
+  "ctrunkleaves": "cherry_leaves",
+  "cwoodleaf": "cherry_leaves",
+  "cwoodleave": "cherry_leaves",
+  "cwoodleaves": "cherry_leaves",
+  "leafc": "cherry_leaves",
+  "leafcher": "cherry_leaves",
+  "leafcherry": "cherry_leaves",
+  "leavesc": "cherry_leaves",
+  "leavescher": "cherry_leaves",
+  "leavescherry": "cherry_leaves",
+  "minecraft:cherry_leaves": "cherry_leaves",
+  "cherry_log": {
+    "material": "CHERRY_LOG"
+  },
+  "cherlog": "cherry_log",
+  "cherrylog": "cherry_log",
+  "cherrytree": "cherry_log",
+  "cherrytrunk": "cherry_log",
+  "chertree": "cherry_log",
+  "chertrunk": "cherry_log",
+  "clog": "cherry_log",
+  "ctree": "cherry_log",
+  "ctrunk": "cherry_log",
+  "logc": "cherry_log",
+  "logcher": "cherry_log",
+  "logcherry": "cherry_log",
+  "minecraft:cherry_log": "cherry_log",
+  "cherry_planks": {
+    "material": "CHERRY_PLANKS"
+  },
+  "cherplank": "cherry_planks",
+  "cherplankw": "cherry_planks",
+  "cherplankwood": "cherry_planks",
+  "cherplankwooden": "cherry_planks",
+  "cherryplank": "cherry_planks",
+  "cherryplanks": "cherry_planks",
+  "cherryplankw": "cherry_planks",
+  "cherryplankwood": "cherry_planks",
+  "cherryplankwooden": "cherry_planks",
+  "cherrywoodenplank": "cherry_planks",
+  "cherrywoodplank": "cherry_planks",
+  "cherrywplank": "cherry_planks",
+  "cherwoodenplank": "cherry_planks",
+  "cherwoodplank": "cherry_planks",
+  "cherwplank": "cherry_planks",
+  "cplank": "cherry_planks",
+  "cplankw": "cherry_planks",
+  "cplankwood": "cherry_planks",
+  "cplankwooden": "cherry_planks",
+  "cwoodenplank": "cherry_planks",
+  "cwoodplank": "cherry_planks",
+  "cwplank": "cherry_planks",
+  "minecraft:cherry_planks": "cherry_planks",
+  "cherry_pressure_plate": {
+    "material": "CHERRY_PRESSURE_PLATE"
+  },
+  "cherplate": "cherry_pressure_plate",
+  "cherpplate": "cherry_pressure_plate",
+  "cherpressplate": "cherry_pressure_plate",
+  "cherpressureplate": "cherry_pressure_plate",
+  "cherryplate": "cherry_pressure_plate",
+  "cherrypplate": "cherry_pressure_plate",
+  "cherrypressplate": "cherry_pressure_plate",
+  "cherrypressureplate": "cherry_pressure_plate",
+  "cplate": "cherry_pressure_plate",
+  "cpplate": "cherry_pressure_plate",
+  "cpressplate": "cherry_pressure_plate",
+  "cpressureplate": "cherry_pressure_plate",
+  "minecraft:cherry_pressure_plate": "cherry_pressure_plate",
+  "platec": "cherry_pressure_plate",
+  "platecher": "cherry_pressure_plate",
+  "platecherry": "cherry_pressure_plate",
+  "cherry_sapling": {
+    "material": "CHERRY_SAPLING"
+  },
+  "cherlogsapling": "cherry_sapling",
+  "cherrylogsapling": "cherry_sapling",
+  "cherrysapling": "cherry_sapling",
+  "cherrytreesapling": "cherry_sapling",
+  "cherrytrunksapling": "cherry_sapling",
+  "cherrywoodsapling": "cherry_sapling",
+  "chersapling": "cherry_sapling",
+  "chertreesapling": "cherry_sapling",
+  "chertrunksapling": "cherry_sapling",
+  "cherwoodsapling": "cherry_sapling",
+  "clogsapling": "cherry_sapling",
+  "csapling": "cherry_sapling",
+  "ctreesapling": "cherry_sapling",
+  "ctrunksapling": "cherry_sapling",
+  "cwoodsapling": "cherry_sapling",
+  "minecraft:cherry_sapling": "cherry_sapling",
+  "cherry_sign": {
+    "material": "CHERRY_SIGN"
+  },
+  "cherrysign": "cherry_sign",
+  "chersign": "cherry_sign",
+  "csign": "cherry_sign",
+  "minecraft:cherry_sign": "cherry_sign",
+  "cherry_slab": {
+    "material": "CHERRY_SLAB"
+  },
+  "chalfblock": "cherry_slab",
+  "cherhalfblock": "cherry_slab",
+  "cherryhalfblock": "cherry_slab",
+  "cherryslab": "cherry_slab",
+  "cherrystep": "cherry_slab",
+  "cherrywhalfblock": "cherry_slab",
+  "cherrywoodenhalfblock": "cherry_slab",
+  "cherrywoodenslab": "cherry_slab",
+  "cherrywoodenstep": "cherry_slab",
+  "cherrywoodhalfblock": "cherry_slab",
+  "cherrywoodslab": "cherry_slab",
+  "cherrywoodstep": "cherry_slab",
+  "cherrywslab": "cherry_slab",
+  "cherrywstep": "cherry_slab",
+  "cherstep": "cherry_slab",
+  "cherwhalfblock": "cherry_slab",
+  "cherwoodenhalfblock": "cherry_slab",
+  "cherwoodenslab": "cherry_slab",
+  "cherwoodenstep": "cherry_slab",
+  "cherwoodhalfblock": "cherry_slab",
+  "cherwoodslab": "cherry_slab",
+  "cherwoodstep": "cherry_slab",
+  "cherwslab": "cherry_slab",
+  "cherwstep": "cherry_slab",
+  "cstep": "cherry_slab",
+  "cwhalfblock": "cherry_slab",
+  "cwoodenhalfblock": "cherry_slab",
+  "cwoodenslab": "cherry_slab",
+  "cwoodenstep": "cherry_slab",
+  "cwoodhalfblock": "cherry_slab",
+  "cwoodslab": "cherry_slab",
+  "cwoodstep": "cherry_slab",
+  "cwslab": "cherry_slab",
+  "cwstep": "cherry_slab",
+  "minecraft:cherry_slab": "cherry_slab",
+  "cherry_stairs": {
+    "material": "CHERRY_STAIRS"
+  },
+  "cherrystair": "cherry_stairs",
+  "cherrystairs": "cherry_stairs",
+  "cherrywoodenstair": "cherry_stairs",
+  "cherrywoodenstairs": "cherry_stairs",
+  "cherrywoodstair": "cherry_stairs",
+  "cherrywoodstairs": "cherry_stairs",
+  "cherrywstair": "cherry_stairs",
+  "cherrywstairs": "cherry_stairs",
+  "cherstair": "cherry_stairs",
+  "cherwoodenstair": "cherry_stairs",
+  "cherwoodenstairs": "cherry_stairs",
+  "cherwoodstair": "cherry_stairs",
+  "cherwoodstairs": "cherry_stairs",
+  "cherwstair": "cherry_stairs",
+  "cherwstairs": "cherry_stairs",
+  "cstair": "cherry_stairs",
+  "cwoodenstair": "cherry_stairs",
+  "cwoodenstairs": "cherry_stairs",
+  "cwoodstair": "cherry_stairs",
+  "cwoodstairs": "cherry_stairs",
+  "cwstair": "cherry_stairs",
+  "cwstairs": "cherry_stairs",
+  "minecraft:cherry_stairs": "cherry_stairs",
+  "cherry_trapdoor": {
+    "material": "CHERRY_TRAPDOOR"
+  },
+  "cdoort": "cherry_trapdoor",
+  "cdoortrap": "cherry_trapdoor",
+  "cdtrap": "cherry_trapdoor",
+  "chatch": "cherry_trapdoor",
+  "cherdoort": "cherry_trapdoor",
+  "cherdoortrap": "cherry_trapdoor",
+  "cherdtrap": "cherry_trapdoor",
+  "cherhatch": "cherry_trapdoor",
+  "cherrydoort": "cherry_trapdoor",
+  "cherrydoortrap": "cherry_trapdoor",
+  "cherrydtrap": "cherry_trapdoor",
+  "cherryhatch": "cherry_trapdoor",
+  "cherrytdoor": "cherry_trapdoor",
+  "cherrytrapd": "cherry_trapdoor",
+  "cherrytrapdoor": "cherry_trapdoor",
+  "chertdoor": "cherry_trapdoor",
+  "chertrapd": "cherry_trapdoor",
+  "chertrapdoor": "cherry_trapdoor",
+  "ctdoor": "cherry_trapdoor",
+  "ctrapd": "cherry_trapdoor",
+  "ctrapdoor": "cherry_trapdoor",
+  "minecraft:cherry_trapdoor": "cherry_trapdoor",
+  "cherry_wood": {
+    "material": "CHERRY_WOOD"
+  },
+  "cherlogall": "cherry_wood",
+  "cherrylogall": "cherry_wood",
+  "cherrytreeall": "cherry_wood",
+  "cherrytrunkall": "cherry_wood",
+  "cherrywood": "cherry_wood",
+  "chertreeall": "cherry_wood",
+  "chertrunkall": "cherry_wood",
+  "cherwood": "cherry_wood",
+  "clogall": "cherry_wood",
+  "ctreeall": "cherry_wood",
+  "ctrunkall": "cherry_wood",
+  "cwood": "cherry_wood",
+  "minecraft:cherry_wood": "cherry_wood",
+  "woodc": "cherry_wood",
+  "woodcher": "cherry_wood",
+  "woodcherry": "cherry_wood",
   "chest": {
     "material": "CHEST"
   },
@@ -2372,6 +3032,18 @@
   "minecraft:chipped_anvil": "chipped_anvil",
   "slightdamageanvil": "chipped_anvil",
   "slightlydamagedanvil": "chipped_anvil",
+  "chiseled_bookshelf": {
+    "material": "CHISELED_BOOKSHELF"
+  },
+  "cblockbook": "chiseled_bookshelf",
+  "cbookblock": "chiseled_bookshelf",
+  "cbookcase": "chiseled_bookshelf",
+  "cbshelf": "chiseled_bookshelf",
+  "chiseledb": "chiseled_bookshelf",
+  "chiseledbookshelf": "chiseled_bookshelf",
+  "chiseledshelf": "chiseled_bookshelf",
+  "cshelfbook": "chiseled_bookshelf",
+  "minecraft:chiseled_bookshelf": "chiseled_bookshelf",
   "chiseled_deepslate": {
     "material": "CHISELED_DEEPSLATE"
   },
@@ -2782,6 +3454,12 @@
   "grasslessearth": "coarse_dirt",
   "grasslessland": "coarse_dirt",
   "minecraft:coarse_dirt": "coarse_dirt",
+  "coast_armor_trim_smithing_template": {
+    "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "coastarmortrimsmithingtemplate": "coast_armor_trim_smithing_template",
+  "coasttrim": "coast_armor_trim_smithing_template",
+  "minecraft:coast_armor_trim_smithing_template": "coast_armor_trim_smithing_template",
   "cobbled_deepslate": {
     "material": "COBBLED_DEEPSLATE"
   },
@@ -3832,6 +4510,17 @@
   "crimsonfun": "crimson_fungus",
   "crimsonfungus": "crimson_fungus",
   "minecraft:crimson_fungus": "crimson_fungus",
+  "crimson_hanging_sign": {
+    "material": "CRIMSON_HANGING_SIGN"
+  },
+  "crhangsign": "crimson_hanging_sign",
+  "crhsign": "crimson_hanging_sign",
+  "crimhangsign": "crimson_hanging_sign",
+  "crimhsign": "crimson_hanging_sign",
+  "crimsonhangingsign": "crimson_hanging_sign",
+  "crimsonhangsign": "crimson_hanging_sign",
+  "crimsonhsign": "crimson_hanging_sign",
+  "minecraft:crimson_hanging_sign": "crimson_hanging_sign",
   "crimson_hyphae": {
     "material": "CRIMSON_HYPHAE"
   },
@@ -4277,6 +4966,12 @@
   "yellowdandelion": "dandelion",
   "yellowflower": "dandelion",
   "yflower": "dandelion",
+  "danger_pottery_sherd": {
+    "material": "DANGER_POTTERY_SHERD"
+  },
+  "dangerpotterysherd": "danger_pottery_sherd",
+  "dangersherd": "danger_pottery_sherd",
+  "minecraft:danger_pottery_sherd": "danger_pottery_sherd",
   "dark_oak_boat": {
     "material": "DARK_OAK_BOAT"
   },
@@ -4346,6 +5041,19 @@
   "gatedo": "dark_oak_fence_gate",
   "gatedoak": "dark_oak_fence_gate",
   "minecraft:dark_oak_fence_gate": "dark_oak_fence_gate",
+  "dark_oak_hanging_sign": {
+    "material": "DARK_OAK_HANGING_SIGN"
+  },
+  "dark_oakhangsign": "dark_oak_hanging_sign",
+  "dark_oakhsign": "dark_oak_hanging_sign",
+  "darkoakhangingsign": "dark_oak_hanging_sign",
+  "darkoakhangsign": "dark_oak_hanging_sign",
+  "darkoakhsign": "dark_oak_hanging_sign",
+  "doakhangsign": "dark_oak_hanging_sign",
+  "doakhsign": "dark_oak_hanging_sign",
+  "dohangsign": "dark_oak_hanging_sign",
+  "dohsign": "dark_oak_hanging_sign",
+  "minecraft:dark_oak_hanging_sign": "dark_oak_hanging_sign",
   "dark_oak_leaves": {
     "material": "DARK_OAK_LEAVES"
   },
@@ -4829,6 +5537,13 @@
   },
   "debugstick": "debug_stick",
   "minecraft:debug_stick": "debug_stick",
+  "decorated_pot": {
+    "material": "DECORATED_POT"
+  },
+  "decoratedpot": "decorated_pot",
+  "decorpot": "decorated_pot",
+  "dflowerpot": "decorated_pot",
+  "minecraft:decorated_pot": "decorated_pot",
   "deepslate": {
     "material": "DEEPSLATE"
   },
@@ -5467,7 +6182,7 @@
   "begg": "dragon_egg",
   "bossegg": "dragon_egg",
   "degg": "dragon_egg",
-  "dragonegg": "dragon_egg",
+  "dragonegg": "ender_dragon_spawn_egg",
   "endegg": "dragon_egg",
   "enderdragonegg": "dragon_egg",
   "minecraft:dragon_egg": "dragon_egg",
@@ -5526,6 +6241,12 @@
   "drownedmonsterspawner": "drowned_spawner",
   "drownedmspawner": "drowned_spawner",
   "drownedspawner": "drowned_spawner",
+  "dune_armor_trim_smithing_template": {
+    "material": "DUNE_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "dunearmortrimsmithingtemplate": "dune_armor_trim_smithing_template",
+  "dunetrim": "dune_armor_trim_smithing_template",
+  "minecraft:dune_armor_trim_smithing_template": "dune_armor_trim_smithing_template",
   "echo_shard": {
     "material": "ECHO_SHARD"
   },
@@ -5614,67 +6335,6 @@
   "oreemerald": "emerald_ore",
   "stoneemeraldore": "emerald_ore",
   "stoneeore": "emerald_ore",
-  "empty_lingering_potion": {
-    "potionData": {
-      "type": "UNCRAFTABLE",
-      "upgraded": false,
-      "extended": false
-    },
-    "material": "LINGERING_POTION"
-  },
-  "aoepotionuncraftable": "empty_lingering_potion",
-  "aoepotuncraftable": "empty_lingering_potion",
-  "areapotionuncraftable": "empty_lingering_potion",
-  "areapotuncraftable": "empty_lingering_potion",
-  "cloudpotionuncraftable": "empty_lingering_potion",
-  "cloudpotuncraftable": "empty_lingering_potion",
-  "lingerpotuncraftable": "empty_lingering_potion",
-  "uncraftableaoepoiont": "empty_lingering_potion",
-  "uncraftableaoepot": "empty_lingering_potion",
-  "uncraftableareapot": "empty_lingering_potion",
-  "uncraftableareapotion": "empty_lingering_potion",
-  "uncraftablecloudpot": "empty_lingering_potion",
-  "uncraftablecloudpotion": "empty_lingering_potion",
-  "uncraftablelingerpot": "empty_lingering_potion",
-  "empty_potion": {
-    "potionData": {
-      "type": "UNCRAFTABLE",
-      "upgraded": false,
-      "extended": false
-    },
-    "material": "POTION"
-  },
-  "potionofuncraftable": "empty_potion",
-  "potofuncraftable": "empty_potion",
-  "uncraftablepot": "empty_potion",
-  "uncraftablepotion": "empty_potion",
-  "empty_splash_potion": {
-    "potionData": {
-      "type": "UNCRAFTABLE",
-      "upgraded": false,
-      "extended": false
-    },
-    "material": "SPLASH_POTION"
-  },
-  "splashuncraftablepot": "empty_splash_potion",
-  "splashuncraftablepotion": "empty_splash_potion",
-  "spluncraftablepot": "empty_splash_potion",
-  "spluncraftablepotion": "empty_splash_potion",
-  "uncraftablesplashpot": "empty_splash_potion",
-  "uncraftablesplashpotion": "empty_splash_potion",
-  "empty_tipped_arrow": {
-    "potionData": {
-      "type": "UNCRAFTABLE",
-      "upgraded": false,
-      "extended": false
-    },
-    "material": "TIPPED_ARROW"
-  },
-  "arrowuncraftable": "empty_tipped_arrow",
-  "uncraftablearrow": "empty_tipped_arrow",
-  "uncraftabletarr": "empty_tipped_arrow",
-  "uncraftabletarrow": "empty_tipped_arrow",
-  "uncraftabletippedarrow": "empty_tipped_arrow",
   "enchanted_book": {
     "material": "ENCHANTED_BOOK"
   },
@@ -5805,6 +6465,34 @@
   "enderchest": "ender_chest",
   "endercontainer": "ender_chest",
   "minecraft:ender_chest": "ender_chest",
+  "ender_dragon_spawn_egg": {
+    "material": "ENDER_DRAGON_SPAWN_EGG"
+  },
+  "dragonsegg": "ender_dragon_spawn_egg",
+  "dragonspawn": "ender_dragon_spawn_egg",
+  "dragonspawnegg": "ender_dragon_spawn_egg",
+  "edragonegg": "ender_dragon_spawn_egg",
+  "edragonsegg": "ender_dragon_spawn_egg",
+  "edragonspawn": "ender_dragon_spawn_egg",
+  "edragonspawnegg": "ender_dragon_spawn_egg",
+  "eggdragon": "ender_dragon_spawn_egg",
+  "eggedragon": "ender_dragon_spawn_egg",
+  "eggender_dragon": "ender_dragon_spawn_egg",
+  "ender_dragonegg": "ender_dragon_spawn_egg",
+  "ender_dragonsegg": "ender_dragon_spawn_egg",
+  "ender_dragonspawn": "ender_dragon_spawn_egg",
+  "ender_dragonspawnegg": "ender_dragon_spawn_egg",
+  "enderdragonspawnegg": "ender_dragon_spawn_egg",
+  "minecraft:ender_dragon_spawn_egg": "ender_dragon_spawn_egg",
+  "seggdragon": "ender_dragon_spawn_egg",
+  "seggedragon": "ender_dragon_spawn_egg",
+  "seggender_dragon": "ender_dragon_spawn_egg",
+  "spawndragon": "ender_dragon_spawn_egg",
+  "spawnedragon": "ender_dragon_spawn_egg",
+  "spawneggdragon": "ender_dragon_spawn_egg",
+  "spawneggedragon": "ender_dragon_spawn_egg",
+  "spawneggender_dragon": "ender_dragon_spawn_egg",
+  "spawnender_dragon": "ender_dragon_spawn_egg",
   "ender_dragon_spawner": {
     "entity": "ENDER_DRAGON",
     "material": "SPAWNER"
@@ -5936,6 +6624,12 @@
   },
   "experiencebottle": "experience_bottle",
   "minecraft:experience_bottle": "experience_bottle",
+  "explorer_pottery_sherd": {
+    "material": "EXPLORER_POTTERY_SHERD"
+  },
+  "explorerpotterysherd": "explorer_pottery_sherd",
+  "explorersherd": "explorer_pottery_sherd",
+  "minecraft:explorer_pottery_sherd": "explorer_pottery_sherd",
   "exposed_copper": {
     "material": "EXPOSED_COPPER"
   },
@@ -6215,6 +6909,12 @@
   "exposedcutcostair": "exposed_cut_copper_stairs",
   "exposedcutcostairs": "exposed_cut_copper_stairs",
   "minecraft:exposed_cut_copper_stairs": "exposed_cut_copper_stairs",
+  "eye_armor_trim_smithing_template": {
+    "material": "EYE_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "eyearmortrimsmithingtemplate": "eye_armor_trim_smithing_template",
+  "eyetrim": "eye_armor_trim_smithing_template",
+  "minecraft:eye_armor_trim_smithing_template": "eye_armor_trim_smithing_template",
   "farmland": {
     "material": "FARMLAND"
   },
@@ -6405,6 +7105,11 @@
   },
   "flintandsteel": "flint_and_steel",
   "minecraft:flint_and_steel": "flint_and_steel",
+  "flow_banner_pattern": {
+    "material": "FLOW_BANNER_PATTERN"
+  },
+  "flowbannerpattern": "flow_banner_pattern",
+  "minecraft:flow_banner_pattern": "flow_banner_pattern",
   "flower_banner_pattern": {
     "material": "FLOWER_BANNER_PATTERN"
   },
@@ -6510,6 +7215,12 @@
   "foxmonsterspawner": "fox_spawner",
   "foxmspawner": "fox_spawner",
   "foxspawner": "fox_spawner",
+  "friend_pottery_sherd": {
+    "material": "FRIEND_POTTERY_SHERD"
+  },
+  "friendpotterysherd": "friend_pottery_sherd",
+  "friendsherd": "friend_pottery_sherd",
+  "minecraft:friend_pottery_sherd": "friend_pottery_sherd",
   "frog_spawn_egg": {
     "material": "FROG_SPAWN_EGG"
   },
@@ -7051,10 +7762,6 @@
   "wallgr": "granite_wall",
   "wallgranite": "granite_wall",
   "wallgstone": "granite_wall",
-  "grass": {
-    "material": "GRASS"
-  },
-  "minecraft:grass": "grass",
   "grass_block": {
     "material": "GRASS_BLOCK"
   },
@@ -7777,6 +8484,11 @@
     "material": "GUNPOWDER"
   },
   "minecraft:gunpowder": "gunpowder",
+  "guster_banner_pattern": {
+    "material": "GUSTER_BANNER_PATTERN"
+  },
+  "gusterbannerpattern": "guster_banner_pattern",
+  "minecraft:guster_banner_pattern": "guster_banner_pattern",
   "hanging_roots": {
     "material": "HANGING_ROOTS"
   },
@@ -7786,10 +8498,12 @@
   "hangingroots": "hanging_roots",
   "hangroot": "hanging_roots",
   "hangroots": "hanging_roots",
+  "hroots": "hanging_roots",
   "minecraft:hanging_roots": "hanging_roots",
   "harming_lingering_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": false,
       "extended": false
     },
@@ -7867,7 +8581,8 @@
   "lingerpotinstantdamage": "harming_lingering_potion",
   "harming_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": false,
       "extended": false
     },
@@ -7895,7 +8610,8 @@
   "potofinstantdamage": "harming_potion",
   "harming_splash_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": false,
       "extended": false
     },
@@ -7933,7 +8649,8 @@
   "splinstantdamagepotion": "harming_splash_potion",
   "harming_tipped_arrow": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": false,
       "extended": false
     },
@@ -7975,7 +8692,8 @@
   "minecraft:hay_block": "hay_block",
   "healing_lingering_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": false,
       "extended": false
     },
@@ -8053,7 +8771,8 @@
   "lingerpotlife": "healing_lingering_potion",
   "healing_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": false,
       "extended": false
     },
@@ -8081,7 +8800,8 @@
   "potoflife": "healing_potion",
   "healing_splash_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": false,
       "extended": false
     },
@@ -8119,7 +8839,8 @@
   "spllifepotion": "healing_splash_potion",
   "healing_tipped_arrow": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": false,
       "extended": false
     },
@@ -8155,6 +8876,20 @@
   },
   "heartofthesea": "heart_of_the_sea",
   "minecraft:heart_of_the_sea": "heart_of_the_sea",
+  "heart_pottery_sherd": {
+    "material": "HEART_POTTERY_SHERD"
+  },
+  "heartpotterysherd": "heart_pottery_sherd",
+  "heartsherd": "heart_pottery_sherd",
+  "minecraft:heart_pottery_sherd": "heart_pottery_sherd",
+  "heartbreak_pottery_sherd": {
+    "material": "HEARTBREAK_POTTERY_SHERD"
+  },
+  "hbreaksherd": "heartbreak_pottery_sherd",
+  "heartbreakpotterysherd": "heartbreak_pottery_sherd",
+  "heartbreaksherd": "heartbreak_pottery_sherd",
+  "heartbsherd": "heartbreak_pottery_sherd",
+  "minecraft:heartbreak_pottery_sherd": "heartbreak_pottery_sherd",
   "heavy_weighted_pressure_plate": {
     "material": "HEAVY_WEIGHTED_PRESSURE_PLATE"
   },
@@ -8286,6 +9021,18 @@
   "horsemonsterspawner": "horse_spawner",
   "horsemspawner": "horse_spawner",
   "horsespawner": "horse_spawner",
+  "host_armor_trim_smithing_template": {
+    "material": "HOST_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "hostarmortrimsmithingtemplate": "host_armor_trim_smithing_template",
+  "hosttrim": "host_armor_trim_smithing_template",
+  "minecraft:host_armor_trim_smithing_template": "host_armor_trim_smithing_template",
+  "howl_pottery_sherd": {
+    "material": "HOWL_POTTERY_SHERD"
+  },
+  "howlpotterysherd": "howl_pottery_sherd",
+  "howlsherd": "howl_pottery_sherd",
+  "minecraft:howl_pottery_sherd": "howl_pottery_sherd",
   "husk_spawn_egg": {
     "material": "HUSK_SPAWN_EGG"
   },
@@ -9431,6 +10178,27 @@
   "sdoor": "spruce_door",
   "stdoor": "spruce_trapdoor",
   "steeldoor": "iron_door",
+  "iron_golem_spawn_egg": {
+    "material": "IRON_GOLEM_SPAWN_EGG"
+  },
+  "eggigolem": "iron_golem_spawn_egg",
+  "eggiron_golem": "iron_golem_spawn_egg",
+  "igolemegg": "iron_golem_spawn_egg",
+  "igolemsegg": "iron_golem_spawn_egg",
+  "igolemspawn": "iron_golem_spawn_egg",
+  "igolemspawnegg": "iron_golem_spawn_egg",
+  "iron_golemegg": "iron_golem_spawn_egg",
+  "iron_golemsegg": "iron_golem_spawn_egg",
+  "iron_golemspawn": "iron_golem_spawn_egg",
+  "iron_golemspawnegg": "iron_golem_spawn_egg",
+  "irongolemspawnegg": "iron_golem_spawn_egg",
+  "minecraft:iron_golem_spawn_egg": "iron_golem_spawn_egg",
+  "seggigolem": "iron_golem_spawn_egg",
+  "seggiron_golem": "iron_golem_spawn_egg",
+  "spawneggigolem": "iron_golem_spawn_egg",
+  "spawneggiron_golem": "iron_golem_spawn_egg",
+  "spawnigolem": "iron_golem_spawn_egg",
+  "spawniron_golem": "iron_golem_spawn_egg",
   "iron_golem_spawner": {
     "entity": "IRON_GOLEM",
     "material": "SPAWNER"
@@ -9762,6 +10530,19 @@
   "junglefencegate": "jungle_fence_gate",
   "junglegate": "jungle_fence_gate",
   "minecraft:jungle_fence_gate": "jungle_fence_gate",
+  "jungle_hanging_sign": {
+    "material": "JUNGLE_HANGING_SIGN"
+  },
+  "fhangsign": "jungle_hanging_sign",
+  "fhsign": "jungle_hanging_sign",
+  "foresthangsign": "jungle_hanging_sign",
+  "foresthsign": "jungle_hanging_sign",
+  "jhangsign": "jungle_hanging_sign",
+  "jhsign": "jungle_hanging_sign",
+  "junglehangingsign": "jungle_hanging_sign",
+  "junglehangsign": "jungle_hanging_sign",
+  "junglehsign": "jungle_hanging_sign",
+  "minecraft:jungle_hanging_sign": "jungle_hanging_sign",
   "jungle_leaves": {
     "material": "JUNGLE_LEAVES"
   },
@@ -10163,7 +10944,8 @@
   "minecraft:lead": "lead",
   "leaping_lingering_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": false
     },
@@ -10213,7 +10995,8 @@
   "lingerpotleaping": "leaping_lingering_potion",
   "leaping_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": false
     },
@@ -10233,7 +11016,8 @@
   "potofleaping": "leaping_potion",
   "leaping_splash_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": false
     },
@@ -10259,7 +11043,8 @@
   "splleappotion": "leaping_splash_potion",
   "leaping_tipped_arrow": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": false
     },
@@ -12499,7 +13284,8 @@
   "invlongtippedarrow": "long_invisibility_tipped_arrow",
   "long_leaping_lingering_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": true
     },
@@ -12717,7 +13503,8 @@
   "lingerpotleaplong": "long_leaping_lingering_potion",
   "long_leaping_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": true
     },
@@ -12785,7 +13572,8 @@
   "potofleaplong": "long_leaping_potion",
   "long_leaping_splash_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": true
     },
@@ -12883,7 +13671,8 @@
   "splleaplongpotion": "long_leaping_splash_potion",
   "long_leaping_tipped_arrow": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": true
     },
@@ -14480,7 +15269,8 @@
   "poisonlongtippedarrow": "long_poison_tipped_arrow",
   "long_regeneration_lingering_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": true
     },
@@ -14698,7 +15488,8 @@
   "regenlingerpotlong": "long_regeneration_lingering_potion",
   "long_regeneration_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": true
     },
@@ -14766,7 +15557,8 @@
   "regenlongpotion": "long_regeneration_potion",
   "long_regeneration_splash_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": true
     },
@@ -14864,7 +15656,8 @@
   "splregenlongpotion": "long_regeneration_splash_potion",
   "long_regeneration_tipped_arrow": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": true
     },
@@ -16203,7 +16996,8 @@
   "stronglongtippedarrow": "long_strength_tipped_arrow",
   "long_swiftness_lingering_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": true
     },
@@ -16421,7 +17215,8 @@
   "swiftnesslingerpotlong": "long_swiftness_lingering_potion",
   "long_swiftness_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": true
     },
@@ -16489,7 +17284,8 @@
   "swiftnesslongpotion": "long_swiftness_potion",
   "long_swiftness_splash_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": true
     },
@@ -16587,7 +17383,8 @@
   "swiftnesslongsplashpotion": "long_swiftness_splash_potion",
   "long_swiftness_tipped_arrow": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": true
     },
@@ -18748,6 +19545,17 @@
   "mfencegate": "mangrove_fence_gate",
   "mgate": "mangrove_fence_gate",
   "minecraft:mangrove_fence_gate": "mangrove_fence_gate",
+  "mangrove_hanging_sign": {
+    "material": "MANGROVE_HANGING_SIGN"
+  },
+  "mangrovehangingsign": "mangrove_hanging_sign",
+  "mangrovehangsign": "mangrove_hanging_sign",
+  "mangrovehsign": "mangrove_hanging_sign",
+  "manhangsign": "mangrove_hanging_sign",
+  "manhsign": "mangrove_hanging_sign",
+  "mhangsign": "mangrove_hanging_sign",
+  "mhsign": "mangrove_hanging_sign",
+  "minecraft:mangrove_hanging_sign": "mangrove_hanging_sign",
   "mangrove_leaves": {
     "material": "MANGROVE_LEAVES"
   },
@@ -19063,6 +19871,12 @@
   "mc": "minecart",
   "mcart": "minecart",
   "minecraft:minecart": "minecart",
+  "miner_pottery_sherd": {
+    "material": "MINER_POTTERY_SHERD"
+  },
+  "minecraft:miner_pottery_sherd": "miner_pottery_sherd",
+  "minerpotterysherd": "miner_pottery_sherd",
+  "minersherd": "miner_pottery_sherd",
   "mojang_banner_pattern": {
     "material": "MOJANG_BANNER_PATTERN"
   },
@@ -19104,6 +19918,43 @@
   "spawnmushroom": "mooshroom_spawn_egg",
   "spawnmushroom_cow": "mooshroom_spawn_egg",
   "spawnmushroomcow": "mooshroom_spawn_egg",
+  "mooshroom_spawner": {
+    "entity": "MOOSHROOM",
+    "material": "SPAWNER"
+  },
+  "mooshroomcage": "mooshroom_spawner",
+  "mooshroommcage": "mooshroom_spawner",
+  "mooshroommobcage": "mooshroom_spawner",
+  "mooshroommobspawner": "mooshroom_spawner",
+  "mooshroommonstercage": "mooshroom_spawner",
+  "mooshroommonsterspawner": "mooshroom_spawner",
+  "mooshroommspawner": "mooshroom_spawner",
+  "mooshroomspawner": "mooshroom_spawner",
+  "mushroom_cow_spawner": "mooshroom_spawner",
+  "mushroom_cowcage": "mooshroom_spawner",
+  "mushroom_cowmcage": "mooshroom_spawner",
+  "mushroom_cowmobcage": "mooshroom_spawner",
+  "mushroom_cowmobspawner": "mooshroom_spawner",
+  "mushroom_cowmonstercage": "mooshroom_spawner",
+  "mushroom_cowmonsterspawner": "mooshroom_spawner",
+  "mushroom_cowmspawner": "mooshroom_spawner",
+  "mushroom_cowspawner": "mooshroom_spawner",
+  "mushroomcage": "mooshroom_spawner",
+  "mushroomcowcage": "mooshroom_spawner",
+  "mushroomcowmcage": "mooshroom_spawner",
+  "mushroomcowmobcage": "mooshroom_spawner",
+  "mushroomcowmobspawner": "mooshroom_spawner",
+  "mushroomcowmonstercage": "mooshroom_spawner",
+  "mushroomcowmonsterspawner": "mooshroom_spawner",
+  "mushroomcowmspawner": "mooshroom_spawner",
+  "mushroomcowspawner": "mooshroom_spawner",
+  "mushroommcage": "mooshroom_spawner",
+  "mushroommobcage": "mooshroom_spawner",
+  "mushroommobspawner": "mooshroom_spawner",
+  "mushroommonstercage": "mooshroom_spawner",
+  "mushroommonsterspawner": "mooshroom_spawner",
+  "mushroommspawner": "mooshroom_spawner",
+  "mushroomspawner": "mooshroom_spawner",
   "moss_block": {
     "material": "MOSS_BLOCK"
   },
@@ -19346,6 +20197,13 @@
   "mossystonebricks": "mossy_stone_bricks",
   "mst": "mossy_stone_bricks",
   "mstone": "mossy_stone_bricks",
+  "mourner_pottery_sherd": {
+    "material": "MOURNER_POTTERY_SHERD"
+  },
+  "minecraft:mourner_pottery_sherd": "mourner_pottery_sherd",
+  "mournerpotterysherd": "mourner_pottery_sherd",
+  "mournersherd": "mourner_pottery_sherd",
+  "mournsherd": "mourner_pottery_sherd",
   "mud": {
     "material": "MUD"
   },
@@ -19481,42 +20339,6 @@
   "mundanetarr": "mundane_tipped_arrow",
   "mundanetarrow": "mundane_tipped_arrow",
   "mundanetippedarrow": "mundane_tipped_arrow",
-  "mushroom_cow_spawner": {
-    "entity": "MUSHROOM_COW",
-    "material": "SPAWNER"
-  },
-  "mooshroomcage": "mushroom_cow_spawner",
-  "mooshroommcage": "mushroom_cow_spawner",
-  "mooshroommobcage": "mushroom_cow_spawner",
-  "mooshroommobspawner": "mushroom_cow_spawner",
-  "mooshroommonstercage": "mushroom_cow_spawner",
-  "mooshroommonsterspawner": "mushroom_cow_spawner",
-  "mooshroommspawner": "mushroom_cow_spawner",
-  "mooshroomspawner": "mushroom_cow_spawner",
-  "mushroom_cowcage": "mushroom_cow_spawner",
-  "mushroom_cowmcage": "mushroom_cow_spawner",
-  "mushroom_cowmobcage": "mushroom_cow_spawner",
-  "mushroom_cowmobspawner": "mushroom_cow_spawner",
-  "mushroom_cowmonstercage": "mushroom_cow_spawner",
-  "mushroom_cowmonsterspawner": "mushroom_cow_spawner",
-  "mushroom_cowmspawner": "mushroom_cow_spawner",
-  "mushroom_cowspawner": "mushroom_cow_spawner",
-  "mushroomcage": "mushroom_cow_spawner",
-  "mushroomcowcage": "mushroom_cow_spawner",
-  "mushroomcowmcage": "mushroom_cow_spawner",
-  "mushroomcowmobcage": "mushroom_cow_spawner",
-  "mushroomcowmobspawner": "mushroom_cow_spawner",
-  "mushroomcowmonstercage": "mushroom_cow_spawner",
-  "mushroomcowmonsterspawner": "mushroom_cow_spawner",
-  "mushroomcowmspawner": "mushroom_cow_spawner",
-  "mushroomcowspawner": "mushroom_cow_spawner",
-  "mushroommcage": "mushroom_cow_spawner",
-  "mushroommobcage": "mushroom_cow_spawner",
-  "mushroommobspawner": "mushroom_cow_spawner",
-  "mushroommonstercage": "mushroom_cow_spawner",
-  "mushroommonsterspawner": "mushroom_cow_spawner",
-  "mushroommspawner": "mushroom_cow_spawner",
-  "mushroomspawner": "mushroom_cow_spawner",
   "mushroom_stem": {
     "material": "MUSHROOM_STEM"
   },
@@ -20371,6 +21193,26 @@
   "recordnether": "music_disc_pigstep",
   "recordpig": "music_disc_pigstep",
   "recordpigstep": "music_disc_pigstep",
+  "music_disc_relic": {
+    "material": "MUSIC_DISC_RELIC"
+  },
+  "cdrelic": "music_disc_relic",
+  "discrelic": "music_disc_relic",
+  "diskrelic": "music_disc_relic",
+  "mdiscrelic": "music_disc_relic",
+  "minecraft:music_disc_relic": "music_disc_relic",
+  "musicdiscrelic": "music_disc_relic",
+  "musicdiskrelic": "music_disc_relic",
+  "musicrecordrelic": "music_disc_relic",
+  "recordrelic": "music_disc_relic",
+  "reliccd": "music_disc_relic",
+  "relicdisc": "music_disc_relic",
+  "relicdisk": "music_disc_relic",
+  "relicmdisc": "music_disc_relic",
+  "relicmusicdisc": "music_disc_relic",
+  "relicmusicdisk": "music_disc_relic",
+  "relicmusicrecord": "music_disc_relic",
+  "relicrecord": "music_disc_relic",
   "music_disc_stal": {
     "material": "MUSIC_DISC_STAL"
   },
@@ -21082,6 +21924,11 @@
   "netheritesword": "netherite_sword",
   "nethersword": "netherite_sword",
   "nethsword": "netherite_sword",
+  "netherite_upgrade_smithing_template": {
+    "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE"
+  },
+  "minecraft:netherite_upgrade_smithing_template": "netherite_upgrade_smithing_template",
+  "netheriteupgradesmithingtemplate": "netherite_upgrade_smithing_template",
   "netherrack": {
     "material": "NETHERRACK"
   },
@@ -21376,6 +22223,15 @@
   "oakgate": "oak_fence_gate",
   "ofencegate": "oak_fence_gate",
   "ogate": "oak_fence_gate",
+  "oak_hanging_sign": {
+    "material": "OAK_HANGING_SIGN"
+  },
+  "minecraft:oak_hanging_sign": "oak_hanging_sign",
+  "oakhangingsign": "oak_hanging_sign",
+  "oakhangsign": "oak_hanging_sign",
+  "oakhsign": "oak_hanging_sign",
+  "ohangsign": "oak_hanging_sign",
+  "ohsign": "oak_hanging_sign",
   "oak_leaves": {
     "material": "OAK_LEAVES"
   },
@@ -22375,6 +23231,11 @@
   "piglinbrmonsterspawner": "piglin_brute_spawner",
   "piglinbrmspawner": "piglin_brute_spawner",
   "piglinbrspawner": "piglin_brute_spawner",
+  "piglin_head": {
+    "material": "PIGLIN_HEAD"
+  },
+  "minecraft:piglin_head": "piglin_head",
+  "piglinhead": "piglin_head",
   "piglin_spawn_egg": {
     "material": "PIGLIN_SPAWN_EGG"
   },
@@ -22553,6 +23414,11 @@
   "pinkglazedterracotta": "pink_glazed_terracotta",
   "pinkgtcotta": "pink_glazed_terracotta",
   "pinkgterra": "pink_glazed_terracotta",
+  "pink_petals": {
+    "material": "PINK_PETALS"
+  },
+  "minecraft:pink_petals": "pink_petals",
+  "pinkpetals": "pink_petals",
   "pink_shulker_box": {
     "material": "PINK_SHULKER_BOX"
   },
@@ -22623,11 +23489,27 @@
     "material": "PISTON"
   },
   "minecraft:piston": "piston",
+  "pitcher_plant": {
+    "material": "PITCHER_PLANT"
+  },
+  "minecraft:pitcher_plant": "pitcher_plant",
+  "pitcherplant": "pitcher_plant",
+  "pitcher_pod": {
+    "material": "PITCHER_POD"
+  },
+  "minecraft:pitcher_pod": "pitcher_pod",
+  "pitcherpod": "pitcher_pod",
   "player_head": {
     "material": "PLAYER_HEAD"
   },
   "minecraft:player_head": "player_head",
   "playerhead": "player_head",
+  "plenty_pottery_sherd": {
+    "material": "PLENTY_POTTERY_SHERD"
+  },
+  "minecraft:plenty_pottery_sherd": "plenty_pottery_sherd",
+  "plentypotterysherd": "plenty_pottery_sherd",
+  "plentysherd": "plenty_pottery_sherd",
   "podzol": {
     "material": "PODZOL"
   },
@@ -23533,6 +24415,12 @@
   },
   "minecraft:prismarine_wall": "prismarine_wall",
   "prismarinewall": "prismarine_wall",
+  "prize_pottery_sherd": {
+    "material": "PRIZE_POTTERY_SHERD"
+  },
+  "minecraft:prize_pottery_sherd": "prize_pottery_sherd",
+  "prizepotterysherd": "prize_pottery_sherd",
+  "prizesherd": "prize_pottery_sherd",
   "pufferfish": {
     "material": "PUFFERFISH"
   },
@@ -23964,6 +24852,12 @@
   "minecraft:rail": "rail",
   "rails": "rail",
   "track": "rail",
+  "raiser_armor_trim_smithing_template": {
+    "material": "RAISER_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:raiser_armor_trim_smithing_template": "raiser_armor_trim_smithing_template",
+  "raiserarmortrimsmithingtemplate": "raiser_armor_trim_smithing_template",
+  "raisertrim": "raiser_armor_trim_smithing_template",
   "ravager_spawn_egg": {
     "material": "RAVAGER_SPAWN_EGG"
   },
@@ -24427,7 +25321,8 @@
   "rstorch": "redstone_torch",
   "regeneration_lingering_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": false
     },
@@ -24477,7 +25372,8 @@
   "regenlingerpot": "regeneration_lingering_potion",
   "regeneration_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": false
     },
@@ -24497,7 +25393,8 @@
   "regenpotion": "regeneration_potion",
   "regeneration_splash_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": false
     },
@@ -24523,7 +25420,8 @@
   "splregenpotion": "regeneration_splash_potion",
   "regeneration_tipped_arrow": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": false
     },
@@ -24607,6 +25505,12 @@
   "respawnpoint": "respawn_anchor",
   "spawnanc": "respawn_anchor",
   "spawnanchor": "respawn_anchor",
+  "rib_armor_trim_smithing_template": {
+    "material": "RIB_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:rib_armor_trim_smithing_template": "rib_armor_trim_smithing_template",
+  "ribarmortrimsmithingtemplate": "rib_armor_trim_smithing_template",
+  "ribtrim": "rib_armor_trim_smithing_template",
   "rooted_dirt": {
     "material": "ROOTED_DIRT"
   },
@@ -24773,10 +25677,6 @@
   "minecraft:sculk_vein": "sculk_vein",
   "sculkvein": "sculk_vein",
   "scvein": "sculk_vein",
-  "scute": {
-    "material": "SCUTE"
-  },
-  "minecraft:scute": "scute",
   "sea_lantern": {
     "material": "SEA_LANTERN"
   },
@@ -24791,6 +25691,24 @@
     "material": "SEAGRASS"
   },
   "minecraft:seagrass": "seagrass",
+  "sentry_armor_trim_smithing_template": {
+    "material": "SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:sentry_armor_trim_smithing_template": "sentry_armor_trim_smithing_template",
+  "sentryarmortrimsmithingtemplate": "sentry_armor_trim_smithing_template",
+  "sentrytrim": "sentry_armor_trim_smithing_template",
+  "shaper_armor_trim_smithing_template": {
+    "material": "SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:shaper_armor_trim_smithing_template": "shaper_armor_trim_smithing_template",
+  "shaperarmortrimsmithingtemplate": "shaper_armor_trim_smithing_template",
+  "shapertrim": "shaper_armor_trim_smithing_template",
+  "sheaf_pottery_sherd": {
+    "material": "SHEAF_POTTERY_SHERD"
+  },
+  "minecraft:sheaf_pottery_sherd": "sheaf_pottery_sherd",
+  "sheafpotterysherd": "sheaf_pottery_sherd",
+  "sheafsherd": "sheaf_pottery_sherd",
   "shears": {
     "material": "SHEARS"
   },
@@ -24819,6 +25737,12 @@
   "sheepmonsterspawner": "sheep_spawner",
   "sheepmspawner": "sheep_spawner",
   "sheepspawner": "sheep_spawner",
+  "shelter_pottery_sherd": {
+    "material": "SHELTER_POTTERY_SHERD"
+  },
+  "minecraft:shelter_pottery_sherd": "shelter_pottery_sherd",
+  "shelterpotterysherd": "shelter_pottery_sherd",
+  "sheltersherd": "shelter_pottery_sherd",
   "shield": {
     "material": "SHIELD"
   },
@@ -24826,6 +25750,14 @@
   "minecraft:shield": "shield",
   "woodenshield": "shield",
   "woodshield": "shield",
+  "short_grass": {
+    "material": "SHORT_GRASS",
+    "fallbacks": [
+      "GRASS"
+    ]
+  },
+  "minecraft:short_grass": "short_grass",
+  "shortgrass": "short_grass",
   "shroomlight": {
     "material": "SHROOMLIGHT"
   },
@@ -24883,6 +25815,12 @@
   "shulkmonsterspawner": "shulker_spawner",
   "shulkmspawner": "shulker_spawner",
   "shulkspawner": "shulker_spawner",
+  "silence_armor_trim_smithing_template": {
+    "material": "SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:silence_armor_trim_smithing_template": "silence_armor_trim_smithing_template",
+  "silencearmortrimsmithingtemplate": "silence_armor_trim_smithing_template",
+  "silencetrim": "silence_armor_trim_smithing_template",
   "silverfish_spawn_egg": {
     "material": "SILVERFISH_SPAWN_EGG"
   },
@@ -25055,6 +25993,12 @@
   },
   "minecraft:skull_banner_pattern": "skull_banner_pattern",
   "skullbannerpattern": "skull_banner_pattern",
+  "skull_pottery_sherd": {
+    "material": "SKULL_POTTERY_SHERD"
+  },
+  "minecraft:skull_pottery_sherd": "skull_pottery_sherd",
+  "skullpotterysherd": "skull_pottery_sherd",
+  "skullsherd": "skull_pottery_sherd",
   "slime_ball": {
     "material": "SLIME_BALL"
   },
@@ -25582,6 +26526,46 @@
   "smstonehalfblock": "smooth_stone_slab",
   "smstonestep": "smooth_stone_slab",
   "smststep": "smooth_stone_slab",
+  "sniffer_egg": {
+    "material": "SNIFFER_EGG"
+  },
+  "minecraft:sniffer_egg": "sniffer_egg",
+  "snifferegg": "sniffer_spawn_egg",
+  "sniffer_spawn_egg": {
+    "material": "SNIFFER_SPAWN_EGG"
+  },
+  "eggsniffer": "sniffer_spawn_egg",
+  "minecraft:sniffer_spawn_egg": "sniffer_spawn_egg",
+  "seggsniffer": "sniffer_spawn_egg",
+  "sniffersegg": "sniffer_spawn_egg",
+  "snifferspawn": "sniffer_spawn_egg",
+  "snifferspawnegg": "sniffer_spawn_egg",
+  "spawneggsniffer": "sniffer_spawn_egg",
+  "spawnsniffer": "sniffer_spawn_egg",
+  "sniffer_spawner": {
+    "entity": "SNIFFER",
+    "material": "SPAWNER"
+  },
+  "sniffercage": "sniffer_spawner",
+  "sniffermcage": "sniffer_spawner",
+  "sniffermobcage": "sniffer_spawner",
+  "sniffermobspawner": "sniffer_spawner",
+  "sniffermonstercage": "sniffer_spawner",
+  "sniffermonsterspawner": "sniffer_spawner",
+  "sniffermspawner": "sniffer_spawner",
+  "snifferspawner": "sniffer_spawner",
+  "snort_pottery_sherd": {
+    "material": "SNORT_POTTERY_SHERD"
+  },
+  "minecraft:snort_pottery_sherd": "snort_pottery_sherd",
+  "snortpotterysherd": "snort_pottery_sherd",
+  "snortsherd": "snort_pottery_sherd",
+  "snout_armor_trim_smithing_template": {
+    "material": "SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:snout_armor_trim_smithing_template": "snout_armor_trim_smithing_template",
+  "snoutarmortrimsmithingtemplate": "snout_armor_trim_smithing_template",
+  "snouttrim": "snout_armor_trim_smithing_template",
   "snow": {
     "material": "SNOW"
   },
@@ -25591,38 +26575,83 @@
   },
   "minecraft:snow_block": "snow_block",
   "snowblock": "snow_block",
+  "snow_golem_spawn_egg": {
+    "material": "SNOW_GOLEM_SPAWN_EGG"
+  },
+  "eggsgolem": "snow_golem_spawn_egg",
+  "eggsnow_golem": "snow_golem_spawn_egg",
+  "eggsnowgolem": "snow_golem_spawn_egg",
+  "eggsnowman": "snow_golem_spawn_egg",
+  "minecraft:snow_golem_spawn_egg": "snow_golem_spawn_egg",
+  "seggsgolem": "snow_golem_spawn_egg",
+  "seggsnow_golem": "snow_golem_spawn_egg",
+  "seggsnowgolem": "snow_golem_spawn_egg",
+  "seggsnowman": "snow_golem_spawn_egg",
+  "sgolemegg": "snow_golem_spawn_egg",
+  "sgolemsegg": "snow_golem_spawn_egg",
+  "sgolemspawn": "snow_golem_spawn_egg",
+  "sgolemspawnegg": "snow_golem_spawn_egg",
+  "snow_golemegg": "snow_golem_spawn_egg",
+  "snow_golemsegg": "snow_golem_spawn_egg",
+  "snow_golemspawn": "snow_golem_spawn_egg",
+  "snow_golemspawnegg": "snow_golem_spawn_egg",
+  "snowgolemegg": "snow_golem_spawn_egg",
+  "snowgolemsegg": "snow_golem_spawn_egg",
+  "snowgolemspawn": "snow_golem_spawn_egg",
+  "snowgolemspawnegg": "snow_golem_spawn_egg",
+  "snowmanegg": "snow_golem_spawn_egg",
+  "snowmansegg": "snow_golem_spawn_egg",
+  "snowmanspawn": "snow_golem_spawn_egg",
+  "snowmanspawnegg": "snow_golem_spawn_egg",
+  "spawneggsgolem": "snow_golem_spawn_egg",
+  "spawneggsnow_golem": "snow_golem_spawn_egg",
+  "spawneggsnowgolem": "snow_golem_spawn_egg",
+  "spawneggsnowman": "snow_golem_spawn_egg",
+  "spawnsgolem": "snow_golem_spawn_egg",
+  "spawnsnow_golem": "snow_golem_spawn_egg",
+  "spawnsnowgolem": "snow_golem_spawn_egg",
+  "spawnsnowman": "snow_golem_spawn_egg",
+  "snow_golem_spawner": {
+    "entity": "SNOW_GOLEM",
+    "material": "SPAWNER"
+  },
+  "sgolemcage": "snow_golem_spawner",
+  "sgolemmcage": "snow_golem_spawner",
+  "sgolemmobcage": "snow_golem_spawner",
+  "sgolemmobspawner": "snow_golem_spawner",
+  "sgolemmonstercage": "snow_golem_spawner",
+  "sgolemmonsterspawner": "snow_golem_spawner",
+  "sgolemmspawner": "snow_golem_spawner",
+  "sgolemspawner": "snow_golem_spawner",
+  "snow_golemcage": "snow_golem_spawner",
+  "snow_golemmcage": "snow_golem_spawner",
+  "snow_golemmobcage": "snow_golem_spawner",
+  "snow_golemmobspawner": "snow_golem_spawner",
+  "snow_golemmonstercage": "snow_golem_spawner",
+  "snow_golemmonsterspawner": "snow_golem_spawner",
+  "snow_golemmspawner": "snow_golem_spawner",
+  "snow_golemspawner": "snow_golem_spawner",
+  "snowgolemcage": "snow_golem_spawner",
+  "snowgolemmcage": "snow_golem_spawner",
+  "snowgolemmobcage": "snow_golem_spawner",
+  "snowgolemmobspawner": "snow_golem_spawner",
+  "snowgolemmonstercage": "snow_golem_spawner",
+  "snowgolemmonsterspawner": "snow_golem_spawner",
+  "snowgolemmspawner": "snow_golem_spawner",
+  "snowgolemspawner": "snow_golem_spawner",
+  "snowman_spawner": "snow_golem_spawner",
+  "snowmancage": "snow_golem_spawner",
+  "snowmanmcage": "snow_golem_spawner",
+  "snowmanmobcage": "snow_golem_spawner",
+  "snowmanmobspawner": "snow_golem_spawner",
+  "snowmanmonstercage": "snow_golem_spawner",
+  "snowmanmonsterspawner": "snow_golem_spawner",
+  "snowmanmspawner": "snow_golem_spawner",
+  "snowmanspawner": "snow_golem_spawner",
   "snowball": {
     "material": "SNOWBALL"
   },
   "minecraft:snowball": "snowball",
-  "snowman_spawner": {
-    "entity": "SNOWMAN",
-    "material": "SPAWNER"
-  },
-  "sgolemcage": "snowman_spawner",
-  "sgolemmcage": "snowman_spawner",
-  "sgolemmobcage": "snowman_spawner",
-  "sgolemmobspawner": "snowman_spawner",
-  "sgolemmonstercage": "snowman_spawner",
-  "sgolemmonsterspawner": "snowman_spawner",
-  "sgolemmspawner": "snowman_spawner",
-  "sgolemspawner": "snowman_spawner",
-  "snowgolemcage": "snowman_spawner",
-  "snowgolemmcage": "snowman_spawner",
-  "snowgolemmobcage": "snowman_spawner",
-  "snowgolemmobspawner": "snowman_spawner",
-  "snowgolemmonstercage": "snowman_spawner",
-  "snowgolemmonsterspawner": "snowman_spawner",
-  "snowgolemmspawner": "snowman_spawner",
-  "snowgolemspawner": "snowman_spawner",
-  "snowmancage": "snowman_spawner",
-  "snowmanmcage": "snowman_spawner",
-  "snowmanmobcage": "snowman_spawner",
-  "snowmanmobspawner": "snowman_spawner",
-  "snowmanmonstercage": "snowman_spawner",
-  "snowmanmonsterspawner": "snowman_spawner",
-  "snowmanmspawner": "snowman_spawner",
-  "snowmanspawner": "snowman_spawner",
   "soul_campfire": {
     "material": "SOUL_CAMPFIRE"
   },
@@ -25702,6 +26731,12 @@
   "spidmonsterspawner": "spider_spawner",
   "spidmspawner": "spider_spawner",
   "spidspawner": "spider_spawner",
+  "spire_armor_trim_smithing_template": {
+    "material": "SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:spire_armor_trim_smithing_template": "spire_armor_trim_smithing_template",
+  "spirearmortrimsmithingtemplate": "spire_armor_trim_smithing_template",
+  "spiretrim": "spire_armor_trim_smithing_template",
   "splash_potion": {
     "material": "SPLASH_POTION"
   },
@@ -25810,6 +26845,23 @@
   "sgate": "spruce_fence_gate",
   "sprucefencegate": "spruce_fence_gate",
   "sprucegate": "spruce_fence_gate",
+  "spruce_hanging_sign": {
+    "material": "SPRUCE_HANGING_SIGN"
+  },
+  "darkhangsign": "spruce_hanging_sign",
+  "darkhsign": "spruce_hanging_sign",
+  "dhangsign": "spruce_hanging_sign",
+  "dhsign": "spruce_hanging_sign",
+  "minecraft:spruce_hanging_sign": "spruce_hanging_sign",
+  "phangsign": "spruce_hanging_sign",
+  "phsign": "spruce_hanging_sign",
+  "pinehangsign": "spruce_hanging_sign",
+  "pinehsign": "spruce_hanging_sign",
+  "shangsign": "spruce_hanging_sign",
+  "shsign": "spruce_hanging_sign",
+  "sprucehangingsign": "spruce_hanging_sign",
+  "sprucehangsign": "spruce_hanging_sign",
+  "sprucehsign": "spruce_hanging_sign",
   "spruce_leaves": {
     "material": "SPRUCE_LEAVES"
   },
@@ -26686,6 +27738,11 @@
   "woodacaciastripped": "stripped_acacia_wood",
   "woodacstripped": "stripped_acacia_wood",
   "woodastripped": "stripped_acacia_wood",
+  "stripped_bamboo_block": {
+    "material": "STRIPPED_BAMBOO_BLOCK"
+  },
+  "minecraft:stripped_bamboo_block": "stripped_bamboo_block",
+  "strippedbambooblock": "stripped_bamboo_block",
   "stripped_birch_log": {
     "material": "STRIPPED_BIRCH_LOG"
   },
@@ -26814,6 +27871,74 @@
   "woodwhitestripped": "stripped_birch_wood",
   "woodwstripped": "stripped_birch_wood",
   "wstrippedwood": "stripped_birch_wood",
+  "stripped_cherry_log": {
+    "material": "STRIPPED_CHERRY_LOG"
+  },
+  "barecherrytree": "stripped_cherry_log",
+  "barecherrytrunk": "stripped_cherry_log",
+  "barechertree": "stripped_cherry_log",
+  "barechertrunk": "stripped_cherry_log",
+  "barectree": "stripped_cherry_log",
+  "barectrunk": "stripped_cherry_log",
+  "cbarelog": "stripped_cherry_log",
+  "cherbarelog": "stripped_cherry_log",
+  "cherrybarelog": "stripped_cherry_log",
+  "cherrystrippedlog": "stripped_cherry_log",
+  "cherstrippedlog": "stripped_cherry_log",
+  "cstrippedlog": "stripped_cherry_log",
+  "logcherrystripped": "stripped_cherry_log",
+  "logcherstripped": "stripped_cherry_log",
+  "logcstripped": "stripped_cherry_log",
+  "minecraft:stripped_cherry_log": "stripped_cherry_log",
+  "strcherlog": "stripped_cherry_log",
+  "strcherrylog": "stripped_cherry_log",
+  "strclog": "stripped_cherry_log",
+  "strippedcherlog": "stripped_cherry_log",
+  "strippedcherrylog": "stripped_cherry_log",
+  "strippedcherrytree": "stripped_cherry_log",
+  "strippedcherrytrunk": "stripped_cherry_log",
+  "strippedchertree": "stripped_cherry_log",
+  "strippedchertrunk": "stripped_cherry_log",
+  "strippedclog": "stripped_cherry_log",
+  "strippedctree": "stripped_cherry_log",
+  "strippedctrunk": "stripped_cherry_log",
+  "stripped_cherry_wood": {
+    "material": "STRIPPED_CHERRY_WOOD"
+  },
+  "barecherlogall": "stripped_cherry_wood",
+  "barecherrylogall": "stripped_cherry_wood",
+  "barecherrytreeall": "stripped_cherry_wood",
+  "barecherrytrunkall": "stripped_cherry_wood",
+  "barechertreeall": "stripped_cherry_wood",
+  "barechertrunkall": "stripped_cherry_wood",
+  "bareclogall": "stripped_cherry_wood",
+  "barectreeall": "stripped_cherry_wood",
+  "barectrunkall": "stripped_cherry_wood",
+  "cbarewood": "stripped_cherry_wood",
+  "cherbarewood": "stripped_cherry_wood",
+  "cherrybarewood": "stripped_cherry_wood",
+  "cherrystrippedwood": "stripped_cherry_wood",
+  "cherstrippedwood": "stripped_cherry_wood",
+  "cstrippedwood": "stripped_cherry_wood",
+  "minecraft:stripped_cherry_wood": "stripped_cherry_wood",
+  "strcherrywood": "stripped_cherry_wood",
+  "strcherwood": "stripped_cherry_wood",
+  "strcwood": "stripped_cherry_wood",
+  "strippedcherlogall": "stripped_cherry_wood",
+  "strippedcherrylogall": "stripped_cherry_wood",
+  "strippedcherrytreeall": "stripped_cherry_wood",
+  "strippedcherrytrunkall": "stripped_cherry_wood",
+  "strippedcherrywood": "stripped_cherry_wood",
+  "strippedchertreeall": "stripped_cherry_wood",
+  "strippedchertrunkall": "stripped_cherry_wood",
+  "strippedcherwood": "stripped_cherry_wood",
+  "strippedclogall": "stripped_cherry_wood",
+  "strippedctreeall": "stripped_cherry_wood",
+  "strippedctrunkall": "stripped_cherry_wood",
+  "strippedcwood": "stripped_cherry_wood",
+  "woodcherrystripped": "stripped_cherry_wood",
+  "woodcherstripped": "stripped_cherry_wood",
+  "woodcstripped": "stripped_cherry_wood",
   "stripped_crimson_hyphae": {
     "material": "STRIPPED_CRIMSON_HYPHAE"
   },
@@ -27307,7 +28432,8 @@
   "warpstrippedlog": "stripped_warped_stem",
   "strong_harming_lingering_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": true,
       "extended": false
     },
@@ -27525,7 +28651,8 @@
   "lingerpotinstantdamagestrong": "strong_harming_lingering_potion",
   "strong_harming_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": true,
       "extended": false
     },
@@ -27593,7 +28720,8 @@
   "potofinstantdamagestrong": "strong_harming_potion",
   "strong_harming_splash_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": true,
       "extended": false
     },
@@ -27691,7 +28819,8 @@
   "splinstantdamagestrongpotion": "strong_harming_splash_potion",
   "strong_harming_tipped_arrow": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": true,
       "extended": false
     },
@@ -27774,7 +28903,8 @@
   "instantdamagestrongtippedarrow": "strong_harming_tipped_arrow",
   "strong_healing_lingering_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": true,
       "extended": false
     },
@@ -27992,7 +29122,8 @@
   "lingerpotlifestrong": "strong_healing_lingering_potion",
   "strong_healing_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": true,
       "extended": false
     },
@@ -28060,7 +29191,8 @@
   "potoflifestrong": "strong_healing_potion",
   "strong_healing_splash_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": true,
       "extended": false
     },
@@ -28158,7 +29290,8 @@
   "spllifestrongpotion": "strong_healing_splash_potion",
   "strong_healing_tipped_arrow": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": true,
       "extended": false
     },
@@ -28241,7 +29374,8 @@
   "lifestrongtippedarrow": "strong_healing_tipped_arrow",
   "strong_leaping_lingering_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": true,
       "extended": false
     },
@@ -28375,7 +29509,8 @@
   "lingerpotleapstrong": "strong_leaping_lingering_potion",
   "strong_leaping_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": true,
       "extended": false
     },
@@ -28419,7 +29554,8 @@
   "potofleapstrong": "strong_leaping_potion",
   "strong_leaping_splash_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": true,
       "extended": false
     },
@@ -28481,7 +29617,8 @@
   "splleapstrongpotion": "strong_leaping_splash_potion",
   "strong_leaping_tipped_arrow": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": true,
       "extended": false
     },
@@ -28827,7 +29964,8 @@
   "pstrongtippedarrow": "strong_poison_tipped_arrow",
   "strong_regeneration_lingering_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": true,
       "extended": false
     },
@@ -28961,7 +30099,8 @@
   "regenlingerpotstrong": "strong_regeneration_lingering_potion",
   "strong_regeneration_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": true,
       "extended": false
     },
@@ -29005,7 +30144,8 @@
   "regenstrongpotion": "strong_regeneration_potion",
   "strong_regeneration_splash_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": true,
       "extended": false
     },
@@ -29067,7 +30207,8 @@
   "splregenstrongpotion": "strong_regeneration_splash_potion",
   "strong_regeneration_tipped_arrow": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": true,
       "extended": false
     },
@@ -29619,7 +30760,8 @@
   "strstrongtippedarrow": "strong_strength_tipped_arrow",
   "strong_swiftness_lingering_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": true,
       "extended": false
     },
@@ -29753,7 +30895,8 @@
   "swiftnesslingerpotstrong": "strong_swiftness_lingering_potion",
   "strong_swiftness_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": true,
       "extended": false
     },
@@ -29797,7 +30940,8 @@
   "swiftstrongpotion": "strong_swiftness_potion",
   "strong_swiftness_splash_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": true,
       "extended": false
     },
@@ -29859,7 +31003,8 @@
   "swiftstrongsplashpotion": "strong_swiftness_splash_potion",
   "strong_swiftness_tipped_arrow": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": true,
       "extended": false
     },
@@ -30226,6 +31371,20 @@
     "material": "SUNFLOWER"
   },
   "minecraft:sunflower": "sunflower",
+  "suspicious_gravel": {
+    "material": "SUSPICIOUS_GRAVEL"
+  },
+  "amongusgravel": "suspicious_gravel",
+  "minecraft:suspicious_gravel": "suspicious_gravel",
+  "susgravel": "suspicious_gravel",
+  "suspiciousgravel": "suspicious_gravel",
+  "suspicious_sand": {
+    "material": "SUSPICIOUS_SAND"
+  },
+  "amongussand": "suspicious_sand",
+  "minecraft:suspicious_sand": "suspicious_sand",
+  "suspicioussand": "suspicious_sand",
+  "sussand": "suspicious_sand",
   "suspicious_stew": {
     "material": "SUSPICIOUS_STEW"
   },
@@ -30238,7 +31397,8 @@
   "sweetberries": "sweet_berries",
   "swiftness_lingering_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": false
     },
@@ -30288,7 +31448,8 @@
   "swiftnesslingerpot": "swiftness_lingering_potion",
   "swiftness_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": false
     },
@@ -30308,7 +31469,8 @@
   "swiftpotion": "swiftness_potion",
   "swiftness_splash_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": false
     },
@@ -30334,7 +31496,8 @@
   "swiftsplashpotion": "swiftness_splash_potion",
   "swiftness_tipped_arrow": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": false
     },
@@ -30469,6 +31632,12 @@
   "thicktarr": "thick_tipped_arrow",
   "thicktarrow": "thick_tipped_arrow",
   "thicktippedarrow": "thick_tipped_arrow",
+  "tide_armor_trim_smithing_template": {
+    "material": "TIDE_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:tide_armor_trim_smithing_template": "tide_armor_trim_smithing_template",
+  "tidearmortrimsmithingtemplate": "tide_armor_trim_smithing_template",
+  "tidetrim": "tide_armor_trim_smithing_template",
   "tinted_glass": {
     "material": "TINTED_GLASS"
   },
@@ -30531,6 +31700,19 @@
   "burningstick": "torch",
   "burnstick": "torch",
   "minecraft:torch": "torch",
+  "torchflower": {
+    "material": "TORCHFLOWER"
+  },
+  "minecraft:torchflower": "torchflower",
+  "tflower": "torchflower",
+  "torchflower_seeds": {
+    "material": "TORCHFLOWER_SEEDS"
+  },
+  "minecraft:torchflower_seeds": "torchflower_seeds",
+  "tflowerseeds": "torchflower_seeds",
+  "torchflowerseeds": "torchflower_seeds",
+  "torchseeds": "torchflower_seeds",
+  "tseeds": "torchflower_seeds",
   "totem_of_undying": {
     "material": "TOTEM_OF_UNDYING"
   },
@@ -30849,6 +32031,13 @@
   "turtletarr": "turtle_master_tipped_arrow",
   "turtletarrow": "turtle_master_tipped_arrow",
   "turtletippedarrow": "turtle_master_tipped_arrow",
+  "turtle_scute": {
+    "material": "TURTLE_SCUTE"
+  },
+  "minecraft:scute": "turtle_scute",
+  "minecraft:turtle_scute": "turtle_scute",
+  "scute": "turtle_scute",
+  "turtlescute": "turtle_scute",
   "turtle_spawn_egg": {
     "material": "TURTLE_SPAWN_EGG"
   },
@@ -30888,6 +32077,12 @@
   "verdlight": "verdant_froglight",
   "vfroglight": "verdant_froglight",
   "vlight": "verdant_froglight",
+  "vex_armor_trim_smithing_template": {
+    "material": "VEX_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:vex_armor_trim_smithing_template": "vex_armor_trim_smithing_template",
+  "vexarmortrimsmithingtemplate": "vex_armor_trim_smithing_template",
+  "vextrim": "vex_armor_trim_smithing_template",
   "vex_spawn_egg": {
     "material": "VEX_SPAWN_EGG"
   },
@@ -31050,6 +32245,12 @@
   "wandering_tradermonsterspawner": "wandering_trader_spawner",
   "wandering_tradermspawner": "wandering_trader_spawner",
   "wandering_traderspawner": "wandering_trader_spawner",
+  "ward_armor_trim_smithing_template": {
+    "material": "WARD_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:ward_armor_trim_smithing_template": "ward_armor_trim_smithing_template",
+  "wardarmortrimsmithingtemplate": "ward_armor_trim_smithing_template",
+  "wardtrim": "ward_armor_trim_smithing_template",
   "warden_spawn_egg": {
     "material": "WARDEN_SPAWN_EGG"
   },
@@ -31125,6 +32326,15 @@
   "warpfunstick": "warped_fungus_on_a_stick",
   "warponstick": "warped_fungus_on_a_stick",
   "warpstick": "warped_fungus_on_a_stick",
+  "warped_hanging_sign": {
+    "material": "WARPED_HANGING_SIGN"
+  },
+  "minecraft:warped_hanging_sign": "warped_hanging_sign",
+  "warpedhangingsign": "warped_hanging_sign",
+  "warpedhangsign": "warped_hanging_sign",
+  "warpedhsign": "warped_hanging_sign",
+  "warphangsign": "warped_hanging_sign",
+  "warphsign": "warped_hanging_sign",
   "warped_hyphae": {
     "material": "WARPED_HYPHAE"
   },
@@ -40359,6 +41569,12 @@
   "wthwaxedcutcopstairs": "waxed_weathered_cut_copper_stairs",
   "wthwaxedcutcostair": "waxed_weathered_cut_copper_stairs",
   "wthwaxedcutcostairs": "waxed_weathered_cut_copper_stairs",
+  "wayfinder_armor_trim_smithing_template": {
+    "material": "WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:wayfinder_armor_trim_smithing_template": "wayfinder_armor_trim_smithing_template",
+  "wayfinderarmortrimsmithingtemplate": "wayfinder_armor_trim_smithing_template",
+  "wayfindertrim": "wayfinder_armor_trim_smithing_template",
   "weakness_lingering_potion": {
     "potionData": {
       "type": "WEAKNESS",
@@ -41002,6 +42218,12 @@
   "whitecotton": "white_wool",
   "whitewool": "white_wool",
   "wwool": "white_wool",
+  "wild_armor_trim_smithing_template": {
+    "material": "WILD_ARMOR_TRIM_SMITHING_TEMPLATE"
+  },
+  "minecraft:wild_armor_trim_smithing_template": "wild_armor_trim_smithing_template",
+  "wildarmortrimsmithingtemplate": "wild_armor_trim_smithing_template",
+  "wildtrim": "wild_armor_trim_smithing_template",
   "witch_spawn_egg": {
     "material": "WITCH_SPAWN_EGG"
   },
@@ -41089,7 +42311,7 @@
   "wither_skeletonsegg": "wither_skeleton_spawn_egg",
   "wither_skeletonspawn": "wither_skeleton_spawn_egg",
   "wither_skeletonspawnegg": "wither_skeleton_spawn_egg",
-  "withersegg": "wither_skeleton_spawn_egg",
+  "withersegg": "wither_spawn_egg",
   "witherskegg": "wither_skeleton_spawn_egg",
   "witherskeletonspawnegg": "wither_skeleton_spawn_egg",
   "withersksegg": "wither_skeleton_spawn_egg",
@@ -41150,6 +42372,17 @@
   "wskmonsterspawner": "wither_skeleton_spawner",
   "wskmspawner": "wither_skeleton_spawner",
   "wskspawner": "wither_skeleton_spawner",
+  "wither_spawn_egg": {
+    "material": "WITHER_SPAWN_EGG"
+  },
+  "eggwither": "wither_spawn_egg",
+  "minecraft:wither_spawn_egg": "wither_spawn_egg",
+  "seggwither": "wither_spawn_egg",
+  "spawneggwither": "wither_spawn_egg",
+  "spawnwither": "wither_spawn_egg",
+  "witheregg": "wither_spawn_egg",
+  "witherspawn": "wither_spawn_egg",
+  "witherspawnegg": "wither_spawn_egg",
   "wither_spawner": {
     "entity": "WITHER",
     "material": "SPAWNER"
@@ -41162,6 +42395,11 @@
   "withermonsterspawner": "wither_spawner",
   "withermspawner": "wither_spawner",
   "witherspawner": "wither_spawner",
+  "wolf_armor": {
+    "material": "WOLF_ARMOR"
+  },
+  "minecraft:wolf_armor": "wolf_armor",
+  "wolfarmor": "wolf_armor",
   "wolf_spawn_egg": {
     "material": "WOLF_SPAWN_EGG"
   },

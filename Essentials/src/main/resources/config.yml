@@ -213,6 +213,10 @@ socialspy-listen-muted-players: true
 # If false, social spy will only monitor commands from the list above.
 socialspy-messages: true
 
+# Whether social spy should use formatted display names which may include color.
+# If false, social spy will use only the actual player names.
+socialspy-uses-displaynames: true
+
 # The following settings listen for when a player changes worlds.
 # If you use another plugin to control speed and flight, you should change these to false.
 
@@ -444,8 +448,22 @@ debug: false
 # If you don't set this, the default locale of the server will be used.
 # For example, to set language to English, set locale to en, to use the file "messages_en.properties".
 # Don't forget to remove the # in front of the line.
-# For more information, visit http://wiki.ess3.net/wiki/Locale
+# For more information, visit https://essentialsx.net/wiki/Locale.html
 #locale: en
+
+# Should EssentialsX use player's language instead of the server's when sending messages?
+# This is useful if you want to use a different language for your server than for your players.
+# For example, if you have your server set to English and a player who speaks French, you can set this to true
+# and EssentialsX will send messages in French to the player and messages in the console as English.
+# If a player's language is not known, the server's language (or one defined above) will be used.
+per-player-locale: false
+
+# Change the default primary and secondary colours used in EssentialsX messages.
+# Some messages may use custom colours, which will need to be edited in the appropriate message files.
+# For more information on customising messages, see https://essentialsx.net/wiki/Locale.html
+message-colors:
+  primary: '#ffaa00'
+  secondary: '#ff5555'
 
 # Turn off god mode when people leave the server.
 remove-god-on-disconnect: false
@@ -731,6 +749,10 @@ log-command-block-commands: true
 
 # Set the maximum speed for projectiles spawned with /fireball.
 max-projectile-speed: 8
+
+# Set the maximum amount of lore lines a user can set with the /itemlore command.
+# Users with the essentials.itemlore.bypass permission will be able to bypass this limit.
+max-itemlore-lines: 10
 
 # Should EssentialsX check for updates?
 # If set to true, EssentialsX will show notifications when a new version is available.

@@ -16,8 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import static com.earth2me.essentials.I18n.tl;
-
 //TODO: TL exceptions
 public class SignTrade extends EssentialsSign {
     private static final int MAX_STOCK_LINE_LENGTH = 15;
@@ -33,7 +31,7 @@ public class SignTrade extends EssentialsSign {
         final Trade trade = getTrade(sign, 2, AmountType.ROUNDED, true, true, ess);
         final Trade charge = getTrade(sign, 1, AmountType.ROUNDED, false, true, ess);
         if (trade.getType() == charge.getType() && (trade.getType() != TradeType.ITEM || trade.getItemStack().isSimilar(charge.getItemStack()))) {
-            throw new SignException("You cannot trade for the same item type.");
+            throw new SignException("tradeSignSameType");
         }
         trade.isAffordableFor(player);
         setOwner(ess, player, sign, 3, "§8");
@@ -61,7 +59,7 @@ public class SignTrade extends EssentialsSign {
                 }
             } catch (final SignException e) {
                 if (store == null) {
-                    throw new SignException(tl("tradeSignEmptyOwner"), e);
+                    throw new SignException(e, "tradeSignEmptyOwner");
                 }
             }
             Trade.log("Sign", "Trade", "Deposit", username, store, username, null, sign.getBlock().getLocation(), player.getMoney(), ess);
@@ -74,7 +72,7 @@ public class SignTrade extends EssentialsSign {
             if (!trade.pay(player)) {
                 subtractAmount(sign, 1, charge, ess);
                 addAmount(sign, 2, trade, ess);
-                throw new ChargeException("Full inventory");
+                throw new ChargeException("inventoryFull");
             }
             charge.charge(player);
             Trade.log("Sign", "Trade", "Interact", sign.getLine(3).substring(2), charge, username, trade, sign.getBlock().getLocation(), player.getMoney(), ess);
@@ -87,6 +85,9 @@ public class SignTrade extends EssentialsSign {
         final Trade trade = getTrade(sign, 2, AmountType.COST, false, true, ess);
         ItemStack stack = Inventories.getItemInHand(player.getBase());
         if (trade.getItemStack() != null && stack != null && !MaterialUtil.isAir(stack.getType()) && trade.getItemStack().getType() == stack.getType() && MaterialUtil.getDamage(trade.getItemStack()) == MaterialUtil.getDamage(stack) && trade.getItemStack().getEnchantments().equals(stack.getEnchantments())) {
+            if (MaterialUtil.isPotion(trade.getItemStack().getType()) && !trade.getItemStack().isSimilar(stack)) {
+                return null;
+            }
             final int amount = trade.getItemStack().getAmount();
             if (Inventories.containsAtLeast(player.getBase(), trade.getItemStack(), amount)) {
                 stack = stack.clone();
@@ -147,14 +148,14 @@ public class SignTrade extends EssentialsSign {
 
     private void validateSignLength(final String newLine) throws SignException {
         if (newLine.length() > MAX_STOCK_LINE_LENGTH) {
-            throw new SignException("This sign is full!");
+            throw new SignException("tradeSignFull");
         }
     }
 
     protected final void validateTrade(final ISign sign, final int index, final boolean amountNeeded, final IEssentials ess) throws SignException {
         final String line = sign.getLine(index).trim();
         if (line.isEmpty()) {
-            throw new SignException("Empty line");
+            throw new SignException("emptySignLine", index + 1);
         }
         final String[] split = line.split("[ :]+");
 
@@ -174,9 +175,9 @@ public class SignTrade extends EssentialsSign {
             if (money != null && amount != null) {
                 amount = amount.subtract(amount.remainder(money));
                 if (amount.compareTo(MINTRANSACTION) < 0 || money.compareTo(MINTRANSACTION) < 0) {
-                    throw new SignException(tl("moreThanZero"));
+                    throw new SignException("moreThanZero");
                 }
-                final String newLine = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(amount, ess).substring(1);
+                final String newLine = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.formatAsCurrency(amount);
                 validateSignLength(newLine);
                 sign.setLine(index, newLine);
                 return;
@@ -187,10 +188,10 @@ public class SignTrade extends EssentialsSign {
             final int amount = getIntegerPositive(split[0]);
 
             if (amount < 1) {
-                throw new SignException(tl("moreThanZero"));
+                throw new SignException("moreThanZero");
             }
             if (!(split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp")) && getItemStack(split[1], amount, ess).getType() == Material.AIR) {
-                throw new SignException(tl("moreThanZero"));
+                throw new SignException("moreThanZero");
             }
             final String newline = amount + " " + split[1] + ":0";
             validateSignLength(newline);
@@ -203,17 +204,17 @@ public class SignTrade extends EssentialsSign {
             int amount = getIntegerPositive(split[2]);
             amount -= amount % stackamount;
             if (amount < 1 || stackamount < 1) {
-                throw new SignException(tl("moreThanZero"));
+                throw new SignException("moreThanZero");
             }
             if (!(split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp")) && getItemStack(split[1], stackamount, ess).getType() == Material.AIR) {
-                throw new SignException(tl("moreThanZero"));
+                throw new SignException("moreThanZero");
             }
             final String newline = stackamount + " " + split[1] + ":" + amount;
             validateSignLength(newline);
             sign.setLine(index, newline);
             return;
         }
-        throw new SignException(tl("invalidSignLine", index + 1));
+        throw new SignException("invalidSignLine", index + 1);
     }
 
     protected final Trade getTrade(final ISign sign, final int index, final AmountType amountType, final boolean notEmpty, final IEssentials ess) throws SignException {
@@ -223,7 +224,7 @@ public class SignTrade extends EssentialsSign {
     protected final Trade getTrade(final ISign sign, final int index, final AmountType amountType, final boolean notEmpty, final boolean allowId, final IEssentials ess) throws SignException {
         final String line = sign.getLine(index).trim();
         if (line.isEmpty()) {
-            throw new SignException("Empty line");
+            throw new SignException("emptySignLine", index + 1);
         }
         final String[] split = line.split("[ :]+");
 
@@ -235,7 +236,7 @@ public class SignTrade extends EssentialsSign {
                     return new Trade(amountType == AmountType.COST ? money : amount, ess);
                 }
             } catch (final SignException e) {
-                throw new SignException(tl("tradeSignEmpty"), e);
+                throw new SignException(e, "tradeSignEmpty");
             }
         }
 
@@ -247,7 +248,7 @@ public class SignTrade extends EssentialsSign {
                     amount -= amount % stackAmount;
                 }
                 if (notEmpty && (amount < 1 || stackAmount < 1)) {
-                    throw new SignException(tl("tradeSignEmpty"));
+                    throw new SignException("tradeSignEmpty");
                 }
                 return new Trade(amountType == AmountType.COST ? stackAmount : amount, ess);
             } else {
@@ -257,13 +258,13 @@ public class SignTrade extends EssentialsSign {
                     amount -= amount % stackAmount;
                 }
                 if (notEmpty && (amount < 1 || stackAmount < 1 || item.getType() == Material.AIR || amount < stackAmount)) {
-                    throw new SignException(tl("tradeSignEmpty"));
+                    throw new SignException("tradeSignEmpty");
                 }
                 item.setAmount(amountType == AmountType.COST ? stackAmount : amount);
                 return new Trade(item, ess);
             }
         }
-        throw new SignException(tl("invalidSignLine", index + 1));
+        throw new SignException("invalidSignLine", index + 1);
     }
 
     protected final void subtractAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException {
@@ -300,7 +301,7 @@ public class SignTrade extends EssentialsSign {
     private void changeAmount(final ISign sign, final int index, final BigDecimal value, final IEssentials ess) throws SignException {
         final String line = sign.getLine(index).trim();
         if (line.isEmpty()) {
-            throw new SignException("Empty line");
+            throw new SignException("emptySignLine", index + 1);
         }
         final String[] split = line.split("[ :]+");
 
@@ -314,7 +315,7 @@ public class SignTrade extends EssentialsSign {
             setAmount(sign, index, amount, ess);
             return;
         }
-        throw new SignException(tl("invalidSignLine", index + 1));
+        throw new SignException("invalidSignLine", index + 1);
     }
 
     //TODO: Translate these exceptions.
@@ -322,7 +323,7 @@ public class SignTrade extends EssentialsSign {
 
         final String line = sign.getLine(index).trim();
         if (line.isEmpty()) {
-            throw new SignException("Empty line");
+            throw new SignException("emptySignLine", index + 1);
         }
         final String[] split = line.split("[ :]+");
 
@@ -330,7 +331,7 @@ public class SignTrade extends EssentialsSign {
             final BigDecimal money = getMoney(split[0], ess);
             final BigDecimal amount = getBigDecimal(split[1], ess);
             if (money != null && amount != null) {
-                final String newline = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(value, ess).substring(1);
+                final String newline = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.formatAsCurrency(value);
                 validateSignLength(newline);
                 sign.setLine(index, newline);
                 return;
@@ -351,7 +352,7 @@ public class SignTrade extends EssentialsSign {
             }
             return;
         }
-        throw new SignException(tl("invalidSignLine", index + 1));
+        throw new SignException("invalidSignLine", index + 1);
     }
 
     public enum AmountType {

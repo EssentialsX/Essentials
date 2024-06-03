@@ -9,7 +9,7 @@ import org.bukkit.plugin.InvalidDescriptionException;
 import java.io.IOException;
 
 public class ToggleTest extends TestCase {
-    private final OfflinePlayer base1;
+    private final OfflinePlayerStub base1;
     private final Essentials ess;
     private final FakeServer server;
 
@@ -49,7 +49,7 @@ public class ToggleTest extends TestCase {
         try {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader().loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
-            cmd.run(server, new CommandSource(sender), command, null, args);
+            cmd.run(server, new CommandSource(ess, sender), command, null, args);
         } catch (final NoChargeException ignored) {
         }
 

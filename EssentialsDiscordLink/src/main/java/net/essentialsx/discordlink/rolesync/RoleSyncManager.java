@@ -1,6 +1,7 @@
 package net.essentialsx.discordlink.rolesync;
 
 import com.earth2me.essentials.UUIDPlayer;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.google.common.collect.BiMap;
 import net.essentialsx.api.v2.events.discordlink.DiscordLinkStatusChangeEvent;
 import net.essentialsx.api.v2.services.discord.InteractionMember;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class RoleSyncManager implements Listener {
     private final EssentialsDiscordLink ess;
@@ -64,7 +65,7 @@ public class RoleSyncManager implements Listener {
 
         if (member == null) {
             if (ess.getSettings().isUnlinkOnLeave()) {
-                ess.getLinkManager().removeAccount(ess.getEss().getUser(player.getUniqueId()), DiscordLinkStatusChangeEvent.Cause.UNSYNC_LEAVE);
+                ess.getLinkManager().removeAccount(ess.getEss().getUser(player), DiscordLinkStatusChangeEvent.Cause.UNSYNC_LEAVE);
             } else {
                 unSync(player.getUniqueId(), discordId);
             }
@@ -145,21 +146,21 @@ public class RoleSyncManager implements Listener {
             final String group = entry.getKey();
             final InteractionRole role = ess.getApi().getRole(entry.getValue());
             if (!groups.contains(group)) {
-                ess.getLogger().warning(tl("discordLinkInvalidGroup", group, entry.getValue(), groups));
+                ess.getLogger().warning(AdventureUtil.miniToLegacy(tlLiteral("discordLinkInvalidGroup", group, entry.getValue(), groups)));
                 continue;
             }
             if (role == null) {
-                ess.getLogger().warning(tl("discordLinkInvalidRole", entry.getValue(), group));
+                ess.getLogger().warning(AdventureUtil.miniToLegacy(tlLiteral("discordLinkInvalidRole", entry.getValue(), group)));
                 continue;
             }
 
             if (role.isManaged() || role.isPublicRole()) {
-                ess.getLogger().warning(tl("discordLinkInvalidRoleManaged", role.getName(), role.getId()));
+                ess.getLogger().warning(AdventureUtil.miniToLegacy(tlLiteral("discordLinkInvalidRoleManaged", role.getName(), role.getId())));
                 continue;
             }
 
             if (!role.canInteract()) {
-                ess.getLogger().warning(tl("discordLinkInvalidRoleInteract", role.getName(), role.getId()));
+                ess.getLogger().warning(AdventureUtil.miniToLegacy(tlLiteral("discordLinkInvalidRoleInteract", role.getName(), role.getId())));
                 continue;
             }
 
@@ -174,11 +175,11 @@ public class RoleSyncManager implements Listener {
             final InteractionRole role = ess.getApi().getRole(entry.getKey());
             final String group = entry.getValue();
             if (role == null) {
-                ess.getLogger().warning(tl("discordLinkInvalidRole", entry.getKey(), group));
+                ess.getLogger().warning(AdventureUtil.miniToLegacy(tlLiteral("discordLinkInvalidRole", entry.getKey(), group)));
                 continue;
             }
             if (!groups.contains(group)) {
-                ess.getLogger().warning(tl("discordLinkInvalidGroup", group, entry.getKey(), groups));
+                ess.getLogger().warning(AdventureUtil.miniToLegacy(tlLiteral("discordLinkInvalidGroup", group, entry.getKey(), groups)));
                 continue;
             }
 

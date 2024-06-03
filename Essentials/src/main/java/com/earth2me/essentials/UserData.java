@@ -11,13 +11,13 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
+import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -32,17 +32,15 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public abstract class UserData extends PlayerExtension implements IConf {
-    protected final transient IEssentials ess;
+    protected final transient Essentials ess;
     private final EssentialsUserConfiguration config;
     private UserConfigHolder holder;
     private BigDecimal money;
 
     protected UserData(final Player base, final IEssentials ess) {
         super(base);
-        this.ess = ess;
+        this.ess = (Essentials) ess;
         final File folder = new File(ess.getDataFolder(), "userdata");
         if (!folder.exists() && !folder.mkdirs()) {
             throw new RuntimeException("Unable to create userdata folder!");
@@ -83,7 +81,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.load();
         try {
             holder = config.getRootNode().get(UserConfigHolder.class);
-        } catch (SerializationException e) {
+        } catch (Throwable e) {
             ess.getLogger().log(Level.SEVERE, "Error while reading user config: " + config.getFile().getName(), e);
             throw new RuntimeException(e);
         }
@@ -195,7 +193,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
             holder.homes().remove(search);
             config.save();
         } else {
-            throw new Exception(tl("invalidHome", search));
+            throw new TranslatableException("invalidHome", search);
         }
     }
 
@@ -205,7 +203,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
             holder.homes().put(StringUtil.safeString(newName), location);
             config.save();
         } else {
-            throw new Exception(tl("invalidHome", name));
+            throw new TranslatableException("invalidHome", name);
         }
     }
 

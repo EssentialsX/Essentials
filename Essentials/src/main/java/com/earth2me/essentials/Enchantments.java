@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.RegistryUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 
@@ -15,33 +16,43 @@ public final class Enchantments {
     private static boolean isFlat;
 
     static {
-        ENCHANTMENTS.put("alldamage", Enchantment.DAMAGE_ALL);
-        ALIASENCHANTMENTS.put("alldmg", Enchantment.DAMAGE_ALL);
-        ENCHANTMENTS.put("sharpness", Enchantment.DAMAGE_ALL);
-        ALIASENCHANTMENTS.put("sharp", Enchantment.DAMAGE_ALL);
-        ALIASENCHANTMENTS.put("dal", Enchantment.DAMAGE_ALL);
+        final Enchantment SHARPNESS = RegistryUtil.valueOf(Enchantment.class, "DAMAGE_ALL", "SHARPNESS");
+        
+        ENCHANTMENTS.put("alldamage", SHARPNESS);
+        ALIASENCHANTMENTS.put("alldmg", SHARPNESS);
+        ENCHANTMENTS.put("sharpness", SHARPNESS);
+        ALIASENCHANTMENTS.put("sharp", SHARPNESS);
+        ALIASENCHANTMENTS.put("dal", SHARPNESS);
+        
+        final Enchantment BANE_OF_ARTHROPODS = RegistryUtil.valueOf(Enchantment.class, "DAMAGE_ARTHROPODS", "BANE_OF_ARTHROPODS");
 
-        ENCHANTMENTS.put("ardmg", Enchantment.DAMAGE_ARTHROPODS);
-        ENCHANTMENTS.put("baneofarthropods", Enchantment.DAMAGE_ARTHROPODS);
-        ALIASENCHANTMENTS.put("baneofarthropod", Enchantment.DAMAGE_ARTHROPODS);
-        ALIASENCHANTMENTS.put("arthropod", Enchantment.DAMAGE_ARTHROPODS);
-        ALIASENCHANTMENTS.put("dar", Enchantment.DAMAGE_ARTHROPODS);
+        ENCHANTMENTS.put("ardmg", BANE_OF_ARTHROPODS);
+        ENCHANTMENTS.put("baneofarthropods", BANE_OF_ARTHROPODS);
+        ALIASENCHANTMENTS.put("baneofarthropod", BANE_OF_ARTHROPODS);
+        ALIASENCHANTMENTS.put("arthropod", BANE_OF_ARTHROPODS);
+        ALIASENCHANTMENTS.put("dar", BANE_OF_ARTHROPODS);
+        
+        final Enchantment SMITE = RegistryUtil.valueOf(Enchantment.class, "DAMAGE_UNDEAD", "SMITE");
 
-        ENCHANTMENTS.put("undeaddamage", Enchantment.DAMAGE_UNDEAD);
-        ENCHANTMENTS.put("smite", Enchantment.DAMAGE_UNDEAD);
-        ALIASENCHANTMENTS.put("du", Enchantment.DAMAGE_UNDEAD);
+        ENCHANTMENTS.put("undeaddamage", SMITE);
+        ENCHANTMENTS.put("smite", SMITE);
+        ALIASENCHANTMENTS.put("du", SMITE);
+        
+        final Enchantment EFFICIENCY = RegistryUtil.valueOf(Enchantment.class, "DIG_SPEED", "EFFICIENCY");
 
-        ENCHANTMENTS.put("digspeed", Enchantment.DIG_SPEED);
-        ENCHANTMENTS.put("efficiency", Enchantment.DIG_SPEED);
-        ALIASENCHANTMENTS.put("minespeed", Enchantment.DIG_SPEED);
-        ALIASENCHANTMENTS.put("cutspeed", Enchantment.DIG_SPEED);
-        ALIASENCHANTMENTS.put("ds", Enchantment.DIG_SPEED);
-        ALIASENCHANTMENTS.put("eff", Enchantment.DIG_SPEED);
+        ENCHANTMENTS.put("digspeed", EFFICIENCY);
+        ENCHANTMENTS.put("efficiency", EFFICIENCY);
+        ALIASENCHANTMENTS.put("minespeed", EFFICIENCY);
+        ALIASENCHANTMENTS.put("cutspeed", EFFICIENCY);
+        ALIASENCHANTMENTS.put("ds", EFFICIENCY);
+        ALIASENCHANTMENTS.put("eff", EFFICIENCY);
+        
+        final Enchantment UNBREAKING = RegistryUtil.valueOf(Enchantment.class, "DURABILITY", "UNBREAKING");
 
-        ENCHANTMENTS.put("durability", Enchantment.DURABILITY);
-        ALIASENCHANTMENTS.put("dura", Enchantment.DURABILITY);
-        ENCHANTMENTS.put("unbreaking", Enchantment.DURABILITY);
-        ALIASENCHANTMENTS.put("d", Enchantment.DURABILITY);
+        ENCHANTMENTS.put("durability", UNBREAKING);
+        ALIASENCHANTMENTS.put("dura", UNBREAKING);
+        ENCHANTMENTS.put("unbreaking", UNBREAKING);
+        ALIASENCHANTMENTS.put("d", UNBREAKING);
 
         ENCHANTMENTS.put("thorns", Enchantment.THORNS);
         ENCHANTMENTS.put("highcrit", Enchantment.THORNS);
@@ -59,106 +70,127 @@ public final class Enchantments {
         ALIASENCHANTMENTS.put("kback", Enchantment.KNOCKBACK);
         ALIASENCHANTMENTS.put("kb", Enchantment.KNOCKBACK);
         ALIASENCHANTMENTS.put("k", Enchantment.KNOCKBACK);
+        
+        final Enchantment FORTUNE = RegistryUtil.valueOf(Enchantment.class, "LOOT_BONUS_BLOCKS", "FORTUNE");
 
-        ALIASENCHANTMENTS.put("blockslootbonus", Enchantment.LOOT_BONUS_BLOCKS);
-        ENCHANTMENTS.put("fortune", Enchantment.LOOT_BONUS_BLOCKS);
-        ALIASENCHANTMENTS.put("fort", Enchantment.LOOT_BONUS_BLOCKS);
-        ALIASENCHANTMENTS.put("lbb", Enchantment.LOOT_BONUS_BLOCKS);
+        ALIASENCHANTMENTS.put("blockslootbonus", FORTUNE);
+        ENCHANTMENTS.put("fortune", FORTUNE);
+        ALIASENCHANTMENTS.put("fort", FORTUNE);
+        ALIASENCHANTMENTS.put("lbb", FORTUNE);
+        
+        final Enchantment LOOTING = RegistryUtil.valueOf(Enchantment.class, "LOOT_BONUS_MOBS", "LOOTING");
 
-        ALIASENCHANTMENTS.put("mobslootbonus", Enchantment.LOOT_BONUS_MOBS);
-        ENCHANTMENTS.put("mobloot", Enchantment.LOOT_BONUS_MOBS);
-        ENCHANTMENTS.put("looting", Enchantment.LOOT_BONUS_MOBS);
-        ALIASENCHANTMENTS.put("lbm", Enchantment.LOOT_BONUS_MOBS);
+        ALIASENCHANTMENTS.put("mobslootbonus", LOOTING);
+        ENCHANTMENTS.put("mobloot", LOOTING);
+        ENCHANTMENTS.put("looting", LOOTING);
+        ALIASENCHANTMENTS.put("lbm", LOOTING);
+        
+        final Enchantment RESPIRATION = RegistryUtil.valueOf(Enchantment.class, "OXYGEN", "RESPIRATION");
 
-        ALIASENCHANTMENTS.put("oxygen", Enchantment.OXYGEN);
-        ENCHANTMENTS.put("respiration", Enchantment.OXYGEN);
-        ALIASENCHANTMENTS.put("breathing", Enchantment.OXYGEN);
-        ENCHANTMENTS.put("breath", Enchantment.OXYGEN);
-        ALIASENCHANTMENTS.put("o", Enchantment.OXYGEN);
+        ALIASENCHANTMENTS.put("oxygen", RESPIRATION);
+        ENCHANTMENTS.put("respiration", RESPIRATION);
+        ALIASENCHANTMENTS.put("breathing", RESPIRATION);
+        ENCHANTMENTS.put("breath", RESPIRATION);
+        ALIASENCHANTMENTS.put("o", RESPIRATION);
+        
+        final Enchantment PROTECTION = RegistryUtil.valueOf(Enchantment.class, "PROTECTION_ENVIRONMENTAL", "PROTECTION");
 
-        ENCHANTMENTS.put("protection", Enchantment.PROTECTION_ENVIRONMENTAL);
-        ALIASENCHANTMENTS.put("prot", Enchantment.PROTECTION_ENVIRONMENTAL);
-        ENCHANTMENTS.put("protect", Enchantment.PROTECTION_ENVIRONMENTAL);
-        ALIASENCHANTMENTS.put("p", Enchantment.PROTECTION_ENVIRONMENTAL);
+        ENCHANTMENTS.put("protection", PROTECTION);
+        ALIASENCHANTMENTS.put("prot", PROTECTION);
+        ENCHANTMENTS.put("protect", PROTECTION);
+        ALIASENCHANTMENTS.put("p", PROTECTION);
+        
+        final Enchantment BLAST_PROTECTION = RegistryUtil.valueOf(Enchantment.class, "PROTECTION_EXPLOSIONS", "BLAST_PROTECTION");
 
-        ALIASENCHANTMENTS.put("explosionsprotection", Enchantment.PROTECTION_EXPLOSIONS);
-        ALIASENCHANTMENTS.put("explosionprotection", Enchantment.PROTECTION_EXPLOSIONS);
-        ALIASENCHANTMENTS.put("expprot", Enchantment.PROTECTION_EXPLOSIONS);
-        ALIASENCHANTMENTS.put("blastprotection", Enchantment.PROTECTION_EXPLOSIONS);
-        ALIASENCHANTMENTS.put("bprotection", Enchantment.PROTECTION_EXPLOSIONS);
-        ALIASENCHANTMENTS.put("bprotect", Enchantment.PROTECTION_EXPLOSIONS);
-        ENCHANTMENTS.put("blastprotect", Enchantment.PROTECTION_EXPLOSIONS);
-        ALIASENCHANTMENTS.put("pe", Enchantment.PROTECTION_EXPLOSIONS);
+        ALIASENCHANTMENTS.put("explosionsprotection", BLAST_PROTECTION);
+        ALIASENCHANTMENTS.put("explosionprotection", BLAST_PROTECTION);
+        ALIASENCHANTMENTS.put("expprot", BLAST_PROTECTION);
+        ALIASENCHANTMENTS.put("blastprotection", BLAST_PROTECTION);
+        ALIASENCHANTMENTS.put("bprotection", BLAST_PROTECTION);
+        ALIASENCHANTMENTS.put("bprotect", BLAST_PROTECTION);
+        ENCHANTMENTS.put("blastprotect", BLAST_PROTECTION);
+        ALIASENCHANTMENTS.put("pe", BLAST_PROTECTION);
+        
+        final Enchantment FEATHER_FALLING = RegistryUtil.valueOf(Enchantment.class, "PROTECTION_FALL", "FEATHER_FALLING");
 
-        ALIASENCHANTMENTS.put("fallprotection", Enchantment.PROTECTION_FALL);
-        ENCHANTMENTS.put("fallprot", Enchantment.PROTECTION_FALL);
-        ENCHANTMENTS.put("featherfall", Enchantment.PROTECTION_FALL);
-        ALIASENCHANTMENTS.put("featherfalling", Enchantment.PROTECTION_FALL);
-        ALIASENCHANTMENTS.put("pfa", Enchantment.PROTECTION_FALL);
+        ALIASENCHANTMENTS.put("fallprotection", FEATHER_FALLING);
+        ENCHANTMENTS.put("fallprot", FEATHER_FALLING);
+        ENCHANTMENTS.put("featherfall", FEATHER_FALLING);
+        ALIASENCHANTMENTS.put("featherfalling", FEATHER_FALLING);
+        ALIASENCHANTMENTS.put("pfa", FEATHER_FALLING);
+        
+        final Enchantment FIRE_PROTECTION = RegistryUtil.valueOf(Enchantment.class, "PROTECTION_FIRE", "FIRE_PROTECTION");
 
-        ALIASENCHANTMENTS.put("fireprotection", Enchantment.PROTECTION_FIRE);
-        ALIASENCHANTMENTS.put("flameprotection", Enchantment.PROTECTION_FIRE);
-        ENCHANTMENTS.put("fireprotect", Enchantment.PROTECTION_FIRE);
-        ALIASENCHANTMENTS.put("flameprotect", Enchantment.PROTECTION_FIRE);
-        ENCHANTMENTS.put("fireprot", Enchantment.PROTECTION_FIRE);
-        ALIASENCHANTMENTS.put("flameprot", Enchantment.PROTECTION_FIRE);
-        ALIASENCHANTMENTS.put("pf", Enchantment.PROTECTION_FIRE);
+        ALIASENCHANTMENTS.put("fireprotection", FIRE_PROTECTION);
+        ALIASENCHANTMENTS.put("flameprotection", FIRE_PROTECTION);
+        ENCHANTMENTS.put("fireprotect", FIRE_PROTECTION);
+        ALIASENCHANTMENTS.put("flameprotect", FIRE_PROTECTION);
+        ENCHANTMENTS.put("fireprot", FIRE_PROTECTION);
+        ALIASENCHANTMENTS.put("flameprot", FIRE_PROTECTION);
+        ALIASENCHANTMENTS.put("pf", FIRE_PROTECTION);
+        
+        final Enchantment PROJECTILE_PROTECTION = RegistryUtil.valueOf(Enchantment.class, "PROTECTION_PROJECTILE", "PROJECTILE_PROTECTION");
 
-        ENCHANTMENTS.put("projectileprotection", Enchantment.PROTECTION_PROJECTILE);
-        ENCHANTMENTS.put("projprot", Enchantment.PROTECTION_PROJECTILE);
-        ALIASENCHANTMENTS.put("pp", Enchantment.PROTECTION_PROJECTILE);
+        ENCHANTMENTS.put("projectileprotection", PROJECTILE_PROTECTION);
+        ENCHANTMENTS.put("projprot", PROJECTILE_PROTECTION);
+        ALIASENCHANTMENTS.put("pp", PROJECTILE_PROTECTION);
 
         ENCHANTMENTS.put("silktouch", Enchantment.SILK_TOUCH);
         ALIASENCHANTMENTS.put("softtouch", Enchantment.SILK_TOUCH);
         ALIASENCHANTMENTS.put("st", Enchantment.SILK_TOUCH);
+        
+        final Enchantment AQUA_AFFINITY = RegistryUtil.valueOf(Enchantment.class, "WATER_WORKER", "AQUA_AFFINITY");
 
-        ENCHANTMENTS.put("waterworker", Enchantment.WATER_WORKER);
-        ENCHANTMENTS.put("aquaaffinity", Enchantment.WATER_WORKER);
-        ALIASENCHANTMENTS.put("watermine", Enchantment.WATER_WORKER);
-        ALIASENCHANTMENTS.put("ww", Enchantment.WATER_WORKER);
+        ENCHANTMENTS.put("waterworker", AQUA_AFFINITY);
+        ENCHANTMENTS.put("aquaaffinity", AQUA_AFFINITY);
+        ALIASENCHANTMENTS.put("watermine", AQUA_AFFINITY);
+        ALIASENCHANTMENTS.put("ww", AQUA_AFFINITY);
+        
+        final Enchantment FLAME = RegistryUtil.valueOf(Enchantment.class, "ARROW_FIRE", "FLAME");
 
-        ALIASENCHANTMENTS.put("firearrow", Enchantment.ARROW_FIRE);
-        ENCHANTMENTS.put("flame", Enchantment.ARROW_FIRE);
-        ENCHANTMENTS.put("flamearrow", Enchantment.ARROW_FIRE);
-        ALIASENCHANTMENTS.put("af", Enchantment.ARROW_FIRE);
+        ALIASENCHANTMENTS.put("firearrow", FLAME);
+        ENCHANTMENTS.put("flame", FLAME);
+        ENCHANTMENTS.put("flamearrow", FLAME);
+        ALIASENCHANTMENTS.put("af", FLAME);
+        
+        final Enchantment POWER = RegistryUtil.valueOf(Enchantment.class, "ARROW_DAMAGE", "POWER");
 
-        ENCHANTMENTS.put("arrowdamage", Enchantment.ARROW_DAMAGE);
-        ENCHANTMENTS.put("power", Enchantment.ARROW_DAMAGE);
-        ALIASENCHANTMENTS.put("arrowpower", Enchantment.ARROW_DAMAGE);
-        ALIASENCHANTMENTS.put("ad", Enchantment.ARROW_DAMAGE);
+        ENCHANTMENTS.put("arrowdamage", POWER);
+        ENCHANTMENTS.put("power", POWER);
+        ALIASENCHANTMENTS.put("arrowpower", POWER);
+        ALIASENCHANTMENTS.put("ad", POWER);
+        
+        final Enchantment PUNCH = RegistryUtil.valueOf(Enchantment.class, "ARROW_KNOCKBACK", "PUNCH");
 
-        ENCHANTMENTS.put("arrowknockback", Enchantment.ARROW_KNOCKBACK);
-        ALIASENCHANTMENTS.put("arrowkb", Enchantment.ARROW_KNOCKBACK);
-        ENCHANTMENTS.put("punch", Enchantment.ARROW_KNOCKBACK);
-        ALIASENCHANTMENTS.put("arrowpunch", Enchantment.ARROW_KNOCKBACK);
-        ALIASENCHANTMENTS.put("ak", Enchantment.ARROW_KNOCKBACK);
+        ENCHANTMENTS.put("arrowknockback", PUNCH);
+        ALIASENCHANTMENTS.put("arrowkb", PUNCH);
+        ENCHANTMENTS.put("punch", PUNCH);
+        ALIASENCHANTMENTS.put("arrowpunch", PUNCH);
+        ALIASENCHANTMENTS.put("ak", PUNCH);
+        
+        final Enchantment INFINITY = RegistryUtil.valueOf(Enchantment.class, "ARROW_INFINITE", "INFINITY");
 
-        ALIASENCHANTMENTS.put("infinitearrows", Enchantment.ARROW_INFINITE);
-        ENCHANTMENTS.put("infarrows", Enchantment.ARROW_INFINITE);
-        ENCHANTMENTS.put("infinity", Enchantment.ARROW_INFINITE);
-        ALIASENCHANTMENTS.put("infinite", Enchantment.ARROW_INFINITE);
-        ALIASENCHANTMENTS.put("unlimited", Enchantment.ARROW_INFINITE);
-        ALIASENCHANTMENTS.put("unlimitedarrows", Enchantment.ARROW_INFINITE);
-        ALIASENCHANTMENTS.put("ai", Enchantment.ARROW_INFINITE);
+        ALIASENCHANTMENTS.put("infinitearrows", INFINITY);
+        ENCHANTMENTS.put("infarrows", INFINITY);
+        ENCHANTMENTS.put("infinity", INFINITY);
+        ALIASENCHANTMENTS.put("infinite", INFINITY);
+        ALIASENCHANTMENTS.put("unlimited", INFINITY);
+        ALIASENCHANTMENTS.put("unlimitedarrows", INFINITY);
+        ALIASENCHANTMENTS.put("ai", INFINITY);
+        
+        final Enchantment LUCK_OF_THE_SEA = RegistryUtil.valueOf(Enchantment.class, "LUCK", "LUCK_OF_THE_SEA");
 
-        ENCHANTMENTS.put("luck", Enchantment.LUCK);
-        ALIASENCHANTMENTS.put("luckofsea", Enchantment.LUCK);
-        ALIASENCHANTMENTS.put("luckofseas", Enchantment.LUCK);
-        ALIASENCHANTMENTS.put("rodluck", Enchantment.LUCK);
+        ENCHANTMENTS.put("luck", LUCK_OF_THE_SEA);
+        ALIASENCHANTMENTS.put("luckofsea", LUCK_OF_THE_SEA);
+        ALIASENCHANTMENTS.put("luckofseas", LUCK_OF_THE_SEA);
+        ALIASENCHANTMENTS.put("rodluck", LUCK_OF_THE_SEA);
 
         ENCHANTMENTS.put("lure", Enchantment.LURE);
         ALIASENCHANTMENTS.put("rodlure", Enchantment.LURE);
 
-        // 1.8
-        try {
-            final Enchantment depthStrider = Enchantment.getByName("DEPTH_STRIDER");
-            if (depthStrider != null) {
-                ENCHANTMENTS.put("depthstrider", depthStrider);
-                ALIASENCHANTMENTS.put("depth", depthStrider);
-                ALIASENCHANTMENTS.put("strider", depthStrider);
-            }
-        } catch (final IllegalArgumentException ignored) {
-        }
+        ENCHANTMENTS.put("depthstrider", Enchantment.DEPTH_STRIDER);
+        ALIASENCHANTMENTS.put("depth", Enchantment.DEPTH_STRIDER);
+        ALIASENCHANTMENTS.put("strider", Enchantment.DEPTH_STRIDER);
 
         // 1.9
         try {

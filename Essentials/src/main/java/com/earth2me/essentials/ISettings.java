@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.bukkit.Material;
 import org.bukkit.event.EventPriority;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -72,6 +73,8 @@ public interface ISettings extends IConf {
 
     boolean isSocialSpyMessages();
 
+    boolean isSocialSpyDisplayNames();
+
     Set<String> getMuteCommands();
 
     @Deprecated
@@ -80,6 +83,8 @@ public interface ISettings extends IConf {
     boolean isSkippingUsedOneTimeKitsFromKitList();
 
     String getLocale();
+
+    boolean isPerPlayerLocale();
 
     String getNewbieSpawn();
 
@@ -282,6 +287,8 @@ public interface ISettings extends IConf {
 
     int getMaxUserCacheCount();
 
+    long getMaxUserCacheValueExpiry();
+
     boolean allowSilentJoinQuit();
 
     boolean isCustomJoinMessage();
@@ -403,6 +410,12 @@ public interface ISettings extends IConf {
     boolean isUpdateCheckEnabled();
 
     boolean showZeroBaltop();
+
+    int getMaxItemLore();
+
+    Tag getPrimaryColor();
+
+    Tag getSecondaryColor();
 
     enum KeepInvPolicy {
         KEEP,

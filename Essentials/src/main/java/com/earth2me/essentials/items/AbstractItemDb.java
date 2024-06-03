@@ -24,10 +24,8 @@ import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
@@ -38,8 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
@@ -175,7 +171,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         }
 
         if (is.isEmpty() || is.get(0).getType() == Material.AIR) {
-            throw new Exception(tl("itemSellAir"));
+            throw new Exception(user.playerTl("itemSellAir"));
         }
 
         return is;
@@ -212,6 +208,12 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
             if (meta.hasLore()) {
                 sb.append("lore:").append(serializeLines(meta.getLore())).append(" ");
+            }
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_R01)) {
+                if (meta.hasCustomModelData()) {
+                    sb.append("custom-model-data:").append(meta.getCustomModelData()).append(" ");
+                }
             }
 
             if (meta.hasEnchants()) {
@@ -281,16 +283,8 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 serializeEffectMeta(sb, fireworkEffectMeta.getEffect());
             }
         } else if (MaterialUtil.isPotion(material)) {
-            final boolean splash;
-            final Collection<PotionEffect> effects;
-            if (VersionUtil.PRE_FLATTENING) {
-                final Potion potion = Potion.fromDamage(is.getDurability());
-                splash = potion.isSplash();
-                effects = potion.getEffects();
-            } else {
-                splash = is.getType() == Material.SPLASH_POTION;
-                effects = ((PotionMeta) is.getItemMeta()).getCustomEffects();
-            }
+            final boolean splash = ess.getPotionMetaProvider().isSplashPotion(is);
+            final Collection<PotionEffect> effects = ess.getPotionMetaProvider().getCustomEffects(is);
 
             for (final PotionEffect e : effects) {
                 // long but needs to be effect:speed power:2 duration:120 in that order.
@@ -313,6 +307,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                     sb.append("basecolor:").append(basecolor).append(" ");
                 }
                 for (final org.bukkit.block.banner.Pattern p : shieldBannerMeta.getPatterns()) {
+                    //noinspection removal
                     final String type = p.getPattern().getIdentifier();
                     final int color = p.getColor().getColor().asRGB();
                     sb.append(type).append(",").append(color).append(" ");
@@ -320,7 +315,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             } else {
                 final BannerMeta bannerMeta = (BannerMeta) is.getItemMeta();
                 if (bannerMeta != null) {
-                    DyeColor baseDyeColor = bannerMeta.getBaseColor();
+                    DyeColor baseDyeColor = ess.getBannerDataProvider().getBaseColor(is);
                     if (baseDyeColor == null) {
                         baseDyeColor = MaterialUtil.getColorOf(material);
                     }
@@ -331,6 +326,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                         sb.append("basecolor:").append(basecolor).append(" ");
                     }
                     for (final org.bukkit.block.banner.Pattern p : bannerMeta.getPatterns()) {
+                        //noinspection removal
                         final String type = p.getPattern().getIdentifier();
                         final int color = p.getColor().getColor().asRGB();
                         sb.append(type).append(",").append(color).append(" ");

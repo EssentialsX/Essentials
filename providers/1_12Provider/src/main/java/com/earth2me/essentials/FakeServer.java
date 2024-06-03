@@ -455,8 +455,8 @@ public final class FakeServer implements Server {
         pluginManager.callEvent(new PlayerJoinEvent(base1, null));
     }
 
-    OfflinePlayer createPlayer(final String name) {
-        final OfflinePlayer player = new OfflinePlayer(name, this);
+    OfflinePlayerStub createPlayer(final String name) {
+        final OfflinePlayerStub player = new OfflinePlayerStub(name, this);
         player.setLocation(new Location(worlds.get(0), 0, 0, 0, 0, 0));
         return player;
     }
@@ -823,7 +823,7 @@ public final class FakeServer implements Server {
     }
 
     @Override
-    public OfflinePlayer[] getOfflinePlayers() {
+    public OfflinePlayerStub[] getOfflinePlayers() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1130,12 +1130,12 @@ public final class FakeServer implements Server {
 
         @Override
         public void registerEvent(final Class<? extends Event> event, final Listener listener, final EventPriority priority, final EventExecutor executor, final Plugin plugin) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            listeners.add(new RegisteredListener(listener, executor, priority, plugin, false));
         }
 
         @Override
         public void registerEvent(final Class<? extends Event> event, final Listener listener, final EventPriority priority, final EventExecutor executor, final Plugin plugin, final boolean ignoreCancelled) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            listeners.add(new RegisteredListener(listener, executor, priority, plugin, false));
         }
 
         @Override

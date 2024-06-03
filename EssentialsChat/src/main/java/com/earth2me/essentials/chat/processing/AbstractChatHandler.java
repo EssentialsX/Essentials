@@ -5,6 +5,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.chat.EssentialsChat;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.LocalChatSpyEvent;
 import net.essentialsx.api.v2.ChatType;
@@ -26,7 +27,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public abstract class AbstractChatHandler {
 
@@ -58,6 +59,9 @@ public abstract class AbstractChatHandler {
             event.setCancelled(true);
             return;
         }
+
+        // Ensure we're getting the latest display name
+        user.setDisplayNick();
 
         // Reuse cached IntermediateChat if available
         ChatProcessingCache.ProcessedChat chat = cache.getProcessedChat(event.getPlayer());
@@ -101,16 +105,14 @@ public abstract class AbstractChatHandler {
 
         // Local, shout and question chat types are only enabled when there's a valid radius
         if (chat.getRadius() > 0 && event.getMessage().length() > 0) {
+            if (event.getMessage().length() > 1 && ((chat.getType() == ChatType.SHOUT && event.getMessage().charAt(0) == ess.getSettings().getChatShout()) || (chat.getType() == ChatType.QUESTION && event.getMessage().charAt(0) == ess.getSettings().getChatQuestion()))) {
+                event.setMessage(event.getMessage().substring(1));
+            }
+
             if (chat.getType() == ChatType.UNKNOWN) {
-                if (user.isToggleShout() && event.getMessage().charAt(0) == ess.getSettings().getChatShout()) {
-                    event.setMessage(event.getMessage().substring(1));
-                }
-                format = tl("chatTypeLocal").concat(format);
+                format = AdventureUtil.miniToLegacy(tlLiteral("chatTypeLocal")).concat(format);
             } else {
-                if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || (event.getMessage().charAt(0) == ess.getSettings().getChatQuestion() && ess.getSettings().isChatQuestionEnabled())) {
-                    event.setMessage(event.getMessage().substring(1));
-                }
-                format = tl(chat.getType().key() + "Format", format);
+                format = AdventureUtil.miniToLegacy(tlLiteral(chat.getType().key() + "Format", format));
             }
         }
 
@@ -143,7 +145,7 @@ public abstract class AbstractChatHandler {
         if (event.getMessage().length() > 0) {
             if (chat.getType() == ChatType.UNKNOWN) {
                 if (!user.isAuthorized("essentials.chat.local")) {
-                    user.sendMessage(tl("notAllowedToLocal"));
+                    user.sendTl("notAllowedToLocal");
                     event.setCancelled(true);
                     return;
                 }
@@ -158,10 +160,9 @@ public abstract class AbstractChatHandler {
                     callChatEvent(event, chat.getType(), null);
                 } else {
                     final String chatType = chat.getType().name();
-                    user.sendMessage(tl("notAllowedTo" + chatType.charAt(0) + chatType.substring(1).toLowerCase(Locale.ENGLISH)));
+                    user.sendTl("notAllowedTo" + chatType.charAt(0) + chatType.substring(1).toLowerCase(Locale.ENGLISH));
                     event.setCancelled(true);
                 }
-
                 return;
             }
         }
@@ -212,12 +213,12 @@ public abstract class AbstractChatHandler {
         }
 
         if (outList.size() < 2) {
-            user.sendMessage(tl("localNoOne"));
+            user.sendTl("localNoOne");
         }
 
         // Strip local chat prefix to preserve API behaviour
-        final String localPrefix = tl("chatTypeLocal");
-        String baseFormat = event.getFormat();
+        final String localPrefix = AdventureUtil.miniToLegacy(tlLiteral("chatTypeLocal"));
+        String baseFormat = AdventureUtil.legacyToMini(event.getFormat());
         if (event.getFormat().startsWith(localPrefix)) {
             baseFormat = baseFormat.substring(localPrefix.length());
         }
@@ -226,8 +227,10 @@ public abstract class AbstractChatHandler {
         server.getPluginManager().callEvent(spyEvent);
 
         if (!spyEvent.isCancelled()) {
+            final String legacyString = AdventureUtil.miniToLegacy(String.format(spyEvent.getFormat(), AdventureUtil.legacyToMini(user.getDisplayName()), AdventureUtil.escapeTags(spyEvent.getMessage())));
+
             for (final Player onlinePlayer : spyEvent.getRecipients()) {
-                onlinePlayer.sendMessage(String.format(spyEvent.getFormat(), user.getDisplayName(), spyEvent.getMessage()));
+                onlinePlayer.sendMessage(legacyString);
             }
         }
     }
@@ -290,16 +293,23 @@ public abstract class AbstractChatHandler {
             return ChatType.UNKNOWN;
         }
 
+        final char shoutPrefix = ess.getSettings().getChatShout();
+        final char questionPrefix = ess.getSettings().getChatQuestion();
+
         final char prefix = message.charAt(0);
-        if (prefix == ess.getSettings().getChatShout()) {
+        final boolean singleChar = message.length() == 1;
+
+        if (singleChar) {
             if (user.isToggleShout()) {
-                return ChatType.UNKNOWN;
+                return ChatType.SHOUT;
             }
-            return message.length() > 1 ? ChatType.SHOUT : ChatType.UNKNOWN;
-        } else if (ess.getSettings().isChatQuestionEnabled() && prefix == ess.getSettings().getChatQuestion()) {
-            return message.length() > 1 ? ChatType.QUESTION : ChatType.UNKNOWN;
-        } else if (user.isToggleShout()) {
-            return message.length() > 1 ? ChatType.SHOUT : ChatType.UNKNOWN;
+            return ChatType.UNKNOWN;
+        }
+
+        if (prefix == questionPrefix && ess.getSettings().isChatQuestionEnabled()) {
+            return ChatType.QUESTION;
+        } else if (prefix == shoutPrefix || user.isToggleShout()) {
+            return ChatType.SHOUT;
         } else {
             return ChatType.UNKNOWN;
         }

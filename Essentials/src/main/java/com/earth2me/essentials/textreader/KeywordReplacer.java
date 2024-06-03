@@ -30,8 +30,6 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
-
 //When adding a keyword here, you also need to add the implementation above
 enum KeywordType {
     PLAYER(KeywordCachable.CACHEABLE),
@@ -140,6 +138,13 @@ public class KeywordReplacer implements IText {
 
         for (int i = 0; i < input.getLines().size(); i++) {
             String line = input.getLines().get(i);
+
+            // Skip processing b64 encoded items, they will not have keywords in them.
+            if (line.startsWith("@")) {
+                replaced.add(line);
+                continue;
+            }
+
             final Matcher matcher = KEYWORD.matcher(line);
 
             while (matcher.find()) {
@@ -337,7 +342,7 @@ public class KeywordReplacer implements IText {
                     case COORDS:
                         if (user != null) {
                             final Location location = user.getLocation();
-                            replacer = tl("coordsKeyword", location.getBlockX(), location.getBlockY(), location.getBlockZ());
+                            replacer = user.playerTl("coordsKeyword", location.getBlockX(), location.getBlockY(), location.getBlockZ());
                         }
                         break;
                     case TPS:
@@ -375,7 +380,10 @@ public class KeywordReplacer implements IText {
                 }
 
                 if (this.replaceSpacesWithUnderscores) {
-                    replacer = replacer.replaceAll("\\s", "_");
+                    // Don't replace spaces with underscores in command nor escape underscores.
+                    if (!line.startsWith("/")) {
+                        replacer = replacer.replace("_", "\\_").replaceAll("\\s", "_");
+                    }
                 }
 
                 //If this is just a regular keyword, lets throw it into the cache

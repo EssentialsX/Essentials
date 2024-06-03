@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandignore extends EssentialsCommand {
     public Commandignore() {
         super("ignore");
@@ -25,7 +23,7 @@ public class Commandignore extends EssentialsCommand {
                 }
             }
             final String ignoredList = sb.toString().trim();
-            user.sendMessage(ignoredList.length() > 0 ? tl("ignoredList", ignoredList) : tl("noIgnored"));
+            user.sendTl(ignoredList.length() > 0 ? "ignoredList" : "noIgnored", ignoredList);
             return;
         }
 
@@ -40,13 +38,15 @@ public class Commandignore extends EssentialsCommand {
         }
 
         if (player.isIgnoreExempt()) {
-            user.sendMessage(tl("ignoreExempt"));
+            user.sendTl("ignoreExempt");
         } else if (user.isIgnoredPlayer(player)) {
             user.setIgnoredPlayer(player, false);
-            user.sendMessage(tl("unignorePlayer", player.getName()));
+            user.sendTl("unignorePlayer", player.getName());
+        } else if (user.getUUID().equals(player.getUUID())) {
+            user.sendTl("ignoreYourself");
         } else {
             user.setIgnoredPlayer(player, true);
-            user.sendMessage(tl("ignorePlayer", player.getName()));
+            user.sendTl("ignorePlayer", player.getName());
         }
     }
 

@@ -1,6 +1,7 @@
 package com.earth2me.essentials.economy.vault;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
@@ -324,7 +325,7 @@ public class VaultEconomyProvider implements Economy {
         if (player instanceof Player) {
             userPlayer = (Player) player;
         } else {
-            final com.earth2me.essentials.OfflinePlayer essPlayer = new com.earth2me.essentials.OfflinePlayer(player.getUniqueId(), ess.getServer());
+            final OfflinePlayerStub essPlayer = new OfflinePlayerStub(player.getUniqueId(), ess.getServer());
             essPlayer.setName(player.getName());
             userPlayer = essPlayer;
         }
