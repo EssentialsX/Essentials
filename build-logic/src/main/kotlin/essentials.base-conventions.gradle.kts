@@ -10,7 +10,7 @@ plugins {
 val baseExtension = extensions.create<EssentialsBaseExtension>("essentials", project)
 
 val checkstyleVersion = "8.36.2"
-val spigotVersion = "1.20.4-R0.1-SNAPSHOT"
+val spigotVersion = "1.20.6-R0.1-SNAPSHOT"
 val junit5Version = "5.10.2"
 val mockitoVersion = "3.12.4"
 
@@ -75,6 +75,9 @@ tasks {
     }
     withType<Jar> {
         archiveVersion.set(rootProject.ext["FULL_VERSION"] as String)
+        manifest {
+            attributes("paperweight-mappings-namespace" to "mojang")
+        }
     }
     withType<Sign> {
         onlyIf { project.hasProperty("forceSign") }

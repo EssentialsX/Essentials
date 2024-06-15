@@ -492,6 +492,16 @@
   "archerpotterysherd": "archer_pottery_sherd",
   "archersherd": "archer_pottery_sherd",
   "minecraft:archer_pottery_sherd": "archer_pottery_sherd",
+  "armadillo_scute": {
+    "material": "ARMADILLO_SCUTE"
+  },
+  "armadilloscute": "armadillo_scute",
+  "minecraft:armadillo_scute": "armadillo_scute",
+  "armadillo_spawn_egg": {
+    "material": "ARMADILLO_SPAWN_EGG"
+  },
+  "armadillospawnegg": "armadillo_spawn_egg",
+  "minecraft:armadillo_spawn_egg": "armadillo_spawn_egg",
   "armor_stand": {
     "material": "ARMOR_STAND"
   },
@@ -6325,67 +6335,6 @@
   "oreemerald": "emerald_ore",
   "stoneemeraldore": "emerald_ore",
   "stoneeore": "emerald_ore",
-  "empty_lingering_potion": {
-    "potionData": {
-      "type": "UNCRAFTABLE",
-      "upgraded": false,
-      "extended": false
-    },
-    "material": "LINGERING_POTION"
-  },
-  "aoepotionuncraftable": "empty_lingering_potion",
-  "aoepotuncraftable": "empty_lingering_potion",
-  "areapotionuncraftable": "empty_lingering_potion",
-  "areapotuncraftable": "empty_lingering_potion",
-  "cloudpotionuncraftable": "empty_lingering_potion",
-  "cloudpotuncraftable": "empty_lingering_potion",
-  "lingerpotuncraftable": "empty_lingering_potion",
-  "uncraftableaoepoiont": "empty_lingering_potion",
-  "uncraftableaoepot": "empty_lingering_potion",
-  "uncraftableareapot": "empty_lingering_potion",
-  "uncraftableareapotion": "empty_lingering_potion",
-  "uncraftablecloudpot": "empty_lingering_potion",
-  "uncraftablecloudpotion": "empty_lingering_potion",
-  "uncraftablelingerpot": "empty_lingering_potion",
-  "empty_potion": {
-    "potionData": {
-      "type": "UNCRAFTABLE",
-      "upgraded": false,
-      "extended": false
-    },
-    "material": "POTION"
-  },
-  "potionofuncraftable": "empty_potion",
-  "potofuncraftable": "empty_potion",
-  "uncraftablepot": "empty_potion",
-  "uncraftablepotion": "empty_potion",
-  "empty_splash_potion": {
-    "potionData": {
-      "type": "UNCRAFTABLE",
-      "upgraded": false,
-      "extended": false
-    },
-    "material": "SPLASH_POTION"
-  },
-  "splashuncraftablepot": "empty_splash_potion",
-  "splashuncraftablepotion": "empty_splash_potion",
-  "spluncraftablepot": "empty_splash_potion",
-  "spluncraftablepotion": "empty_splash_potion",
-  "uncraftablesplashpot": "empty_splash_potion",
-  "uncraftablesplashpotion": "empty_splash_potion",
-  "empty_tipped_arrow": {
-    "potionData": {
-      "type": "UNCRAFTABLE",
-      "upgraded": false,
-      "extended": false
-    },
-    "material": "TIPPED_ARROW"
-  },
-  "arrowuncraftable": "empty_tipped_arrow",
-  "uncraftablearrow": "empty_tipped_arrow",
-  "uncraftabletarr": "empty_tipped_arrow",
-  "uncraftabletarrow": "empty_tipped_arrow",
-  "uncraftabletippedarrow": "empty_tipped_arrow",
   "enchanted_book": {
     "material": "ENCHANTED_BOOK"
   },
@@ -7156,6 +7105,11 @@
   },
   "flintandsteel": "flint_and_steel",
   "minecraft:flint_and_steel": "flint_and_steel",
+  "flow_banner_pattern": {
+    "material": "FLOW_BANNER_PATTERN"
+  },
+  "flowbannerpattern": "flow_banner_pattern",
+  "minecraft:flow_banner_pattern": "flow_banner_pattern",
   "flower_banner_pattern": {
     "material": "FLOWER_BANNER_PATTERN"
   },
@@ -8530,6 +8484,11 @@
     "material": "GUNPOWDER"
   },
   "minecraft:gunpowder": "gunpowder",
+  "guster_banner_pattern": {
+    "material": "GUSTER_BANNER_PATTERN"
+  },
+  "gusterbannerpattern": "guster_banner_pattern",
+  "minecraft:guster_banner_pattern": "guster_banner_pattern",
   "hanging_roots": {
     "material": "HANGING_ROOTS"
   },
@@ -8543,7 +8502,8 @@
   "minecraft:hanging_roots": "hanging_roots",
   "harming_lingering_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": false,
       "extended": false
     },
@@ -8621,7 +8581,8 @@
   "lingerpotinstantdamage": "harming_lingering_potion",
   "harming_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": false,
       "extended": false
     },
@@ -8649,7 +8610,8 @@
   "potofinstantdamage": "harming_potion",
   "harming_splash_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": false,
       "extended": false
     },
@@ -8687,7 +8649,8 @@
   "splinstantdamagepotion": "harming_splash_potion",
   "harming_tipped_arrow": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": false,
       "extended": false
     },
@@ -8729,7 +8692,8 @@
   "minecraft:hay_block": "hay_block",
   "healing_lingering_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": false,
       "extended": false
     },
@@ -8807,7 +8771,8 @@
   "lingerpotlife": "healing_lingering_potion",
   "healing_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": false,
       "extended": false
     },
@@ -8835,7 +8800,8 @@
   "potoflife": "healing_potion",
   "healing_splash_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": false,
       "extended": false
     },
@@ -8873,7 +8839,8 @@
   "spllifepotion": "healing_splash_potion",
   "healing_tipped_arrow": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": false,
       "extended": false
     },
@@ -10977,7 +10944,8 @@
   "minecraft:lead": "lead",
   "leaping_lingering_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": false
     },
@@ -11027,7 +10995,8 @@
   "lingerpotleaping": "leaping_lingering_potion",
   "leaping_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": false
     },
@@ -11047,7 +11016,8 @@
   "potofleaping": "leaping_potion",
   "leaping_splash_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": false
     },
@@ -11073,7 +11043,8 @@
   "splleappotion": "leaping_splash_potion",
   "leaping_tipped_arrow": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": false
     },
@@ -13313,7 +13284,8 @@
   "invlongtippedarrow": "long_invisibility_tipped_arrow",
   "long_leaping_lingering_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": true
     },
@@ -13531,7 +13503,8 @@
   "lingerpotleaplong": "long_leaping_lingering_potion",
   "long_leaping_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": true
     },
@@ -13599,7 +13572,8 @@
   "potofleaplong": "long_leaping_potion",
   "long_leaping_splash_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": true
     },
@@ -13697,7 +13671,8 @@
   "splleaplongpotion": "long_leaping_splash_potion",
   "long_leaping_tipped_arrow": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": false,
       "extended": true
     },
@@ -15294,7 +15269,8 @@
   "poisonlongtippedarrow": "long_poison_tipped_arrow",
   "long_regeneration_lingering_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": true
     },
@@ -15512,7 +15488,8 @@
   "regenlingerpotlong": "long_regeneration_lingering_potion",
   "long_regeneration_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": true
     },
@@ -15580,7 +15557,8 @@
   "regenlongpotion": "long_regeneration_potion",
   "long_regeneration_splash_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": true
     },
@@ -15678,7 +15656,8 @@
   "splregenlongpotion": "long_regeneration_splash_potion",
   "long_regeneration_tipped_arrow": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": true
     },
@@ -17017,7 +16996,8 @@
   "stronglongtippedarrow": "long_strength_tipped_arrow",
   "long_swiftness_lingering_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": true
     },
@@ -17235,7 +17215,8 @@
   "swiftnesslingerpotlong": "long_swiftness_lingering_potion",
   "long_swiftness_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": true
     },
@@ -17303,7 +17284,8 @@
   "swiftnesslongpotion": "long_swiftness_potion",
   "long_swiftness_splash_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": true
     },
@@ -17401,7 +17383,8 @@
   "swiftnesslongsplashpotion": "long_swiftness_splash_potion",
   "long_swiftness_tipped_arrow": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": true
     },
@@ -19935,6 +19918,43 @@
   "spawnmushroom": "mooshroom_spawn_egg",
   "spawnmushroom_cow": "mooshroom_spawn_egg",
   "spawnmushroomcow": "mooshroom_spawn_egg",
+  "mooshroom_spawner": {
+    "entity": "MOOSHROOM",
+    "material": "SPAWNER"
+  },
+  "mooshroomcage": "mooshroom_spawner",
+  "mooshroommcage": "mooshroom_spawner",
+  "mooshroommobcage": "mooshroom_spawner",
+  "mooshroommobspawner": "mooshroom_spawner",
+  "mooshroommonstercage": "mooshroom_spawner",
+  "mooshroommonsterspawner": "mooshroom_spawner",
+  "mooshroommspawner": "mooshroom_spawner",
+  "mooshroomspawner": "mooshroom_spawner",
+  "mushroom_cow_spawner": "mooshroom_spawner",
+  "mushroom_cowcage": "mooshroom_spawner",
+  "mushroom_cowmcage": "mooshroom_spawner",
+  "mushroom_cowmobcage": "mooshroom_spawner",
+  "mushroom_cowmobspawner": "mooshroom_spawner",
+  "mushroom_cowmonstercage": "mooshroom_spawner",
+  "mushroom_cowmonsterspawner": "mooshroom_spawner",
+  "mushroom_cowmspawner": "mooshroom_spawner",
+  "mushroom_cowspawner": "mooshroom_spawner",
+  "mushroomcage": "mooshroom_spawner",
+  "mushroomcowcage": "mooshroom_spawner",
+  "mushroomcowmcage": "mooshroom_spawner",
+  "mushroomcowmobcage": "mooshroom_spawner",
+  "mushroomcowmobspawner": "mooshroom_spawner",
+  "mushroomcowmonstercage": "mooshroom_spawner",
+  "mushroomcowmonsterspawner": "mooshroom_spawner",
+  "mushroomcowmspawner": "mooshroom_spawner",
+  "mushroomcowspawner": "mooshroom_spawner",
+  "mushroommcage": "mooshroom_spawner",
+  "mushroommobcage": "mooshroom_spawner",
+  "mushroommobspawner": "mooshroom_spawner",
+  "mushroommonstercage": "mooshroom_spawner",
+  "mushroommonsterspawner": "mooshroom_spawner",
+  "mushroommspawner": "mooshroom_spawner",
+  "mushroomspawner": "mooshroom_spawner",
   "moss_block": {
     "material": "MOSS_BLOCK"
   },
@@ -20319,42 +20339,6 @@
   "mundanetarr": "mundane_tipped_arrow",
   "mundanetarrow": "mundane_tipped_arrow",
   "mundanetippedarrow": "mundane_tipped_arrow",
-  "mushroom_cow_spawner": {
-    "entity": "MUSHROOM_COW",
-    "material": "SPAWNER"
-  },
-  "mooshroomcage": "mushroom_cow_spawner",
-  "mooshroommcage": "mushroom_cow_spawner",
-  "mooshroommobcage": "mushroom_cow_spawner",
-  "mooshroommobspawner": "mushroom_cow_spawner",
-  "mooshroommonstercage": "mushroom_cow_spawner",
-  "mooshroommonsterspawner": "mushroom_cow_spawner",
-  "mooshroommspawner": "mushroom_cow_spawner",
-  "mooshroomspawner": "mushroom_cow_spawner",
-  "mushroom_cowcage": "mushroom_cow_spawner",
-  "mushroom_cowmcage": "mushroom_cow_spawner",
-  "mushroom_cowmobcage": "mushroom_cow_spawner",
-  "mushroom_cowmobspawner": "mushroom_cow_spawner",
-  "mushroom_cowmonstercage": "mushroom_cow_spawner",
-  "mushroom_cowmonsterspawner": "mushroom_cow_spawner",
-  "mushroom_cowmspawner": "mushroom_cow_spawner",
-  "mushroom_cowspawner": "mushroom_cow_spawner",
-  "mushroomcage": "mushroom_cow_spawner",
-  "mushroomcowcage": "mushroom_cow_spawner",
-  "mushroomcowmcage": "mushroom_cow_spawner",
-  "mushroomcowmobcage": "mushroom_cow_spawner",
-  "mushroomcowmobspawner": "mushroom_cow_spawner",
-  "mushroomcowmonstercage": "mushroom_cow_spawner",
-  "mushroomcowmonsterspawner": "mushroom_cow_spawner",
-  "mushroomcowmspawner": "mushroom_cow_spawner",
-  "mushroomcowspawner": "mushroom_cow_spawner",
-  "mushroommcage": "mushroom_cow_spawner",
-  "mushroommobcage": "mushroom_cow_spawner",
-  "mushroommobspawner": "mushroom_cow_spawner",
-  "mushroommonstercage": "mushroom_cow_spawner",
-  "mushroommonsterspawner": "mushroom_cow_spawner",
-  "mushroommspawner": "mushroom_cow_spawner",
-  "mushroomspawner": "mushroom_cow_spawner",
   "mushroom_stem": {
     "material": "MUSHROOM_STEM"
   },
@@ -25337,7 +25321,8 @@
   "rstorch": "redstone_torch",
   "regeneration_lingering_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": false
     },
@@ -25387,7 +25372,8 @@
   "regenlingerpot": "regeneration_lingering_potion",
   "regeneration_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": false
     },
@@ -25407,7 +25393,8 @@
   "regenpotion": "regeneration_potion",
   "regeneration_splash_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": false
     },
@@ -25433,7 +25420,8 @@
   "splregenpotion": "regeneration_splash_potion",
   "regeneration_tipped_arrow": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": false,
       "extended": false
     },
@@ -25689,10 +25677,6 @@
   "minecraft:sculk_vein": "sculk_vein",
   "sculkvein": "sculk_vein",
   "scvein": "sculk_vein",
-  "scute": {
-    "material": "SCUTE"
-  },
-  "minecraft:scute": "scute",
   "sea_lantern": {
     "material": "SEA_LANTERN"
   },
@@ -26594,40 +26578,80 @@
   "snow_golem_spawn_egg": {
     "material": "SNOW_GOLEM_SPAWN_EGG"
   },
+  "eggsgolem": "snow_golem_spawn_egg",
+  "eggsnow_golem": "snow_golem_spawn_egg",
+  "eggsnowgolem": "snow_golem_spawn_egg",
+  "eggsnowman": "snow_golem_spawn_egg",
   "minecraft:snow_golem_spawn_egg": "snow_golem_spawn_egg",
+  "seggsgolem": "snow_golem_spawn_egg",
+  "seggsnow_golem": "snow_golem_spawn_egg",
+  "seggsnowgolem": "snow_golem_spawn_egg",
+  "seggsnowman": "snow_golem_spawn_egg",
+  "sgolemegg": "snow_golem_spawn_egg",
+  "sgolemsegg": "snow_golem_spawn_egg",
+  "sgolemspawn": "snow_golem_spawn_egg",
+  "sgolemspawnegg": "snow_golem_spawn_egg",
+  "snow_golemegg": "snow_golem_spawn_egg",
+  "snow_golemsegg": "snow_golem_spawn_egg",
+  "snow_golemspawn": "snow_golem_spawn_egg",
+  "snow_golemspawnegg": "snow_golem_spawn_egg",
+  "snowgolemegg": "snow_golem_spawn_egg",
+  "snowgolemsegg": "snow_golem_spawn_egg",
+  "snowgolemspawn": "snow_golem_spawn_egg",
   "snowgolemspawnegg": "snow_golem_spawn_egg",
+  "snowmanegg": "snow_golem_spawn_egg",
+  "snowmansegg": "snow_golem_spawn_egg",
+  "snowmanspawn": "snow_golem_spawn_egg",
+  "snowmanspawnegg": "snow_golem_spawn_egg",
+  "spawneggsgolem": "snow_golem_spawn_egg",
+  "spawneggsnow_golem": "snow_golem_spawn_egg",
+  "spawneggsnowgolem": "snow_golem_spawn_egg",
+  "spawneggsnowman": "snow_golem_spawn_egg",
+  "spawnsgolem": "snow_golem_spawn_egg",
+  "spawnsnow_golem": "snow_golem_spawn_egg",
+  "spawnsnowgolem": "snow_golem_spawn_egg",
+  "spawnsnowman": "snow_golem_spawn_egg",
+  "snow_golem_spawner": {
+    "entity": "SNOW_GOLEM",
+    "material": "SPAWNER"
+  },
+  "sgolemcage": "snow_golem_spawner",
+  "sgolemmcage": "snow_golem_spawner",
+  "sgolemmobcage": "snow_golem_spawner",
+  "sgolemmobspawner": "snow_golem_spawner",
+  "sgolemmonstercage": "snow_golem_spawner",
+  "sgolemmonsterspawner": "snow_golem_spawner",
+  "sgolemmspawner": "snow_golem_spawner",
+  "sgolemspawner": "snow_golem_spawner",
+  "snow_golemcage": "snow_golem_spawner",
+  "snow_golemmcage": "snow_golem_spawner",
+  "snow_golemmobcage": "snow_golem_spawner",
+  "snow_golemmobspawner": "snow_golem_spawner",
+  "snow_golemmonstercage": "snow_golem_spawner",
+  "snow_golemmonsterspawner": "snow_golem_spawner",
+  "snow_golemmspawner": "snow_golem_spawner",
+  "snow_golemspawner": "snow_golem_spawner",
+  "snowgolemcage": "snow_golem_spawner",
+  "snowgolemmcage": "snow_golem_spawner",
+  "snowgolemmobcage": "snow_golem_spawner",
+  "snowgolemmobspawner": "snow_golem_spawner",
+  "snowgolemmonstercage": "snow_golem_spawner",
+  "snowgolemmonsterspawner": "snow_golem_spawner",
+  "snowgolemmspawner": "snow_golem_spawner",
+  "snowgolemspawner": "snow_golem_spawner",
+  "snowman_spawner": "snow_golem_spawner",
+  "snowmancage": "snow_golem_spawner",
+  "snowmanmcage": "snow_golem_spawner",
+  "snowmanmobcage": "snow_golem_spawner",
+  "snowmanmobspawner": "snow_golem_spawner",
+  "snowmanmonstercage": "snow_golem_spawner",
+  "snowmanmonsterspawner": "snow_golem_spawner",
+  "snowmanmspawner": "snow_golem_spawner",
+  "snowmanspawner": "snow_golem_spawner",
   "snowball": {
     "material": "SNOWBALL"
   },
   "minecraft:snowball": "snowball",
-  "snowman_spawner": {
-    "entity": "SNOWMAN",
-    "material": "SPAWNER"
-  },
-  "sgolemcage": "snowman_spawner",
-  "sgolemmcage": "snowman_spawner",
-  "sgolemmobcage": "snowman_spawner",
-  "sgolemmobspawner": "snowman_spawner",
-  "sgolemmonstercage": "snowman_spawner",
-  "sgolemmonsterspawner": "snowman_spawner",
-  "sgolemmspawner": "snowman_spawner",
-  "sgolemspawner": "snowman_spawner",
-  "snowgolemcage": "snowman_spawner",
-  "snowgolemmcage": "snowman_spawner",
-  "snowgolemmobcage": "snowman_spawner",
-  "snowgolemmobspawner": "snowman_spawner",
-  "snowgolemmonstercage": "snowman_spawner",
-  "snowgolemmonsterspawner": "snowman_spawner",
-  "snowgolemmspawner": "snowman_spawner",
-  "snowgolemspawner": "snowman_spawner",
-  "snowmancage": "snowman_spawner",
-  "snowmanmcage": "snowman_spawner",
-  "snowmanmobcage": "snowman_spawner",
-  "snowmanmobspawner": "snowman_spawner",
-  "snowmanmonstercage": "snowman_spawner",
-  "snowmanmonsterspawner": "snowman_spawner",
-  "snowmanmspawner": "snowman_spawner",
-  "snowmanspawner": "snowman_spawner",
   "soul_campfire": {
     "material": "SOUL_CAMPFIRE"
   },
@@ -28408,7 +28432,8 @@
   "warpstrippedlog": "stripped_warped_stem",
   "strong_harming_lingering_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": true,
       "extended": false
     },
@@ -28626,7 +28651,8 @@
   "lingerpotinstantdamagestrong": "strong_harming_lingering_potion",
   "strong_harming_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": true,
       "extended": false
     },
@@ -28694,7 +28720,8 @@
   "potofinstantdamagestrong": "strong_harming_potion",
   "strong_harming_splash_potion": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": true,
       "extended": false
     },
@@ -28792,7 +28819,8 @@
   "splinstantdamagestrongpotion": "strong_harming_splash_potion",
   "strong_harming_tipped_arrow": {
     "potionData": {
-      "type": "INSTANT_DAMAGE",
+      "type": "HARMING",
+      "fallbackType": "INSTANT_DAMAGE",
       "upgraded": true,
       "extended": false
     },
@@ -28875,7 +28903,8 @@
   "instantdamagestrongtippedarrow": "strong_harming_tipped_arrow",
   "strong_healing_lingering_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": true,
       "extended": false
     },
@@ -29093,7 +29122,8 @@
   "lingerpotlifestrong": "strong_healing_lingering_potion",
   "strong_healing_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": true,
       "extended": false
     },
@@ -29161,7 +29191,8 @@
   "potoflifestrong": "strong_healing_potion",
   "strong_healing_splash_potion": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": true,
       "extended": false
     },
@@ -29259,7 +29290,8 @@
   "spllifestrongpotion": "strong_healing_splash_potion",
   "strong_healing_tipped_arrow": {
     "potionData": {
-      "type": "INSTANT_HEAL",
+      "type": "HEALING",
+      "fallbackType": "INSTANT_HEAL",
       "upgraded": true,
       "extended": false
     },
@@ -29342,7 +29374,8 @@
   "lifestrongtippedarrow": "strong_healing_tipped_arrow",
   "strong_leaping_lingering_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": true,
       "extended": false
     },
@@ -29476,7 +29509,8 @@
   "lingerpotleapstrong": "strong_leaping_lingering_potion",
   "strong_leaping_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": true,
       "extended": false
     },
@@ -29520,7 +29554,8 @@
   "potofleapstrong": "strong_leaping_potion",
   "strong_leaping_splash_potion": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": true,
       "extended": false
     },
@@ -29582,7 +29617,8 @@
   "splleapstrongpotion": "strong_leaping_splash_potion",
   "strong_leaping_tipped_arrow": {
     "potionData": {
-      "type": "JUMP",
+      "type": "LEAPING",
+      "fallbackType": "JUMP",
       "upgraded": true,
       "extended": false
     },
@@ -29928,7 +29964,8 @@
   "pstrongtippedarrow": "strong_poison_tipped_arrow",
   "strong_regeneration_lingering_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": true,
       "extended": false
     },
@@ -30062,7 +30099,8 @@
   "regenlingerpotstrong": "strong_regeneration_lingering_potion",
   "strong_regeneration_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": true,
       "extended": false
     },
@@ -30106,7 +30144,8 @@
   "regenstrongpotion": "strong_regeneration_potion",
   "strong_regeneration_splash_potion": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": true,
       "extended": false
     },
@@ -30168,7 +30207,8 @@
   "splregenstrongpotion": "strong_regeneration_splash_potion",
   "strong_regeneration_tipped_arrow": {
     "potionData": {
-      "type": "REGEN",
+      "type": "REGENERATION",
+      "fallbackType": "REGEN",
       "upgraded": true,
       "extended": false
     },
@@ -30720,7 +30760,8 @@
   "strstrongtippedarrow": "strong_strength_tipped_arrow",
   "strong_swiftness_lingering_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": true,
       "extended": false
     },
@@ -30854,7 +30895,8 @@
   "swiftnesslingerpotstrong": "strong_swiftness_lingering_potion",
   "strong_swiftness_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": true,
       "extended": false
     },
@@ -30898,7 +30940,8 @@
   "swiftstrongpotion": "strong_swiftness_potion",
   "strong_swiftness_splash_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": true,
       "extended": false
     },
@@ -30960,7 +31003,8 @@
   "swiftstrongsplashpotion": "strong_swiftness_splash_potion",
   "strong_swiftness_tipped_arrow": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": true,
       "extended": false
     },
@@ -31353,7 +31397,8 @@
   "sweetberries": "sweet_berries",
   "swiftness_lingering_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": false
     },
@@ -31403,7 +31448,8 @@
   "swiftnesslingerpot": "swiftness_lingering_potion",
   "swiftness_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": false
     },
@@ -31423,7 +31469,8 @@
   "swiftpotion": "swiftness_potion",
   "swiftness_splash_potion": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": false
     },
@@ -31449,7 +31496,8 @@
   "swiftsplashpotion": "swiftness_splash_potion",
   "swiftness_tipped_arrow": {
     "potionData": {
-      "type": "SPEED",
+      "type": "SWIFTNESS",
+      "fallbackType": "SPEED",
       "upgraded": false,
       "extended": false
     },
@@ -31983,6 +32031,13 @@
   "turtletarr": "turtle_master_tipped_arrow",
   "turtletarrow": "turtle_master_tipped_arrow",
   "turtletippedarrow": "turtle_master_tipped_arrow",
+  "turtle_scute": {
+    "material": "TURTLE_SCUTE"
+  },
+  "minecraft:scute": "turtle_scute",
+  "minecraft:turtle_scute": "turtle_scute",
+  "scute": "turtle_scute",
+  "turtlescute": "turtle_scute",
   "turtle_spawn_egg": {
     "material": "TURTLE_SPAWN_EGG"
   },
@@ -42340,6 +42395,11 @@
   "withermonsterspawner": "wither_spawner",
   "withermspawner": "wither_spawner",
   "witherspawner": "wither_spawner",
+  "wolf_armor": {
+    "material": "WOLF_ARMOR"
+  },
+  "minecraft:wolf_armor": "wolf_armor",
+  "wolfarmor": "wolf_armor",
   "wolf_spawn_egg": {
     "material": "WOLF_SPAWN_EGG"
   },
