@@ -144,6 +144,23 @@ public final class Potions {
             POTIONS.put("unluck", PotionEffectType.UNLUCK);
         } catch (final Throwable ignored) {
         }
+
+        // 1.21
+        try {
+            POTIONS.put("infested", PotionEffectType.INFESTED);
+            ALIASPOTIONS.put("silverfish", PotionEffectType.INFESTED);
+
+            POTIONS.put("oozing", PotionEffectType.OOZING);
+            ALIASPOTIONS.put("ooze", PotionEffectType.OOZING);
+
+            POTIONS.put("weaving", PotionEffectType.WEAVING);
+            ALIASPOTIONS.put("weave", PotionEffectType.WEAVING);
+
+            POTIONS.put("windcharged", PotionEffectType.WIND_CHARGED);
+            ALIASPOTIONS.put("windcharge", PotionEffectType.WIND_CHARGED);
+            ALIASPOTIONS.put("wind", PotionEffectType.WIND_CHARGED);
+        } catch (final Throwable ignored) {
+        }
     }
 
     private Potions() {
