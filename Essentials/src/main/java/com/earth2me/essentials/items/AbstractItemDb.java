@@ -1,5 +1,6 @@
 package com.earth2me.essentials.items;
 
+import com.earth2me.essentials.Enchantments;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
@@ -218,7 +219,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
             if (meta.hasEnchants()) {
                 for (final Enchantment e : meta.getEnchants().keySet()) {
-                    sb.append(e.getName().toLowerCase()).append(":").append(meta.getEnchantLevel(e)).append(" ");
+                    sb.append(Enchantments.getRealName(e)).append(":").append(meta.getEnchantLevel(e)).append(" ");
                 }
             }
 
@@ -263,7 +264,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             case ENCHANTED_BOOK:
                 final EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) is.getItemMeta();
                 for (final Enchantment e : enchantmentStorageMeta.getStoredEnchants().keySet()) {
-                    sb.append(e.getName().toLowerCase()).append(":").append(enchantmentStorageMeta.getStoredEnchantLevel(e)).append(" ");
+                    sb.append(Enchantments.getRealName(e)).append(":").append(enchantmentStorageMeta.getStoredEnchantLevel(e)).append(" ");
                 }
                 break;
         }
