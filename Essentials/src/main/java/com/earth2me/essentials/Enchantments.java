@@ -334,6 +334,17 @@ public final class Enchantments {
     private Enchantments() {
     }
 
+    public static String getRealName(final Enchantment enchantment) {
+        if (enchantment == null) {
+            return null;
+        }
+
+        if (isFlat) { // 1.13+ only
+            return enchantment.getKey().getKey();
+        }
+        return enchantment.getName().toLowerCase(Locale.ENGLISH);
+    }
+
     public static Enchantment getByName(final String name) {
         if (name == null || name.isEmpty()) {
             return null;
