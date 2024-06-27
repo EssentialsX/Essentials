@@ -326,7 +326,9 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         final String joinMessage = event.getJoinMessage();
         ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer(), joinMessage));
 
-        if (hideJoinQuitMessages() || ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage()) {
+        final User user = ess.getUser(event.getPlayer());
+
+        if (hideJoinQuitMessages() || ess.getSettings().isCustomJoinMessage() || ess.getSettings().allowSilentJoinQuit() && (user.isAuthorized("essentials.silentjoin") || user.isAuthorized("essentials.silentjoin.vanish"))) {
             event.setJoinMessage(null);
         }
     }
@@ -412,9 +414,6 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         ess.getServer().broadcastMessage(msg);
                     }
                     effectiveMessage = msg.isEmpty() ? null : msg;
-                } else if (ess.getSettings().allowSilentJoinQuit()) {
-                    ess.getServer().broadcastMessage(message);
-                    effectiveMessage = message;
                 } else {
                     effectiveMessage = message;
                 }
