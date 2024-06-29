@@ -34,7 +34,7 @@ public class Commandkill extends EssentialsLoopCommand {
             return;
         }
         ede.getEntity().setLastDamageCause(ede);
-        matchPlayer.setHealth(0);
+        matchPlayer.damage(Float.MAX_VALUE);
         sender.sendTl("kill", matchPlayer.getDisplayName());
     }
 
