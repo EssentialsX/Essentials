@@ -10,7 +10,7 @@ plugins {
 val baseExtension = extensions.create<EssentialsBaseExtension>("essentials", project)
 
 val checkstyleVersion = "8.36.2"
-val spigotVersion = "1.20.6-R0.1-SNAPSHOT"
+val spigotVersion = "1.21-R0.1-SNAPSHOT"
 val junit5Version = "5.10.2"
 val mockitoVersion = "3.12.4"
 
@@ -125,7 +125,7 @@ indra {
 
     javaVersions {
         target(8)
-        minimumToolchain(17)
+        minimumToolchain(21)
         // Don't enforce running tests on Java 8; we only care about the release for compiling, not running tests
         strictVersions(false)
     }
