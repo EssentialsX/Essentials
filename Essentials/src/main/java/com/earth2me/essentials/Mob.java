@@ -113,6 +113,8 @@ public enum Mob {
     CAMEL("Camel", Enemies.FRIENDLY, "CAMEL"),
     SNIFFER("Sniffer", Enemies.FRIENDLY, "SNIFFER"),
     ARMADILLO("Armadillo", Enemies.FRIENDLY, "ARMADILLO"),
+    BREEZE("Breeze", Enemies.ENEMY, "BREEZE"),
+    BOGGED("Bogged", Enemies.ENEMY, "BOGGED"),
     ;
 
     private static final Map<String, Mob> hashMap = new HashMap<>();
