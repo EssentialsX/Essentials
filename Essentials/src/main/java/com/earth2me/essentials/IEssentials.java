@@ -14,6 +14,7 @@ import net.ess3.provider.BiomeKeyProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.DamageEventProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
+import net.ess3.provider.InventoryViewProvider;
 import net.ess3.provider.ItemUnbreakableProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
@@ -191,6 +192,8 @@ public interface IEssentials extends Plugin {
     BiomeKeyProvider getBiomeKeyProvider();
 
     BannerDataProvider getBannerDataProvider();
+
+    InventoryViewProvider getInventoryViewProvider();
 
     PluginCommand getPluginCommand(String cmd);
 }
