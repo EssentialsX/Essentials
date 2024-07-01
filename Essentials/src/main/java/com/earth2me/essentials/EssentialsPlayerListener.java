@@ -36,10 +36,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -62,6 +59,8 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -894,17 +893,28 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         return used;
     }
 
+    public static Inventory getTopInventory(InventoryEvent event) {
+        try {
+            Object view = event.getView();
+            Method getTopInventory = view.getClass().getMethod("getTopInventory");
+            getTopInventory.setAccessible(true);
+            return (Inventory) getTopInventory.invoke(view);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onInventoryClickEvent(final InventoryClickEvent event) {
         Player refreshPlayer = null;
-        final Inventory top = event.getView().getTopInventory();
+        final Inventory top = getTopInventory(event);
         final InventoryType type = top.getType();
 
         final Inventory clickedInventory;
         if (event.getRawSlot() < 0) {
             clickedInventory = null;
         } else {
-            clickedInventory = event.getRawSlot() < top.getSize() ? top : event.getView().getBottomInventory();
+            clickedInventory = event.getRawSlot() < top.getSize() ? top : event.getClickedInventory();
         }
 
         final User user = ess.getUser((Player) event.getWhoClicked());
@@ -963,7 +973,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryCloseEvent(final InventoryCloseEvent event) {
         Player refreshPlayer = null;
-        final Inventory top = event.getView().getTopInventory();
+        final Inventory top = getTopInventory(event);
         final InventoryType type = top.getType();
         if (type == InventoryType.PLAYER) {
             final User user = ess.getUser((Player) event.getPlayer());
@@ -977,7 +987,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             final User user = ess.getUser((Player) event.getPlayer());
             if (user.isRecipeSee()) {
                 user.setRecipeSee(false);
-                event.getView().getTopInventory().clear();
+                top.clear();
                 refreshPlayer = user.getBase();
             }
         } else if (type == InventoryType.CHEST && top.getSize() == 9) {
