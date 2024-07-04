@@ -178,8 +178,6 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setHome(String name, final Location loc) {
-        //Invalid names will corrupt the yaml
-        name = StringUtil.safeString(name);
         holder.homes().put(name, LazyLocation.fromLocation(loc));
         config.save();
     }
