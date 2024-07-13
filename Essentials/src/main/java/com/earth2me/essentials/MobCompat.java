@@ -296,7 +296,7 @@ public final class MobCompat {
         }
 
         private Villager.Profession asEnum() {
-            return EnumUtil.valueOf(Villager.Profession.class, newProfession, oldProfession);
+            return RegistryUtil.valueOf(Villager.Profession.class, newProfession, oldProfession);
         }
     }
 
