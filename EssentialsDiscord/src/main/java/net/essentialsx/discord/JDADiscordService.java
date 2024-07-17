@@ -383,11 +383,10 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
             final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.ADVANCED_RELAY_NAME).join();
             if (webhook == null) {
-                final WrappedWebhookClient current = channelIdToWebhook.get(channel.getId());
+                final WrappedWebhookClient current = channelIdToWebhook.remove(channel.getId());
                 if (current != null) {
                     current.close();
                 }
-                channelIdToWebhook.remove(channel.getId()).close();
                 continue;
             }
             typeToChannelId.put(type, channel.getId());
