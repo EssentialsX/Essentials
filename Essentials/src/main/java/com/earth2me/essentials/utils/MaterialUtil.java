@@ -3,6 +3,7 @@ package com.earth2me.essentials.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.material.MaterialData;
@@ -245,5 +246,12 @@ public final class MaterialUtil {
         }
 
         return DyeColor.WHITE;
+    }
+
+    public static Material[] getKnownMaterials() {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_14_R01)) {
+            return Material.values();
+        }
+        return Registry.MATERIAL.stream().toArray(Material[]::new);
     }
 }

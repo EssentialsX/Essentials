@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -37,15 +37,15 @@ public final class LocationUtil {
     private static final Material FARMLAND = EnumUtil.getMaterial("FARMLAND");
 
     // The player can stand inside these materials
-    private static final Set<Material> HOLLOW_MATERIALS = EnumSet.noneOf(Material.class);
-    private static final Set<Material> TRANSPARENT_MATERIALS = EnumSet.noneOf(Material.class);
+    private static final Set<Material> HOLLOW_MATERIALS = new HashSet<>();
+    private static final Set<Material> TRANSPARENT_MATERIALS = new HashSet<>();
 
     static {
         // If the server is running in a test environment, the isTransparent() method will blow up since
         // it requires the registry to be initialized. This is a workaround to prevent that from happening.
         if (!Essentials.TESTING) {
             // Materials from Material.isTransparent()
-            for (final Material mat : Material.values()) {
+            for (final Material mat : MaterialUtil.getKnownMaterials()) {
                 if (mat.isTransparent()) {
                     HOLLOW_MATERIALS.add(mat);
                 }

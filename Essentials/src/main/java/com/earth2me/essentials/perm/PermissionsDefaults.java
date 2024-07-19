@@ -1,6 +1,7 @@
 package com.earth2me.essentials.perm;
 
 import com.earth2me.essentials.commands.Commandhat;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -10,16 +11,16 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 public final class PermissionsDefaults {
-    
+
     private PermissionsDefaults() {
     }
-    
+
     public static void registerAllBackDefaults() {
         for (final World world : Bukkit.getWorlds()) {
             registerBackDefaultFor(world);
         }
     }
-    
+
     public static void registerBackDefaultFor(final World w) {
         final String permName = "essentials.back.into." + w.getName();
 
@@ -41,7 +42,7 @@ public final class PermissionsDefaults {
         }
 
         final ImmutableMap.Builder<String, Boolean> children = ImmutableMap.builder();
-        for (final Material mat : Material.values()) {
+        for (final Material mat : MaterialUtil.getKnownMaterials()) {
             final String matPerm = Commandhat.PERM_PREFIX + mat.name().toLowerCase();
             children.put(matPerm, true);
             pluginManager.addPermission(new Permission(matPerm, "Prevent using " + mat + " as a type of hat.", PermissionDefault.FALSE));
