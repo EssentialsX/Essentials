@@ -131,7 +131,7 @@ public class Commandrecipe extends EssentialsCommand {
                     if (VersionUtil.PRE_FLATTENING && item.getDurability() == Short.MAX_VALUE) {
                         item.setDurability((short) 0);
                     }
-                    view.getTopInventory().setItem(j * 3 + k + 1, item);
+                    ess.getInventoryViewProvider().getTopInventory(view).setItem(j * 3 + k + 1, item);
                 }
             }
         } else {
@@ -174,7 +174,7 @@ public class Commandrecipe extends EssentialsCommand {
                 if (VersionUtil.PRE_FLATTENING && item.getDurability() == Short.MAX_VALUE) {
                     item.setDurability((short) 0);
                 }
-                view.setItem(i + 1, item);
+                ess.getInventoryViewProvider().setItem(view, i + 1, item);
             }
 
         } else {

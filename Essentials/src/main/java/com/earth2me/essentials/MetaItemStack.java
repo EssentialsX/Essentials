@@ -576,7 +576,7 @@ public class MetaItemStack {
         if (enchantment == null) {
             return false;
         }
-        if (hasMetaPermission(sender, "enchantments." + enchantment.getName().toLowerCase(Locale.ENGLISH), false, false, ess)) {
+        if (hasMetaPermission(sender, "enchantments." + Enchantments.getRealName(enchantment), false, false, ess)) {
             int level = -1;
             if (split.length > 1) {
                 try {
@@ -619,7 +619,7 @@ public class MetaItemStack {
                 }
             }
         } catch (final Exception ex) {
-            throw new Exception("Enchantment " + enchantment.getName() + ": " + ex.getMessage(), ex);
+            throw new Exception("Enchantment " + Enchantments.getRealName(enchantment) + ": " + ex.getMessage(), ex);
         }
     }
 
@@ -629,7 +629,7 @@ public class MetaItemStack {
             return null;
         }
 
-        final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
+        final String enchantmentName = Enchantments.getRealName(enchantment);
 
         if (!hasMetaPermission(user, "enchantments." + enchantmentName, true, false)) {
             throw new TranslatableException("enchantmentPerm", enchantmentName);

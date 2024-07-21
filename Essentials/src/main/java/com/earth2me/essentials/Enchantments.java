@@ -303,6 +303,24 @@ public final class Enchantments {
         } catch (final IllegalArgumentException ignored) {
         }
 
+        try { // 1.21
+            final Enchantment breach = Enchantment.getByName("BREACH");
+            if (breach != null) {
+                ENCHANTMENTS.put("breach", breach);
+            }
+            final Enchantment density = Enchantment.getByName("DENSITY");
+            if (density != null) {
+                ENCHANTMENTS.put("density", density);
+            }
+            final Enchantment windBurst = Enchantment.getByName("WIND_BURST");
+            if (breach != null) {
+                ENCHANTMENTS.put("windburst", windBurst);
+                ALIASENCHANTMENTS.put("wind", windBurst);
+                ALIASENCHANTMENTS.put("burst", windBurst);
+            }
+        } catch (final IllegalArgumentException ignored) {
+        }
+
         try {
             final Class<?> namespacedKeyClass = Class.forName("org.bukkit.NamespacedKey");
             final Class<?> enchantmentClass = Class.forName("org.bukkit.enchantments.Enchantment");
@@ -314,6 +332,17 @@ public final class Enchantments {
     }
 
     private Enchantments() {
+    }
+
+    public static String getRealName(final Enchantment enchantment) {
+        if (enchantment == null) {
+            return null;
+        }
+
+        if (isFlat) { // 1.13+ only
+            return enchantment.getKey().getKey();
+        }
+        return enchantment.getName().toLowerCase(Locale.ENGLISH);
     }
 
     public static Enchantment getByName(final String name) {

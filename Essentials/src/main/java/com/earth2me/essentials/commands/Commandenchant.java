@@ -14,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -35,7 +34,7 @@ public class Commandenchant extends EssentialsCommand {
         if (args.length == 0) {
             final Set<String> usableEnchants = new TreeSet<>();
             for (final Map.Entry<String, Enchantment> entry : Enchantments.entrySet()) {
-                final String name = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
+                final String name = Enchantments.getRealName(entry.getValue());
                 if (usableEnchants.contains(name) || (user.isAuthorized("essentials.enchantments." + name) && entry.getValue().canEnchantItem(stack))) {
                     usableEnchants.add(entry.getKey());
                 }
@@ -57,7 +56,7 @@ public class Commandenchant extends EssentialsCommand {
         metaStack.addEnchantment(user.getSource(), ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchantments.allowunsafe"), enchantment, level);
         stack.setItemMeta(metaStack.getItemStack().getItemMeta());
         user.getBase().updateInventory();
-        final String enchantName = enchantment.getName().toLowerCase(Locale.ENGLISH).replace('_', ' ');
+        final String enchantName = Enchantments.getRealName(enchantment).replace('_', ' ');
         if (level == 0) {
             user.sendTl("enchantmentRemoved", enchantName);
         } else {
