@@ -1,5 +1,6 @@
 package com.earth2me.essentials.utils;
 
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
@@ -41,10 +42,14 @@ public final class LocationUtil {
     private static final Set<Material> TRANSPARENT_MATERIALS = EnumSet.noneOf(Material.class);
 
     static {
-        // Materials from Material.isTransparent()
-        for (final Material mat : Material.values()) {
-            if (mat.isTransparent()) {
-                HOLLOW_MATERIALS.add(mat);
+        // If the server is running in a test environment, the isTransparent() method will blow up since
+        // it requires the registry to be initialized. This is a workaround to prevent that from happening.
+        if (!Essentials.TESTING) {
+            // Materials from Material.isTransparent()
+            for (final Material mat : Material.values()) {
+                if (mat.isTransparent()) {
+                    HOLLOW_MATERIALS.add(mat);
+                }
             }
         }
 

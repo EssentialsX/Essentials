@@ -301,7 +301,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
         user.setLogoutLocation();
         if (user.isRecipeSee()) {
-            user.getBase().getOpenInventory().getTopInventory().clear();
+            ess.getInventoryViewProvider().getTopInventory(user.getBase().getOpenInventory()).clear();
         }
 
         final ArrayList<HumanEntity> viewers = new ArrayList<>(user.getBase().getInventory().getViewers());
@@ -547,14 +547,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 final Date banExpiry = banEntry.getExpiration();
                 if (banExpiry != null) {
                     final String expiry = DateUtil.formatDateDiff(banExpiry.getTime());
-                    event.setKickMessage(tlLiteral("tempbanJoin", expiry, banEntry.getReason()));
+                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("tempbanJoin", expiry, banEntry.getReason())));
                 } else {
-                    event.setKickMessage(tlLiteral("banJoin", banEntry.getReason()));
+                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("banJoin", banEntry.getReason())));
                 }
             } else {
                 banEntry = ess.getServer().getBanList(BanList.Type.IP).getBanEntry(event.getAddress().getHostAddress());
                 if (banEntry != null) {
-                    event.setKickMessage(tlLiteral("banIpJoin", banEntry.getReason()));
+                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("banIpJoin", banEntry.getReason())));
                 }
             }
         }
@@ -642,12 +642,13 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 || (!pluginCommand.getName().equals("msg") && !pluginCommand.getName().equals("r"))) { // /msg and /r are handled in SimpleMessageRecipient
                 final User user = ess.getUser(player);
                 if (!user.isAuthorized("essentials.chat.spy.exempt")) {
+                    final String playerName = ess.getSettings().isSocialSpyDisplayNames() ? player.getDisplayName() : player.getName();
                     for (final User spyer : ess.getOnlineUsers()) {
                         if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
                             final Component base = (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers())
                                     ? spyer.tlComponent("socialSpyMutedPrefix")
                                     : spyer.tlComponent("socialSpyPrefix");
-                            spyer.sendComponent(base.append(AdventureUtil.legacyToAdventure(player.getDisplayName())).append(Component.text(": " + event.getMessage())));
+                            spyer.sendComponent(base.append(AdventureUtil.legacyToAdventure(playerName)).append(Component.text(": " + event.getMessage())));
                         }
                     }
                 }
@@ -898,14 +899,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onInventoryClickEvent(final InventoryClickEvent event) {
         Player refreshPlayer = null;
-        final Inventory top = event.getView().getTopInventory();
+        final Inventory top = ess.getInventoryViewProvider().getTopInventory(event.getView());
         final InventoryType type = top.getType();
 
         final Inventory clickedInventory;
         if (event.getRawSlot() < 0) {
             clickedInventory = null;
         } else {
-            clickedInventory = event.getRawSlot() < top.getSize() ? top : event.getView().getBottomInventory();
+            clickedInventory = event.getRawSlot() < top.getSize() ? top : ess.getInventoryViewProvider().getBottomInventory(event.getView());
         }
 
         final User user = ess.getUser((Player) event.getWhoClicked());
@@ -964,7 +965,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryCloseEvent(final InventoryCloseEvent event) {
         Player refreshPlayer = null;
-        final Inventory top = event.getView().getTopInventory();
+        final Inventory top = ess.getInventoryViewProvider().getTopInventory(event.getView());
         final InventoryType type = top.getType();
         if (type == InventoryType.PLAYER) {
             final User user = ess.getUser((Player) event.getPlayer());
@@ -978,7 +979,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             final User user = ess.getUser((Player) event.getPlayer());
             if (user.isRecipeSee()) {
                 user.setRecipeSee(false);
-                event.getView().getTopInventory().clear();
+                ess.getInventoryViewProvider().getTopInventory(event.getView()).clear();
                 refreshPlayer = user.getBase();
             }
         } else if (type == InventoryType.CHEST && top.getSize() == 9) {

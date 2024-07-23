@@ -110,6 +110,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -142,6 +143,7 @@ import static com.earth2me.essentials.I18n.tlLocale;
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private static final Logger BUKKIT_LOGGER = Logger.getLogger("Essentials");
     private static Logger LOGGER = null;
+    public static boolean TESTING = false;
     private final transient TNTExplodeListener tntListener = new TNTExplodeListener();
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
     private final transient Map<String, IEssentialsCommand> commandMap = new HashMap<>();
@@ -192,6 +194,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     public void setupForTesting(final Server server) throws IOException, InvalidDescriptionException {
+        TESTING = true;
         LOGGER = new BaseLoggerProvider(this, BUKKIT_LOGGER);
         final File dataFolder = File.createTempFile("essentialstest", "");
         if (!dataFolder.delete()) {
@@ -359,8 +362,21 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Spawn Egg Providers
             providerFactory.registerProvider(LegacySpawnEggProvider.class, ReflSpawnEggProvider.class, FlatSpawnEggProvider.class);
 
-            // Potion Meta Provider
-            providerFactory.registerProvider(LegacyPotionMetaProvider.class, BasePotionDataProvider.class);
+            //Potion Meta Provider
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_6_R01)) {
+                potionMetaProvider = new ModernPotionMetaProvider();
+            } else if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
+                potionMetaProvider = new PrehistoricPotionMetaProvider();
+            } else {
+                potionMetaProvider = new LegacyPotionMetaProvider();
+            }
+
+            //Banner Meta Provider
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_6_R01)) {
+                bannerDataProvider = new BaseBannerDataProvider();
+            } else {
+                bannerDataProvider = new LegacyBannerDataProvider();
+            }
 
             // Server State Provider
             providerFactory.registerProvider(ReflServerStateProvider.class, PaperServerStateProvider.class);
@@ -417,6 +433,72 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     });
                 } catch (final ClassNotFoundException ignored) {
                 }
+            }
+
+            //Known Commands Provider
+            if (PaperLib.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01)) {
+                knownCommandsProvider = new PaperKnownCommandsProvider();
+            } else {
+                knownCommandsProvider = new ReflKnownCommandsProvider();
+            }
+
+            // Command aliases provider
+            formattedCommandAliasProvider = new ReflFormattedCommandAliasProvider(PaperLib.isPaper());
+
+            // Material Tag Providers
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
+                materialTagProvider = PaperLib.isPaper() ? new PaperMaterialTagProvider() : new BukkitMaterialTagProvider();
+            }
+
+            // Sync Commands Provider
+            syncCommandsProvider = new ReflSyncCommandsProvider();
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01)) {
+                persistentDataProvider = new ModernPersistentDataProvider(this);
+            } else {
+                persistentDataProvider = new ReflPersistentDataProvider(this);
+            }
+
+            onlineModeProvider = new ReflOnlineModeProvider();
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01)) {
+                unbreakableProvider = new ModernItemUnbreakableProvider();
+            } else {
+                unbreakableProvider = new LegacyItemUnbreakableProvider();
+            }
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_17_1_R01)) {
+                worldInfoProvider = new ModernDataWorldInfoProvider();
+            } else if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01)) {
+                worldInfoProvider = new ReflDataWorldInfoProvider();
+            } else {
+                worldInfoProvider = new FixedHeightWorldInfoProvider();
+            }
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01)) {
+                signDataProvider = new ModernSignDataProvider(this);
+            }
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_2_R01)) {
+                playerLocaleProvider = new ModernPlayerLocaleProvider();
+            } else {
+                playerLocaleProvider = new LegacyPlayerLocaleProvider();
+            }
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_4_R01)) {
+                damageEventProvider = new ModernDamageEventProvider();
+            } else {
+                damageEventProvider = new LegacyDamageEventProvider();
+            }
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_21_R01)) {
+                inventoryViewProvider = new BaseInventoryViewProvider();
+            } else {
+                inventoryViewProvider = new LegacyInventoryViewProvider();
+            }
+
+            if (PaperLib.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_19_4_R01)) {
+                biomeKeyProvider = new PaperBiomeKeyProvider();
             }
 
             execTimer.mark("Init(Providers)");
@@ -574,6 +656,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public void reload() {
         Trade.closeLog();
 
+        if (bukkitAudience != null) {
+            bukkitAudience.close();
+            bukkitAudience = null;
+        }
+
         for (final IConf iConf : confList) {
             iConf.reloadConfig();
             execTimer.mark("Reload(" + iConf.getClass().getSimpleName() + ")");
@@ -591,6 +678,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         final PluginManager pm = getServer().getPluginManager();
         registerListeners(pm);
 
+        AdventureUtil.setEss(this);
         bukkitAudience = BukkitAudiences.create(this);
     }
 
@@ -813,7 +901,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     sender.sendMessage(command.getUsage().replace("<command>", commandLabel));
                 }
                 if (!ex.getMessage().isEmpty()) {
-                    sender.sendMessage(ex.getMessage());
+                    sender.sendComponent(AdventureUtil.miniMessage().deserialize(ex.getMessage()));
                 }
                 if (ex.getCause() != null && settings.isDebug()) {
                     ex.getCause().printStackTrace();
@@ -839,12 +927,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public void cleanupOpenInventories() {
         for (final User user : getOnlineUsers()) {
             if (user.isRecipeSee()) {
-                user.getBase().getOpenInventory().getTopInventory().clear();
-                user.getBase().getOpenInventory().close();
+                final InventoryView view = user.getBase().getOpenInventory();
+
+                inventoryViewProvider.getTopInventory(view).clear();
+                inventoryViewProvider.close(view);
                 user.setRecipeSee(false);
             }
             if (user.isInvSee() || user.isEnderSee()) {
-                user.getBase().getOpenInventory().close();
+                inventoryViewProvider.close(user.getBase().getOpenInventory());
                 user.setInvSee(false);
                 user.setEnderSee(false);
             }
@@ -1127,7 +1217,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void broadcastTl(final String tlKey, final Object... args) {
-        broadcastTl(null, null, true, tlKey, args);
+        broadcastTl(null, null, false, tlKey, args);
     }
 
     @Override

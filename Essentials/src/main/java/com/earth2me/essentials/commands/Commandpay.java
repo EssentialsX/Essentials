@@ -109,8 +109,10 @@ public class Commandpay extends EssentialsLoopCommand {
                     user.setMoney(user.getMoney().add(amount));
                 } catch (final MaxMoneyException ignored) {
                 }
+            } catch (final TranslatableException e) {
+                throw e;
             } catch (final Exception e) {
-                user.sendMessage(e.getMessage());
+                throw new TranslatableException("errorWithMessage", e.getMessage());
             }
         });
         if (informToConfirm.get()) {

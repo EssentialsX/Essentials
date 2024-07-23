@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.ess3.api.IEssentials;
-import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -181,7 +181,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        throw new Exception(tlLiteral("onlyPlayers", commandLabel));
+        throw new TranslatableException("onlyPlayers", commandLabel);
     }
 
     @Override

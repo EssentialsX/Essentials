@@ -553,9 +553,11 @@ public class EssentialsSign {
 
     static class BlockSign implements ISign {
         private final transient Block block;
+        private transient Sign sign;
 
         BlockSign(final Block block) {
             this.block = block;
+            this.sign = getSign();
         }
 
         @Override
@@ -572,7 +574,7 @@ public class EssentialsSign {
 
         @Override
         public final void setLine(final int index, final String text) {
-            getSign().setLine(index, text);
+            sign.setLine(index, text);
             updateSign();
         }
 
@@ -589,7 +591,8 @@ public class EssentialsSign {
 
         @Override
         public final void updateSign() {
-            getSign().update();
+            sign.update();
+            sign = getSign();
         }
     }
 }

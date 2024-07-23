@@ -18,7 +18,9 @@ public class ReflServerStateProvider implements ServerStateProvider {
         MethodHandle isRunning = null;
 
         final String MDFIVEMAGICLETTER;
-        if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_19_R2)) {
+        if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_20_R4)) {
+            MDFIVEMAGICLETTER = "x";
+        } else if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_19_R2)) {
             MDFIVEMAGICLETTER = "v";
         } else if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_19_R1)) {
             MDFIVEMAGICLETTER = "u";
