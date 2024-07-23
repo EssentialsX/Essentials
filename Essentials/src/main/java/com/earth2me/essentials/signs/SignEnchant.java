@@ -106,7 +106,7 @@ public class SignEnchant extends EssentialsSign {
             throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
 
-        final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
+        final String enchantmentName = Enchantments.getRealName(enchantment);
         if (level == 0) {
             player.sendTl("enchantmentRemoved", enchantmentName.replace('_', ' '));
         } else {
