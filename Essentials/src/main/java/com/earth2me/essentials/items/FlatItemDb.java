@@ -9,6 +9,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.ess3.api.IEssentials;
 import net.ess3.api.TranslatableException;
+import net.ess3.provider.PersistentDataProvider;
+import net.ess3.provider.PotionMetaProvider;
+import net.ess3.provider.SpawnerItemProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -131,7 +134,7 @@ public class FlatItemDb extends AbstractItemDb {
         final ItemData.EssentialPotionData potionData = data.getPotionData();
 
         if (potionData != null && stack.getItemMeta() instanceof PotionMeta) {
-            ess.getPotionMetaProvider().setBasePotionType(stack, potionData.getType(), potionData.isExtended(), potionData.isUpgraded());
+            ess.provider(PotionMetaProvider.class).setBasePotionType(stack, potionData.getType(), potionData.isExtended(), potionData.isUpgraded());
         }
 
         final ItemMeta meta = stack.getItemMeta();
@@ -205,7 +208,7 @@ public class FlatItemDb extends AbstractItemDb {
         final Material type = is.getType();
 
         if (MaterialUtil.isPotion(type) && is.getItemMeta() instanceof PotionMeta) {
-            final PotionMetaProvider provider = ess.getPotionMetaProvider();
+            final PotionMetaProvider provider = ess.provider(PotionMetaProvider.class);
             return new ItemData(type, new ItemData.EssentialPotionData(provider.getBasePotionType(is), provider.isUpgraded(is), provider.isExtended(is)));
         } else if (type.toString().contains("SPAWNER")) {
             final EntityType entity = ess.provider(SpawnerItemProvider.class).getEntityType(is);

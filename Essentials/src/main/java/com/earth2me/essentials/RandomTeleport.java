@@ -217,7 +217,7 @@ public class RandomTeleport implements IConf {
             return false;
         }
         final String biomeKey;
-        final BiomeKeyProvider biomeKeyProvider = ess.getBiomeKeyProvider();
+        final BiomeKeyProvider biomeKeyProvider = ess.provider(BiomeKeyProvider.class);
         if (biomeKeyProvider != null) {
             // Works with custom biome keys
             biomeKey = biomeKeyProvider.getBiomeKey(location.getBlock()).toString();

@@ -11,7 +11,9 @@ import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
 import net.ess3.api.TranslatableException;
+import net.ess3.provider.BannerDataProvider;
 import net.ess3.provider.ItemUnbreakableProvider;
+import net.ess3.provider.PotionMetaProvider;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -566,7 +568,7 @@ public class MetaItemStack {
                 }
                 pmeta.addCustomEffect(pEffect, true);
                 stack.setItemMeta(pmeta);
-                ess.getPotionMetaProvider().setSplashPotion(stack, isSplashPotion);
+                ess.provider(PotionMetaProvider.class).setSplashPotion(stack, isSplashPotion);
                 resetPotionMeta();
             }
         }
@@ -656,7 +658,7 @@ public class MetaItemStack {
             final BannerMeta meta = (BannerMeta) stack.getItemMeta();
             if (split[0].equalsIgnoreCase("basecolor")) {
                 final Color color = Color.fromRGB(Integer.parseInt(split[1]));
-                ess.getBannerDataProvider().setBaseColor(stack, DyeColor.getByColor(color));
+                ess.provider(BannerDataProvider.class).setBaseColor(stack, DyeColor.getByColor(color));
             } else if (patternType != null) {
                 //noinspection removal
                 final PatternType type = PatternType.getByIdentifier(split[0]);

@@ -18,6 +18,7 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.provider.CommandSendListenerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
+import net.ess3.provider.InventoryViewProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
 import net.ess3.provider.providers.PaperCommandSendListenerProvider;
@@ -301,7 +302,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
         user.setLogoutLocation();
         if (user.isRecipeSee()) {
-            ess.getInventoryViewProvider().getTopInventory(user.getBase().getOpenInventory()).clear();
+            ess.provider(InventoryViewProvider.class).getTopInventory(user.getBase().getOpenInventory()).clear();
         }
 
         final ArrayList<HumanEntity> viewers = new ArrayList<>(user.getBase().getInventory().getViewers());
@@ -899,14 +900,15 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onInventoryClickEvent(final InventoryClickEvent event) {
         Player refreshPlayer = null;
-        final Inventory top = ess.getInventoryViewProvider().getTopInventory(event.getView());
+        final InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
+        final Inventory top = provider.getTopInventory(event.getView());
         final InventoryType type = top.getType();
 
         final Inventory clickedInventory;
         if (event.getRawSlot() < 0) {
             clickedInventory = null;
         } else {
-            clickedInventory = event.getRawSlot() < top.getSize() ? top : ess.getInventoryViewProvider().getBottomInventory(event.getView());
+            clickedInventory = event.getRawSlot() < top.getSize() ? top : provider.getBottomInventory(event.getView());
         }
 
         final User user = ess.getUser((Player) event.getWhoClicked());
@@ -965,7 +967,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryCloseEvent(final InventoryCloseEvent event) {
         Player refreshPlayer = null;
-        final Inventory top = ess.getInventoryViewProvider().getTopInventory(event.getView());
+        final InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
+        final Inventory top = provider.getTopInventory(event.getView());
         final InventoryType type = top.getType();
         if (type == InventoryType.PLAYER) {
             final User user = ess.getUser((Player) event.getPlayer());
@@ -979,7 +982,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             final User user = ess.getUser((Player) event.getPlayer());
             if (user.isRecipeSee()) {
                 user.setRecipeSee(false);
-                ess.getInventoryViewProvider().getTopInventory(event.getView()).clear();
+                provider.getTopInventory(event.getView()).clear();
                 refreshPlayer = user.getBase();
             }
         } else if (type == InventoryType.CHEST && top.getSize() == 9) {

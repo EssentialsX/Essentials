@@ -59,18 +59,22 @@ import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
 import net.ess3.nms.refl.providers.ReflSyncCommandsProvider;
+import net.ess3.provider.InventoryViewProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.PlayerLocaleProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
+import net.ess3.provider.providers.BaseBannerDataProvider;
+import net.ess3.provider.providers.BaseInventoryViewProvider;
 import net.ess3.provider.providers.BaseLoggerProvider;
-import net.ess3.provider.providers.BasePotionDataProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
 import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
 import net.ess3.provider.providers.FixedHeightWorldInfoProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
+import net.ess3.provider.providers.LegacyBannerDataProvider;
 import net.ess3.provider.providers.LegacyDamageEventProvider;
+import net.ess3.provider.providers.LegacyInventoryViewProvider;
 import net.ess3.provider.providers.LegacyItemUnbreakableProvider;
 import net.ess3.provider.providers.LegacyPlayerLocaleProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
@@ -80,13 +84,16 @@ import net.ess3.provider.providers.ModernDataWorldInfoProvider;
 import net.ess3.provider.providers.ModernItemUnbreakableProvider;
 import net.ess3.provider.providers.ModernPersistentDataProvider;
 import net.ess3.provider.providers.ModernPlayerLocaleProvider;
+import net.ess3.provider.providers.ModernPotionMetaProvider;
 import net.ess3.provider.providers.ModernSignDataProvider;
+import net.ess3.provider.providers.PaperBiomeKeyProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperSerializationProvider;
 import net.ess3.provider.providers.PaperServerStateProvider;
+import net.ess3.provider.providers.PrehistoricPotionMetaProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -330,9 +337,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             execTimer.mark("Init(ItemDB)");
 
             randomTeleport = new RandomTeleport(this);
-            if (randomTeleport.getPreCache()) {
-                randomTeleport.cacheRandomLocations(randomTeleport.getCenter(), randomTeleport.getMinRange(), randomTeleport.getMaxRange());
-            }
             confList.add(randomTeleport);
             execTimer.mark("Init(RandomTeleport)");
 
@@ -363,20 +367,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             providerFactory.registerProvider(LegacySpawnEggProvider.class, ReflSpawnEggProvider.class, FlatSpawnEggProvider.class);
 
             //Potion Meta Provider
-            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_6_R01)) {
-                potionMetaProvider = new ModernPotionMetaProvider();
-            } else if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
-                potionMetaProvider = new PrehistoricPotionMetaProvider();
-            } else {
-                potionMetaProvider = new LegacyPotionMetaProvider();
-            }
+            providerFactory.registerProvider(PrehistoricPotionMetaProvider.class, LegacyPotionMetaProvider.class, ModernPotionMetaProvider.class);
 
             //Banner Meta Provider
-            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_6_R01)) {
-                bannerDataProvider = new BaseBannerDataProvider();
-            } else {
-                bannerDataProvider = new LegacyBannerDataProvider();
-            }
+            providerFactory.registerProvider(LegacyBannerDataProvider.class, BaseBannerDataProvider.class);
 
             // Server State Provider
             providerFactory.registerProvider(ReflServerStateProvider.class, PaperServerStateProvider.class);
@@ -420,6 +414,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Damage Event Provider
             providerFactory.registerProvider(ModernDamageEventProvider.class, LegacyDamageEventProvider.class);
 
+            // Inventory View Provider
+            providerFactory.registerProvider(LegacyInventoryViewProvider.class, BaseInventoryViewProvider.class);
+
+            // Biome Key Provider
+            providerFactory.registerProvider(PaperBiomeKeyProvider.class);
+
             providerFactory.finalizeRegistration();
 
             // Event Providers
@@ -435,74 +435,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
             }
 
-            //Known Commands Provider
-            if (PaperLib.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01)) {
-                knownCommandsProvider = new PaperKnownCommandsProvider();
-            } else {
-                knownCommandsProvider = new ReflKnownCommandsProvider();
-            }
-
-            // Command aliases provider
-            formattedCommandAliasProvider = new ReflFormattedCommandAliasProvider(PaperLib.isPaper());
-
-            // Material Tag Providers
-            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
-                materialTagProvider = PaperLib.isPaper() ? new PaperMaterialTagProvider() : new BukkitMaterialTagProvider();
-            }
-
-            // Sync Commands Provider
-            syncCommandsProvider = new ReflSyncCommandsProvider();
-
-            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01)) {
-                persistentDataProvider = new ModernPersistentDataProvider(this);
-            } else {
-                persistentDataProvider = new ReflPersistentDataProvider(this);
-            }
-
-            onlineModeProvider = new ReflOnlineModeProvider();
-
-            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01)) {
-                unbreakableProvider = new ModernItemUnbreakableProvider();
-            } else {
-                unbreakableProvider = new LegacyItemUnbreakableProvider();
-            }
-
-            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_17_1_R01)) {
-                worldInfoProvider = new ModernDataWorldInfoProvider();
-            } else if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01)) {
-                worldInfoProvider = new ReflDataWorldInfoProvider();
-            } else {
-                worldInfoProvider = new FixedHeightWorldInfoProvider();
-            }
-
-            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01)) {
-                signDataProvider = new ModernSignDataProvider(this);
-            }
-
-            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_2_R01)) {
-                playerLocaleProvider = new ModernPlayerLocaleProvider();
-            } else {
-                playerLocaleProvider = new LegacyPlayerLocaleProvider();
-            }
-
-            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_4_R01)) {
-                damageEventProvider = new ModernDamageEventProvider();
-            } else {
-                damageEventProvider = new LegacyDamageEventProvider();
-            }
-
-            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_21_R01)) {
-                inventoryViewProvider = new BaseInventoryViewProvider();
-            } else {
-                inventoryViewProvider = new LegacyInventoryViewProvider();
-            }
-
-            if (PaperLib.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_19_4_R01)) {
-                biomeKeyProvider = new PaperBiomeKeyProvider();
-            }
-
             execTimer.mark("Init(Providers)");
             reload();
+
+            if (randomTeleport.getPreCache()) {
+                randomTeleport.cacheRandomLocations(randomTeleport.getCenter(), randomTeleport.getMinRange(), randomTeleport.getMaxRange());
+            }
+            execTimer.mark("PreCache(RandomTeleport)");
 
             // The item spawn blacklist is loaded with all other settings, before the item
             // DB, but it depends on the item DB, so we need to reload it again here:
@@ -925,16 +864,17 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     public void cleanupOpenInventories() {
+        final InventoryViewProvider provider = provider(InventoryViewProvider.class);
         for (final User user : getOnlineUsers()) {
             if (user.isRecipeSee()) {
                 final InventoryView view = user.getBase().getOpenInventory();
 
-                inventoryViewProvider.getTopInventory(view).clear();
-                inventoryViewProvider.close(view);
+                provider.getTopInventory(view).clear();
+                provider.close(view);
                 user.setRecipeSee(false);
             }
             if (user.isInvSee() || user.isEnderSee()) {
-                inventoryViewProvider.close(user.getBase().getOpenInventory());
+                provider.close(user.getBase().getOpenInventory());
                 user.setInvSee(false);
                 user.setEnderSee(false);
             }

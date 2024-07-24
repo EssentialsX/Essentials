@@ -3,10 +3,13 @@ package net.ess3.provider.providers;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import net.ess3.provider.BannerDataProvider;
+import net.essentialsx.providers.ProviderData;
+import net.essentialsx.providers.ProviderTest;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+@ProviderData(description = "1.20.5+ Banner Data Provider", weight = 1)
 public class BaseBannerDataProvider implements BannerDataProvider {
     private final BiMap<Material, DyeColor> materialToDyeMap = HashBiMap.create();
 
@@ -42,8 +45,14 @@ public class BaseBannerDataProvider implements BannerDataProvider {
         }
     }
 
-    @Override
-    public String getDescription() {
-        return "1.20.5+ Banner Data Provider.";
+    @ProviderTest
+    public static boolean test() {
+        try {
+            //noinspection unused
+            final Material needAVariable = Material.LIGHT_BLUE_BANNER;
+            return true;
+        } catch (final Throwable t) {
+            return false;
+        }
     }
 }
