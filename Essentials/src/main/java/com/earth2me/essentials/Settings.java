@@ -722,9 +722,7 @@ public class Settings implements net.ess3.api.ISettings {
 
                     // This is 2 because Settings are reloaded twice in the startup lifecycle
                     if (reloadCount.get() < 2) {
-                        ess.scheduleSyncDelayedTask(() -> {
-                            _addAlternativeCommand(effectiveAlias, toDisable);
-                        });
+                        ess.scheduleSyncDelayedTask(() -> _addAlternativeCommand(effectiveAlias, toDisable));
                     } else {
                         _addAlternativeCommand(effectiveAlias, toDisable);
                     }
