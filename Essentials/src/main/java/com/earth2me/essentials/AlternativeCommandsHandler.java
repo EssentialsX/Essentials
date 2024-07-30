@@ -25,6 +25,14 @@ public class AlternativeCommandsHandler {
                 addPlugin(plugin);
             }
         }
+        ess.scheduleSyncDelayedTask(() -> {
+            // add plugins again in case they registered commands with the new API
+            for (final Plugin plugin : ess.getServer().getPluginManager().getPlugins()) {
+                if (plugin.isEnabled()) {
+                    ess.getAlternativeCommandsHandler().addPlugin(plugin);
+                }
+            }
+        });
     }
 
     public final void addPlugin(final Plugin plugin) {

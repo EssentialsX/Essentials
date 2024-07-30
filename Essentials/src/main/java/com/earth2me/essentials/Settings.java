@@ -23,7 +23,6 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.io.File;
@@ -724,10 +723,6 @@ public class Settings implements net.ess3.api.ISettings {
                     // This is 2 because Settings are reloaded twice in the startup lifecycle
                     if (reloadCount.get() < 2) {
                         ess.scheduleSyncDelayedTask(() -> {
-                            for (Plugin plugin : ess.getServer().getPluginManager().getPlugins()) {
-                                // add plugins again in case they registered commands with the new API
-                                ess.getAlternativeCommandsHandler().addPlugin(plugin);
-                            }
                             _addAlternativeCommand(effectiveAlias, toDisable);
                         });
                     } else {
