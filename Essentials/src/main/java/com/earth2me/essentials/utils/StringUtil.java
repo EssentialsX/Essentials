@@ -10,7 +10,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public final class StringUtil {
-    private static final Pattern INVALIDFILECHARS = Pattern.compile("[^\\p{L}\\p{N}\\.\\-\\p{IsHan}\\p{IsHiragana}\\p{IsKatakana}\\p{IsHangul}]");
+    private static final Pattern INVALIDFILECHARS = Pattern.compile("[/\\\\:*?\"<>|\\x00-\\x1F]");
     private static final Pattern STRICTINVALIDCHARS = Pattern.compile("[^a-z0-9]");
     @SuppressWarnings("CheckStyle")
     private static final Pattern INVALIDCHARS = Pattern.compile("[^\t\n\r\u0020-\u007E\u0085\u00A0-\uD7FF\uE000-\uFFFD]");
@@ -29,9 +29,14 @@ public final class StringUtil {
         if (string == null) {
             return null;
         }
+        return INVALIDFILECHARS.matcher(string.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+    }
+    public static String old_safeString(final String string) {
+        if (string == null) {
+            return null;
+        }
         return STRICTINVALIDCHARS.matcher(string.toLowerCase(Locale.ENGLISH)).replaceAll("_");
     }
-
     //Less restrictive string sanitizing, when not used as perm or filename
     public static String sanitizeString(final String string) {
         return INVALIDCHARS.matcher(string).replaceAll("");
