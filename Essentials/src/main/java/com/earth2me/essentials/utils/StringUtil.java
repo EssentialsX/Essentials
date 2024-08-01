@@ -11,8 +11,7 @@ import java.util.regex.Pattern;
 
 public final class StringUtil {
     private static final Pattern INVALIDCHARACTER = Pattern.compile("[/\\\\:*?\"<>|\\x00-\\x1F]");
-    private static final Pattern OLD_INVALIDCHARACTER = Pattern.compile("[^a-z0-9-]");
-    //private static final Pattern STRICTINVALIDCHARS = Pattern.compile("[^a-z0-9]");
+    private static final Pattern STRICTINVALIDCHARS = Pattern.compile("[^a-z0-9]");
     @SuppressWarnings("CheckStyle")
     private static final Pattern INVALIDCHARS = Pattern.compile("[^\t\n\r\u0020-\u007E\u0085\u00A0-\uD7FF\uE000-\uFFFD]");
 
@@ -30,14 +29,15 @@ public final class StringUtil {
         if (string == null) {
             return null;
         }
-        return INVALIDCHARACTER.matcher(string.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+        return STRICTINVALIDCHARS.matcher(string.toLowerCase(Locale.ENGLISH)).replaceAll("_");
     }
-    public static String old_safeString(final String string) {
+    public static String new_safeString(final String string) {
         if (string == null) {
             return null;
         }
-        return OLD_INVALIDCHARACTER.matcher(string.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+        return INVALIDCHARACTER.matcher(string.toLowerCase(Locale.ENGLISH)).replaceAll("_");
     }
+
     //Less restrictive string sanitizing, when not used as perm or filename
     public static String sanitizeString(final String string) {
         return INVALIDCHARS.matcher(string).replaceAll("");

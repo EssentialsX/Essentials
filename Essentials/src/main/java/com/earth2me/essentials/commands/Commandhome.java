@@ -8,7 +8,6 @@ import com.earth2me.essentials.utils.StringUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserTeleportHomeEvent;
-
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-
 
 public class Commandhome extends EssentialsCommand {
     public Commandhome() {
@@ -128,8 +126,7 @@ public class Commandhome extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-       final  Location loc = Optional.ofNullable(player.getHome(home))
-               .orElse(player.getHome(StringUtil.old_safeString(home)));
+        final  Location loc = player.getHome(home);
 
         if (loc == null) {
             throw new NotEnoughArgumentsException();
