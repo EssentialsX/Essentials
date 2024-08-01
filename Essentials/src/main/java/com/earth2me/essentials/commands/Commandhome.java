@@ -8,7 +8,7 @@ import com.earth2me.essentials.utils.StringUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserTeleportHomeEvent;
-import org.bukkit.Bukkit;
+
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -144,7 +144,6 @@ public class Commandhome extends EssentialsCommand {
             future.thenAccept(success -> {
                 if (success) {
                     user.sendTl("teleportHome", home);
-                    Bukkit.getLogger().info(home);
                 }
             });
         }
