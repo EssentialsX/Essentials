@@ -126,7 +126,7 @@ public class Commandclearinventory extends EssentialsCommand {
                 }
 
                 // can't remove a negative amount of items. (it adds them)
-                if(amount < -1){
+                if (amount < -1) {
                     throw new TranslatableException("cannotRemoveNegativeItems");
                 }
 
@@ -137,7 +137,6 @@ public class Commandclearinventory extends EssentialsCommand {
                         sender.sendTl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName());
                     }
                 } else {
-                    stack.setAmount(amount < 0 ? 1 : amount);
                     if (Inventories.removeItemAmount(player, stack, amount)) {
                         sender.sendTl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName());
                     } else {
