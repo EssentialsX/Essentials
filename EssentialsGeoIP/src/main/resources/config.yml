@@ -2,10 +2,11 @@ database:
   show-cities: false
   download-if-missing: true
   # Url for country
-  download-url: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key={LICENSEKEY}&suffix=tar.gz"
+  download-url: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&userid={USERID}&license_key={LICENSEKEY}&suffix=tar.gz"
   # Url for cities
-  download-url-city: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={LICENSEKEY}&suffix=tar.gz"
+  download-url-city: "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&userid={USERID}&license_key={LICENSEKEY}&suffix=tar.gz"
   # License key for downloads
+  userid: ""
   license-key: ""
   update:
     enable: true

@@ -131,9 +131,10 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
 
         // detect and update the old config.yml. migrate from legacy GeoIP to GeoIP2.
         if (!config.hasProperty("enable-locale")) {
-            config.setProperty("database.download-url", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key={LICENSEKEY}&suffix=tar.gz");
-            config.setProperty("database.download-url-city", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={LICENSEKEY}&suffix=tar.gz");
+            config.setProperty("database.download-url", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&userid={USERID}&license_key={LICENSEKEY}&suffix=tar.gz");
+            config.setProperty("database.download-url-city", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&userid={USERID}&license_key={LICENSEKEY}&suffix=tar.gz");
             config.setProperty("database.license-key", "");
+            config.setProperty("database.userid", "");
             config.setProperty("database.update.enable", true);
             config.setProperty("database.update.by-every-x-days", 30);
             config.setProperty("enable-locale", true);
@@ -195,11 +196,13 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 return;
             }
             final String licenseKey = config.getString("database.license-key", "");
-            if (licenseKey == null || licenseKey.isEmpty()) {
+            final String userid = config.getString("database.userid", "");
+            if (licenseKey == null || licenseKey.isEmpty() || userid == null || userid.isEmpty()) {
                 essGeo.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("geoIpLicenseMissing")));
                 return;
             }
             url = url.replace("{LICENSEKEY}", licenseKey);
+            url = url.replace("{USERID}", userid);
             essGeo.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("downloadingGeoIp")));
             final URL downloadUrl = new URL(url);
             final URLConnection conn = downloadUrl.openConnection();
