@@ -36,10 +36,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -958,6 +955,21 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             return head != null && head.getEnchantments().containsKey(Enchantment.BINDING_CURSE) && !user.isAuthorized("essentials.hat.ignore-binding");
         }
         return false;
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onInventoryDragEvent(final InventoryDragEvent event) {
+        final Inventory top = ess.getInventoryViewProvider().getTopInventory(event.getView());
+        if (top.getType() != InventoryType.PLAYER) {
+            return;
+        }
+        final User user = ess.getUser((Player) event.getWhoClicked());
+        if (!user.isInvSee()) {
+            return;
+        }
+        if (event.getNewItems().keySet().stream().anyMatch(slot -> slot > 35)) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
