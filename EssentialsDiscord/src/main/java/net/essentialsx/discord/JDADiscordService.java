@@ -22,6 +22,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.ess3.nms.refl.providers.AchievementListenerProvider;
 import net.ess3.nms.refl.providers.AdvancementListenerProvider;
 import net.ess3.provider.providers.PaperAdvancementListenerProvider;
+import net.ess3.provider.providers.PaperAsyncChatListenerProvider;
 import net.essentialsx.api.v2.ChatType;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.DiscordService;
@@ -37,11 +38,7 @@ import net.essentialsx.discord.interactions.InteractionRoleImpl;
 import net.essentialsx.discord.interactions.commands.ExecuteCommand;
 import net.essentialsx.discord.interactions.commands.ListCommand;
 import net.essentialsx.discord.interactions.commands.MessageCommand;
-import net.essentialsx.discord.listeners.BukkitListener;
-import net.essentialsx.discord.listeners.DiscordCommandDispatcher;
-import net.essentialsx.discord.listeners.DiscordListener;
-import net.essentialsx.discord.listeners.EssentialsChatListener;
-import net.essentialsx.discord.listeners.BukkitChatListener;
+import net.essentialsx.discord.listeners.*;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
@@ -88,6 +85,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     private DiscordCommandDispatcher commandDispatcher;
     private InteractionControllerImpl interactionController;
     private Listener chatListener;
+    private Listener paperChatListener;
     private boolean invalidStartup = false;
 
     public JDADiscordService(EssentialsDiscord plugin) {
@@ -349,12 +347,28 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             HandlerList.unregisterAll(chatListener);
             chatListener = null;
         }
+        if (paperChatListener != null) {
+            HandlerList.unregisterAll(paperChatListener);
+            paperChatListener = null;
+        }
 
-        chatListener = getSettings().isUseEssentialsEvents() && plugin.isEssentialsChat()
-            ? new EssentialsChatListener(this)
-            : new BukkitChatListener(this);
+        if (getSettings().isUseEssentialsEvents() && plugin.isEssentialsChat()) {
+            chatListener = new EssentialsChatListener(this);
+        }
+        else {
+            try {
+                Class.forName("io.papermc.paper.event.player.AsyncChatEvent");
+                chatListener = new PaperChatListener(this);
+                paperChatListener = new PaperAsyncChatListenerProvider();
+            } catch (ClassNotFoundException ignored) {
+                chatListener = new BukkitChatListener(this);
+            }
+        }
 
         Bukkit.getPluginManager().registerEvents(chatListener, plugin);
+        if (paperChatListener != null) {
+            Bukkit.getPluginManager().registerEvents(paperChatListener, plugin);
+        }
     }
 
     public void updatePresence() {
