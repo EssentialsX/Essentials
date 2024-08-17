@@ -11,13 +11,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.stream.Collectors;
 
 public class PaperAsyncChatListenerProvider implements Listener {
     private final ComponentSerializer<Component, TextComponent, String> serializer;
+    private final JavaPlugin plugin;
 
-    public PaperAsyncChatListenerProvider() {
+    public PaperAsyncChatListenerProvider(JavaPlugin plugin) {
+        this.plugin = plugin;
         ComponentSerializer<Component, TextComponent, String> yeOldSerializer;
         try {
             // This method is only available in Paper 1.18.1+ and replaces the old deprecated method below.
@@ -32,12 +35,17 @@ public class PaperAsyncChatListenerProvider implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAsyncChatEvent(final AsyncChatEvent event) {
-        Bukkit.getPluginManager().callEvent(new AbstractAsyncChatEvent(
-                event.getPlayer(),
-                serializer.serialize(event.message()),
-                event.viewers().stream()
-                        .filter(v -> v instanceof Player)
-                        .map(v -> (Player) v)
-                        .collect(Collectors.toSet())));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () ->
+                Bukkit.getPluginManager().callEvent(
+                        new AbstractAsyncChatEvent(
+                                event.getPlayer(),
+                                serializer.serialize(event.message()),
+                                event.viewers().stream()
+                                        .filter(v -> v instanceof Player)
+                                        .map(v -> (Player) v)
+                                        .collect(Collectors.toSet())
+                        )
+                )
+        );
     }
 }

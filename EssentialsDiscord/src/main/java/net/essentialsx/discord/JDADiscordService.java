@@ -359,7 +359,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             try {
                 Class.forName("io.papermc.paper.event.player.AsyncChatEvent");
                 chatListener = new PaperChatListener(this);
-                paperChatListener = new PaperAsyncChatListenerProvider();
+                paperChatListener = new PaperAsyncChatListenerProvider(plugin);
             } catch (ClassNotFoundException ignored) {
                 chatListener = new BukkitChatListener(this);
             }
