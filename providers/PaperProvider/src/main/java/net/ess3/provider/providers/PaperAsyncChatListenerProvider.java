@@ -35,16 +35,15 @@ public class PaperAsyncChatListenerProvider implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAsyncChatEvent(final AsyncChatEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () ->
-                Bukkit.getPluginManager().callEvent(
-                        new AbstractAsyncChatEvent(
-                                event.getPlayer(),
-                                serializer.serialize(event.message()),
-                                event.viewers().stream()
-                                        .filter(v -> v instanceof Player)
-                                        .map(v -> (Player) v)
-                                        .collect(Collectors.toSet())
-                        )
+        Bukkit.getPluginManager().callEvent(
+                new AbstractAsyncChatEvent(
+                        event.isAsynchronous(),
+                        event.getPlayer(),
+                        serializer.serialize(event.message()),
+                        event.viewers().stream()
+                                .filter(v -> v instanceof Player)
+                                .map(v -> (Player) v)
+                                .collect(Collectors.toSet())
                 )
         );
     }
