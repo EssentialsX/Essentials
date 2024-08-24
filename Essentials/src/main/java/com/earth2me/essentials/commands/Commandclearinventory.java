@@ -6,6 +6,7 @@ import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -80,7 +81,7 @@ public class Commandclearinventory extends EssentialsCommand {
         }
     }
 
-    protected void clearHandler(final CommandSource sender, final Player player, final String[] args, final int offset, final boolean showExtended) {
+    protected void clearHandler(final CommandSource sender, final Player player, final String[] args, final int offset, final boolean showExtended) throws TranslatableException {
         ClearHandlerType type = ClearHandlerType.ALL_EXCEPT_ARMOR;
         final Set<Item> items = new HashSet<>();
         int amount = -1;
@@ -124,6 +125,11 @@ public class Commandclearinventory extends EssentialsCommand {
                     stack.setDurability(item.getData());
                 }
 
+                // can't remove a negative amount of items. (it adds them)
+                if (amount < -1) {
+                    throw new TranslatableException("cannotRemoveNegativeItems");
+                }
+
                 // amount -1 means all items will be cleared
                 if (amount == -1) {
                     final int removedAmount = Inventories.removeItemSimilar(player, stack, true);
@@ -131,7 +137,6 @@ public class Commandclearinventory extends EssentialsCommand {
                         sender.sendTl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName());
                     }
                 } else {
-                    stack.setAmount(amount < 0 ? 1 : amount);
                     if (Inventories.removeItemAmount(player, stack, amount)) {
                         sender.sendTl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName());
                     } else {
