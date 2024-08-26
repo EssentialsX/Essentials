@@ -208,6 +208,9 @@ public final class UpdateChecker {
 
     public Component[] getVersionMessages(final boolean sendLatestMessage, final boolean verboseErrors, final CommandSource source) {
         if (!ess.getSettings().isUpdateCheckEnabled()) {
+            if (source.isPlayer()) {
+                return new Component[] {};
+            }
             return new Component[] {source.tlComponent("versionCheckDisabled")};
         }
 
