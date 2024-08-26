@@ -73,9 +73,9 @@ public final class NumberUtil {
             sign = "-";
         }
         if (ess.getSettings().isCurrencySymbolSuffixed()) {
-            return sign + tlLiteral("currency", currency, ess.getSettings().getCurrencySymbol());
+            return sign + AdventureUtil.miniToLegacy(tlLiteral("currency", currency, ess.getSettings().getCurrencySymbol()));
         }
-        return sign + tlLiteral("currency", ess.getSettings().getCurrencySymbol(), currency);
+        return sign + AdventureUtil.miniToLegacy(tlLiteral("currency", ess.getSettings().getCurrencySymbol(), currency));
     }
 
     public static String displayCurrencyExactly(final BigDecimal value, final IEssentials ess) {
@@ -86,9 +86,9 @@ public final class NumberUtil {
             sign = "-";
         }
         if (ess.getSettings().isCurrencySymbolSuffixed()) {
-            return sign + tlLiteral("currency", currency, ess.getSettings().getCurrencySymbol());
+            return sign + AdventureUtil.miniToLegacy(tlLiteral("currency", currency, ess.getSettings().getCurrencySymbol()));
         }
-        return sign + tlLiteral("currency", ess.getSettings().getCurrencySymbol(), currency);
+        return sign + AdventureUtil.miniToLegacy(tlLiteral("currency", ess.getSettings().getCurrencySymbol(), currency));
     }
 
     public static String sanitizeCurrencyString(final String input, final IEssentials ess) {
