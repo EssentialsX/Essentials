@@ -4,40 +4,55 @@ import net.ess3.api.IEssentials;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.serializer.legacy.CharacterAndFormat;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.serializer.legacy.Reset;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public final class AdventureUtil {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER;
-    private static final MiniMessage MINI_MESSAGE_INSTANCE;
-    private static IEssentials ess;
-    private static final Pattern NAMED_PATTERN = Pattern.compile(ChatColor.COLOR_CHAR + "[0-9a-fk-orA-FK-OR]");
-    private static final Pattern HEX_PATTERN = Pattern.compile(ChatColor.COLOR_CHAR + "x((?:" + ChatColor.COLOR_CHAR + "[0-9a-fA-F]){6})");
+    private static final MiniMessage MINI_MESSAGE_NO_TAGS;
     private static final String LOOKUP = "0123456789abcdefklmnor";
-    private static final String[] MINI_TAGS = new String[] {"black", "dark_blue", "dark_green", "dark_aqua", "dark_red", "dark_purple", "gold", "gray", "dark_gray", "blue", "green", "aqua", "red", "light_purple", "yellow", "white", "obf", "b", "st", "u", "i", "reset"};
-    private static final NamedTextColor[] COLORS = new NamedTextColor[] {NamedTextColor.BLACK, NamedTextColor.DARK_BLUE, NamedTextColor.DARK_GREEN, NamedTextColor.DARK_AQUA, NamedTextColor.DARK_RED, NamedTextColor.DARK_PURPLE, NamedTextColor.GOLD, NamedTextColor.GRAY, NamedTextColor.DARK_GRAY, NamedTextColor.BLUE, NamedTextColor.GREEN, NamedTextColor.AQUA, NamedTextColor.RED, NamedTextColor.LIGHT_PURPLE, NamedTextColor.YELLOW, NamedTextColor.WHITE};
+    private static final NamedTextColor[] COLORS = new NamedTextColor[]{NamedTextColor.BLACK, NamedTextColor.DARK_BLUE, NamedTextColor.DARK_GREEN, NamedTextColor.DARK_AQUA, NamedTextColor.DARK_RED, NamedTextColor.DARK_PURPLE, NamedTextColor.GOLD, NamedTextColor.GRAY, NamedTextColor.DARK_GRAY, NamedTextColor.BLUE, NamedTextColor.GREEN, NamedTextColor.AQUA, NamedTextColor.RED, NamedTextColor.LIGHT_PURPLE, NamedTextColor.YELLOW, NamedTextColor.WHITE};
+    private static IEssentials ess;
+    private static MiniMessage miniMessageInstance;
 
     static {
-        final LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder().flattener(ComponentFlattener.basic()).useUnusualXRepeatedCharacterHexFormat();
+        final List<CharacterAndFormat> formats = new ArrayList<>();
+        formats.addAll(CharacterAndFormat.defaults());
+        formats.addAll(Arrays.asList(
+                CharacterAndFormat.characterAndFormat('A', NamedTextColor.GREEN),
+                CharacterAndFormat.characterAndFormat('B', NamedTextColor.AQUA),
+                CharacterAndFormat.characterAndFormat('C', NamedTextColor.RED),
+                CharacterAndFormat.characterAndFormat('D', NamedTextColor.LIGHT_PURPLE),
+                CharacterAndFormat.characterAndFormat('E', NamedTextColor.YELLOW),
+                CharacterAndFormat.characterAndFormat('F', NamedTextColor.WHITE),
+                CharacterAndFormat.characterAndFormat('K', TextDecoration.OBFUSCATED),
+                CharacterAndFormat.characterAndFormat('L', TextDecoration.BOLD),
+                CharacterAndFormat.characterAndFormat('M', TextDecoration.STRIKETHROUGH),
+                CharacterAndFormat.characterAndFormat('N', TextDecoration.UNDERLINED),
+                CharacterAndFormat.characterAndFormat('O', TextDecoration.ITALIC),
+                CharacterAndFormat.characterAndFormat('R', Reset.INSTANCE)
+        ));
+        final LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder()
+                .flattener(ComponentFlattener.basic())
+                .formats(formats)
+                .useUnusualXRepeatedCharacterHexFormat();
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
             builder.hexColors();
         }
         LEGACY_SERIALIZER = builder.build();
 
-        MINI_MESSAGE_INSTANCE = MiniMessage.builder()
-                .tags(TagResolver.builder()
-                        .resolvers(TagResolver.standard())
-                        .resolver(TagResolver.resolver("primary", supplyTag(true)))
-                        .resolver(TagResolver.resolver("secondary", supplyTag(false)))
-                        .build())
-                .build();
+        MINI_MESSAGE_NO_TAGS = MiniMessage.builder().strict(true).build();
 
+        miniMessageInstance = createMiniMessageInstance();
     }
 
     private AdventureUtil() {
@@ -45,10 +60,21 @@ public final class AdventureUtil {
 
     public static void setEss(final IEssentials ess) {
         AdventureUtil.ess = ess;
+        miniMessageInstance = createMiniMessageInstance();
+    }
+
+    private static MiniMessage createMiniMessageInstance() {
+        return MiniMessage.builder()
+                .tags(TagResolver.builder()
+                        .resolvers(TagResolver.standard())
+                        .resolver(TagResolver.resolver("primary", supplyTag(true)))
+                        .resolver(TagResolver.resolver("secondary", supplyTag(false)))
+                        .build())
+                .build();
     }
 
     public static MiniMessage miniMessage() {
-        return MINI_MESSAGE_INSTANCE;
+        return miniMessageInstance;
     }
 
     /**
@@ -81,37 +107,16 @@ public final class AdventureUtil {
 
     /**
      * Converts a section sign legacy string to a MiniMessage string.
+     *
      * @param useCustomTags true if gold and red colors should use primary and secondary tags instead.
      */
     public static String legacyToMini(String text, boolean useCustomTags) {
-        StringBuffer buffer = new StringBuffer();
-        Matcher matcher = HEX_PATTERN.matcher(text);
-        while (matcher.find()) {
-            final String code = matcher.group(1).replace(String.valueOf(ChatColor.COLOR_CHAR), "");
-            matcher.appendReplacement(buffer, "<#" + code + ">");
+        final Component deserializedText = LEGACY_SERIALIZER.deserialize(text);
+        if (useCustomTags) {
+            return miniMessageInstance.serialize(deserializedText);
+        } else {
+            return MINI_MESSAGE_NO_TAGS.serialize(deserializedText);
         }
-        matcher.appendTail(buffer);
-
-        matcher = NAMED_PATTERN.matcher(buffer.toString());
-        buffer = new StringBuffer();
-        while (matcher.find()) {
-            final int format = LOOKUP.indexOf(Character.toLowerCase(matcher.group().charAt(1)));
-            if (format != -1) {
-                String tagName = MINI_TAGS[format];
-                if (useCustomTags) {
-                    if (tagName.equals("gold")) {
-                        tagName = "primary";
-                    } else if (tagName.equals("red")) {
-                        tagName = "secondary";
-                    }
-                }
-
-                matcher.appendReplacement(buffer, "<" + tagName + ">");
-            }
-        }
-        matcher.appendTail(buffer);
-
-        return buffer.toString();
     }
 
     /**

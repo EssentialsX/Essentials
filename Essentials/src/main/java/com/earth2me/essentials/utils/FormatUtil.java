@@ -40,6 +40,13 @@ public final class FormatUtil {
         return ChatColor.stripColor(input);
     }
 
+    public static String stripMiniFormat(final String input) {
+        if (input == null) {
+            return null;
+        }
+        return AdventureUtil.miniMessage().stripTags(input);
+    }
+
     //This method is used to simply strip the & convention colour codes
     public static String stripEssentialsFormat(final String input) {
         if (input == null) {

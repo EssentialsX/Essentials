@@ -1,5 +1,6 @@
 package net.essentialsx.discord.interactions;
 
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.base.Joiner;
 import net.dv8tion.jda.api.entities.Message;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 /**
  * A class which provides information about what triggered an interaction event.
@@ -43,6 +46,11 @@ public class InteractionEventImpl implements InteractionEvent {
                         .setContent(reply)
                         .setAllowedMentions(DiscordUtil.NO_GROUP_MENTIONS).build())
                 .queue(null, error -> logger.log(Level.SEVERE, "Error while editing command interaction response", error));
+    }
+
+    @Override
+    public void replyTl(String tlKey, Object... args) {
+        reply(AdventureUtil.miniToLegacy(tlLiteral(tlKey, args)));
     }
 
     @Override

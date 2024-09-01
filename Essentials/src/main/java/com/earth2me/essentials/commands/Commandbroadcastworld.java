@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
@@ -19,13 +20,13 @@ public class Commandbroadcastworld extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length == 0) {
+        if (args.length < 2) {
             throw new NotEnoughArgumentsException();
         }
 
         World world = user.getWorld();
         String message = getFinalArg(args, 0);
-        if (args.length > 1 && ess.getSettings().isAllowWorldInBroadcastworld()) {
+        if (ess.getSettings().isAllowWorldInBroadcastworld()) {
             final World argWorld = ess.getWorld(args[0]);
             if (argWorld != null) {
                 world = argWorld;
@@ -39,7 +40,7 @@ public class Commandbroadcastworld extends EssentialsCommand {
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
-            throw new NotEnoughArgumentsException("world");
+            throw new NotEnoughArgumentsException();
         }
 
         final World world = ess.getWorld(args[0]);
@@ -53,7 +54,7 @@ public class Commandbroadcastworld extends EssentialsCommand {
         if (message.isEmpty()) {
             throw new NotEnoughArgumentsException();
         }
-        ess.broadcastTl(null, u -> u.getBase().getWorld().equals(world), true, "broadcast", message, AdventureUtil.parsed(AdventureUtil.legacyToMini(name)));
+        ess.broadcastTl(null, u -> !u.getBase().getWorld().equals(world), true, "broadcast", FormatUtil.replaceFormat(message).replace("\\n", "\n"), AdventureUtil.parsed(AdventureUtil.legacyToMini(name)));
     }
 
     @Override

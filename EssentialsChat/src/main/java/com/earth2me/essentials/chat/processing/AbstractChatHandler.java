@@ -218,7 +218,7 @@ public abstract class AbstractChatHandler {
 
         // Strip local chat prefix to preserve API behaviour
         final String localPrefix = AdventureUtil.miniToLegacy(tlLiteral("chatTypeLocal"));
-        String baseFormat = event.getFormat();
+        String baseFormat = AdventureUtil.legacyToMini(event.getFormat());
         if (event.getFormat().startsWith(localPrefix)) {
             baseFormat = baseFormat.substring(localPrefix.length());
         }

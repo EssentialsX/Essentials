@@ -70,10 +70,13 @@ body:
   validations:
     required: true
 
-- type: markdown
+- type: textarea
   attributes:
-    value: |
-      In the text box below, you can attach any relevant screenshots, files and links to Timings/spark profiler reports.
+    label: Additional Information
+    description: |
+      In this box, you can attach any relevant screenshots, files and links to Timings/spark profiler reports.
       You can also include a link to a heapdump if necessary, but please make sure you don't include any private player data in the heapdump.
       If you suspect this issue is related to a prior issue/PR/commit, please mention it here.
-
+  validations:
+    required: false
+    
