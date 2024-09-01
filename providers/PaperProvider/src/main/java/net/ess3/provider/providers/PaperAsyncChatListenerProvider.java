@@ -32,7 +32,6 @@ public class PaperAsyncChatListenerProvider implements Listener {
         this.serializer = yeOldSerializer;
     }
 
-
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAsyncChatEvent(final AsyncChatEvent event) {
         Bukkit.getPluginManager().callEvent(

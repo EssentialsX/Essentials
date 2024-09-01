@@ -25,7 +25,7 @@ public class AbstractAsyncChatEvent extends PlayerEvent {
 
     public Set<Player> getRecipients() {
         return playerRecipients;
-    };
+    }
 
     @Override
     public @NotNull HandlerList getHandlers() {
