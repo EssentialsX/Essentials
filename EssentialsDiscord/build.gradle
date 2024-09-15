@@ -12,7 +12,7 @@ dependencies {
         exclude(module: 'okhttp')
     }
     compileOnly 'org.apache.logging.log4j:log4j-core:2.17.1'
-    compileOnly 'me.clip:placeholderapi:2.10.9'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
 }
 
 shadowJar {
