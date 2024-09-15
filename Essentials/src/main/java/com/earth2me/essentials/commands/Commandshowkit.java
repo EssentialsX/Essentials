@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class Commandshowkit extends EssentialsCommand {
     public Commandshowkit() {
@@ -22,7 +23,11 @@ public class Commandshowkit extends EssentialsCommand {
 
         for (final String kitName : args[0].toLowerCase(Locale.ENGLISH).split(",")) {
             user.sendTl("kitContains", kitName);
-            for (final String s : new Kit(kitName, ess).getItems()) {
+            final Kit kit = new Kit(kitName, ess);
+            for (final String s : kit.getBasicItems()) {
+                user.sendTl("kitItem", s);
+            }
+            for (final String s : kit.getGearItems().stream().filter(is -> is != null).collect(Collectors.toList())) {
                 user.sendTl("kitItem", s);
             }
         }

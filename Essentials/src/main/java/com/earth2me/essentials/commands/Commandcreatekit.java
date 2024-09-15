@@ -39,8 +39,10 @@ public class Commandcreatekit extends EssentialsCommand {
         // Command handler will auto fail if this fails.
         final long delay = Long.parseLong(args[1]);
         final String kitname = args[0];
-        final ItemStack[] items = Inventories.getInventory(user.getBase(), true);
+        final ItemStack[] items = Inventories.getInventoryBasicContents(user.getBase());
+        final ItemStack[] gear = Inventories.getInventoryGear(user.getBase());
         final List<String> list = new ArrayList<>();
+        final List<String> gearList = new ArrayList<>();
 
         boolean useSerializationProvider = ess.getSettings().isUseBetterKits();
 
@@ -50,26 +52,43 @@ public class Commandcreatekit extends EssentialsCommand {
         }
 
         for (ItemStack is : items) {
-            if (is != null && is.getType() != null && is.getType() != Material.AIR) {
-                final String serialized;
-                if (useSerializationProvider) {
-                    serialized = "@" + Base64Coder.encodeLines(ess.getSerializationProvider().serializeItem(is));
-                } else {
-                    serialized = ess.getItemDb().serialize(is);
-                }
+            final String serialized = serializeItem(is, useSerializationProvider);
+            if (serialized != null) {
                 list.add(serialized);
             }
         }
+
+        int gearItemsAmount = 0;
+        for (ItemStack is : gear) {
+            gearItemsAmount = is == null ? gearItemsAmount : gearItemsAmount + 1;
+            gearList.add(serializeItem(is, useSerializationProvider));
+        }
+
         // Some users might want to directly write to config knowing the consequences. *shrug*
         if (!ess.getSettings().isPastebinCreateKit()) {
-            ess.getKits().addKit(kitname, list, delay);
-            user.sendTl("createdKit", kitname, list.size(), delay);
+            ess.getKits().addKit(kitname, list, gearList, delay);
+            user.sendTl("createdKit", kitname, list.size() + gearItemsAmount, delay);
         } else {
-            uploadPaste(user.getSource(), kitname, delay, list);
+            uploadPaste(user.getSource(), kitname, delay, list, gearList);
         }
     }
 
-    private void uploadPaste(final CommandSource sender, final String kitName, final long delay, final List<String> list) {
+    private String serializeItem(ItemStack is, boolean useSerializationProvider) {
+        if (is != null && is.getType() != null && is.getType() != Material.AIR) {
+            final String serialized;
+            if (useSerializationProvider) {
+                serialized = "@" + Base64Coder.encodeLines(ess.getSerializationProvider().serializeItem(is));
+            } else {
+                serialized = ess.getItemDb().serialize(is);
+            }
+
+            return serialized;
+        }
+
+        return null;
+    }
+
+    private void uploadPaste(final CommandSource sender, final String kitName, final long delay, final List<String> list, final List<String> gearList) {
         ess.runTaskAsynchronously(() -> {
             try {
                 final StringWriter sw = new StringWriter();
@@ -78,6 +97,14 @@ public class Commandcreatekit extends EssentialsCommand {
                 final ConfigurationNode config = loader.createNode();
                 config.node("kits", kitName, "delay").set(delay);
                 config.node("kits", kitName, "items").set(list);
+
+                final String[] gearConfigName = {"boots", "leggings", "chestplate", "helmet", "offhand"};
+                for (int i = 0; i < gearList.size(); i++) {
+                    final String gearLine = gearList.get(i);
+                    if (gearLine != null) {
+                        config.node("kits", kitName, gearConfigName[i]).set(gearList.get(i));
+                    }
+                }
 
                 sw.append("# Copy the kit code below into the kits section in your config.yml file\n");
                 loader.save(config);

@@ -26,6 +26,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tlLiteral;
 
@@ -127,10 +128,10 @@ public class Kit {
 
     @Deprecated
     public List<String> getItems(final User user) throws Exception {
-        return getItems();
+        return getBasicItems();
     }
 
-    public List<String> getItems() throws Exception {
+    public List<String> getBasicItems() throws Exception {
         if (kit == null) {
             throw new TranslatableException("kitNotFound");
         }
@@ -154,14 +155,46 @@ public class Kit {
         }
     }
 
-    public boolean expandItems(final User user) throws Exception {
-        return expandItems(user, getItems(user));
+    public List<String> getGearItems() throws Exception {
+        if (kit == null) {
+            throw new TranslatableException("kitNotFound");
+        }
+        try {
+            final List<String> itemList = new ArrayList<>();
+            final String[] gearConfigName = {"boots", "leggings", "chestplate", "helmet", "offhand"};
+            for (String itemName : gearConfigName) {
+                final Object item = kit.get(itemName);
+                if (item == null) {
+                    itemList.add(null);
+                    continue;
+                }
+
+                if (item instanceof String) {
+                    itemList.add(item.toString());
+                    continue;
+                }
+                throw new Exception("Invalid kit item: " + item.toString());
+            }
+
+            return itemList;
+        } catch (final Exception e) {
+            ess.getLogger().log(Level.WARNING, "Error parsing kit " + kitName + ": " + e.getMessage());
+            throw new TranslatableException(e,"kitError2");
+        }
     }
 
-    public boolean expandItems(final User user, final List<String> items) throws Exception {
+    public boolean expandItems(final User user) throws Exception {
+        return expandItems(user, getItems(user), getGearItems());
+    }
+
+    public boolean expandItems(final User user, final List<String> items, final List<String> gearItems) throws Exception {
         try {
-            final IText input = new SimpleTextInput(items);
-            final IText output = new KeywordReplacer(input, user.getSource(), ess, true, true);
+            final IText basicInput = new SimpleTextInput(items);
+            final IText basicOutput = new KeywordReplacer(basicInput, user.getSource(), ess, true, true);
+
+            final List<String> nonNullGearItems = gearItems.stream().filter(is -> is != null).collect(Collectors.toList());
+            final IText gearInput = new SimpleTextInput(nonNullGearItems);
+            final IText gearOutput = new KeywordReplacer(gearInput, user.getSource(), ess, true, true);
 
             final KitClaimEvent event = new KitClaimEvent(user, this);
             Bukkit.getPluginManager().callEvent(event);
@@ -173,57 +206,28 @@ public class Kit {
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
             final boolean autoEquip = ess.getSettings().isKitAutoEquip();
             final List<ItemStack> itemList = new ArrayList<>();
+            final List<ItemStack> gearList = new ArrayList<>();
             final List<String> commandQueue = new ArrayList<>();
             final List<String> moneyQueue = new ArrayList<>();
             final String currencySymbol = ess.getSettings().getCurrencySymbol().isEmpty() ? "$" : ess.getSettings().getCurrencySymbol();
-            for (final String kitItem : output.getLines()) {
-                if (kitItem.startsWith("$") || kitItem.startsWith(currencySymbol)) {
-                    moneyQueue.add(NumberUtil.sanitizeCurrencyString(kitItem, ess));
-                    continue;
-                }
 
-                if (kitItem.startsWith("/")) {
-                    String command = kitItem.substring(1);
-                    final String name = user.getName();
-                    command = command.replace("{player}", name);
-                    commandQueue.add(command);
-                    continue;
-                }
-
-                final ItemStack stack;
-
-                if (kitItem.startsWith("@")) {
-                    if (ess.getSerializationProvider() == null) {
-                        ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("kitError3", kitName, user.getName())));
-                        continue;
-                    }
-                    stack = ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
-                } else {
-                    final String[] parts = kitItem.split(" +");
-                    final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
-
-                    if (parseStack.getType() == Material.AIR) {
-                        continue;
-                    }
-
-                    final MetaItemStack metaStack = new MetaItemStack(parseStack);
-
-                    if (parts.length > 2) {
-                        // We pass a null sender here because kits should not do perm checks
-                        metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
-                    }
-
-                    stack = metaStack.getItemStack();
-                }
-
-                itemList.add(stack);
-            }
+            populateKitLists(user, basicOutput, moneyQueue, commandQueue, itemList, allowUnsafe, currencySymbol);
+            populateKitLists(user, gearOutput, moneyQueue, commandQueue, gearList, allowUnsafe, currencySymbol);
 
             final int maxStackSize = user.isAuthorized("essentials.oversizedstacks") ? ess.getSettings().getOversizedStackSize() : 0;
             final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
 
-            final KitPreExpandItemsEvent itemsEvent = new KitPreExpandItemsEvent(user, kitName, itemList);
+            final List<ItemStack> totalItems = new ArrayList<>(itemList);
+            totalItems.addAll(gearList.stream().filter(is -> is != null).collect(Collectors.toList()));
+            final KitPreExpandItemsEvent itemsEvent = new KitPreExpandItemsEvent(user, kitName, totalItems);
             Bukkit.getPluginManager().callEvent(itemsEvent);
+
+            final List<Integer> nullGearItemsIndexes = findNullIndexes(gearItems);
+
+            final ItemStack[] gearArray = addNullIndexes(gearList, nullGearItemsIndexes).toArray(new ItemStack[0]);
+            final List<ItemStack> leftovers = Inventories.addGear(user.getBase(), gearArray);
+
+            itemList.addAll(leftovers);
 
             final ItemStack[] itemArray = itemList.toArray(new ItemStack[0]);
 
@@ -273,5 +277,77 @@ public class Kit {
             throw new TranslatableException(e, "kitError2");
         }
         return true;
+    }
+
+    private void populateKitLists(User user, IText output, List<String> moneyQueue, List<String> commandQueue, List<ItemStack> itemList, boolean allowUnsafe, String currencySymbol) throws Exception {
+        for (final String kitItem : output.getLines()) {
+            if (kitItem.startsWith(currencySymbol)) {
+                moneyQueue.add(NumberUtil.sanitizeCurrencyString(kitItem, ess));
+                continue;
+            }
+
+            if (kitItem.startsWith("/")) {
+                String command = kitItem.substring(1);
+                final String name = user.getName();
+                command = command.replace("{player}", name);
+                commandQueue.add(command);
+                continue;
+            }
+
+            final ItemStack stack = parseItemStack(kitItem, user, allowUnsafe);
+            if (stack == null) {
+                continue;
+            }
+
+            itemList.add(stack);
+        }
+    }
+
+    private ItemStack parseItemStack(String kitItem, User user, boolean allowUnsafe) throws Exception {
+        if (kitItem.startsWith("@")) {
+            if (ess.getSerializationProvider() == null) {
+                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("kitError3", kitName, user.getName())));
+                return null;
+            }
+            return ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
+        } else {
+            final String[] parts = kitItem.split(" +");
+            final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
+
+            if (parseStack.getType() == Material.AIR) {
+                return null;
+            }
+
+            final MetaItemStack metaStack = new MetaItemStack(parseStack);
+
+            if (parts.length > 2) {
+                // We pass a null sender here because kits should not do perm checks
+                metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
+            }
+
+            return metaStack.getItemStack();
+        }
+    }
+
+    private List<Integer> findNullIndexes(List<String> list) {
+        final List<Integer> nullIndexes = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) == null) {
+                nullIndexes.add(i);
+            }
+        }
+
+        return nullIndexes;
+    }
+
+    private List<ItemStack> addNullIndexes(List<ItemStack> list, List<Integer> nullIndexes) {
+        final List<ItemStack> newList = new ArrayList<>(list);
+
+        for (int nullIndex : nullIndexes) {
+            newList.add(nullIndex, null);
+        }
+
+        return newList;
     }
 }
