@@ -143,10 +143,12 @@ public abstract class UserData extends PlayerExtension implements IConf {
         }
         return search;
     }
-
+    //Optimize character compatibility
     public Location getHome(final String name) {
-        final String search = getHomeName(name);
-        final LazyLocation loc = holder.homes().get(search);
+        LazyLocation loc = holder.homes().get(getHomeName(name));
+        if (loc == null) {
+            loc = holder.homes().get(getHomeName(StringUtil.safeString(name)));
+        }
         return loc != null ? loc.location() : null;
     }
 
@@ -179,28 +181,32 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public void setHome(String name, final Location loc) {
         //Invalid names will corrupt the yaml
-        name = StringUtil.safeString(name);
+        name = StringUtil.new_safeString(name);
         holder.homes().put(name, LazyLocation.fromLocation(loc));
         config.save();
     }
 
     public void delHome(final String name) throws Exception {
         String search = getHomeName(name);
-        if (!holder.homes().containsKey(search)) {
-            search = StringUtil.safeString(search);
-        }
-        if (holder.homes().containsKey(search)) {
-            holder.homes().remove(search);
+        String safeSearch = StringUtil.new_safeString(search);
+        String oldSafeSearch = StringUtil.safeString(search);
+        if (holder.homes().containsKey(safeSearch)) {
+            holder.homes().remove(safeSearch);
+            config.save();
+        } else if (holder.homes().containsKey(oldSafeSearch)) {
+            holder.homes().remove(oldSafeSearch);
             config.save();
         } else {
             throw new TranslatableException("invalidHome", search);
         }
     }
 
+
     public void renameHome(final String name, final String newName) throws Exception {
         final LazyLocation location = holder.homes().remove(name);
+        //If possible, it is necessary to improve the compatibility here to make it support underscores
         if (location != null) {
-            holder.homes().put(StringUtil.safeString(newName), location);
+            holder.homes().put(StringUtil.new_safeString(newName), location);
             config.save();
         } else {
             throw new TranslatableException("invalidHome", name);

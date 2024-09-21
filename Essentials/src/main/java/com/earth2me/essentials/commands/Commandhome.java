@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class Commandhome extends EssentialsCommand {
@@ -124,7 +125,9 @@ public class Commandhome extends EssentialsCommand {
         if (home.length() < 1) {
             throw new NotEnoughArgumentsException();
         }
-        final Location loc = player.getHome(home);
+
+        final  Location loc = player.getHome(home);
+
         if (loc == null) {
             throw new NotEnoughArgumentsException();
         }
