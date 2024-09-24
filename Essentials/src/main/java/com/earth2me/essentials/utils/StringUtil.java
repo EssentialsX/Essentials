@@ -13,7 +13,7 @@ public final class StringUtil {
     private static final Pattern INVALIDFILECHARS = Pattern.compile("[^a-z0-9-]");
     private static final Pattern STRICTINVALIDCHARS = Pattern.compile("[^a-z0-9]");
     @SuppressWarnings("CheckStyle")
-    private static final Pattern INVALIDCHARS = Pattern.compile("[^\t\n\r\u0020-\u007E\u0085\u00A0-\uD7FF\uE000-\uFFFC]");
+    private static final Pattern INVALIDCHARS = Pattern.compile("[^\t\n\r -~\u0085\u00A0-\uD7FF\uE000-\uFFFC]");
 
     private StringUtil() {
     }
