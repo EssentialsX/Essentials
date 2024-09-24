@@ -29,39 +29,45 @@ public class Trade {
     private final transient Trade fallbackTrade;
     private final transient BigDecimal money;
     private final transient ItemStack itemStack;
+    private final transient ItemGroupQuery itemGroupQuery;
     private final transient Integer exp;
     private final transient IEssentials ess;
 
     public Trade(final String command, final IEssentials ess) {
-        this(command, null, null, null, null, ess);
+        this(command, null, null, null, null, null, ess);
     }
 
     public Trade(final String command, final Trade fallback, final IEssentials ess) {
-        this(command, fallback, null, null, null, ess);
+        this(command, fallback, null, null, null, null, ess);
     }
 
     @Deprecated
     public Trade(final double money, final com.earth2me.essentials.IEssentials ess) {
-        this(null, null, BigDecimal.valueOf(money), null, null, (IEssentials) ess);
+        this(null, null, BigDecimal.valueOf(money), null, null, null, (IEssentials) ess);
     }
 
     public Trade(final BigDecimal money, final IEssentials ess) {
-        this(null, null, money, null, null, ess);
+        this(null, null, money, null, null, null, ess);
     }
 
     public Trade(final ItemStack items, final IEssentials ess) {
-        this(null, null, null, items, null, ess);
+        this(null, null, null, items, null, null, ess);
     }
 
     public Trade(final int exp, final IEssentials ess) {
-        this(null, null, null, null, exp, ess);
+        this(null, null, null, null, null, exp, ess);
     }
 
-    private Trade(final String command, final Trade fallback, final BigDecimal money, final ItemStack item, final Integer exp, final IEssentials ess) {
+    public Trade(final ItemGroupQuery query, final IEssentials ess){
+        this(null, null, null, null, query, null, ess);
+    }
+
+    private Trade(final String command, final Trade fallback, final BigDecimal money, final ItemStack item, final ItemGroupQuery groupQuery, final Integer exp, final IEssentials ess) {
         this.command = command;
         this.fallbackTrade = fallback;
         this.money = money;
         this.itemStack = item;
+        this.itemGroupQuery = groupQuery;
         this.exp = exp;
         this.ess = ess;
     }
@@ -144,7 +150,7 @@ public class Trade {
             sb.append(loc.getBlockY()).append(",");
             sb.append(loc.getBlockZ()).append(",");
         }
-        
+
         if (endBalance == null) {
             sb.append(",");
         } else {
@@ -301,6 +307,17 @@ public class Trade {
             Inventories.removeItemAmount(user.getBase(), getItemStack(), getItemStack().getAmount());
             user.getBase().updateInventory();
         }
+        if(getItemGroupQuery() != null){
+            if(ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " itemgroup " +getItemGroupQuery().toString());
+            }
+            if (!Inventories.containsAtLeast(user.getBase(), ess, getItemGroupQuery())) {
+                future.completeExceptionally(new ChargeException(tl("missingItems", getItemGroupQuery().getAmount(), "~"+getItemGroupQuery().getItemGroup().toLowerCase(Locale.ENGLISH).replace("_", " "))));
+                return;
+            }
+            Inventories.removeItemAmount(user.getBase(), ess, getItemGroupQuery());
+            user.getBase().updateInventory();
+        }
         if (command != null) {
             final BigDecimal cost = getCommandCost(user);
             if (!user.canAfford(cost) && cost.signum() > 0) {
@@ -331,6 +348,10 @@ public class Trade {
 
     public ItemStack getItemStack() {
         return itemStack;
+    }
+
+    public ItemGroupQuery getItemGroupQuery() {
+        return itemGroupQuery;
     }
 
     public Integer getExperience() {

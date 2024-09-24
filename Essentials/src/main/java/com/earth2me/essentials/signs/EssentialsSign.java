@@ -2,6 +2,7 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.ItemGroupQuery;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -341,6 +342,12 @@ public class EssentialsSign {
             sign.setLine(itemIndex, "exp");
             return;
         }
+        if(itemType.startsWith("~")){
+            final int amount = getIntegerPositive(getSignText(sign, amountIndex));
+            sign.setLine(amountIndex, Integer.toString(amount));
+            sign.setLine(itemIndex, "§6~§r"+itemType.substring(1));
+            return;
+        }
         final Trade trade = getTrade(sign, amountIndex, itemIndex, player, ess);
         final ItemStack item = trade.getItemStack();
         sign.setLine(amountIndex, Integer.toString(item.getAmount()));
@@ -356,6 +363,11 @@ public class EssentialsSign {
         if (itemType.equalsIgnoreCase("exp") || itemType.equalsIgnoreCase("xp")) {
             final int amount = getIntegerPositive(getSignText(sign, amountIndex));
             return new Trade(amount, ess);
+        }
+        if(itemType.startsWith("§6~§r")){
+            final int amount = Math.min(getIntegerPositive(getSignText(sign, amountIndex)), 64 * player.getBase().getInventory().getSize());
+            final ItemGroupQuery query = new ItemGroupQuery(itemType.substring(5), amount);
+            return new Trade(query, ess);
         }
         final ItemStack item = getItemStack(itemType, 1, allowId, ess);
         final int amount = Math.min(getIntegerPositive(getSignText(sign, amountIndex)), item.getType().getMaxStackSize() * player.getBase().getInventory().getSize());

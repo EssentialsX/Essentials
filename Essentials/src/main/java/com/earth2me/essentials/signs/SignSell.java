@@ -1,6 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
+import com.earth2me.essentials.ItemGroupQuery;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.User;
@@ -30,12 +31,23 @@ public class SignSell extends EssentialsSign {
         // Check if the player is trying to sell in bulk.
         if (ess.getSettings().isAllowBulkBuySell() && player.getBase().isSneaking()) {
             final ItemStack heldItem = player.getItemInHand();
-            if (charge.getItemStack().isSimilar(heldItem)) {
+            if (charge.getItemStack() != null && charge.getItemStack().isSimilar(heldItem)) {
                 final int initialItemAmount = charge.getItemStack().getAmount();
                 final int newItemAmount = heldItem.getAmount();
                 final ItemStack item = charge.getItemStack();
                 item.setAmount(newItemAmount);
                 charge = new Trade(item, ess);
+
+                final BigDecimal chargeAmount = money.getMoney();
+                //noinspection BigDecimalMethodWithoutRoundingCalled
+                BigDecimal pricePerSingleItem = chargeAmount.divide(new BigDecimal(initialItemAmount));
+                pricePerSingleItem = pricePerSingleItem.multiply(new BigDecimal(newItemAmount));
+                money = new Trade(pricePerSingleItem, ess);
+            }else if(charge.getItemGroupQuery() != null && charge.getItemGroupQuery().contains(ess, heldItem.getType())){
+                final ItemGroupQuery groupQuery = charge.getItemGroupQuery();
+                final int initialItemAmount = groupQuery.getAmount();
+                final int newItemAmount = heldItem.getAmount();
+                charge = new Trade(new ItemGroupQuery(groupQuery.getItemGroup(), newItemAmount), ess);
 
                 final BigDecimal chargeAmount = money.getMoney();
                 //noinspection BigDecimalMethodWithoutRoundingCalled

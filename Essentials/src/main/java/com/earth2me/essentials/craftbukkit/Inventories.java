@@ -1,7 +1,10 @@
 package com.earth2me.essentials.craftbukkit;
 
+import com.earth2me.essentials.ItemGroupQuery;
+import com.earth2me.essentials.ItemGroups;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
@@ -76,6 +79,22 @@ public final class Inventories {
                 continue;
             }
             if (invItem.isSimilar(item)) {
+                amount -= invItem.getAmount();
+                if (amount <= 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean containsAtLeast(final Player player, IEssentials ess, final ItemGroupQuery query) {
+        int amount = query.getAmount();
+        for (final ItemStack invItem : player.getInventory().getContents()) {
+            if (isEmpty(invItem)) {
+                continue;
+            }
+            if (query.contains(ess, invItem.getType())) {
                 amount -= invItem.getAmount();
                 if (amount <= 0) {
                     return true;
@@ -257,6 +276,41 @@ public final class Inventories {
             }
 
             if (item.isSimilar(toRemove)) {
+                if (item.getAmount() >= amount) {
+                    item.setAmount(item.getAmount() - amount);
+                    player.getInventory().setItem(i, item);
+                    for (final int slot : clearSlots) {
+                        clearSlot(player, slot);
+                    }
+                    return true;
+                } else {
+                    amount -= item.getAmount();
+                    clearSlots.add(i);
+                }
+
+                if (amount == 0) {
+                    for (final int slot : clearSlots) {
+                        clearSlot(player, slot);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean removeItemAmount(final Player player, final IEssentials ess, final ItemGroupQuery query) {
+        final List<Integer> clearSlots = new ArrayList<>();
+        final ItemStack[] items = player.getInventory().getContents();
+
+        int amount = query.getAmount();
+        for (int i = 0; i < items.length; i++) {
+            final ItemStack item = items[i];
+            if (isEmpty(item)) {
+                continue;
+            }
+
+            if (query.contains(ess, item.getType())) {
                 if (item.getAmount() >= amount) {
                     item.setAmount(item.getAmount() - amount);
                     player.getInventory().setItem(i, item);
