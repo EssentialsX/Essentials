@@ -739,7 +739,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
                     if (cSender instanceof Player) {
                         final PlayerLocaleProvider localeProvider = provider(PlayerLocaleProvider.class);
-                        cSender.sendMessage(tlLocale(I18n.getLocale(localeProvider.getLocale((Player) cSender)), "internalError"));
+                        getBukkitAudience().sender(cSender).sendMessage(AdventureUtil.miniMessage().deserialize(tlLocale(I18n.getLocale(localeProvider.getLocale((Player) cSender)), "internalError")));
                     } else {
                         cSender.sendMessage(tlLiteral("internalError"));
                     }
