@@ -2,12 +2,14 @@ package net.ess3.nms.refl.providers;
 
 import net.ess3.nms.refl.ReflUtil;
 import net.ess3.provider.SyncCommandsProvider;
+import net.essentialsx.providers.ProviderData;
 import org.bukkit.Bukkit;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
+@ProviderData(description = "Reflection Sync Commands Provider")
 public class ReflSyncCommandsProvider implements SyncCommandsProvider {
     private final MethodHandle nmsSyncCommands;
 
@@ -20,11 +22,6 @@ public class ReflSyncCommandsProvider implements SyncCommandsProvider {
             // This will fail below 1.13, this is okay, we will fail silently!
         }
         nmsSyncCommands = syncCommands;
-    }
-
-    @Override
-    public String getDescription() {
-        return "NMS Reflection Sync Commands Provider";
     }
 
     @Override

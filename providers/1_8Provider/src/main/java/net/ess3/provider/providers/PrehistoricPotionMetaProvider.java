@@ -1,6 +1,7 @@
 package net.ess3.provider.providers;
 
 import net.ess3.provider.PotionMetaProvider;
+import net.essentialsx.providers.ProviderData;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
@@ -9,6 +10,7 @@ import org.bukkit.potion.PotionType;
 
 import java.util.Collection;
 
+@ProviderData(description = "Legacy 1.8 Potion Meta Provider")
 public class PrehistoricPotionMetaProvider implements PotionMetaProvider {
     @Override
     public ItemStack createPotionItem(final Material initial, final int effectId) {
@@ -76,10 +78,5 @@ public class PrehistoricPotionMetaProvider implements PotionMetaProvider {
         }
 
         potion.apply(stack);
-    }
-
-    @Override
-    public String getDescription() {
-        return "Legacy 1.8 Potion Meta Provider";
     }
 }

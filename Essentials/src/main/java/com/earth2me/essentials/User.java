@@ -21,6 +21,7 @@ import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import net.ess3.provider.PlayerLocaleProvider;
 import net.essentialsx.api.v2.events.TransactionEvent;
 import net.essentialsx.api.v2.services.mail.MailSender;
 import net.kyori.adventure.text.Component;
@@ -1088,7 +1089,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public String playerTl(String tlKey, Object... args) {
         if (ess.getSettings().isPerPlayerLocale()) {
-            return tlLocale(getPlayerLocale(ess.getPlayerLocaleProvider().getLocale(base)), tlKey, args);
+            final PlayerLocaleProvider provider = ess.provider(PlayerLocaleProvider.class);
+            return tlLocale(getPlayerLocale(provider.getLocale(base)), tlKey, args);
         }
         return tlLiteral(tlKey, args);
     }

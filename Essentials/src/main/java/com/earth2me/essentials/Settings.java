@@ -14,6 +14,8 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.provider.SyncCommandsProvider;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -323,9 +325,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private void _addAlternativeCommand(final String label, final Command current) {
+        final KnownCommandsProvider knownCommandsProvider = ess.provider(KnownCommandsProvider.class);
+
         Command cmd = ess.getAlternativeCommandsHandler().getAlternative(label);
         if (cmd == null) {
-            for (final Map.Entry<String, Command> entry : ess.getKnownCommandsProvider().getKnownCommands().entrySet()) {
+            for (final Map.Entry<String, Command> entry : knownCommandsProvider.getKnownCommands().entrySet()) {
                 final String[] split = entry.getKey().split(":");
                 if (entry.getValue() != current && split[split.length - 1].equals(label)) {
                     cmd = entry.getValue();
@@ -335,7 +339,7 @@ public class Settings implements net.ess3.api.ISettings {
         }
 
         if (cmd != null) {
-            ess.getKnownCommandsProvider().getKnownCommands().put(label, cmd);
+            knownCommandsProvider.getKnownCommands().put(label, cmd);
         }
     }
 
@@ -694,14 +698,16 @@ public class Settings implements net.ess3.api.ISettings {
         overriddenCommands = _getOverriddenCommands();
         playerCommands = _getPlayerCommands();
 
+        final KnownCommandsProvider knownCommandsProvider = ess.provider(KnownCommandsProvider.class);
+
         // This will be late loaded
-        if (ess.getKnownCommandsProvider() != null) {
+        if (knownCommandsProvider != null) {
             boolean mapModified = false;
             if (!disabledBukkitCommands.isEmpty()) {
                 if (isDebug()) {
                     ess.getLogger().log(Level.INFO, "Re-adding " + disabledBukkitCommands.size() + " disabled commands!");
                 }
-                ess.getKnownCommandsProvider().getKnownCommands().putAll(disabledBukkitCommands);
+                knownCommandsProvider.getKnownCommands().putAll(disabledBukkitCommands);
                 disabledBukkitCommands.clear();
                 mapModified = true;
             }
@@ -725,7 +731,7 @@ public class Settings implements net.ess3.api.ISettings {
                     if (isDebug()) {
                         ess.getLogger().log(Level.INFO, "Attempting removal of " + effectiveAlias);
                     }
-                    final Command removed = ess.getKnownCommandsProvider().getKnownCommands().remove(effectiveAlias);
+                    final Command removed = knownCommandsProvider.getKnownCommands().remove(effectiveAlias);
                     if (removed != null) {
                         if (isDebug()) {
                             ess.getLogger().log(Level.INFO, "Adding command " + effectiveAlias + " to disabled map!");
@@ -743,14 +749,16 @@ public class Settings implements net.ess3.api.ISettings {
                 }
             }
 
+            final SyncCommandsProvider syncCommandsProvider = ess.provider(SyncCommandsProvider.class);
+
             if (mapModified) {
                 if (isDebug()) {
                     ess.getLogger().log(Level.INFO, "Syncing commands");
                 }
                 if (reloadCount.get() < 2) {
-                    ess.scheduleSyncDelayedTask(() -> ess.getSyncCommandsProvider().syncCommands());
+                    ess.scheduleSyncDelayedTask(syncCommandsProvider::syncCommands);
                 } else {
-                    ess.getSyncCommandsProvider().syncCommands();
+                    syncCommandsProvider.syncCommands();
                 }
             }
         }

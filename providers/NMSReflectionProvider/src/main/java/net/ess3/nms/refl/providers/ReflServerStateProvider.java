@@ -2,11 +2,13 @@ package net.ess3.nms.refl.providers;
 
 import net.ess3.nms.refl.ReflUtil;
 import net.ess3.provider.ServerStateProvider;
+import net.essentialsx.providers.ProviderData;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
+@ProviderData(description = "Reflection Server State Provider")
 public class ReflServerStateProvider implements ServerStateProvider {
     private final Object nmsServer;
     private final MethodHandle nmsIsRunning;
@@ -51,10 +53,5 @@ public class ReflServerStateProvider implements ServerStateProvider {
             }
         }
         return false;
-    }
-
-    @Override
-    public String getDescription() {
-        return "NMS Reflection Server State Provider";
     }
 }

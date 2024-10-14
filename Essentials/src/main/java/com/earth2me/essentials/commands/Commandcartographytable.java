@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import net.ess3.provider.ContainerProvider;
 import org.bukkit.Server;
 
 public class Commandcartographytable extends EssentialsCommand {
@@ -11,11 +12,13 @@ public class Commandcartographytable extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (ess.getContainerProvider() == null) {
+        final ContainerProvider containerProvider = ess.provider(ContainerProvider.class);
+
+        if (containerProvider == null) {
             user.sendTl("unsupportedBrand");
             return;
         }
 
-        ess.getContainerProvider().openCartographyTable(user.getBase());
+        containerProvider.openCartographyTable(user.getBase());
     }
 }

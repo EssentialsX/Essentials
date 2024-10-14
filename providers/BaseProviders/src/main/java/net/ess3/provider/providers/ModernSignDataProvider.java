@@ -1,11 +1,14 @@
 package net.ess3.provider.providers;
 
 import net.ess3.provider.SignDataProvider;
+import net.essentialsx.providers.ProviderData;
+import net.essentialsx.providers.ProviderTest;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Sign;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
+@ProviderData(description = "1.14+ Sign Data Provider")
 public class ModernSignDataProvider implements SignDataProvider {
     private final Plugin plugin;
 
@@ -36,8 +39,13 @@ public class ModernSignDataProvider implements SignDataProvider {
         }
     }
 
-    @Override
-    public String getDescription() {
-        return "1.14+ Persistent Data Sign Provider";
+    @ProviderTest
+    public static boolean test() {
+        try {
+            Class.forName("org.bukkit.block.TileState");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 }

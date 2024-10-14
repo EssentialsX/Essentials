@@ -1,13 +1,16 @@
 package net.ess3.nms.refl.providers;
 
 import net.ess3.nms.refl.ReflUtil;
+import net.ess3.provider.OnlineModeProvider;
+import net.essentialsx.providers.ProviderData;
 import org.bukkit.Bukkit;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
-public class ReflOnlineModeProvider {
+@ProviderData(description = "Reflection Online Mode Provider")
+public class ReflOnlineModeProvider implements OnlineModeProvider {
     private final MethodHandle spigotBungeeGetter;
     private final MethodHandle paperBungeeGetter;
     private final Object paperProxiesInstance;
@@ -42,6 +45,7 @@ public class ReflOnlineModeProvider {
         this.fancyPaperCheck = fancyCheck;
     }
 
+    @Override
     public String getOnlineModeString() {
         if (spigotBungeeGetter == null) {
             return Bukkit.getOnlineMode() ? "Online Mode" : "Offline Mode";
@@ -53,7 +57,7 @@ public class ReflOnlineModeProvider {
             }
 
             if (fancyPaperCheck) {
-                if ((boolean) paperBungeeGetter.invoke()) {
+                if ((boolean) (paperProxiesInstance != null ? paperBungeeGetter.invoke(paperProxiesInstance) : paperBungeeGetter.invoke())) {
                     // Could be Velocity or Bungee, so do not specify.
                     return "Proxy Mode";
                 }

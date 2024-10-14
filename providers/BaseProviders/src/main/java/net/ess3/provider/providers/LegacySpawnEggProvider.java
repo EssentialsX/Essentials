@@ -1,12 +1,14 @@
 package net.ess3.provider.providers;
 
 import net.ess3.provider.SpawnEggProvider;
+import net.essentialsx.providers.ProviderData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.SpawnEgg;
 
 @SuppressWarnings("deprecation")
+@ProviderData(description = "1.8 Spawn Egg Provider")
 public class LegacySpawnEggProvider implements SpawnEggProvider {
     @Override
     public ItemStack createEggItem(final EntityType type) throws IllegalArgumentException {
@@ -20,10 +22,5 @@ public class LegacySpawnEggProvider implements SpawnEggProvider {
             return ((SpawnEgg) data).getSpawnedType();
         }
         throw new IllegalArgumentException("Item is missing data");
-    }
-
-    @Override
-    public String getDescription() {
-        return "Legacy 1.8 Spawn Egg Provider";
     }
 }

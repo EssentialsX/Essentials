@@ -1,9 +1,14 @@
 package net.ess3.provider.providers;
 
 import net.ess3.provider.ContainerProvider;
+import net.essentialsx.providers.ProviderData;
+import net.essentialsx.providers.ProviderTest;
+import org.bukkit.Location;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 
+@ProviderData(description = "Paper Container Provider")
 public class PaperContainerProvider implements ContainerProvider {
 
     @Override
@@ -36,9 +41,13 @@ public class PaperContainerProvider implements ContainerProvider {
         return player.openStonecutter(null, true);
     }
 
-    @Override
-    public String getDescription() {
-        return "Paper Container Opening Provider";
+    @ProviderTest
+    public static boolean test() {
+        try {
+            HumanEntity.class.getDeclaredMethod("openCartographyTable", Location.class, boolean.class);
+            return true;
+        } catch (final NoSuchMethodException ignored) {
+            return false;
+        }
     }
-
 }

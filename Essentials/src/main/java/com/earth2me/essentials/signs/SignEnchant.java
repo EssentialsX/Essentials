@@ -21,7 +21,7 @@ public class SignEnchant extends EssentialsSign {
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         final ItemStack stack;
         final String itemName = sign.getLine(1);
-        final MaterialTagProvider tagProvider = ess.getMaterialTagProvider();
+        final MaterialTagProvider tagProvider = ess.provider(MaterialTagProvider.class);
         try {
             stack = itemName.equals("*") || itemName.equalsIgnoreCase("any") || (tagProvider != null && tagProvider.tagExists(itemName)) ? null : getItemStack(sign.getLine(1), 1, ess);
         } catch (final SignException e) {
@@ -66,7 +66,7 @@ public class SignEnchant extends EssentialsSign {
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         final ItemStack playerHand = Inventories.getItemInHand(player.getBase());
-        final MaterialTagProvider tagProvider = ess.getMaterialTagProvider();
+        final MaterialTagProvider tagProvider = ess.provider(MaterialTagProvider.class);
         final String itemName = sign.getLine(1);
         final ItemStack search = itemName.equals("*") || itemName.equalsIgnoreCase("any") || (tagProvider != null && tagProvider.tagExists(itemName) && tagProvider.isTagged(itemName, playerHand.getType())) ? null : getItemStack(itemName, 1, ess);
         final Trade charge = getTrade(sign, 3, ess);
