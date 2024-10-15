@@ -3,10 +3,12 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.TranslatableException;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -150,16 +152,26 @@ public class Commandrecipe extends EssentialsCommand {
                     materials[j][k] = item == null ? null : item.getType();
                 }
             }
-            sender.sendTl("recipeGrid", colorMap.get(materials[0][0]), colorMap.get(materials[0][1]), colorMap.get(materials[0][2]));
-            sender.sendTl("recipeGrid", colorMap.get(materials[1][0]), colorMap.get(materials[1][1]), colorMap.get(materials[1][2]));
-            sender.sendTl("recipeGrid", colorMap.get(materials[2][0]), colorMap.get(materials[2][1]), colorMap.get(materials[2][2]));
+            sender.sendTl("recipeGrid", colorTag(colorMap, materials, 0, 0), colorTag(colorMap, materials, 0, 1), colorTag(colorMap, materials, 0, 2));
+            sender.sendTl("recipeGrid", colorTag(colorMap, materials, 1, 0), colorTag(colorMap, materials, 1, 1), colorTag(colorMap, materials, 1, 2));
+            sender.sendTl("recipeGrid", colorTag(colorMap, materials, 2, 0), colorTag(colorMap, materials, 2, 1), colorTag(colorMap, materials, 2, 2));
 
             final StringBuilder s = new StringBuilder();
             for (final Material items : colorMap.keySet().toArray(new Material[0])) {
-                s.append(sender.tl("recipeGridItem", colorMap.get(items), getMaterialName(sender, items)));
+                s.append(sender.tl("recipeGridItem", colorMap.get(items), getMaterialName(sender, items))).append(" ");
             }
-            sender.sendTl("recipeWhere", s.toString());
+            sender.sendTl("recipeWhere", AdventureUtil.parsed(s.toString()));
         }
+    }
+
+    private AdventureUtil.ParsedPlaceholder colorTag(final Map<Material, String> colorMap, final Material[][] materials, final int x, final int y) {
+        final char colorChar = colorMap.get(materials[x][y]).charAt(0);
+        final NamedTextColor namedTextColor = AdventureUtil.fromChar(colorChar);
+        if (namedTextColor == null) {
+            throw new IllegalStateException("Illegal amount of materials in recipe");
+        }
+
+        return AdventureUtil.parsed("<" + namedTextColor + ">" + colorChar);
     }
 
     public void shapelessRecipe(final CommandSource sender, final ShapelessRecipe recipe, final boolean showWindow) {
