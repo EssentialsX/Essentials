@@ -446,7 +446,7 @@ commands:
     aliases: [sign, esign, eeditsign]
   skull:
     description: Set the owner of a player skull
-    usage: /<command> [owner]
+    usage: /<command> [owner] [player]
     aliases: [eskull, playerskull, eplayerskull, head, ehead]
   smithingtable:
     description: Opens up a smithing table.
