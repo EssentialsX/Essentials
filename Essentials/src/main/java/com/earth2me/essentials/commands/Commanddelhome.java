@@ -18,6 +18,24 @@ public class Commanddelhome extends EssentialsCommand {
         super("delhome");
     }
 
+    private void deleteHome(CommandSource sender, User user, String home) {
+        final HomeModifyEvent event = new HomeModifyEvent(sender.getUser(), user, home, user.getHome(home), false);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("HomeModifyEvent canceled for /delhome execution by " + sender.getDisplayName());
+            }
+            return;
+        }
+
+        try {
+            user.delHome(home);
+        } catch (Exception e) {
+            sender.sendTl("invalidHome", home);
+        }
+        sender.sendTl("deleteHome", home);
+    }
+
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -45,21 +63,19 @@ public class Commanddelhome extends EssentialsCommand {
             name = expandedArg[0].toLowerCase(Locale.ENGLISH);
         }
 
-        if (name.equals("bed")) {
-            throw new TranslatableException("invalidHomeName");
+        switch (name) {
+            case "bed":
+                throw new TranslatableException("invalidHomeName");
+            case "*":
+                final List<String> homes = user.getHomes();
+                for (String home : homes) {
+                    deleteHome(sender, user, home);
+                }
+                break;
+            default:
+                deleteHome(sender, user, name);
+                break;
         }
-
-        final HomeModifyEvent event = new HomeModifyEvent(sender.getUser(), user, name, user.getHome(name), false);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("HomeModifyEvent canceled for /delhome execution by " + sender.getDisplayName());
-            }
-            return;
-        }
-
-        user.delHome(name);
-        sender.sendTl("deleteHome", name);
     }
 
     @Override
@@ -81,6 +97,7 @@ public class Commanddelhome extends EssentialsCommand {
                         return homes;
                     }
                     otherUser.getHomes().forEach(home -> homes.add(namePart + ":" + home));
+                    homes.add(namePart + ":" + "*");
                 }
             }
             return homes;
