@@ -79,7 +79,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         if (conf == null) {
             final File confFile = new File(warpsFolder, filename + ".yml");
             if (confFile.exists()) {
-                throw new Exception(user == null ? tlLiteral("similarWarpExist") : user.playerTl("similarWarpExist"));
+                throw new TranslatableException("similarWarpExist");
             }
             conf = new EssentialsConfiguration(confFile);
             conf.load();

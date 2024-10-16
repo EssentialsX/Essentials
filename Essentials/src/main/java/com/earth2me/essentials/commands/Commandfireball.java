@@ -19,6 +19,7 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.entity.SplashPotion;
 import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.entity.Trident;
+import org.bukkit.entity.WindCharge;
 import org.bukkit.entity.WitherSkull;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
@@ -53,6 +54,10 @@ public class Commandfireball extends EssentialsCommand {
 
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
             builder.put("trident", Trident.class);
+        }
+
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_21_R01)) {
+            builder.put("windcharge", WindCharge.class);
         }
 
         types = builder.build();
