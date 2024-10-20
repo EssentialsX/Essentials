@@ -4,11 +4,11 @@ plugins {
 
 dependencies {
     compileOnly project(':EssentialsX')
-    implementation('net.dv8tion:JDA:5.0.0-beta.12') {
+    implementation('net.dv8tion:JDA:5.1.2') {
         exclude(module: 'opus-java')
     }
     implementation 'com.github.MinnDevelopment:emoji-java:v6.1.0'
-    implementation('club.minnced:discord-webhooks:0.8.2') {
+    implementation('club.minnced:discord-webhooks:0.8.4') {
         exclude(module: 'okhttp')
     }
     compileOnly 'org.apache.logging.log4j:log4j-core:2.17.1'
