@@ -488,8 +488,8 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public double getTeleportCooldown() {
-        return config.getDouble("teleport-cooldown", 0);
+    public double getTeleportCooldown(String group) {
+        return config.getDouble("group-teleport-cooldowns." + (group == null ? "Default" : group),0);
     }
 
     @Override

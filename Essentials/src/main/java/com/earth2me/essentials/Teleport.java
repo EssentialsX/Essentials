@@ -43,7 +43,8 @@ public class Teleport implements ITeleport {
         final Calendar time = new GregorianCalendar();
         if (teleportOwner.getLastTeleportTimestamp() > 0) {
             // Take the current time, and remove the delay from it.
-            final double cooldown = ess.getSettings().getTeleportCooldown();
+            final String group = teleportOwner.getGroup();
+            final double cooldown = ess.getSettings().getTeleportCooldown(group);
             final Calendar earliestTime = new GregorianCalendar();
             earliestTime.add(Calendar.SECOND, -(int) cooldown);
             earliestTime.add(Calendar.MILLISECOND, -(int) ((cooldown * 1000.0) % 1000.0));

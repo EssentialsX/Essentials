@@ -128,7 +128,7 @@ public interface ISettings extends IConf {
 
     boolean isForcePassengerTeleport();
 
-    double getTeleportCooldown();
+    double getTeleportCooldown(String group);
 
     double getTeleportDelay();
 
