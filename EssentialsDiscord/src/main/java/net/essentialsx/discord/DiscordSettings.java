@@ -199,6 +199,10 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("show-displayname", false);
     }
 
+    public boolean isSendTypeAsWebhook(String key) {
+        return config.getBoolean("send-types-as-player." + key, true);
+    }
+
     public String getAvatarURL() {
         return config.getString("avatar-url", "https://crafthead.net/helm/{uuid}");
     }

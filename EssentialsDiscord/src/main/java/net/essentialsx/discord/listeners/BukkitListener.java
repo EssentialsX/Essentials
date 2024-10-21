@@ -249,6 +249,12 @@ public class BukkitListener implements Listener {
         String avatarUrl = null;
         String name = null;
         UUID uuid = null;
+
+        if (player != null && !jda.getSettings().isSendTypeAsWebhook(messageType.getKey())) {
+            sendDiscordMessage(messageType, message);
+            return;
+        }
+
         if (player != null) {
             if (jda.getSettings().isShowAvatar()) {
                 avatarUrl = DiscordUtil.getAvatarUrl(jda, player);

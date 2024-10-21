@@ -163,6 +163,23 @@ show-avatar: false
 # To include the name of the player in this URL, use "{name}".
 avatar-url: "https://crafthead.net/helm/{uuid}"
 
+# When set to false, the message will send as the bot user instead of the player webhook.
+send-types-as-player:
+  # Join messages sent when a player joins the Minecraft server.
+  join: true
+  # Join messages sent when a player joins the Minecraft server for the first time.
+  first-join: true
+  # Leave messages sent when a player leaves the Minecraft server.
+  leave: true
+  # Death messages sent when a player dies on the Minecraft server.
+  death: true
+  # AFK status change messages sent when a player's AFK status changes.
+  afk: true
+  # Achievement/advancement messages sent when a player is awarded an achievement/advancement.
+  advancement: true
+  # Action messages sent when a player runs the /me or /action commands.
+  action: true
+
 # Whether or not fake join and leave messages should be sent to Discord when a player toggles vanish in Minecraft.
 # Fake join/leave messages will be sent the same as real join and leave messages (and to the same channel).
 vanish-fake-join-leave: true
