@@ -121,7 +121,7 @@ public class EssentialsEntityListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityDamage(final EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player && ess.getUser((Player) event.getEntity()).isGodModeEnabled()) {
+        if (event.getEntity() instanceof Player && ess.getUser((Player) event.getEntity()).isGodModeEnabled() && event.getDamage() < Float.MAX_VALUE) {
             final Player player = (Player) event.getEntity();
             player.setFireTicks(0);
             player.setRemainingAir(player.getMaximumAir());
