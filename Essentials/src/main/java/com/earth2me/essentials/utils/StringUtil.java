@@ -10,17 +10,18 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public final class StringUtil {
-    private static final Pattern INVALIDFILECHARS = Pattern.compile("[^a-z0-9-]");
+    private static final Pattern INVALIDCHARACTER = Pattern.compile("[/\\\\:*?\"<>|\\x00-\\x1F]");
     private static final Pattern STRICTINVALIDCHARS = Pattern.compile("[^a-z0-9]");
     @SuppressWarnings("CheckStyle")
-    private static final Pattern INVALIDCHARS = Pattern.compile("[^\t\n\r\u0020-\u007E\u0085\u00A0-\uD7FF\uE000-\uFFFC]");
+    private static final Pattern INVALIDCHARS = Pattern.compile("[^\t\n\r\u0020-\u007E\u0085\u00A0-\uD7FF\uE000-\uFFFD]");
+
 
     private StringUtil() {
     }
 
     //Used to clean file names before saving to disk
     public static String sanitizeFileName(final String name) {
-        return INVALIDFILECHARS.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+        return INVALIDCHARACTER.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
     }
 
     //Used to clean strings/names before saving as filenames/permissions
@@ -29,6 +30,12 @@ public final class StringUtil {
             return null;
         }
         return STRICTINVALIDCHARS.matcher(string.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+    }
+    public static String new_safeString(final String string) {
+        if (string == null) {
+            return null;
+        }
+        return INVALIDCHARACTER.matcher(string.toLowerCase(Locale.ENGLISH)).replaceAll("_");
     }
 
     //Less restrictive string sanitizing, when not used as perm or filename
