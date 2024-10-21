@@ -24,7 +24,7 @@ shadowJar {
         include(dependency('com.squareup.okio:okio'))
         include(dependency('com.squareup.okio:okio-jvm'))
         include(dependency('org.apache.commons:commons-collections4'))
-        include(dependency('net.sf.trove4j:trove4j'))
+        include(dependency('net.sf.trove4j:core'))
         include(dependency('com.fasterxml.jackson.core:jackson-databind'))
         include(dependency('com.fasterxml.jackson.core:jackson-core'))
         include(dependency('com.fasterxml.jackson.core:jackson-annotations'))
