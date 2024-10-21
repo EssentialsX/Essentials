@@ -75,7 +75,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     private final static Logger logger = EssentialsDiscord.getWrappedLogger();
     private final EssentialsDiscord plugin;
     private final Unsafe unsafe = this::getJda;
-
+    
     private JDA jda;
     private Guild guild;
     private TextChannel primaryChannel;
@@ -89,24 +89,24 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     private InteractionControllerImpl interactionController;
     private Listener chatListener;
     private boolean invalidStartup = false;
-
+    
     public JDADiscordService(EssentialsDiscord plugin) {
         this.plugin = plugin;
         for (final MessageType type : MessageType.DefaultTypes.values()) {
             registerMessageType(plugin, type);
         }
     }
-
+    
     public TextChannel getChannel(String key, boolean primaryFallback) {
         if (NumberUtil.isLong(key)) {
             return getDefinedChannel(key, primaryFallback);
         }
         return getDefinedChannel(getSettings().getMessageChannel(key), primaryFallback);
     }
-
+    
     public TextChannel getDefinedChannel(String key, boolean primaryFallback) {
         final long resolvedId = getSettings().getChannelId(key);
-
+        
         if (isDebug()) {
             logger.log(Level.INFO, "Channel definition " + key + " resolved as " + resolvedId);
         }
@@ -139,6 +139,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         final String strippedContent = FormatUtil.stripFormat(message);
 
         final String webhookChannelId = typeToChannelId.get(event.getType());
+
         if (webhookChannelId != null) {
             final WrappedWebhookClient client = channelIdToWebhook.get(webhookChannelId);
             if (client != null) {
@@ -153,6 +154,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             logger.warning(tlLiteral("discordNoSendPermission", channel.getName()));
             return;
         }
+
         channel.sendMessage(strippedContent)
                 .setAllowedMentions(groupMentions ? null : DiscordUtil.NO_GROUP_MENTIONS)
                 .queue();

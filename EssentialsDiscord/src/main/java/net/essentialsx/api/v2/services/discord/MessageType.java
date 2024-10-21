@@ -57,6 +57,7 @@ public final class MessageType {
         public final static MessageType FIRST_JOIN = new MessageType("first-join", true);
         public final static MessageType LEAVE = new MessageType("leave", true);
         public final static MessageType CHAT = new MessageType("chat", true);
+        public final static MessageType PRIVATE_CHAT = new MessageType("private-chat", true);
         public final static MessageType DEATH = new MessageType("death", true);
         public final static MessageType AFK = new MessageType("afk", true);
         public final static MessageType ADVANCEMENT = new MessageType("advancement", true);
@@ -68,7 +69,7 @@ public final class MessageType {
         public final static MessageType LOCAL = new MessageType("local", true);
         public final static MessageType QUESTION = new MessageType("question", true);
         public final static MessageType SHOUT = new MessageType("shout", true);
-        private final static MessageType[] VALUES = new MessageType[]{JOIN, FIRST_JOIN, LEAVE, CHAT, DEATH, AFK, ADVANCEMENT, ACTION, SERVER_START, SERVER_STOP, KICK, MUTE, LOCAL, QUESTION, SHOUT};
+        private final static MessageType[] VALUES = new MessageType[]{JOIN, FIRST_JOIN, LEAVE, CHAT, PRIVATE_CHAT, DEATH, AFK, ADVANCEMENT, ACTION, SERVER_START, SERVER_STOP, KICK, MUTE, LOCAL, QUESTION, SHOUT};
 
         /**
          * Gets an array of all the default {@link MessageType MessageTypes}.
