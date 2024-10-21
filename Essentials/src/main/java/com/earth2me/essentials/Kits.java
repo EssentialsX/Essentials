@@ -112,11 +112,20 @@ public class Kits implements IConf {
         return null;
     }
 
-    public void addKit(String name, final List<String> lines, final long delay) {
+    public void addKit(String name, final List<String> basicLines, final List<String> gearLines, final long delay) {
         name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
         // Will overwrite but w/e
         rootConfig.setProperty("kits." + name + ".delay", delay);
-        rootConfig.setProperty("kits." + name + ".items", lines);
+        rootConfig.setProperty("kits." + name + ".items", basicLines);
+
+        final String[] gearConfigName = {"boots", "leggings", "chestplate", "helmet", "offhand"};
+        for (int i = 0; i < gearLines.size(); i++) {
+            final String gearLine = gearLines.get(i);
+            if (gearLine != null) {
+                rootConfig.setProperty("kits." + name + "." + gearConfigName[i], gearLine);
+            }
+        }
+
         parseKits();
         rootConfig.save();
     }
