@@ -1,6 +1,6 @@
 plugins {
     id("essentials.module-conventions")
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
 }
 
 tasks {
@@ -8,7 +8,8 @@ tasks {
         archiveClassifier.set("unshaded")
     }
     shadowJar {
-        archiveClassifier.set(null)
+        @Suppress("CAST_NEVER_SUCCEEDS")
+        archiveClassifier.set(null as? String)
     }
 }
 
