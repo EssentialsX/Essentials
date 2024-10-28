@@ -50,7 +50,7 @@ public enum Mob {
     WITHER("Wither", Enemies.ENEMY, EntityType.WITHER),
     BAT("Bat", Enemies.FRIENDLY, EntityType.BAT),
     WITCH("Witch", Enemies.ENEMY, EntityType.WITCH),
-    BOAT("Boat", Enemies.NEUTRAL, EntityType.BOAT),
+    BOAT("Boat", Enemies.NEUTRAL, MobCompat.OAK_BOAT),
     MINECART("Minecart", Enemies.NEUTRAL, EntityType.MINECART),
     MINECART_CHEST("ChestMinecart", Enemies.NEUTRAL, MobCompat.CHEST_MINECART),
     MINECART_FURNACE("FurnaceMinecart", Enemies.NEUTRAL, MobCompat.FURNACE_MINECART),

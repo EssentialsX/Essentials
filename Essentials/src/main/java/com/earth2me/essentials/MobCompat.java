@@ -61,6 +61,7 @@ public final class MobCompat {
     public static final EntityType SPAWNER_MINECART = getEntityType("SPAWNER_MINECART", "MINECART_MOB_SPAWNER");
     public static final EntityType END_CRYSTAL = getEntityType("END_CRYSTAL", "ENDER_CRYSTAL");
     public static final EntityType FIREWORK_ROCKET = getEntityType("FIREWORK_ROCKET", "FIREWORK");
+    public static final EntityType OAK_BOAT = getEntityType("BOAT", "OAK_BOAT");
 
     private MobCompat() {
     }
