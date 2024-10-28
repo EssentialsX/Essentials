@@ -8,7 +8,6 @@ import net.ess3.api.TranslatableException;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
-import org.bukkit.entity.Boat;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
@@ -199,15 +198,6 @@ public enum MobData {
     TEMPERATE_FROG("temperate", MobCompat.FROG, "frog:TEMPERATE", true),
     WARM_FROG("warm", MobCompat.FROG, "frog:WARM", true),
     COLD_FROG("cold", MobCompat.FROG, "frog:COLD", true),
-    ACACIA_BOAT("acacia", Boat.class, MobCompat.BoatVariant.ACACIA, true),
-    BIRCH_BOAT("birch", Boat.class, MobCompat.BoatVariant.BIRCH, true),
-    DARK_OAK_BOAT("darkoak", Boat.class, MobCompat.BoatVariant.DARKOAK, true),
-    GENERIC_BOAT("generic", Boat.class, MobCompat.BoatVariant.GENERIC, true),
-    JUNGLE_BOAT("jungle", Boat.class, MobCompat.BoatVariant.JUNGLE, true),
-    REDWOOD_BOAT("redwood", Boat.class, MobCompat.BoatVariant.REDWOOD, true),
-    MANGROVE_BOAT("mangrove", Boat.class, MobCompat.BoatVariant.MANGROVE, true),
-    OAK_BOAT("oak", Boat.class, MobCompat.BoatVariant.OAK, true),
-    SPRUCE_BOAT("spruce", Boat.class, MobCompat.BoatVariant.SPRUCE, true),
     SADDLE_CAMEL("saddle", MobCompat.CAMEL, Data.CAMELSADDLE, true),
     PALE_WOLF("pale", EntityType.WOLF, "wolf:PALE", true),
     SPOTTED_WOLF("spotted", EntityType.WOLF, "wolf:PALE", true),
@@ -218,6 +208,9 @@ public enum MobData {
     WOODS_WOLF("woods", EntityType.WOLF, "wolf:WOODS", true),
     CHESTNUT_WOLF("chestnut", EntityType.WOLF, "wolf:CHESTNUT", true),
     STRIPED_WOLF("striped", EntityType.WOLF, "wolf:STRIPED", true),
+    SMALL_SALMON("small", MobCompat.SALMON, "salmon:SMALL", true),
+    MEDIUM_SALMON("medium", MobCompat.SALMON, "salmon:MEDIUM", true),
+    LARGE_SALMON("large", MobCompat.SALMON, "salmon:LARGE", true),
     ;
 
     final private String nickname;
@@ -398,8 +391,6 @@ public enum MobData {
             ((Goat) spawned).setScreaming(true);
         } else if (this.value.equals(Data.CAMELSADDLE)) {
             MobCompat.setCamelSaddle(spawned, target);
-        } else if (this.value instanceof MobCompat.BoatVariant) {
-            MobCompat.setBoatVariant(spawned, (MobCompat.BoatVariant) this.value);
         } else if (this.value instanceof String) {
             final String[] split = ((String) this.value).split(":");
             switch (split[0]) {
@@ -435,6 +426,9 @@ public enum MobData {
                     break;
                 case "wolf":
                     MobCompat.setWolfVariant(spawned, split[1]);
+                    break;
+                case "salmon":
+                    MobCompat.setSalmonSize(spawned, split[1]);
                     break;
             }
         } else {
