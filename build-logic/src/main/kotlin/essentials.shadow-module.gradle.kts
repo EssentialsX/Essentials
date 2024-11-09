@@ -8,8 +8,7 @@ tasks {
         archiveClassifier.set("unshaded")
     }
     shadowJar {
-        @Suppress("CAST_NEVER_SUCCEEDS")
-        archiveClassifier.set(null as? String)
+        archiveClassifier.set(null as String?)
     }
 }
 
