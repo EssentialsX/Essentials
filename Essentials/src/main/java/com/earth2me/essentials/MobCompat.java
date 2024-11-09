@@ -5,7 +5,9 @@ import com.earth2me.essentials.utils.RegistryUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Material;
+import org.bukkit.TreeSpecies;
 import org.bukkit.entity.Axolotl;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.Camel;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -194,6 +196,25 @@ public final class MobCompat {
         }
     }
 
+    public static void setBoatVariant(final Entity entity, final BoatVariant variant) {
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_21_3_R01) || VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
+            return;
+        }
+        final Boat boat;
+        if (entity instanceof Boat) {
+            boat = (Boat) entity;
+        } else {
+            return;
+        }
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_19_R01)) {
+            //noinspection deprecation
+            boat.setWoodType(TreeSpecies.valueOf(variant.getTreeSpecies()));
+        } else {
+            //noinspection deprecation
+            boat.setBoatType(Boat.Type.valueOf(variant.getBoatType()));
+        }
+    }
+
     public static void setCamelSaddle(final Entity entity, final Player target) {
         if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_20_1_R01)) {
             return;
@@ -290,6 +311,37 @@ public final class MobCompat {
 
         private Villager.Profession asEnum() {
             return RegistryUtil.valueOf(Villager.Profession.class, newProfession, oldProfession);
+        }
+    }
+
+    public enum BoatVariant {
+        // Mappings for TreeSpecies names
+        ACACIA("ACACIA", "ACACIA"),
+        BIRCH("BIRCH", "BIRCH"),
+        DARKOAK("DARK_OAK", "DARK_OAK"),
+        GENERIC("GENERIC", "OAK"),
+        JUNGLE("JUNGLE", "JUNGLE"),
+        REDWOOD("REDWOOD", "SPRUCE"),
+        // Mappings for Boat.Type names (falling back to GENERIC where undefined)
+        OAK("GENERIC", "OAK"),
+        SPRUCE("REDWOOD", "SPRUCE"),
+        MANGROVE("GENERIC", "MANGROVE"),
+        ;
+
+        private final String treeSpecies;
+        private final String boatType;
+
+        BoatVariant(final String treeSpecies, final String boatType) {
+            this.treeSpecies = treeSpecies;
+            this.boatType = boatType;
+        }
+
+        public String getTreeSpecies() {
+            return treeSpecies;
+        }
+
+        public String getBoatType() {
+            return boatType;
         }
     }
 }
