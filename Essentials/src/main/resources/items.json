@@ -1691,6 +1691,13 @@
   "blabed": "black_bed",
   "blackbed": "black_bed",
   "minecraft:black_bed": "black_bed",
+  "black_bundle": {
+    "material": "BLACK_BUNDLE"
+  },
+  "bkbundle": "black_bundle",
+  "blabundle": "black_bundle",
+  "blackbundle": "black_bundle",
+  "minecraft:black_bundle": "black_bundle",
   "black_candle": {
     "material": "BLACK_CANDLE"
   },
@@ -1947,6 +1954,12 @@
   "blubed": "blue_bed",
   "bluebed": "blue_bed",
   "minecraft:blue_bed": "blue_bed",
+  "blue_bundle": {
+    "material": "BLUE_BUNDLE"
+  },
+  "blubundle": "blue_bundle",
+  "bluebundle": "blue_bundle",
+  "minecraft:blue_bundle": "blue_bundle",
   "blue_candle": {
     "material": "BLUE_CANDLE"
   },
@@ -2139,6 +2152,11 @@
   "casebook": "bookshelf",
   "minecraft:bookshelf": "bookshelf",
   "shelfbook": "bookshelf",
+  "bordure_indented_banner_pattern": {
+    "material": "BORDURE_INDENTED_BANNER_PATTERN"
+  },
+  "bordureindentedbannerpattern": "bordure_indented_banner_pattern",
+  "minecraft:bordure_indented_banner_pattern": "bordure_indented_banner_pattern",
   "bow": {
     "material": "BOW"
   },
@@ -2244,6 +2262,13 @@
   "brobed": "brown_bed",
   "brownbed": "brown_bed",
   "minecraft:brown_bed": "brown_bed",
+  "brown_bundle": {
+    "material": "BROWN_BUNDLE"
+  },
+  "brbundle": "brown_bundle",
+  "brobundle": "brown_bundle",
+  "brownbundle": "brown_bundle",
+  "minecraft:brown_bundle": "brown_bundle",
   "brown_candle": {
     "material": "BROWN_CANDLE"
   },
@@ -4972,6 +4997,12 @@
   "cbed": "cyan_bed",
   "cyanbed": "cyan_bed",
   "minecraft:cyan_bed": "cyan_bed",
+  "cyan_bundle": {
+    "material": "CYAN_BUNDLE"
+  },
+  "cbundle": "cyan_bundle",
+  "cyanbundle": "cyan_bundle",
+  "minecraft:cyan_bundle": "cyan_bundle",
   "cyan_candle": {
     "material": "CYAN_CANDLE"
   },
@@ -7179,6 +7210,11 @@
     "material": "FERN"
   },
   "minecraft:fern": "fern",
+  "field_masoned_banner_pattern": {
+    "material": "FIELD_MASONED_BANNER_PATTERN"
+  },
+  "fieldmasonedbannerpattern": "field_masoned_banner_pattern",
+  "minecraft:field_masoned_banner_pattern": "field_masoned_banner_pattern",
   "filled_map": {
     "material": "FILLED_MAP"
   },
@@ -8059,6 +8095,19 @@
   "graybed": "gray_bed",
   "greybed": "gray_bed",
   "minecraft:gray_bed": "gray_bed",
+  "gray_bundle": {
+    "material": "GRAY_BUNDLE"
+  },
+  "darkgrabundle": "gray_bundle",
+  "darkgraybundle": "gray_bundle",
+  "darkgreybundle": "gray_bundle",
+  "dgrabundle": "gray_bundle",
+  "dgraybundle": "gray_bundle",
+  "dgreybundle": "gray_bundle",
+  "grabundle": "gray_bundle",
+  "graybundle": "gray_bundle",
+  "greybundle": "gray_bundle",
+  "minecraft:gray_bundle": "gray_bundle",
   "gray_candle": {
     "material": "GRAY_CANDLE"
   },
@@ -8438,6 +8487,16 @@
   "grebed": "green_bed",
   "greenbed": "green_bed",
   "minecraft:green_bed": "green_bed",
+  "green_bundle": {
+    "material": "GREEN_BUNDLE"
+  },
+  "darkgrebundle": "green_bundle",
+  "darkgreenbundle": "green_bundle",
+  "dgrebundle": "green_bundle",
+  "dgreenbundle": "green_bundle",
+  "grebundle": "green_bundle",
+  "greenbundle": "green_bundle",
+  "minecraft:green_bundle": "green_bundle",
   "green_candle": {
     "material": "GREEN_CANDLE"
   },
@@ -11515,6 +11574,16 @@
   "lightblubed": "light_blue_bed",
   "lightbluebed": "light_blue_bed",
   "minecraft:light_blue_bed": "light_blue_bed",
+  "light_blue_bundle": {
+    "material": "LIGHT_BLUE_BUNDLE"
+  },
+  "lbbundle": "light_blue_bundle",
+  "lblubundle": "light_blue_bundle",
+  "lbluebundle": "light_blue_bundle",
+  "light_bluebundle": "light_blue_bundle",
+  "lightblubundle": "light_blue_bundle",
+  "lightbluebundle": "light_blue_bundle",
+  "minecraft:light_blue_bundle": "light_blue_bundle",
   "light_blue_candle": {
     "material": "LIGHT_BLUE_CANDLE"
   },
@@ -11799,6 +11868,21 @@
   "siabed": "light_gray_bed",
   "sibed": "light_gray_bed",
   "silverbed": "light_gray_bed",
+  "light_gray_bundle": {
+    "material": "LIGHT_GRAY_BUNDLE"
+  },
+  "lgbundle": "light_gray_bundle",
+  "lgrabundle": "light_gray_bundle",
+  "lgraybundle": "light_gray_bundle",
+  "lgreybundle": "light_gray_bundle",
+  "light_graybundle": "light_gray_bundle",
+  "lightgrabundle": "light_gray_bundle",
+  "lightgraybundle": "light_gray_bundle",
+  "lightgreybundle": "light_gray_bundle",
+  "minecraft:light_gray_bundle": "light_gray_bundle",
+  "siabundle": "light_gray_bundle",
+  "sibundle": "light_gray_bundle",
+  "silverbundle": "light_gray_bundle",
   "light_gray_candle": {
     "material": "LIGHT_GRAY_CANDLE"
   },
@@ -12277,6 +12361,16 @@
   "lightgreenbed": "lime_bed",
   "limebed": "lime_bed",
   "minecraft:lime_bed": "lime_bed",
+  "lime_bundle": {
+    "material": "LIME_BUNDLE"
+  },
+  "lbundle": "lime_bundle",
+  "lgrebundle": "lime_bundle",
+  "lgreenbundle": "lime_bundle",
+  "lightgrebundle": "lime_bundle",
+  "lightgreenbundle": "lime_bundle",
+  "limebundle": "lime_bundle",
+  "minecraft:lime_bundle": "lime_bundle",
   "lime_candle": {
     "material": "LIME_CANDLE"
   },
@@ -19656,6 +19750,12 @@
   "magentabed": "magenta_bed",
   "mbed": "magenta_bed",
   "minecraft:magenta_bed": "magenta_bed",
+  "magenta_bundle": {
+    "material": "MAGENTA_BUNDLE"
+  },
+  "magentabundle": "magenta_bundle",
+  "mbundle": "magenta_bundle",
+  "minecraft:magenta_bundle": "magenta_bundle",
   "magenta_candle": {
     "material": "MAGENTA_CANDLE"
   },
@@ -22998,6 +23098,12 @@
   "minecraft:orange_bed": "orange_bed",
   "obed": "orange_bed",
   "orangebed": "orange_bed",
+  "orange_bundle": {
+    "material": "ORANGE_BUNDLE"
+  },
+  "minecraft:orange_bundle": "orange_bundle",
+  "obundle": "orange_bundle",
+  "orangebundle": "orange_bundle",
   "orange_candle": {
     "material": "ORANGE_CANDLE"
   },
@@ -24010,6 +24116,12 @@
   "minecraft:pink_bed": "pink_bed",
   "pibed": "pink_bed",
   "pinkbed": "pink_bed",
+  "pink_bundle": {
+    "material": "PINK_BUNDLE"
+  },
+  "minecraft:pink_bundle": "pink_bundle",
+  "pibundle": "pink_bundle",
+  "pinkbundle": "pink_bundle",
   "pink_candle": {
     "material": "PINK_CANDLE"
   },
@@ -25256,6 +25368,12 @@
   "minecraft:purple_bed": "purple_bed",
   "pubed": "purple_bed",
   "purplebed": "purple_bed",
+  "purple_bundle": {
+    "material": "PURPLE_BUNDLE"
+  },
+  "minecraft:purple_bundle": "purple_bundle",
+  "pubundle": "purple_bundle",
+  "purplebundle": "purple_bundle",
   "purple_candle": {
     "material": "PURPLE_CANDLE"
   },
@@ -25699,6 +25817,12 @@
   "minecraft:red_bed": "red_bed",
   "rbed": "red_bed",
   "redbed": "red_bed",
+  "red_bundle": {
+    "material": "RED_BUNDLE"
+  },
+  "minecraft:red_bundle": "red_bundle",
+  "rbundle": "red_bundle",
+  "redbundle": "red_bundle",
   "red_candle": {
     "material": "RED_CANDLE"
   },
@@ -45791,6 +45915,12 @@
   "minecraft:white_bed": "white_bed",
   "wbed": "white_bed",
   "whitebed": "white_bed",
+  "white_bundle": {
+    "material": "WHITE_BUNDLE"
+  },
+  "minecraft:white_bundle": "white_bundle",
+  "wbundle": "white_bundle",
+  "whitebundle": "white_bundle",
   "white_candle": {
     "material": "WHITE_CANDLE"
   },
@@ -46325,6 +46455,12 @@
   "minecraft:yellow_bed": "yellow_bed",
   "ybed": "yellow_bed",
   "yellowbed": "yellow_bed",
+  "yellow_bundle": {
+    "material": "YELLOW_BUNDLE"
+  },
+  "minecraft:yellow_bundle": "yellow_bundle",
+  "ybundle": "yellow_bundle",
+  "yellowbundle": "yellow_bundle",
   "yellow_candle": {
     "material": "YELLOW_CANDLE"
   },
