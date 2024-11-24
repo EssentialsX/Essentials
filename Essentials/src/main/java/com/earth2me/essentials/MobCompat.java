@@ -1,9 +1,14 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.RegistryUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.nms.refl.ReflUtil;
+import org.bukkit.Material;
+import org.bukkit.TreeSpecies;
 import org.bukkit.entity.Axolotl;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.Camel;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
@@ -13,8 +18,12 @@ import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Panda;
 import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Salmon;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.Wolf;
+import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
 
@@ -39,10 +48,22 @@ public final class MobCompat {
     public static final EntityType AXOLOTL = getEntityType("AXOLOTL");
     public static final EntityType GOAT = getEntityType("GOAT");
     public static final EntityType FROG = getEntityType("FROG");
+    public static final EntityType CAMEL = getEntityType("CAMEL");
+    public static final EntityType SALMON = getEntityType("SALMON");
 
     // Constants for mobs that have changed since earlier versions
     public static final EntityType CAT = getEntityType("CAT", "OCELOT");
     public static final EntityType ZOMBIFIED_PIGLIN = getEntityType("ZOMBIFIED_PIGLIN", "PIG_ZOMBIE");
+    public static final EntityType MOOSHROOM = getEntityType("MOOSHROOM", "MUSHROOM_COW");
+    public static final EntityType SNOW_GOLEM = getEntityType("SNOW_GOLEM", "SNOWMAN");
+    public static final EntityType CHEST_MINECART = getEntityType("CHEST_MINECART", "MINECART_CHEST");
+    public static final EntityType FURNACE_MINECART = getEntityType("FURNACE_MINECART", "MINECART_FURNACE");
+    public static final EntityType TNT_MINECART = getEntityType("TNT_MINECART", "MINECART_TNT");
+    public static final EntityType HOPPER_MINECART = getEntityType("HOPPER_MINECART", "MINECART_HOPPER");
+    public static final EntityType SPAWNER_MINECART = getEntityType("SPAWNER_MINECART", "MINECART_MOB_SPAWNER");
+    public static final EntityType END_CRYSTAL = getEntityType("END_CRYSTAL", "ENDER_CRYSTAL");
+    public static final EntityType FIREWORK_ROCKET = getEntityType("FIREWORK_ROCKET", "FIREWORK");
+    public static final EntityType OAK_BOAT = getEntityType("BOAT", "OAK_BOAT");
 
     private MobCompat() {
     }
@@ -175,6 +196,60 @@ public final class MobCompat {
         }
     }
 
+    public static void setBoatVariant(final Entity entity, final BoatVariant variant) {
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_21_3_R01) || VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
+            return;
+        }
+        final Boat boat;
+        if (entity instanceof Boat) {
+            boat = (Boat) entity;
+        } else {
+            return;
+        }
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_19_R01)) {
+            //noinspection deprecation
+            boat.setWoodType(TreeSpecies.valueOf(variant.getTreeSpecies()));
+        } else {
+            //noinspection deprecation
+            boat.setBoatType(Boat.Type.valueOf(variant.getBoatType()));
+        }
+    }
+
+    public static void setCamelSaddle(final Entity entity, final Player target) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_20_1_R01)) {
+            return;
+        }
+
+        if (entity instanceof Camel) {
+            final Camel camel = (Camel) entity;
+            camel.setTamed(true);
+            camel.setOwner(target);
+            camel.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+        }
+    }
+
+    public static void setWolfVariant(final Entity entity, final String variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_20_6_R01)) {
+            return;
+        }
+
+        if (entity instanceof Wolf) {
+            final Wolf wolf = (Wolf) entity;
+            //noinspection DataFlowIssue
+            wolf.setVariant(RegistryUtil.valueOf(Wolf.Variant.class, variant));
+        }
+    }
+
+    public static void setSalmonSize(Entity spawned, String s) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_21_3_R01)) {
+            return;
+        }
+
+        if (spawned instanceof org.bukkit.entity.Salmon) {
+            ((Salmon) spawned).setVariant(Salmon.Variant.valueOf(s));
+        }
+    }
+
     public enum CatType {
         // These are (loosely) Mojang names for the cats
         SIAMESE("SIAMESE", "SIAMESE_CAT"),
@@ -235,8 +310,38 @@ public final class MobCompat {
         }
 
         private Villager.Profession asEnum() {
-            return EnumUtil.valueOf(Villager.Profession.class, newProfession, oldProfession);
+            return RegistryUtil.valueOf(Villager.Profession.class, newProfession, oldProfession);
         }
     }
 
+    public enum BoatVariant {
+        // Mappings for TreeSpecies names
+        ACACIA("ACACIA", "ACACIA"),
+        BIRCH("BIRCH", "BIRCH"),
+        DARKOAK("DARK_OAK", "DARK_OAK"),
+        GENERIC("GENERIC", "OAK"),
+        JUNGLE("JUNGLE", "JUNGLE"),
+        REDWOOD("REDWOOD", "SPRUCE"),
+        // Mappings for Boat.Type names (falling back to GENERIC where undefined)
+        OAK("GENERIC", "OAK"),
+        SPRUCE("REDWOOD", "SPRUCE"),
+        MANGROVE("GENERIC", "MANGROVE"),
+        ;
+
+        private final String treeSpecies;
+        private final String boatType;
+
+        BoatVariant(final String treeSpecies, final String boatType) {
+            this.treeSpecies = treeSpecies;
+            this.boatType = boatType;
+        }
+
+        public String getTreeSpecies() {
+            return treeSpecies;
+        }
+
+        public String getBoatType() {
+            return boatType;
+        }
+    }
 }

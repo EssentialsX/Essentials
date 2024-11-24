@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n.tl;
+import net.ess3.api.TranslatableException;
 
-public class PlayerNotFoundException extends NoSuchFieldException {
+public class PlayerNotFoundException extends TranslatableException {
     public PlayerNotFoundException() {
-        super(tl("playerNotFound"));
+        super("playerNotFound");
     }
 }

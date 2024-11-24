@@ -6,12 +6,11 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandmsg extends EssentialsLoopCommand {
     public Commandmsg() {
@@ -25,15 +24,15 @@ public class Commandmsg extends EssentialsLoopCommand {
         }
 
         String message = getFinalArg(args, 1);
-        final boolean canWildcard = sender.isAuthorized("essentials.msg.multiple", ess);
+        final boolean canWildcard = sender.isAuthorized("essentials.msg.multiple");
         if (sender.isPlayer()) {
             final User user = ess.getUser(sender.getPlayer());
             if (user.isMuted()) {
                 final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
                 if (dateDiff == null) {
-                    throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                    throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReason" : "voiceSilenced", user.getMuteReason());
                 }
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+                throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReasonTime" : "voiceSilencedTime", dateDiff, user.getMuteReason());
             }
             message = FormatUtil.formatMessage(user, "essentials.msg", message);
         } else {

@@ -5,18 +5,19 @@ import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.config.entities.CommandCooldown;
 import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.config.holders.UserConfigHolder;
+import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
+import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -31,31 +32,24 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public abstract class UserData extends PlayerExtension implements IConf {
-    protected final transient IEssentials ess;
+    protected final transient Essentials ess;
     private final EssentialsUserConfiguration config;
     private UserConfigHolder holder;
     private BigDecimal money;
 
     protected UserData(final Player base, final IEssentials ess) {
         super(base);
-        this.ess = ess;
+        this.ess = (Essentials) ess;
         final File folder = new File(ess.getDataFolder(), "userdata");
-        if (!folder.exists()) {
-            folder.mkdirs();
+        if (!folder.exists() && !folder.mkdirs()) {
+            throw new RuntimeException("Unable to create userdata folder!");
         }
 
-        String filename;
-        try {
-            filename = base.getUniqueId().toString();
-        } catch (final Throwable ex) {
-            ess.getLogger().warning("Falling back to old username system for " + base.getName());
-            filename = base.getName();
-        }
-
-        config = new EssentialsUserConfiguration(base.getName(), base.getUniqueId(), new File(folder, filename + ".yml"));
+        config = new EssentialsUserConfiguration(base.getName(), base.getUniqueId(), new File(folder, base.getUniqueId() + ".yml"));
+        config.setSaveHook(() -> {
+            config.setRootHolder(UserConfigHolder.class, holder);
+        });
         reloadConfig();
 
         if (config.getUsername() == null) {
@@ -65,12 +59,15 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public final void reset() {
         config.blockingSave();
-        config.getFile().delete();
+        if (!config.getFile().delete()) {
+            ess.getLogger().warning("Unable to delete data file for " + config.getFile().getName());
+        }
         if (config.getUsername() != null) {
-            ess.getUserMap().removeUser(config.getUsername());
+            final ModernUserMap users = (ModernUserMap) ess.getUsers();
+            users.invalidate(config.getUuid());
             if (isNPC()) {
-                final String uuid = UUID.nameUUIDFromBytes(("NPC:" + StringUtil.safeString(config.getUsername())).getBytes(Charsets.UTF_8)).toString();
-                ess.getUserMap().removeUserUUID(uuid);
+                final String name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(config.getUsername()) : config.getUsername();
+                users.invalidate(UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8)));
             }
         }
     }
@@ -84,18 +81,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.load();
         try {
             holder = config.getRootNode().get(UserConfigHolder.class);
-        } catch (SerializationException e) {
+        } catch (Throwable e) {
             ess.getLogger().log(Level.SEVERE, "Error while reading user config: " + config.getFile().getName(), e);
             throw new RuntimeException(e);
         }
-        config.setSaveHook(() -> {
-            try {
-                config.getRootNode().set(UserConfigHolder.class, holder);
-            } catch (SerializationException e) {
-                ess.getLogger().log(Level.SEVERE, "Error while saving user config: " + config.getFile().getName(), e);
-                throw new RuntimeException(e);
-            }
-        });
         money = _getMoney();
     }
 
@@ -204,7 +193,17 @@ public abstract class UserData extends PlayerExtension implements IConf {
             holder.homes().remove(search);
             config.save();
         } else {
-            throw new Exception(tl("invalidHome", search));
+            throw new TranslatableException("invalidHome", search);
+        }
+    }
+
+    public void renameHome(final String name, final String newName) throws Exception {
+        final LazyLocation location = holder.homes().remove(name);
+        if (location != null) {
+            holder.homes().put(StringUtil.safeString(newName), location);
+            config.save();
+        } else {
+            throw new TranslatableException("invalidHome", name);
         }
     }
 
@@ -589,9 +588,13 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setLastAccountName(final String lastAccountName) {
+        if (getLastAccountName() != null && !getLastAccountName().equals(lastAccountName)) {
+            final List<String> usernames = holder.pastUsernames();
+            usernames.add(0, getLastAccountName());
+            holder.pastUsernames(usernames);
+        }
         holder.lastAccountName(lastAccountName);
         config.save();
-        ess.getUserMap().trackUUID(getConfigUUID(), lastAccountName, true);
     }
 
     public boolean arePowerToolsEnabled() {
@@ -719,6 +722,17 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public void setBaltopExemptCache(boolean baltopExempt) {
         holder.baltopExempt(baltopExempt);
+        config.save();
+    }
+
+    public List<String> getPastUsernames() {
+        return holder.pastUsernames();
+    }
+
+    public void addPastUsername(String username) {
+        final List<String> usernames = holder.pastUsernames();
+        usernames.add(0, username);
+        holder.pastUsernames(usernames);
         config.save();
     }
 

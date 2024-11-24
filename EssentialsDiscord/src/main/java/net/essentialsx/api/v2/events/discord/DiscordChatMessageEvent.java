@@ -1,5 +1,6 @@
 package net.essentialsx.api.v2.events.discord;
 
+import net.essentialsx.api.v2.ChatType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -14,6 +15,7 @@ public class DiscordChatMessageEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final Player player;
+    private final ChatType chatType;
     private String message;
     private boolean cancelled = false;
 
@@ -21,13 +23,14 @@ public class DiscordChatMessageEvent extends Event implements Cancellable {
      * @param player  The player which caused this event.
      * @param message The message of this event.
      */
-    public DiscordChatMessageEvent(Player player, String message) {
+    public DiscordChatMessageEvent(Player player, String message, ChatType chatType) {
         this.player = player;
         this.message = message;
+        this.chatType = chatType;
     }
 
     /**
-     * The player which which caused this chat message.
+     * The player which caused this chat message.
      * @return the player who caused the event.
      */
     public Player getPlayer() {
@@ -48,6 +51,14 @@ public class DiscordChatMessageEvent extends Event implements Cancellable {
      */
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    /**
+     * Type of chat of the original message.
+     * @return type of chat of the original message.
+     */
+    public ChatType getChatType() {
+        return chatType;
     }
 
     @Override

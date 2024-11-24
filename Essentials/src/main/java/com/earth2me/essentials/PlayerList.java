@@ -1,8 +1,9 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-import org.bukkit.ChatColor;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public final class PlayerList {
 
@@ -32,19 +33,19 @@ public final class PlayerList {
             }
             needComma = true;
             if (user.isAfk()) {
-                groupString.append(tl("listAfkTag"));
+                groupString.append(tlLiteral("listAfkTag"));
             }
             if (user.isHidden()) {
-                groupString.append(tl("listHiddenTag"));
+                groupString.append(tlLiteral("listHiddenTag"));
             }
             user.setDisplayNick();
-            groupString.append(user.getDisplayName());
+            groupString.append(AdventureUtil.legacyToMini(user.getDisplayName()));
 
             final String strippedNick = FormatUtil.stripFormat(user.getNickname());
             if (ess.getSettings().realNamesOnList() && strippedNick != null && !strippedNick.equals(user.getName())) {
-                groupString.append(" ").append(tl("listRealName",user.getName()));
+                groupString.append(" ").append(tlLiteral("listRealName",user.getName()));
             }
-            groupString.append(ChatColor.WHITE.toString());
+            groupString.append("<white>");
         }
         return groupString.toString();
     }
@@ -55,27 +56,31 @@ public final class PlayerList {
         int playerHidden = 0;
         int hiddenCount = 0;
         for (final User onlinePlayer : ess.getOnlineUsers()) {
-            if (onlinePlayer.isHidden() || (user != null && !user.getBase().canSee(onlinePlayer.getBase()))) {
+            if (onlinePlayer.isHidden() || (user != null && onlinePlayer.isHiddenFrom(user.getBase()))) {
                 playerHidden++;
-                if (showHidden || user != null && user.getBase().canSee(onlinePlayer.getBase())) {
+                if (showHidden || user != null && !onlinePlayer.isHiddenFrom(user.getBase())) {
                     hiddenCount++;
                 }
             }
         }
-        final String online;
+
+        final String tlKey;
+        final Object[] objects;
         if (hiddenCount > 0) {
-            online = tl("listAmountHidden", ess.getOnlinePlayers().size() - playerHidden, hiddenCount, server.getMaxPlayers());
+            tlKey = "listAmountHidden";
+            objects = new Object[]{ess.getOnlinePlayers().size() - playerHidden, hiddenCount, server.getMaxPlayers()};
         } else {
-            online = tl("listAmount", ess.getOnlinePlayers().size() - playerHidden, server.getMaxPlayers());
+            tlKey = "listAmount";
+            objects = new Object[]{ess.getOnlinePlayers().size() - playerHidden, server.getMaxPlayers()};
         }
-        return online;
+        return user == null ? tlLiteral(tlKey, objects) : user.playerTl(tlKey, objects);
     }
 
     // Build the basic player list, divided by groups.
     public static Map<String, List<User>> getPlayerLists(final IEssentials ess, final IUser sender, final boolean showHidden) {
         final Map<String, List<User>> playerList = new HashMap<>();
         for (final User onlineUser : ess.getOnlineUsers()) {
-            if ((sender == null && !showHidden && onlineUser.isHidden()) || (sender != null && !showHidden && !sender.getBase().canSee(onlineUser.getBase()))) {
+            if ((sender == null && !showHidden && onlineUser.isHidden()) || (sender != null && !showHidden && onlineUser.isHiddenFrom(sender.getBase()))) {
                 continue;
             }
             final String group = FormatUtil.stripFormat(FormatUtil.stripEssentialsFormat(onlineUser.getGroup().toLowerCase()));
@@ -117,7 +122,7 @@ public final class PlayerList {
             users.addAll(groupUsers);
         }
         if (users.isEmpty()) {
-            throw new Exception(tl("groupDoesNotExist"));
+            throw new TranslatableException("groupDoesNotExist");
         }
         final String displayGroupName = Character.toTitleCase(groupName.charAt(0)) +
             groupName.substring(1);
@@ -126,11 +131,11 @@ public final class PlayerList {
 
     // Build the output string
     public static String outputFormat(final String group, final String message) {
-        return tl("listGroupTag", FormatUtil.replaceFormat(group)) +
+        return tlLiteral("listGroupTag", FormatUtil.replaceFormat(group)) +
             message;
     }
 
-    public static List<String> prepareGroupedList(final IEssentials ess, final String commandLabel, final Map<String, List<User>> playerList) {
+    public static List<String> prepareGroupedList(final IEssentials ess, final CommandSource source, final String commandLabel, final Map<String, List<User>> playerList) {
         final List<String> output = new ArrayList<>();
 
         final Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
@@ -163,7 +168,9 @@ public final class PlayerList {
                     outputUserList = new ArrayList<>(matchedList);
                     final int limit = Integer.parseInt(groupValue);
                     if (matchedList.size() > limit) {
-                        output.add(outputFormat(oConfigGroup, tl("groupNumber", matchedList.size(), commandLabel, FormatUtil.stripFormat(configGroup))));
+                        final String tlKey = "groupNumber";
+                        final Object[] objects = {matchedList.size(), commandLabel, FormatUtil.stripFormat(configGroup)};
+                        output.add(outputFormat(oConfigGroup, source == null ? tlLiteral(tlKey, objects) : source.tl(tlKey, objects)));
                     } else {
                         output.add(outputFormat(oConfigGroup, listUsers(ess, outputUserList, ", ")));
                     }
@@ -203,7 +210,7 @@ public final class PlayerList {
             String groupName = asterisk.isEmpty() ? users.get(0).getGroup() : onlineGroup;
 
             if (ess.getPermissionsHandler().getName().equals("ConfigPermissions")) {
-                groupName = tl("connectedPlayers");
+                groupName = source == null ? tlLiteral("connectedPlayers") : source.tl("connectedPlayers");
             }
             if (users == null || users.isEmpty()) {
                 continue;

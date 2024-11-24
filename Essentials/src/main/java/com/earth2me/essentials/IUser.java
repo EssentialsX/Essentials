@@ -8,6 +8,8 @@ import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import net.essentialsx.api.v2.services.mail.MailSender;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.math.BigDecimal;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -94,6 +95,15 @@ public interface IUser {
      */
     boolean isHidden();
 
+    /**
+     * Whether the user was hidden before leaving the server.
+     *
+     * @return true if the user was hidden.
+     */
+    boolean isLeavingHidden();
+
+    void setLeavingHidden(boolean leavingHidden);
+
     void setHidden(boolean vanish);
 
     boolean isGodModeEnabled();
@@ -133,6 +143,14 @@ public interface IUser {
 
     void sendMessage(String message);
 
+    void sendComponent(ComponentLike component);
+
+    Component tlComponent(String tlKey, Object... args);
+
+    String playerTl(String tlKey, Object... args);
+
+    void sendTl(String tlKey, Object... args);
+
     /*
      * UserData
      */
@@ -145,6 +163,8 @@ public interface IUser {
     void setHome(String name, Location loc);
 
     void delHome(String name) throws Exception;
+
+    void renameHome(String name, String newName) throws Exception;
 
     boolean hasHome();
 
@@ -321,4 +341,12 @@ public interface IUser {
             this.time = time;
         }
     }
+
+    List<String> getPastUsernames();
+
+    void addPastUsername(String username);
+
+    boolean isFreeze();
+
+    void setFreeze(boolean freeze);
 }

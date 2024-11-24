@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandtpr extends EssentialsCommand {
 
     public Commandtpr() {
@@ -42,7 +40,7 @@ public class Commandtpr extends EssentialsCommand {
                     final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
                     future.thenAccept(success -> {
                         if (success) {
-                            userToTeleport.sendMessage(tl("tprSuccess"));
+                            userToTeleport.sendTl("tprSuccess");
                         }
                     });
                     userToTeleport.getAsyncTeleport().teleport(location, charge, PlayerTeleportEvent.TeleportCause.COMMAND, future);

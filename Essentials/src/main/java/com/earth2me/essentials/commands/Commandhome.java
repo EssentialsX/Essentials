@@ -1,10 +1,12 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.OfflinePlayer;
+import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import io.papermc.lib.PaperLib;
+import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserTeleportHomeEvent;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -14,8 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandhome extends EssentialsCommand {
     public Commandhome() {
@@ -42,8 +42,8 @@ public class Commandhome extends EssentialsCommand {
         }
         try {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
-                if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayer) {
-                    throw new Exception(tl("bedOffline"));
+                if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayerStub) {
+                    throw new TranslatableException("bedOffline");
                 }
                 PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(location -> {
                     final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
@@ -55,12 +55,12 @@ public class Commandhome extends EssentialsCommand {
                         }
                         future.thenAccept(success -> {
                             if (success) {
-                                user.sendMessage(tl("teleportHome", "bed"));
+                                user.sendTl("teleportHome", "bed");
                             }
                         });
                         user.getAsyncTeleport().teleport(location, charge, TeleportCause.COMMAND, future);
                     } else {
-                        showError(user.getBase(), new Exception(tl("bedMissing")), commandLabel);
+                        showError(user.getBase(), new TranslatableException("bedMissing"), commandLabel);
                     }
                 });
                 throw new NoChargeException();
@@ -79,10 +79,10 @@ public class Commandhome extends EssentialsCommand {
                             user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
                         }
                     } else {
-                        showError(user.getBase(), new Exception(tl("noHomeSetPlayer")), commandLabel);
+                        showError(user.getBase(), new TranslatableException("noHomeSetPlayer"), commandLabel);
                     }
                 } else if (homes.isEmpty() || !finalPlayer.hasValidHomes()) {
-                    showError(user.getBase(), new Exception(tl("noHomeSetPlayer")), commandLabel);
+                    showError(user.getBase(), new TranslatableException("noHomeSetPlayer"), commandLabel);
                 } else if (homes.size() == 1 && finalPlayer.equals(user)) {
                     try {
                         goHome(user, finalPlayer, homes.get(0), charge, getNewExceptionFuture(user.getSource(), commandLabel));
@@ -93,15 +93,15 @@ public class Commandhome extends EssentialsCommand {
                     final int count = homes.size();
                     if (user.isAuthorized("essentials.home.bed")) {
                         if (bed != null) {
-                            homes.add(tl("bed"));
+                            homes.add(user.playerTl("bed"));
                         } else {
-                            homes.add(tl("bedNull"));
+                            homes.add(user.playerTl("bedNull"));
                         }
                     }
-                    user.sendMessage(tl("homes", StringUtil.joinList(homes), count, getHomeLimit(finalPlayer)));
+                    user.sendTl("homes", AdventureUtil.parsed(StringUtil.joinList(homes)), count, getHomeLimit(finalPlayer));
                 }
             });
-            if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayer) {
+            if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayerStub) {
                 message.complete(null);
                 return;
             }
@@ -129,7 +129,7 @@ public class Commandhome extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions() && !user.isAuthorized("essentials.worlds." + loc.getWorld().getName())) {
-            throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
+            throw new TranslatableException("noPerm", "essentials.worlds." + loc.getWorld().getName());
         }
         final UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, home, loc, UserTeleportHomeEvent.HomeType.HOME);
         user.getServer().getPluginManager().callEvent(event);
@@ -137,7 +137,7 @@ public class Commandhome extends EssentialsCommand {
             user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, future);
             future.thenAccept(success -> {
                 if (success) {
-                    user.sendMessage(tl("teleportHome", home));
+                    user.sendTl("teleportHome", home);
                 }
             });
         }

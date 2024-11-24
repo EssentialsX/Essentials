@@ -2,8 +2,10 @@ package net.essentialsx.discord.interactions;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.PrivateChannel;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.essentialsx.api.v2.services.discord.InteractionMember;
+import net.essentialsx.api.v2.services.discord.InteractionRole;
 import net.essentialsx.discord.util.DiscordUtil;
 
 import java.util.List;
@@ -24,6 +26,11 @@ public class InteractionMemberImpl implements InteractionMember {
     @Override
     public String getDiscriminator() {
         return member.getUser().getDiscriminator();
+    }
+
+    @Override
+    public String getAsMention() {
+        return member.getAsMention();
     }
 
     @Override
@@ -49,6 +56,21 @@ public class InteractionMemberImpl implements InteractionMember {
     @Override
     public boolean hasRoles(List<String> roleDefinitions) {
         return DiscordUtil.hasRoles(member, roleDefinitions);
+    }
+
+    @Override
+    public boolean hasRole(InteractionRole role) {
+        return hasRole(role.getId());
+    }
+
+    @Override
+    public boolean hasRole(String roleId) {
+        for (final Role role : member.getRoles()) {
+            if (role.getId().equals(roleId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Member getJdaObject() {

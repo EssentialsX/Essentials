@@ -4,11 +4,10 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
+import net.ess3.api.TranslatableException;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.concurrent.CompletableFuture;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class SignWarp extends EssentialsSign {
     public SignWarp() {
@@ -22,12 +21,16 @@ public class SignWarp extends EssentialsSign {
 
         if (warpName.isEmpty()) {
             sign.setLine(1, "§c<Warp name>");
-            throw new SignException(tl("invalidSignLine", 1));
+            throw new SignException("invalidSignLine", 1);
         } else {
             try {
                 ess.getWarps().getWarp(warpName);
             } catch (final Exception ex) {
-                throw new SignException(ex.getMessage(), ex);
+                if (ex instanceof TranslatableException) {
+                    final TranslatableException te = (TranslatableException) ex;
+                    throw new SignException(ex, te.getTlKey(), te.getArgs());
+                }
+                throw new SignException(ex, "errorWithMessage", ex.getMessage());
             }
             final String group = sign.getLine(2);
             if ("Everyone".equalsIgnoreCase(group) || "Everybody".equalsIgnoreCase(group)) {
@@ -44,11 +47,11 @@ public class SignWarp extends EssentialsSign {
 
         if (!group.isEmpty()) {
             if (!"§2Everyone".equals(group) && !player.inGroup(group)) {
-                throw new SignException(tl("warpUsePermission"));
+                throw new SignException("warpUsePermission");
             }
         } else {
             if (ess.getSettings().getPerWarpPermission() && !player.isAuthorized("essentials.warps." + warpName)) {
-                throw new SignException(tl("warpUsePermission"));
+                throw new SignException("warpUsePermission");
             }
         }
 

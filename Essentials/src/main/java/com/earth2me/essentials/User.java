@@ -1,10 +1,12 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -14,12 +16,15 @@ import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
+import net.ess3.api.TranslatableException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.essentialsx.api.v2.events.TransactionEvent;
 import net.essentialsx.api.v2.services.mail.MailSender;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -27,7 +32,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -49,7 +53,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
+import static com.earth2me.essentials.I18n.tlLocale;
 
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
     private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
@@ -57,10 +62,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     // User modules
     private final IMessageRecipient messageRecipient;
     private transient final AsyncTeleport teleport;
+    @SuppressWarnings("deprecation")
     private transient final Teleport legacyTeleport;
 
     // User command confirmation strings
     private final Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
+    private String confirmingClearCommand;
+    private String lastHomeConfirmation;
 
     // User teleport variables
     private final transient LinkedHashMap<String, TpaRequest> teleportRequestQueue = new LinkedHashMap<>();
@@ -68,33 +76,38 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     // User properties
     private transient boolean vanished;
     private boolean hidden = false;
+    private boolean leavingHidden = false;
     private boolean rightClickJump = false;
     private boolean invSee = false;
     private boolean recipeSee = false;
     private boolean enderSee = false;
     private boolean ignoreMsg = false;
+    private Boolean toggleShout;
+    private boolean freeze = false;
 
     // User afk variables
     private String afkMessage;
     private long afkSince;
     private transient Location afkPosition = null;
 
-    // Misc
+    // Timestamps
     private transient long lastOnlineActivity;
     private transient long lastThrottledAction;
     private transient long lastActivity = System.currentTimeMillis();
     private transient long teleportInvulnerabilityTimestamp = 0;
-    private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
-    private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
-    private Boolean toggleShout;
+
+    // Misc
     private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
     private transient long lastVanishTime = System.currentTimeMillis();
+    private String lastLocaleString;
+    private Locale playerLocale;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
         teleport = new AsyncTeleport(this, ess);
+        //noinspection deprecation
         legacyTeleport = new Teleport(this, ess);
         if (isAfk()) {
             afkPosition = this.getLocation();
@@ -105,7 +118,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         this.messageRecipient = new SimpleMessageRecipient(ess, this);
     }
 
-    void update(final Player base) {
+    public void update(final Player base) {
         setBase(base);
     }
 
@@ -150,7 +163,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isAuthorizedCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return false;
         }
 
@@ -168,7 +181,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isPermSetCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return false;
         }
 
@@ -186,7 +199,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private TriState isAuthorizedExactCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return TriState.UNSET;
         }
 
@@ -213,7 +226,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             cooldownTime.add(Calendar.SECOND, (int) cooldown);
             cooldownTime.add(Calendar.MILLISECOND, (int) ((cooldown * 1000.0) % 1000.0));
             if (cooldownTime.after(now) && !isAuthorized("essentials.heal.cooldown.bypass")) {
-                throw new Exception(tl("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis())));
+                throw new TranslatableException("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis()));
             }
         }
         setLastHealTimestamp(now.getTimeInMillis());
@@ -234,9 +247,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
         setMoney(getMoney().add(value), cause);
-        sendMessage(tl("addedToAccount", NumberUtil.displayCurrency(value, ess)));
+        sendTl("addedToAccount", NumberUtil.displayCurrency(value, ess));
         if (initiator != null) {
-            initiator.sendMessage(tl("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
+            initiator.sendTl("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess));
         }
     }
 
@@ -247,18 +260,18 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void payUser(final User reciever, final BigDecimal value, final UserBalanceUpdateEvent.Cause cause) throws Exception {
         if (value.compareTo(BigDecimal.ZERO) < 1) {
-            throw new Exception(tl("payMustBePositive"));
+            throw new Exception(tlLocale(playerLocale, "payMustBePositive"));
         }
 
         if (canAfford(value)) {
             setMoney(getMoney().subtract(value), cause);
             reciever.setMoney(reciever.getMoney().add(value), cause);
-            sendMessage(tl("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName()));
-            reciever.sendMessage(tl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName()));
+            sendTl("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName());
+            reciever.sendTl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName());
             final TransactionEvent transactionEvent = new TransactionEvent(this.getSource(), reciever, value);
             ess.getServer().getPluginManager().callEvent(transactionEvent);
         } else {
-            throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(value, ess)));
+            throw new ChargeException("notEnoughMoney", NumberUtil.displayCurrency(value, ess));
         }
     }
 
@@ -281,9 +294,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } catch (final MaxMoneyException ex) {
             ess.getLogger().log(Level.WARNING, "Invalid call to takeMoney, total balance can't be more than the max-money limit.", ex);
         }
-        sendMessage(tl("takenFromAccount", NumberUtil.displayCurrency(value, ess)));
+        sendTl("takenFromAccount", NumberUtil.displayCurrency(value, ess));
         if (initiator != null) {
-            initiator.sendMessage(tl("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
+            initiator.sendTl("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess));
         }
     }
 
@@ -309,7 +322,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     private void _dispose() {
         if (!base.isOnline()) {
-            this.base = new OfflinePlayer(getConfigUUID(), ess.getServer());
+            this.base = new OfflinePlayerStub(getConfigUUID(), ess.getServer());
         }
         cleanup();
     }
@@ -323,8 +336,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 return true;
 
             if (VersionUtil.PRE_FLATTENING) {
+                //noinspection deprecation
                 final int id = material.getId();
-                if (isAuthorized("essentials.itemspawn.item-" + id)) return true;
+                return isAuthorized("essentials.itemspawn.item-" + id);
             }
 
             return false;
@@ -361,6 +375,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         teleportRequestQueue.put(request.getName(), request);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     @Deprecated
     public boolean hasOutstandingTeleportRequest() {
@@ -393,7 +408,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         teleportRequestQueue.remove(playerUsername);
         if (inform) {
-            sendMessage(tl("requestTimedOutFrom", ess.getUser(request.getRequesterUuid()).getDisplayName()));
+            sendTl("requestTimedOutFrom", ess.getUser(request.getRequesterUuid()).getDisplayName());
         }
         return null;
     }
@@ -427,7 +442,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             } else {
                 if (inform) {
-                    sendMessage(tl("requestTimedOutFrom", ess.getUser(request.getRequesterUuid()).getDisplayName()));
+                    sendTl("requestTimedOutFrom", ess.getUser(request.getRequesterUuid()).getDisplayName());
                 }
                 teleportRequestQueue.remove(key);
             }
@@ -442,14 +457,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     /**
      * Needed for backwards compatibility.
      */
-    public String getNick(final boolean longnick) {
+    public String getNick(@SuppressWarnings("unused") final boolean longNick) {
         return getNick(true, true);
     }
 
     /**
      * Needed for backwards compatibility.
      */
-    public String getNick(final boolean longnick, final boolean withPrefix, final boolean withSuffix) {
+    @SuppressWarnings("unused")
+    public String getNick(@SuppressWarnings("unused") final boolean longNick, final boolean withPrefix, final boolean withSuffix) {
         return getNick(withPrefix, withSuffix);
     }
 
@@ -463,7 +479,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } else if (nick.equalsIgnoreCase(getName())) {
             nickname = nick;
         } else {
-            nickname = FormatUtil.replaceFormat(ess.getSettings().getNicknamePrefix()) + nick;
+            if (isAuthorized("essentials.nick.hideprefix")) {
+                nickname = nick;
+            } else {
+                nickname = FormatUtil.replaceFormat(ess.getSettings().getNicknamePrefix()) + nick;
+            }
             suffix = "§r";
         }
 
@@ -527,6 +547,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public String getDisplayName() {
+        //noinspection ConstantConditions
         return super.getBase().getDisplayName() == null || (ess.getSettings().hideDisplayNameInVanish() && isHidden()) ? super.getBase().getName() : super.getBase().getDisplayName();
     }
 
@@ -547,6 +568,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     /**
      * @deprecated This API is not asynchronous. Use {@link User#getAsyncTeleport()}
      */
+    @SuppressWarnings("deprecation")
     @Override
     @Deprecated
     public Teleport getTeleport() {
@@ -623,6 +645,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setAfk(final boolean set) {
         setAfk(set, AfkStatusChangeEvent.Cause.UNKNOWN);
@@ -636,7 +659,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || set && ess.getSettings().sleepIgnoresAfkPlayers());
+        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || (set && ess.getSettings().sleepIgnoresAfkPlayers()));
         if (set && !isAfk()) {
             afkPosition = this.getLocation();
             this.afkSince = System.currentTimeMillis();
@@ -673,12 +696,25 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public boolean isHiddenFrom(Player player) {
+        if (getBase() instanceof OfflinePlayerStub || player instanceof OfflinePlayerStub) {
+            return true;
+        }
         return !player.canSee(getBase());
     }
 
     @Override
     public boolean isHidden() {
         return hidden;
+    }
+
+    @Override
+    public boolean isLeavingHidden() {
+        return leavingHidden;
+    }
+
+    @Override
+    public void setLeavingHidden(boolean leavingHidden) {
+        this.leavingHidden = leavingHidden;
     }
 
     @Override
@@ -690,7 +726,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public boolean isHidden(final Player player) {
-        return hidden || !player.canSee(getBase());
+        return hidden || isHiddenFrom(player);
     }
 
     @Override
@@ -703,6 +739,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     //Returns true if status expired during this check
+    @SuppressWarnings("UnusedReturnValue")
     public boolean checkJailTimeout(final long currentTime) {
         if (getJailTimeout() > 0) {
 
@@ -720,7 +757,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     setJailTimeout(0);
                     setOnlineJailedTime(0);
                     setJailed(false);
-                    sendMessage(tl("haveBeenReleased"));
+                    sendTl("haveBeenReleased");
                     setJail(null);
                     if (ess.getSettings().getTeleportWhenFreePolicy() == ISettings.TeleportWhenFreePolicy.BACK) {
                         final CompletableFuture<Boolean> future = new CompletableFuture<>();
@@ -740,6 +777,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     //Returns true if status expired during this check
+    @SuppressWarnings("UnusedReturnValue")
     public boolean checkMuteTimeout(final long currentTime) {
         if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted()) {
             final MuteStatusChangeEvent event = new MuteStatusChangeEvent(this, null, false, getMuteTimeout(), getMuteReason());
@@ -747,7 +785,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
             if (!event.isCancelled()) {
                 setMuteTimeout(0);
-                sendMessage(tl("canTalkAgain"));
+                sendTl("canTalkAgain");
                 setMuted(false);
                 setMuteReason(null);
                 return true;
@@ -766,15 +804,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             setAfk(false, cause);
             if (broadcast && !isHidden() && !isAfk()) {
                 setDisplayNick();
-                final String msg = tl("userIsNotAway", getDisplayName());
-                final String selfmsg = tl("userIsNotAwaySelf", getDisplayName());
-                if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
-                    // exclude user from receiving general AFK announcement in favor of personal message
-                    ess.broadcastMessage(this, msg, u -> u == this);
+                if (ess.getSettings().broadcastAfkMessage()) {
+                    ess.broadcastTl(this, u -> u == this, "userIsNotAway", getDisplayName());
                 }
-                if (!selfmsg.isEmpty()) {
-                    this.sendMessage(selfmsg);
-                }
+                sendTl("userIsNotAwaySelf", getDisplayName());
             }
         }
         lastActivity = System.currentTimeMillis();
@@ -795,14 +828,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public void updateActivityOnChat(final boolean broadcast) {
         if (ess.getSettings().cancelAfkOnChat()) {
             //Chat happens async, make sure we have a sync context
-            ess.scheduleSyncDelayedTask(() -> {
-                updateActivity(broadcast, AfkStatusChangeEvent.Cause.CHAT);
-            });
+            ess.scheduleSyncDelayedTask(() -> updateActivity(broadcast, AfkStatusChangeEvent.Cause.CHAT));
         }
     }
 
     public void checkActivity() {
-        // Graceful time before the first afk check call. 
+        // Graceful time before the first afk check call.
         if (System.currentTimeMillis() - lastActivity <= 10000) {
             return;
         }
@@ -812,13 +843,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
                 && !isAuthorized("essentials.kick.exempt")
                 && !isAuthorized("essentials.afk.kickexempt")) {
-            final String kickReason = tl("autoAfkKickReason", autoafkkick / 60.0);
             lastActivity = 0;
-            this.getBase().kickPlayer(kickReason);
+            final double kickTime = autoafkkick / 60.0;
+
+            this.getBase().kickPlayer(AdventureUtil.miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
 
             for (final User user : ess.getOnlineUsers()) {
                 if (user.isAuthorized("essentials.kick.notify")) {
-                    user.sendMessage(tl("playerKicked", Console.DISPLAY_NAME, getName(), kickReason));
+                    user.sendTl("playerKicked", Console.DISPLAY_NAME, getName(), user.playerTl("autoAfkKickReason", kickTime));
                 }
             }
         }
@@ -827,15 +859,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             setAfk(true, AfkStatusChangeEvent.Cause.ACTIVITY);
             if (isAfk() && !isHidden()) {
                 setDisplayNick();
-                final String msg = tl("userIsAway", getDisplayName());
-                final String selfmsg = tl("userIsAwaySelf", getDisplayName());
-                if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
-                    // exclude user from receiving general AFK announcement in favor of personal message
-                    ess.broadcastMessage(this, msg, u -> u == this);
+                if (ess.getSettings().broadcastAfkMessage()) {
+                    ess.broadcastTl(this, u -> u == this, "userIsAway", getDisplayName());
                 }
-                if (!selfmsg.isEmpty()) {
-                    this.sendMessage(selfmsg);
-                }
+                sendTl("userIsAwaySelf", getDisplayName());
             }
         }
     }
@@ -850,6 +877,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             // This enables the no-god-in-worlds functionality where the actual player god mode state is never modified in disabled worlds,
             // but this method gets called every time the player takes damage. In the case that the world has god-mode disabled then this method
             // will return false and the player will take damage, even though they are in god mode (isGodModeEnabledRaw()).
+            //noinspection ConstantConditions
             if (!ess.getSettings().getNoGodWorlds().contains(this.getLocation().getWorld().getName())) {
                 return true;
             }
@@ -891,6 +919,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return ess.getPermissionsHandler().canBuild(base, getGroup());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     @Deprecated
     public long getTeleportRequestTime() {
@@ -959,6 +988,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (set) {
             for (final User user : ess.getOnlineUsers()) {
                 if (!user.isAuthorized("essentials.vanish.see")) {
+                    //noinspection deprecation
                     user.getBase().hidePlayer(getBase());
                 }
             }
@@ -974,6 +1004,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
         } else {
             for (final Player p : ess.getOnlinePlayers()) {
+                //noinspection deprecation
                 p.showPlayer(getBase());
             }
             setHidden(false);
@@ -1034,6 +1065,48 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
+    public void sendComponent(ComponentLike component) {
+        ess.getBukkitAudience().player(base).sendMessage(component);
+    }
+
+    @Override
+    public Component tlComponent(String tlKey, Object... args) {
+        final String translation = playerTl(tlKey, args);
+        return AdventureUtil.miniMessage().deserialize(translation);
+    }
+
+    @Override
+    public void sendTl(String tlKey, Object... args) {
+        final String translation = playerTl(tlKey, args);
+        if (translation.trim().isEmpty()) {
+            return;
+        }
+
+        sendComponent(AdventureUtil.miniMessage().deserialize(translation));
+    }
+
+    @Override
+    public String playerTl(String tlKey, Object... args) {
+        if (ess.getSettings().isPerPlayerLocale()) {
+            return tlLocale(getPlayerLocale(ess.getPlayerLocaleProvider().getLocale(base)), tlKey, args);
+        }
+        return tlLiteral(tlKey, args);
+    }
+
+    @Override
+    public String tlSender(String tlKey, Object... args) {
+        return playerTl(tlKey, args);
+    }
+
+    public Locale getPlayerLocale(final String locale) {
+        if (locale.equals(lastLocaleString)) {
+            return playerLocale;
+        }
+        lastLocaleString = locale;
+        return playerLocale = I18n.getLocale(locale);
+    }
+
+    @Override
     public int compareTo(final User other) {
         return FormatUtil.stripFormat(getDisplayName()).compareToIgnoreCase(FormatUtil.stripFormat(other.getDisplayName()));
     }
@@ -1054,7 +1127,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public CommandSource getSource() {
-        return new CommandSource(getBase());
+        return new CommandSource(ess, getBase());
     }
 
     @Override
@@ -1126,12 +1199,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
      * Returns the {@link ItemStack} in the main hand or off-hand. If the main hand is empty then the offhand item is returned - also nullable.
      */
     public ItemStack getItemInHand() {
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
-            return getBase().getInventory().getItemInHand();
-        } else {
-            final PlayerInventory inventory = getBase().getInventory();
-            return inventory.getItemInMainHand() != null ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
-        }
+        return Inventories.getItemInHand(getBase());
     }
 
     @Override
@@ -1144,6 +1212,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         ess.getMail().sendMail(this, sender, message, expireAt);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     @Deprecated
     public void addMail(String mail) {
@@ -1155,7 +1224,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (unread != 0) {
             final int notifyPlayerOfMailCooldown = ess.getSettings().getNotifyPlayerOfMailCooldown() * 1000;
             if (System.currentTimeMillis() - lastNotifiedAboutMailsMs >= notifyPlayerOfMailCooldown) {
-                sendMessage(tl("youHaveNewMail", unread));
+                sendTl("youHaveNewMail", unread);
                 lastNotifiedAboutMailsMs = System.currentTimeMillis();
             }
         }
@@ -1179,6 +1248,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public List<String> getSignCopy() {
         return signCopy;
+    }
+
+    @Override
+    public boolean isFreeze() {
+        return freeze;
+    }
+
+    @Override
+    public void setFreeze(boolean freeze) {
+        this.freeze = freeze;
     }
 
     public boolean isBaltopExempt() {

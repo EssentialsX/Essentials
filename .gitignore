@@ -15,6 +15,8 @@
 /Essentials/kits.yml
 /Essentials/userdata/testplayer1.yml
 /Essentials/usermap.csv
+/Essentials/usermap.bin
+/Essentials/uuids.bin
 
 # Build files
 .gradle/

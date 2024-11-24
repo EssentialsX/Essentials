@@ -4,13 +4,15 @@ import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.craftbukkit.BanLookup;
+import com.earth2me.essentials.userstorage.ModernUUIDCache;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
-import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.google.gson.reflect.TypeToken;
 import net.ess3.api.IEssentials;
 import net.essentialsx.api.v2.services.mail.MailMessage;
+import nu.studer.java.util.OrderedProperties;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,10 +33,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -47,13 +49,12 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsUpgrade {
-    private static final FileFilter YML_FILTER = pathname -> pathname.isFile() && pathname.getName().endsWith(".yml");
+    public static final FileFilter YML_FILTER = pathname -> pathname.isFile() && pathname.getName().endsWith(".yml");
     private static final String PATTERN_CONFIG_UUID_REGEX = "(?mi)^uuid:\\s*([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\\s*$";
     private static final Pattern PATTERN_CONFIG_UUID = Pattern.compile(PATTERN_CONFIG_UUID_REGEX);
     private static final String PATTERN_CONFIG_NAME_REGEX = "(?mi)^lastAccountName:\\s*[\"\']?(\\w+)[\"\']?\\s*$";
@@ -93,7 +94,6 @@ public class EssentialsUpgrade {
             final int showProgress = countFiles % 250;
 
             if (showProgress == 0) {
-                ess.getUserMap().getUUIDMap().forceWriteUUIDMap();
                 ess.getLogger().info("Converted " + countFiles + "/" + userdir.list().length);
             }
 
@@ -103,7 +103,8 @@ public class EssentialsUpgrade {
             final EssentialsUserConfiguration config;
             UUID uuid = null;
             try {
-                uuid = UUID.fromString(name);
+                //noinspection ResultOfMethodCallIgnored
+                UUID.fromString(name);
             } catch (final IllegalArgumentException ex) {
                 final File file = new File(userdir, string);
                 final EssentialsConfiguration conf = new EssentialsConfiguration(file);
@@ -115,6 +116,7 @@ public class EssentialsUpgrade {
 
                 final String uuidString = conf.getString(uuidConf, null);
 
+                //noinspection ConstantConditions
                 for (int i = 0; i < 4; i++) {
                     try {
                         uuid = UUID.fromString(uuidString);
@@ -122,7 +124,7 @@ public class EssentialsUpgrade {
                         break;
                     } catch (final Exception ex2) {
                         if (conf.getBoolean("npc", false)) {
-                            uuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
+                            uuid = UUID.nameUUIDFromBytes(("NPC:" + (ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name)).getBytes(Charsets.UTF_8));
                             break;
                         }
 
@@ -130,23 +132,24 @@ public class EssentialsUpgrade {
                         uuid = player.getUniqueId();
                     }
 
+                    //noinspection ConstantConditions
                     if (uuid != null) {
                         countBukkit++;
                         break;
                     }
                 }
 
+                //noinspection ConstantConditions
                 if (uuid != null) {
                     conf.blockingSave();
                     config = new EssentialsUserConfiguration(name, uuid, new File(userdir, uuid + ".yml"));
                     config.convertLegacyFile();
-                    ess.getUserMap().trackUUID(uuid, name, false);
+                    ess.getUsers().loadUncachedUser(uuid);
                     continue;
                 }
                 countFails++;
             }
         }
-        ess.getUserMap().getUUIDMap().forceWriteUUIDMap();
 
         ess.getLogger().info("Converted " + countFiles + "/" + countFiles + ".  Conversion complete.");
         ess.getLogger().info("Converted via cache: " + countEssCache + " :: Converted via lookup: " + countBukkit + " :: Failed to convert: " + countFails);
@@ -496,7 +499,7 @@ public class EssentialsUpgrade {
             doneFile.setProperty("move" + name + "ToFile", true);
             doneFile.save();
         } catch (final IOException e) {
-            ess.getLogger().log(Level.SEVERE, tl("upgradingFilesError"), e);
+            ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("upgradingFilesError")), e);
         }
     }
 
@@ -531,10 +534,10 @@ public class EssentialsUpgrade {
         bWriter.close();
         if (needUpdate) {
             if (!file.renameTo(new File(file.getParentFile(), file.getName().concat("." + System.currentTimeMillis() + ".upgradebackup")))) {
-                throw new Exception(tl("configFileMoveError"));
+                throw new Exception(tlLiteral("configFileMoveError"));
             }
             if (!tempFile.renameTo(file)) {
-                throw new Exception(tl("configFileRenameError"));
+                throw new Exception(tlLiteral("configFileRenameError"));
             }
         } else {
             tempFile.delete();
@@ -659,15 +662,15 @@ public class EssentialsUpgrade {
             final File tmpFile = new File(listOfFile.getParentFile(), sanitizedFilename + ".tmp");
             final File newFile = new File(listOfFile.getParentFile(), sanitizedFilename);
             if (!listOfFile.renameTo(tmpFile)) {
-                ess.getLogger().log(Level.WARNING, tl("userdataMoveError", filename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("userdataMoveError", filename, sanitizedFilename)));
                 continue;
             }
             if (newFile.exists()) {
-                ess.getLogger().log(Level.WARNING, tl("duplicatedUserdata", filename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("duplicatedUserdata", filename, sanitizedFilename)));
                 continue;
             }
             if (!tmpFile.renameTo(newFile)) {
-                ess.getLogger().log(Level.WARNING, tl("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("userdataMoveBackError", sanitizedFilename, sanitizedFilename)));
             }
         }
         doneFile.setProperty("sanitizeAllUserFilenames", true);
@@ -745,7 +748,7 @@ public class EssentialsUpgrade {
                         config.setProperty(entry.getKey(), loc);
                     }
                     if (!configFile.renameTo(new File(ess.getDataFolder(), "spawn.yml.old"))) {
-                        throw new Exception(tl("fileRenameError", "spawn.yml"));
+                        throw new Exception(tlLiteral("fileRenameError", "spawn.yml"));
                     }
                     config.blockingSave();
                 }
@@ -773,7 +776,7 @@ public class EssentialsUpgrade {
                         config.setProperty(entry.getKey(), loc);
                     }
                     if (!configFile.renameTo(new File(ess.getDataFolder(), "jail.yml.old"))) {
-                        throw new Exception(tl("fileRenameError", "jail.yml"));
+                        throw new Exception(tlLiteral("fileRenameError", "jail.yml"));
                     }
                     config.blockingSave();
                 }
@@ -917,74 +920,130 @@ public class EssentialsUpgrade {
         Bukkit.getBanList(BanList.Type.NAME).addBan(playerName, banReason, banTimeout == 0 ? null : new Date(banTimeout), Console.NAME);
     }
 
-    private void repairUserMap() {
-        if (doneFile.getBoolean("userMapRepaired", false)) {
+    public void generateUidCache() {
+        if (doneFile.getBoolean("newUidCacheBuilt", false)) {
             return;
         }
-        ess.getLogger().info("Starting usermap repair");
 
+        final File usermapFile = new File(ess.getDataFolder(), "usermap.bin");
+        final File uidsFile = new File(ess.getDataFolder(), "uuids.bin");
         final File userdataFolder = new File(ess.getDataFolder(), "userdata");
-        if (!userdataFolder.isDirectory()) {
+
+        if (!userdataFolder.isDirectory() || usermapFile.exists() || uidsFile.exists()) {
             ess.getLogger().warning("Missing userdata folder, aborting");
+            doneFile.setProperty("newUidCacheBuilt", true);
+            doneFile.save();
             return;
         }
-        final File[] files = userdataFolder.listFiles(YML_FILTER);
 
-        final DecimalFormat format = new DecimalFormat("#0.00");
-        final Map<String, UUID> names = Maps.newHashMap();
-
-        for (int index = 0; index < files.length; index++) {
-            final File file = files[index];
-            try {
-                UUID uuid = null;
-                final String filename = file.getName();
-                final String configData = new String(java.nio.file.Files.readAllBytes(file.toPath()), Charsets.UTF_8);
-
-                if (filename.length() > 36) {
-                    try {
-                        // ".yml" ending has 4 chars...
-                        uuid = UUID.fromString(filename.substring(0, filename.length() - 4));
-                    } catch (final IllegalArgumentException ignored) {
-                    }
-                }
-
-                final Matcher uuidMatcher = PATTERN_CONFIG_UUID.matcher(configData);
-                if (uuidMatcher.find()) {
-                    try {
-                        uuid = UUID.fromString(uuidMatcher.group(1));
-                    } catch (final IllegalArgumentException ignored) {
-                    }
-                }
-
-                if (uuid == null) {
-                    // Don't import
-                    continue;
-                }
-
-                final Matcher nameMatcher = PATTERN_CONFIG_NAME.matcher(configData);
-                if (nameMatcher.find()) {
-                    final String username = nameMatcher.group(1);
-                    if (username != null && username.length() > 0) {
-                        names.put(StringUtil.safeString(username), uuid);
-                    }
-                }
-
-                if (index % 1000 == 0) {
-                    ess.getLogger().info("Reading: " + format.format((100d * (double) index) / files.length)
-                            + "%");
-                }
-            } catch (final IOException e) {
-                ess.getLogger().log(Level.SEVERE, "Error while reading file: ", e);
+        try {
+            if (!usermapFile.createNewFile() || !uidsFile.createNewFile()) {
+                ess.getLogger().warning("Couldn't create usermap.bin or uuids.bin, aborting");
                 return;
             }
+
+            final Map<UUID, Long> uuids = new HashMap<>();
+            final Map<String, UUID> nameToUuidMap = new HashMap<>();
+
+            final File[] files = userdataFolder.listFiles(YML_FILTER);
+            if (files != null) {
+                for (final File file : files) {
+                    try {
+                        final String fileName = file.getName();
+                        final UUID uuid = UUID.fromString(fileName.substring(0, fileName.length() - 4));
+                        final EssentialsConfiguration config = new EssentialsConfiguration(file);
+                        config.load();
+                        String name = config.getString("last-account-name", null);
+                        name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name;
+                        final long time = config.getLong("timestamps.logout", 0L);
+
+                        if (name != null) {
+                            if (nameToUuidMap.containsKey(name)) {
+                                final UUID oldUuid = nameToUuidMap.get(name);
+                                if (oldUuid.version() < uuid.version() || (oldUuid.version() == uuid.version() && uuids.get(oldUuid) < time)) {
+                                    ess.getLogger().warning("New UUID found for " + name + ": " + uuid + " (old: " + oldUuid + "). Replacing.");
+                                    uuids.remove(oldUuid);
+                                } else {
+                                    ess.getLogger().warning("Found UUID for " + name + ": " + uuid + " (old: " + oldUuid + "). Skipping.");
+                                    continue;
+                                }
+                            }
+
+                            uuids.put(uuid, time);
+                            nameToUuidMap.put(name, uuid);
+                        }
+                    } catch (IllegalArgumentException | IndexOutOfBoundsException ignored) {
+                    }
+                }
+            }
+
+            if (!nameToUuidMap.isEmpty()) {
+                ModernUUIDCache.writeNameUuidMap(usermapFile, nameToUuidMap);
+            }
+
+            if (!uuids.isEmpty()) {
+                ModernUUIDCache.writeUuidCache(uidsFile, uuids.keySet());
+            }
+
+            doneFile.setProperty("newUidCacheBuilt", true);
+            doneFile.save();
+        } catch (final IOException e) {
+            ess.getLogger().log(Level.SEVERE, "Error while generating initial uuids/names cache", e);
+        }
+    }
+
+    public void upgradeLang() {
+        if (doneFile.getBoolean("updateLegacyToAdventure", false)) {
+            return;
         }
 
-        ess.getUserMap().getNames().putAll(names);
-        ess.getUserMap().reloadConfig();
+        ess.getLogger().log(Level.WARNING, "Beginning Adventure locale file conversion.");
 
-        doneFile.setProperty("userMapRepaired", true);
-        doneFile.save();
-        ess.getLogger().info("Completed usermap repair.");
+        try {
+            final File dataFolder = ess.getDataFolder();
+            if (!dataFolder.exists() || !dataFolder.isDirectory()) {
+                return;
+            }
+
+            final File backDir = new File(dataFolder, "msg-backups-" + System.currentTimeMillis());
+            if (backDir.exists() || !backDir.mkdir()) {
+                ess.getLogger().log(Level.SEVERE, "Unable to make msg-backups dir?!");
+                return;
+            }
+
+            final File messagesDir = new File(dataFolder, "messages");
+            //noinspection ResultOfMethodCallIgnored
+            messagesDir.mkdir();
+
+            final File[] files = dataFolder.listFiles();
+            boolean isThereAtLeastOneBackup = false;
+            if (files != null) {
+                for (final File file : files) {
+                    if (file.getName().endsWith(".properties")) {
+                        final File newFile = new File(messagesDir, file.getName());
+                        final File backup = new File(backDir, file.getName());
+                        Files.move(file, backup);
+                        isThereAtLeastOneBackup = true;
+                        final OrderedProperties properties = new OrderedProperties();
+                        properties.load(Files.newReader(backup, Charsets.UTF_8));
+                        for (final String key : properties.stringPropertyNames()) {
+                            final String value = properties.getProperty(key);
+                            properties.setProperty(key, AdventureUtil.legacyToMini(AdventureUtil.miniMessage().escapeTags(value), true));
+                        }
+                        properties.store(Files.newWriter(newFile, Charsets.UTF_8), null);
+                    }
+                }
+            }
+
+            if (!isThereAtLeastOneBackup) {
+                backDir.delete();
+            }
+
+            doneFile.setProperty("updateLegacyToAdventure", true);
+            doneFile.save();
+        } catch (final Throwable e) {
+            ess.getLogger().log(Level.SEVERE, "Error while upgrading custom locales", e);
+        }
     }
 
     public void beforeSettings() {
@@ -993,6 +1052,10 @@ public class EssentialsUpgrade {
         }
         moveMotdRulesToFile("motd");
         moveMotdRulesToFile("rules");
+    }
+
+    public void preModules() {
+        generateUidCache();
     }
 
     public void afterSettings() {
@@ -1005,7 +1068,6 @@ public class EssentialsUpgrade {
         uuidFileChange();
         banFormatChange();
         warnMetrics();
-        repairUserMap();
         convertIgnoreList();
         convertStupidCamelCaseUserdataKeys();
         convertMailList();

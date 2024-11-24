@@ -7,10 +7,10 @@ import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.InvalidWorldException;
+import net.ess3.provider.BiomeKeyProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -114,14 +114,10 @@ public class RandomTeleport implements IConf {
         return config.getBoolean("per-location-permission", false);
     }
 
-    public Set<Biome> getExcludedBiomes() {
-        final List<String> biomeNames = config.getList("excluded-biomes", String.class);
-        final Set<Biome> excludedBiomes = new HashSet<>();
-        for (final String biomeName : biomeNames) {
-            try {
-                excludedBiomes.add(Biome.valueOf(biomeName.toUpperCase()));
-            } catch (final IllegalArgumentException ignored) {
-            }
+    public Set<String> getExcludedBiomes() {
+        final Set<String> excludedBiomes = new HashSet<>();
+        for (final String key : config.getList("excluded-biomes", String.class)) {
+            excludedBiomes.add(key.toLowerCase());
         }
         return excludedBiomes;
     }
@@ -255,7 +251,31 @@ public class RandomTeleport implements IConf {
     }
 
     private boolean isValidRandomLocation(final Location location) {
-        return location.getBlockY() > ess.getWorldInfoProvider().getMinHeight(location.getWorld()) && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
+        return location.getBlockY() > ess.getWorldInfoProvider().getMinHeight(location.getWorld()) && !isExcludedBiome(location);
+    }
+
+    // Exclude biome if enum or namespaced key matches
+    private boolean isExcludedBiome(final Location location) {
+        final Set<String> excluded = getExcludedBiomes();
+        final String enumKey = location.getBlock().getBiome().name().toLowerCase();
+        // Try with good old bukkit enum
+        if (excluded.contains(enumKey)) {
+            return true;
+        }
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_14_4_R01)) {
+            // No way to get the biome key on versions below this
+            return false;
+        }
+        final String biomeKey;
+        final BiomeKeyProvider biomeKeyProvider = ess.getBiomeKeyProvider();
+        if (biomeKeyProvider != null) {
+            // Works with custom biome keys
+            biomeKey = biomeKeyProvider.getBiomeKey(location.getBlock()).toString();
+        } else {
+            // Custom biome keys resolve as "minecraft:custom" which is unfortunate
+            biomeKey = location.getBlock().getBiome().getKey().toString();
+        }
+        return excluded.contains(biomeKey);
     }
 
     private String locationKey(final String name, final String key) {

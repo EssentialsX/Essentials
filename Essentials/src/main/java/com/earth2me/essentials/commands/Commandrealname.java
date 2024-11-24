@@ -7,8 +7,6 @@ import org.bukkit.Server;
 
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandrealname extends EssentialsCommand {
     public Commandrealname() {
         super("realname");
@@ -25,13 +23,13 @@ public class Commandrealname extends EssentialsCommand {
         final boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
         boolean foundUser = false;
         for (final User u : ess.getOnlineUsers()) {
-            if (skipHidden && u.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(u.getBase())) {
+            if (skipHidden && u.isHidden(sender.getPlayer()) && u.isHiddenFrom(sender.getPlayer())) {
                 continue;
             }
             u.setDisplayNick();
             if (FormatUtil.stripFormat(u.getDisplayName()).toLowerCase(Locale.ENGLISH).contains(lookup)) {
                 foundUser = true;
-                sender.sendMessage(tl("realName", u.getDisplayName(), u.getName()));
+                sender.sendTl("realName", u.getDisplayName(), u.getName());
             }
         }
         if (!foundUser) {

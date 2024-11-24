@@ -10,8 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandsettpr extends EssentialsCommand {
     public Commandsettpr() {
         super("settpr");
@@ -26,14 +24,14 @@ public class Commandsettpr extends EssentialsCommand {
         randomTeleport.reloadConfig();
         if ("center".equalsIgnoreCase(args[1])) {
             randomTeleport.setCenter(args[0], user.getLocation());
-            user.sendMessage(tl("settpr"));
+            user.sendTl("settpr");
         } else if (args.length > 2) {
             if ("minrange".equalsIgnoreCase(args[1])) {
                 randomTeleport.setMinRange(args[0], Double.parseDouble(args[2]));
             } else if ("maxrange".equalsIgnoreCase(args[1])) {
                 randomTeleport.setMaxRange(args[0], Double.parseDouble(args[2]));
             }
-            user.sendMessage(tl("settprValue", args[1].toLowerCase(), args[2].toLowerCase()));
+            user.sendTl("settprValue", args[1].toLowerCase(), args[2].toLowerCase());
         } else {
             throw new NotEnoughArgumentsException();
         }

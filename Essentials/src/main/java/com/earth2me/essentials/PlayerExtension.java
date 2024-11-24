@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -30,5 +31,12 @@ public class PlayerExtension {
 
     public Location getLocation() {
         return base.getLocation();
+    }
+
+    public OfflinePlayer getOffline() {
+        if (base instanceof OfflinePlayerStub) {
+            return ((OfflinePlayerStub) base).base;
+        }
+        return base;
     }
 }

@@ -3,8 +3,10 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.config.entities.LazyLocation;
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -35,7 +37,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Jails implements net.ess3.api.IJails {
     private static transient boolean enabled = false;
@@ -102,17 +104,17 @@ public class Jails implements net.ess3.api.IJails {
     @Override
     public Location getJail(String jailName) throws Exception {
         if (jailName == null) {
-            throw new Exception(tl("jailNotExist"));
+            throw new TranslatableException("jailNotExist");
         }
 
         jailName = jailName.toLowerCase(Locale.ENGLISH);
         synchronized (jails) {
             if (!jails.containsKey(jailName)) {
-                throw new Exception(tl("jailNotExist"));
+                throw new TranslatableException("jailNotExist");
             }
             final Location location = jails.get(jailName).location();
             if (location == null) {
-                throw new Exception(tl("jailWorldNotExist"));
+                throw new TranslatableException("jailWorldNotExist");
             }
             return location;
         }
@@ -203,6 +205,10 @@ public class Jails implements net.ess3.api.IJails {
     private class JailListener implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailBlockBreak(final BlockBreakEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-break")) {
                 event.setCancelled(true);
@@ -211,6 +217,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailBlockPlace(final BlockPlaceEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-place")) {
                 event.setCancelled(true);
@@ -219,6 +229,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailBlockDamage(final BlockDamageEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-block-damage")) {
                 event.setCancelled(true);
@@ -232,6 +246,9 @@ public class Jails implements net.ess3.api.IJails {
             }
             final Entity damager = event.getDamager();
             if (damager.getType() == EntityType.PLAYER) {
+                if (shouldIgnore((Player) damager)) {
+                    return;
+                }
                 final User user = ess.getUser((Player) damager);
                 if (user != null && user.isJailed()) {
                     event.setCancelled(true);
@@ -241,6 +258,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailPlayerInteract(final PlayerInteractEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-interact")) {
                 event.setCancelled(true);
@@ -249,6 +270,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailPlayerGameModeChange(final PlayerGameModeChangeEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed()) {
                 event.setCancelled(true);
@@ -257,6 +282,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.HIGHEST)
         public void onJailPlayerRespawn(final PlayerRespawnEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty()) {
                 return;
@@ -266,15 +295,19 @@ public class Jails implements net.ess3.api.IJails {
                 event.setRespawnLocation(getJail(user.getJail()));
             } catch (final Exception ex) {
                 if (ess.getSettings().isDebug()) {
-                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+                    ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage())), ex);
                 } else {
-                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+                    ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage())));
                 }
             }
         }
 
         @EventHandler(priority = EventPriority.HIGH)
         public void onJailPlayerTeleport(final PlayerTeleportEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty()) {
                 return;
@@ -284,16 +317,20 @@ public class Jails implements net.ess3.api.IJails {
                 event.setTo(getJail(user.getJail()));
             } catch (final Exception ex) {
                 if (ess.getSettings().isDebug()) {
-                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+                    ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage())), ex);
                 } else {
-                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+                    ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage())));
                 }
             }
-            user.sendMessage(tl("jailMessage"));
+            user.sendTl("jailMessage");
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
         public void onJailPlayerJoin(final PlayerJoinEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             final long currentTime = System.currentTimeMillis();
             user.checkJailTimeout(currentTime);
@@ -304,19 +341,24 @@ public class Jails implements net.ess3.api.IJails {
             final CompletableFuture<Boolean> future = new CompletableFuture<>();
             future.exceptionally(ex -> {
                 if (ess.getSettings().isDebug()) {
-                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+                    ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage())), ex);
                 } else {
-                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+                    ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage())));
                 }
                 return false;
             });
-            future.thenAccept(success -> user.sendMessage(tl("jailMessage")));
+            future.thenAccept(success -> user.sendTl("jailMessage"));
 
             try {
                 sendToJail(user, user.getJail(), future);
             } catch (final Exception ex) {
                 future.completeExceptionally(ex);
             }
+        }
+
+        private boolean shouldIgnore(final Player base) {
+            // Ignore Citizens NPCs
+            return base.getUniqueId().version() == 2 || base.hasMetadata("NPC");
         }
     }
 }

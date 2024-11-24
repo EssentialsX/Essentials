@@ -17,7 +17,9 @@ public class MaterialTypeSerializer extends ScalarSerializer<Material> {
         if (obj instanceof String) {
             return Material.matchMaterial((String) obj);
         }
-        return null;
+
+        // Configurate will use an EnumSet to deserialize, which doesn't support null types. Default to air.
+        return Material.AIR;
     }
 
     @Override

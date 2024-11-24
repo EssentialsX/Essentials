@@ -8,13 +8,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.ess3.api.IEssentials;
+import net.ess3.api.TranslatableException;
+import net.ess3.provider.PotionMetaProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,10 +24,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class FlatItemDb extends AbstractItemDb {
     private static final Gson gson = new Gson();
@@ -118,23 +119,23 @@ public class FlatItemDb extends AbstractItemDb {
         final ItemData data = getByName(split[0]);
 
         if (data == null) {
-            throw new Exception(tl("unknownItemName", id));
+            throw new TranslatableException("unknownItemName", id);
         }
 
         final Material material = data.getMaterial();
 
-        if (!material.isItem()) throw new Exception(tl("unableToSpawnItem", id));
+        if (!material.isItem()) throw new TranslatableException("unableToSpawnItem", id);
 
         final ItemStack stack = new ItemStack(material);
         stack.setAmount(material.getMaxStackSize());
 
-        final PotionData potionData = data.getPotionData();
-        final ItemMeta meta = stack.getItemMeta();
+        final ItemData.EssentialPotionData potionData = data.getPotionData();
 
-        if (potionData != null && meta instanceof PotionMeta) {
-            final PotionMeta potionMeta = (PotionMeta) meta;
-            potionMeta.setBasePotionData(potionData);
+        if (potionData != null && stack.getItemMeta() instanceof PotionMeta) {
+            ess.getPotionMetaProvider().setBasePotionType(stack, potionData.getType(), potionData.isExtended(), potionData.isUpgraded());
         }
+
+        final ItemMeta meta = stack.getItemMeta();
 
         // For some reason, Damageable doesn't extend ItemMeta but CB implements them in the same
         // class. As to why, your guess is as good as mine.
@@ -201,14 +202,14 @@ public class FlatItemDb extends AbstractItemDb {
         throw new UnsupportedOperationException("Legacy IDs aren't supported on this version.");
     }
 
-    private ItemData lookup(final ItemStack item) {
-        final Material type = item.getType();
+    private ItemData lookup(final ItemStack is) {
+        final Material type = is.getType();
 
-        if (MaterialUtil.isPotion(type) && item.getItemMeta() instanceof PotionMeta) {
-            final PotionData potion = ((PotionMeta) item.getItemMeta()).getBasePotionData();
-            return new ItemData(type, potion);
+        if (MaterialUtil.isPotion(type) && is.getItemMeta() instanceof PotionMeta) {
+            final PotionMetaProvider provider = ess.getPotionMetaProvider();
+            return new ItemData(type, new ItemData.EssentialPotionData(provider.getBasePotionType(is), provider.isUpgraded(is), provider.isExtended(is)));
         } else if (type.toString().contains("SPAWNER")) {
-            final EntityType entity = ess.getSpawnerItemProvider().getEntityType(item);
+            final EntityType entity = ess.getSpawnerItemProvider().getEntityType(is);
             return new ItemData(type, entity);
         } else {
             return new ItemData(type);
@@ -225,14 +226,14 @@ public class FlatItemDb extends AbstractItemDb {
     public static class ItemData {
         private Material material;
         private String[] fallbacks = null;
-        private PotionData potionData = null;
+        private EssentialPotionData potionData = null;
         private EntityType entity = null;
 
         ItemData(final Material material) {
             this.material = material;
         }
 
-        ItemData(final Material material, final PotionData potionData) {
+        ItemData(final Material material, final EssentialPotionData potionData) {
             this.material = material;
             this.potionData = potionData;
         }
@@ -268,7 +269,7 @@ public class FlatItemDb extends AbstractItemDb {
             return material;
         }
 
-        public PotionData getPotionData() {
+        public EssentialPotionData getPotionData() {
             return this.potionData;
         }
 
@@ -293,6 +294,52 @@ public class FlatItemDb extends AbstractItemDb {
                 return this.entity.equals(o.getEntity());
             } else { // one has an entity but the other doesn't, so they can't be equal
                 return false;
+            }
+        }
+
+        public static class EssentialPotionData {
+            private PotionType type;
+            private String fallbackType;
+            private final boolean upgraded;
+            private final boolean extended;
+
+            EssentialPotionData(PotionType type, boolean upgraded, boolean extended) {
+                this.type = type;
+                this.upgraded = upgraded;
+                this.extended = extended;
+            }
+
+            public PotionType getType() {
+                if (type == null && fallbackType != null) {
+                    type = EnumUtil.valueOf(PotionType.class, fallbackType);
+                    fallbackType = null; // If fallback fails, don't keep trying to look up fallbacks
+                }
+
+                return type;
+            }
+
+            public boolean isUpgraded() {
+                return upgraded;
+            }
+
+            public boolean isExtended() {
+                return extended;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                final EssentialPotionData that = (EssentialPotionData) o;
+                return upgraded == that.upgraded &&
+                    extended == that.extended &&
+                    // Use the getters here to ensure the fallbacks are being used
+                    getType() == that.getType();
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(getType(), upgraded, extended);
             }
         }
     }

@@ -3,14 +3,15 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import net.ess3.api.TranslatableException;
+import net.essentialsx.api.v2.events.HomeModifyEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commanddelhome extends EssentialsCommand {
     public Commanddelhome() {
@@ -37,25 +38,34 @@ public class Commanddelhome extends EssentialsCommand {
 
         if (expandedArg.length > 1 && (user == null || user.isAuthorized("essentials.delhome.others"))) {
             user = getPlayer(server, expandedArg, 0, true, true);
-            name = expandedArg[1];
+            name = expandedArg[1].toLowerCase(Locale.ENGLISH);
         } else if (user == null) {
             throw new NotEnoughArgumentsException();
         } else {
-            name = expandedArg[0];
+            name = expandedArg[0].toLowerCase(Locale.ENGLISH);
         }
 
-        if (name.equalsIgnoreCase("bed")) {
-            throw new Exception(tl("invalidHomeName"));
+        if (name.equals("bed")) {
+            throw new TranslatableException("invalidHomeName");
         }
 
-        user.delHome(name.toLowerCase(Locale.ENGLISH));
-        sender.sendMessage(tl("deleteHome", name));
+        final HomeModifyEvent event = new HomeModifyEvent(sender.getUser(), user, name, user.getHome(name), false);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("HomeModifyEvent canceled for /delhome execution by " + sender.getDisplayName());
+            }
+            return;
+        }
+
+        user.delHome(name);
+        sender.sendTl("deleteHome", name);
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        final IUser user = sender.getUser(ess);
-        final boolean canDelOthers = sender.isAuthorized("essentials.delhome.others", ess);
+        final IUser user = sender.getUser();
+        final boolean canDelOthers = sender.isAuthorized("essentials.delhome.others");
         if (args.length == 1) {
             final List<String> homes = user == null ? new ArrayList<>() : user.getHomes();
             if (canDelOthers) {

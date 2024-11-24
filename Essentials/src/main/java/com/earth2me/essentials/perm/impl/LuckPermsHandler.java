@@ -70,11 +70,19 @@ public class LuckPermsHandler extends ModernVaultHandler {
             // If the player doesn't exist in the UserMap, just skip
             // Ess will cause performance problems for permissions checks if it attempts to
             // perform i/o to load the user data otherwise.
-            if (!ess.getUserMap().userExists(target.getUniqueId())) {
+            if (!ess.getUsers().getAllUserUUIDs().contains(target.getUniqueId())) {
                 return;
             }
 
-            final User user = ess.getUser(target);
+            final User user = ess.getUsers().loadUncachedUser(target.getUniqueId());
+
+            // This will occur for first time players during join,
+            // None of our contexts would apply to that kind of person anyway,
+            // lets just skip :O
+            if (user == null) {
+                return;
+            }
+
             for (Calculator calculator : this.calculators) {
                 calculator.function.apply(user).forEach(value -> consumer.accept(calculator.id, value));
             }

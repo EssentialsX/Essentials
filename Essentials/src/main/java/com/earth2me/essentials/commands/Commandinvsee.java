@@ -21,10 +21,15 @@ public class Commandinvsee extends EssentialsCommand {
         }
 
         final User invUser = getPlayer(server, user, args, 0);
+        if (user == invUser) {
+            user.sendTl("invseeNoSelf");
+            throw new NoChargeException();
+        }
+
         final Inventory inv;
 
         if (args.length > 1 && user.isAuthorized("essentials.invsee.equip")) {
-            inv = server.createInventory(invUser.getBase(), 9, "Equipped");
+            inv = server.createInventory(invUser.getBase(), 9, user.playerTl("equipped"));
             inv.setContents(invUser.getBase().getInventory().getArmorContents());
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_4_R01)) {
                 inv.setItem(4, invUser.getBase().getInventory().getItemInOffHand());
@@ -40,7 +45,9 @@ public class Commandinvsee extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, user);
+            final List<String> suggestions = getPlayers(server, user);
+            suggestions.remove(user.getName());
+            return suggestions;
         } else {
             //if (args.length == 2) {
             //    return Lists.newArrayList("equipped");

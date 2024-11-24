@@ -18,6 +18,9 @@ public class PaperLoggerProvider extends LoggerProvider {
 
     @Override
     protected void doTheLog(Level level, String message, Throwable throwable) {
+        if (message == null) {
+            return;
+        }
         final Component component = LegacyComponentSerializer.legacySection().deserialize(message);
         if (level == Level.SEVERE) {
             logger.error(component, throwable);
@@ -34,6 +37,9 @@ public class PaperLoggerProvider extends LoggerProvider {
 
     @Override
     protected void doTheLog(Level level, String message) {
+        if (message == null) {
+            return;
+        }
         final Component component = LegacyComponentSerializer.legacySection().deserialize(message);
         if (level == Level.SEVERE) {
             logger.error(component);

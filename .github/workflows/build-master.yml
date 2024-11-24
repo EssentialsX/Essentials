@@ -5,6 +5,9 @@ on:
     branches:
     - 2.x
     - dev/*
+  release:
+    types:
+    - published
 
 jobs:
   build:
@@ -13,34 +16,32 @@ jobs:
 
     steps:
     - name: Checkout Git repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    - name: Restore Gradle cache
-      uses: actions/cache@v2
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
       with:
-        path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+        distribution: 'temurin'
+        java-version: 17
 
-    - name: Set up JDK 16
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'adopt'
-        java-version: 16
-
-    - name: Validate Gradle Wrapper
-      uses: gradle/wrapper-validation-action@v1
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v3
 
     - name: Build with Gradle
       run: |
         chmod +x gradlew
         ./gradlew build --stacktrace
 
+    - name: Publish JUnit report
+      uses: mikepenz/action-junit-report@v4
+      if: success() || failure() # Run even if the previous step fails
+      with:
+        report_paths: '**/build/test-results/test*/TEST-*.xml'
+
     - name: Archive plugin jars on GitHub
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@v4
       with:
         name: EssentialsX plugin jars
         path: jars/
@@ -54,22 +55,43 @@ jobs:
         ./gradlew publish
 
     - name: Prepare Javadocs
-      if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
       run: |
         mv Essentials/build/docs/javadoc/ javadocs/
         cp -r EssentialsAntiBuild/build/docs/javadoc/ javadocs/EssentialsAntiBuild/
         cp -r EssentialsChat/build/docs/javadoc/ javadocs/EssentialsChat/
         cp -r EssentialsDiscord/build/docs/javadoc/ javadocs/EssentialsDiscord/
+        cp -r EssentialsDiscordLink/build/docs/javadoc/ javadocs/EssentialsDiscordLink/
         cp -r EssentialsGeoIP/build/docs/javadoc/ javadocs/EssentialsGeoIP/
         cp -r EssentialsProtect/build/docs/javadoc/ javadocs/EssentialsProtect/
         cp -r EssentialsSpawn/build/docs/javadoc/ javadocs/EssentialsSpawn/
         cp -r EssentialsXMPP/build/docs/javadoc/ javadocs/EssentialsXMPP/
 
-    - name: Deploy Javadocs
-      if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
-      uses: netlify/actions/cli@master
+    - name: Archive Javadocs
+      uses: actions/upload-artifact@v4
       with:
-        args: deploy --dir=javadocs/ --prod --message="GitHubActionsDeploy"
+        name: javadocs
+        path: javadocs/
+
+  publish-jd:
+    name: Publish Javadocs
+    needs: build
+    if: ${{ github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 16
+
+    - name: Download Javadocs
+      uses: actions/download-artifact@v4
+      with:
+        name: javadocs
+        path: javadocs/
+
+    - name: Deploy Javadocs
+      run: npx netlify-cli deploy --dir=javadocs/ --prod --message="GitHubActionsDeploy"
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_JD_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_JD_2X_SITE_ID }}

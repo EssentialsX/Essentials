@@ -3,6 +3,7 @@ package com.earth2me.essentials.perm.impl;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,13 +33,34 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
     }
 
     @Override
-    public String getGroup(final Player base) {
-        return perms.getPrimaryGroup(base);
+    public String getGroup(final OfflinePlayer base) {
+        if (base.isOnline()) {
+            return perms.getPrimaryGroup(base.getPlayer());
+        }
+        return perms.getPrimaryGroup(null, base);
     }
 
     @Override
-    public List<String> getGroups(final Player base) {
-        return Arrays.asList(perms.getPlayerGroups(base));
+    public List<String> getGroups(final OfflinePlayer base) {
+        if (base.isOnline()) {
+            return Arrays.asList(perms.getPlayerGroups(base.getPlayer()));
+        }
+        return Arrays.asList(perms.getPlayerGroups(null, base));
+    }
+
+    @Override
+    public List<String> getGroups() {
+        return Arrays.asList(perms.getGroups());
+    }
+
+    @Override
+    public boolean addToGroup(OfflinePlayer base, String group) {
+        return perms.playerAddGroup(null, base, group);
+    }
+
+    @Override
+    public boolean removeFromGroup(OfflinePlayer base, String group) {
+        return perms.playerRemoveGroup(null, base, group);
     }
 
     @Override

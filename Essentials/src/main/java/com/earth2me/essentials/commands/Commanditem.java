@@ -2,8 +2,9 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -11,8 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commanditem extends EssentialsCommand {
     public Commanditem() {
@@ -29,7 +28,7 @@ public class Commanditem extends EssentialsCommand {
 
         final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
         if (!user.canSpawnItem(stack.getType())) {
-            throw new Exception(tl("cantSpawnItem", itemname));
+            throw new TranslatableException("cantSpawnItem", itemname);
         }
 
         try {
@@ -46,7 +45,7 @@ public class Commanditem extends EssentialsCommand {
 
         final MetaItemStack metaStack = new MetaItemStack(stack);
         if (!metaStack.canSpawn(ess)) {
-            throw new Exception(tl("unableToSpawnItem", itemname));
+            throw new TranslatableException("unableToSpawnItem", itemname);
         }
 
         if (args.length > 2) {
@@ -58,16 +57,12 @@ public class Commanditem extends EssentialsCommand {
         }
 
         if (stack.getType() == Material.AIR) {
-            throw new Exception(tl("cantSpawnItem", "Air"));
+            throw new TranslatableException("cantSpawnItem", "Air");
         }
 
         final String displayName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
-        user.sendMessage(tl("itemSpawn", stack.getAmount(), displayName));
-        if (user.isAuthorized("essentials.oversizedstacks")) {
-            InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), stack);
-        } else {
-            InventoryWorkaround.addItems(user.getBase().getInventory(), stack);
-        }
+        user.sendTl("itemSpawn", stack.getAmount(), displayName);
+        Inventories.addItem(user.getBase(), user.isAuthorized("essentials.oversizedstacks") ? ess.getSettings().getOversizedStackSize() : 0, stack);
         user.getBase().updateInventory();
     }
 

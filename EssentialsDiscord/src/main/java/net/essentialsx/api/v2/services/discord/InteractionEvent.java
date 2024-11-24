@@ -11,6 +11,13 @@ public interface InteractionEvent {
     void reply(String message);
 
     /**
+     * Appends the given string to the initial response message and creates one if it doesn't exist.
+     * @param tlKey The tlKey of the message to append.
+     * @param args  The args for the message to append.
+     */
+    void replyTl(String tlKey, Object... args);
+
+    /**
      * Gets the member which caused this event.
      * @return the member which caused the event.
      */
@@ -50,6 +57,13 @@ public interface InteractionEvent {
      * @return the channel value or null
      */
     InteractionChannel getChannelArgument(String key);
+
+    /**
+     * Helper method to get the role representation of the argument by the given key or null if none by that key is present.
+     * @param key The key of the argument to lookup.
+     * @return the role value or null
+     */
+    InteractionRole getRoleArgument(String key);
 
     /**
      * Gets the channel ID where this interaction occurred.

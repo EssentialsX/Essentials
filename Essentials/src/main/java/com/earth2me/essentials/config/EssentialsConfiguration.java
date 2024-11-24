@@ -12,6 +12,7 @@ import com.earth2me.essentials.config.serializers.CommandCooldownSerializer;
 import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
 import com.earth2me.essentials.config.serializers.MailMessageSerializer;
 import com.earth2me.essentials.config.serializers.MaterialTypeSerializer;
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.InvalidWorldException;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import org.bukkit.Location;
@@ -33,7 +34,9 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -46,7 +49,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsConfiguration {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
@@ -103,6 +106,15 @@ public class EssentialsConfiguration {
         return configurationNode;
     }
 
+    public void setRootHolder(final Class<?> holderClass, final Object holder) {
+        try {
+            getRootNode().set(holderClass, holder);
+        } catch (SerializationException e) {
+            Essentials.getWrappedLogger().log(Level.SEVERE, "Error while saving user config: " + configFile.getName(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
     public File getFile() {
         return configFile;
     }
@@ -120,6 +132,7 @@ public class EssentialsConfiguration {
         try {
             return node.get(LazyLocation.class);
         } catch (SerializationException e) {
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
             return null;
         }
     }
@@ -261,7 +274,8 @@ public class EssentialsConfiguration {
         try {
             return node.get(BigDecimal.class);
         } catch (SerializationException e) {
-            return null;
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
+            return def;
         }
     }
 
@@ -292,6 +306,19 @@ public class EssentialsConfiguration {
 
     public Map<String, CommentedConfigurationNode> getMap() {
         return ConfigurateUtil.getMap(configurationNode);
+    }
+
+    public Map<String, String> getStringMap(String path) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node == null || !node.isMap()) {
+            return Collections.emptyMap();
+        }
+
+        final Map<String, String> map = new LinkedHashMap<>();
+        for (Map.Entry<Object, CommentedConfigurationNode> entry : node.childrenMap().entrySet()) {
+            map.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue().rawScalar()));
+        }
+        return map;
     }
 
     public void removeProperty(String path) {
@@ -341,7 +368,7 @@ public class EssentialsConfiguration {
 
         if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
             if (!configFile.getParentFile().mkdirs()) {
-                Essentials.getWrappedLogger().log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
+                Essentials.getWrappedLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("failedToCreateConfig", configFile.toString())));
                 return;
             }
         }
@@ -353,10 +380,10 @@ public class EssentialsConfiguration {
                 convertAltFile();
             } else if (templateName != null) {
                 try (final InputStream is = resourceClass.getResourceAsStream(templateName)) {
-                    Essentials.getWrappedLogger().log(Level.INFO, tl("creatingConfigFromTemplate", configFile.toString()));
+                    Essentials.getWrappedLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("creatingConfigFromTemplate", configFile.toString())));
                     Files.copy(is, configFile.toPath());
                 } catch (IOException e) {
-                    Essentials.getWrappedLogger().log(Level.SEVERE, tl("failedToWriteConfig", configFile.toString()), e);
+                    Essentials.getWrappedLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("failedToWriteConfig", configFile.toString())), e);
                 }
             }
         }
@@ -366,10 +393,10 @@ public class EssentialsConfiguration {
         } catch (final ParsingException e) {
             final File broken = new File(configFile.getAbsolutePath() + ".broken." + System.currentTimeMillis());
             if (configFile.renameTo(broken)) {
-                Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), e.getCause());
+                Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile + " is broken, it has been renamed to " + broken, e.getCause());
                 return;
             }
-            Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile.toString() + " is broken. A backup file has failed to be created", e.getCause());
+            Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile + " is broken. A backup file has failed to be created", e.getCause());
         } catch (final ConfigurateException e) {
             Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
         } finally {
@@ -418,6 +445,10 @@ public class EssentialsConfiguration {
         } else {
             save();
         }
+    }
+
+    public boolean isTransaction() {
+        return transaction.get();
     }
 
     public void setSaveHook(Runnable saveHook) {
