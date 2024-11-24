@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.RandomTeleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserRandomTeleportEvent;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -28,7 +29,7 @@ public class Commandtpr extends EssentialsCommand {
         final String name = args.length > 0 ? args[0] : defaultLocation;
         final User userToTeleport = args.length > 1 && user.isAuthorized("essentials.tpr.others") ? getPlayer(server, user, args, 1) : user;
         if (randomTeleport.isPerLocationPermission() && !user.isAuthorized("essentials.tpr.location." + name)) {
-            throw new Exception(tl("warpUsePermission"));
+            throw new TranslatableException("warpUsePermission");
         }
         final UserRandomTeleportEvent event = new UserRandomTeleportEvent(userToTeleport, name, randomTeleport.getCenter(name), randomTeleport.getMinRange(name), randomTeleport.getMaxRange(name));
         server.getPluginManager().callEvent(event);
@@ -66,7 +67,7 @@ public class Commandtpr extends EssentialsCommand {
                     final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                     future.thenAccept(success -> {
                         if (success) {
-                            userToTeleport.sendMessage(tl("tprSuccess"));
+                            userToTeleport.sendTl("tprSuccess");
                         }
                     });
                     userToTeleport.getAsyncTeleport().now(location, false, PlayerTeleportEvent.TeleportCause.COMMAND, future);
@@ -78,11 +79,11 @@ public class Commandtpr extends EssentialsCommand {
         final RandomTeleport randomTeleport = ess.getRandomTeleport();
         if (args.length == 1) {
             if (randomTeleport.isPerLocationPermission()) {
-                return randomTeleport.listLocations().stream().filter(name -> sender.isAuthorized("essentials.tpr.location." + name, ess)).collect(Collectors.toList());
+                return randomTeleport.listLocations().stream().filter(name -> sender.isAuthorized("essentials.tpr.location." + name)).collect(Collectors.toList());
             } else {
                 return randomTeleport.listLocations();
             }
-        } else if (args.length == 2 && sender.isAuthorized("essentials.tpr.others", ess)) {
+        } else if (args.length == 2 && sender.isAuthorized("essentials.tpr.others")) {
             return getPlayers(server, sender);
         }
         return Collections.emptyList();

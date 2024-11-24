@@ -9,16 +9,9 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class SignRandomTeleport extends EssentialsSign {
     public SignRandomTeleport() {
         super("RandomTeleport");
-    }
-
-    @Override
-    protected boolean onSignCreate(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException {
-        return true;
     }
 
     @Override
@@ -29,7 +22,7 @@ public class SignRandomTeleport extends EssentialsSign {
             final CompletableFuture<Boolean> future = new CompletableFuture<>();
             future.thenAccept(success -> {
                 if (success) {
-                    player.sendMessage(tl("tprSuccess"));
+                    player.sendTl("tprSuccess");
                 }
             });
             player.getAsyncTeleport().now(location, false, PlayerTeleportEvent.TeleportCause.COMMAND, future);
