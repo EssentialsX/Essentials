@@ -6,7 +6,6 @@ import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
-import net.ess3.api.InvalidWorldException;
 import net.ess3.provider.BiomeKeyProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,31 +37,14 @@ public class RandomTeleport implements IConf {
         reloadConfig();
     }
 
+    public EssentialsConfiguration getConfig() {
+        return config;
+    }
+
     @Override
     public void reloadConfig() {
         config.load();
         cachedLocations.clear();
-    }
-
-    public void updateConfig() {
-        try {
-            final LazyLocation center = config.getLocation("center");
-            if (center != null && center.location() != null) {
-                final double minRange = config.getDouble("min-range", Double.MIN_VALUE);
-                final double maxRange = config.getDouble("max-range", Double.MIN_VALUE);
-                for (World world : ess.getServer().getWorlds()) {
-                    setCenter(world.getName(), center.location());
-                    if (minRange != Double.MIN_VALUE) {
-                        setMinRange(world.getName(), minRange);
-                    }
-                    if (maxRange != Double.MIN_VALUE) {
-                        setMaxRange(world.getName(), maxRange);
-                    }
-                }
-            }
-            config.removeProperty("center");
-        } catch (InvalidWorldException ignored) {
-        }
     }
 
     public boolean hasLocation(final String name) {
@@ -70,17 +52,15 @@ public class RandomTeleport implements IConf {
     }
 
     public Location getCenter(final String name) {
-        try {
-            final LazyLocation center = config.getLocation(locationKey(name, "center"));
-            if (center != null && center.location() != null) {
-                return center.location();
-            }
-        } catch (final InvalidWorldException ignored) {
+        final LazyLocation center = config.getLocation(locationKey(name, "center"));
+        if (center != null && center.location() != null) {
+            return center.location();
         }
-        final Location center = ess.getServer().getWorlds().get(0).getWorldBorder().getCenter();
-        center.setY(center.getWorld().getHighestBlockYAt(center) + HIGHEST_BLOCK_Y_OFFSET);
-        setCenter(name, center);
-        return center;
+
+        final Location worldCenter = ess.getServer().getWorlds().get(0).getWorldBorder().getCenter();
+        worldCenter.setY(worldCenter.getWorld().getHighestBlockYAt(worldCenter) + HIGHEST_BLOCK_Y_OFFSET);
+        setCenter(name, worldCenter);
+        return worldCenter;
     }
 
     public void setCenter(final String name, final Location center) {
