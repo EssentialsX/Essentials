@@ -22,14 +22,9 @@ public class UserRandomTeleportEvent extends Event implements Cancellable {
     private boolean modified = false;
 
     public UserRandomTeleportEvent(final IUser user, final String name, final Location center, final double minRange, final double maxRange) {
-        this(user, center, minRange, maxRange);
-        this.name = name;
-    }
-
-    @Deprecated
-    public UserRandomTeleportEvent(final IUser user, final Location center, final double minRange, final double maxRange) {
         super(!Bukkit.isPrimaryThread());
         this.user = user;
+        this.name = name;
         this.center = center;
         this.minRange = minRange;
         this.maxRange = maxRange;
