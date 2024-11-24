@@ -21,7 +21,6 @@ public class Commandsettpr extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         final RandomTeleport randomTeleport = ess.getRandomTeleport();
-        randomTeleport.reloadConfig();
         if ("center".equalsIgnoreCase(args[1])) {
             randomTeleport.setCenter(args[0], user.getLocation());
             user.sendTl("settpr");
