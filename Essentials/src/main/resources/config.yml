@@ -387,6 +387,7 @@ enabledSigns:
   #- loom
   #- smithing
   #- workbench
+  #- randomteleport
 
 # How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.
@@ -935,7 +936,7 @@ chat:
 
   # If you are using group formats make sure to remove the '#' to allow the setting to be read.
   # Note: Group names are case-sensitive so you must match them up with your permission plugin.
-  
+
   # You can use permissions to control whether players can use formatting codes in their chat messages.
   # See https://essentialsx.net/wiki/Color-Permissions.html for more information.
 
@@ -1196,6 +1197,12 @@ respawn-at-home-bed: true
 
 # When users die, should EssentialsSpawn respect users' respawn anchors?
 respawn-at-anchor: false
+
+# If configured, users will spawn at the random spawn location instead of the newbies spawnpoint.
+random-spawn-location: "none"
+
+# If configured, when users die, they will respawn at the random respawn location.
+random-respawn-location: "none"
 
 # Teleport all joining players to the spawnpoint
 spawn-on-join: false
