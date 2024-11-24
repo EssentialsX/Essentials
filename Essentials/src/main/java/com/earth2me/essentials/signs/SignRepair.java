@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.Commandrepair;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import net.ess3.api.IEssentials;
+import net.ess3.api.TranslatableException;
 
 public class SignRepair extends EssentialsSign {
     public SignRepair() {
@@ -42,6 +43,8 @@ public class SignRepair extends EssentialsSign {
                 throw new NotEnoughArgumentsException();
             }
 
+        } catch (final TranslatableException ex) {
+            throw new SignException(ex.getTlKey(), ex.getArgs());
         } catch (final Exception ex) {
             throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
