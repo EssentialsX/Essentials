@@ -7,8 +7,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandsuicide extends EssentialsCommand {
     public Commandsuicide() {
         super("suicide");
@@ -16,13 +14,12 @@ public class Commandsuicide extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final EntityDamageEvent ede = new EntityDamageEvent(user.getBase(), EntityDamageEvent.DamageCause.SUICIDE, Float.MAX_VALUE);
-        server.getPluginManager().callEvent(ede);
+        final EntityDamageEvent ede = ess.getDamageEventProvider().callDamageEvent(user.getBase(), EntityDamageEvent.DamageCause.SUICIDE, Float.MAX_VALUE);
         ede.getEntity().setLastDamageCause(ede);
         user.getBase().setHealth(0);
-        user.sendMessage(tl("suicideMessage"));
+        user.sendTl("suicideMessage");
         user.setDisplayNick();
-        ess.broadcastMessage(user, tl("suicideSuccess", user.getDisplayName()));
+        ess.broadcastTl(user, "suicideSuccess", new Object[]{user.getDisplayName()});
     }
 
     @Override

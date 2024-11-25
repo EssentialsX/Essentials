@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.IEssentials;
 
 import java.io.BufferedInputStream;
@@ -22,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class ManagedFile {
     private static final int BUFFERSIZE = 1024 * 8;
@@ -45,7 +46,7 @@ public class ManagedFile {
             try {
                 copyResourceAscii("/" + filename, file);
             } catch (final IOException ex) {
-                Essentials.getWrappedLogger().log(Level.SEVERE, tl("itemsCsvNotLoaded", filename), ex);
+                Essentials.getWrappedLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("itemsCsvNotLoaded", filename)), ex);
             }
         }
     }

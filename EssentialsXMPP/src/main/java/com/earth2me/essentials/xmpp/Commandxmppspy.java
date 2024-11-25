@@ -1,13 +1,10 @@
 package com.earth2me.essentials.xmpp;
 
-import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsLoopCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
-import com.earth2me.essentials.commands.PlayerExemptException;
-import com.earth2me.essentials.commands.PlayerNotFoundException;
-import net.ess3.api.MaxMoneyException;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 
 public class Commandxmppspy extends EssentialsLoopCommand {
@@ -16,7 +13,7 @@ public class Commandxmppspy extends EssentialsLoopCommand {
     }
 
     @Override
-    protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws NotEnoughArgumentsException, PlayerExemptException, MaxMoneyException, ChargeException, PlayerNotFoundException {
+    protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws NotEnoughArgumentsException, TranslatableException {
         if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }

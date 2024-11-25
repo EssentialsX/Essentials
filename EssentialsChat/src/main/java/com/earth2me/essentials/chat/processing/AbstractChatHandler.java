@@ -5,6 +5,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.chat.EssentialsChat;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.LocalChatSpyEvent;
 import net.essentialsx.api.v2.ChatType;
@@ -26,7 +27,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public abstract class AbstractChatHandler {
 
@@ -109,9 +110,9 @@ public abstract class AbstractChatHandler {
             }
 
             if (chat.getType() == ChatType.UNKNOWN) {
-                format = tl("chatTypeLocal").concat(format);
+                format = AdventureUtil.miniToLegacy(tlLiteral("chatTypeLocal")).concat(format);
             } else {
-                format = tl(chat.getType().key() + "Format", format);
+                format = AdventureUtil.miniToLegacy(tlLiteral(chat.getType().key() + "Format", format));
             }
         }
 
@@ -144,7 +145,7 @@ public abstract class AbstractChatHandler {
         if (event.getMessage().length() > 0) {
             if (chat.getType() == ChatType.UNKNOWN) {
                 if (!user.isAuthorized("essentials.chat.local")) {
-                    user.sendMessage(tl("notAllowedToLocal"));
+                    user.sendTl("notAllowedToLocal");
                     event.setCancelled(true);
                     return;
                 }
@@ -159,10 +160,9 @@ public abstract class AbstractChatHandler {
                     callChatEvent(event, chat.getType(), null);
                 } else {
                     final String chatType = chat.getType().name();
-                    user.sendMessage(tl("notAllowedTo" + chatType.charAt(0) + chatType.substring(1).toLowerCase(Locale.ENGLISH)));
+                    user.sendTl("notAllowedTo" + chatType.charAt(0) + chatType.substring(1).toLowerCase(Locale.ENGLISH));
                     event.setCancelled(true);
                 }
-
                 return;
             }
         }
@@ -213,12 +213,12 @@ public abstract class AbstractChatHandler {
         }
 
         if (outList.size() < 2) {
-            user.sendMessage(tl("localNoOne"));
+            user.sendTl("localNoOne");
         }
 
         // Strip local chat prefix to preserve API behaviour
-        final String localPrefix = tl("chatTypeLocal");
-        String baseFormat = event.getFormat();
+        final String localPrefix = AdventureUtil.miniToLegacy(tlLiteral("chatTypeLocal"));
+        String baseFormat = AdventureUtil.legacyToMini(event.getFormat());
         if (event.getFormat().startsWith(localPrefix)) {
             baseFormat = baseFormat.substring(localPrefix.length());
         }
@@ -227,8 +227,10 @@ public abstract class AbstractChatHandler {
         server.getPluginManager().callEvent(spyEvent);
 
         if (!spyEvent.isCancelled()) {
+            final String legacyString = AdventureUtil.miniToLegacy(String.format(spyEvent.getFormat(), AdventureUtil.legacyToMini(user.getDisplayName()), AdventureUtil.escapeTags(spyEvent.getMessage())));
+
             for (final Player onlinePlayer : spyEvent.getRecipients()) {
-                onlinePlayer.sendMessage(String.format(spyEvent.getFormat(), user.getDisplayName(), spyEvent.getMessage()));
+                onlinePlayer.sendMessage(legacyString);
             }
         }
     }

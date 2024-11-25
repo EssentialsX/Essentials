@@ -3,9 +3,12 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import net.ess3.api.TranslatableException;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -20,8 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandrecipe extends EssentialsCommand {
     private static final Material FIREWORK_ROCKET = EnumUtil.getMaterial("FIREWORK_ROCKET", "FIREWORK");
@@ -46,7 +47,7 @@ public class Commandrecipe extends EssentialsCommand {
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (unsupported) {
-            sender.sendMessage(tl("unsupportedFeature"));
+            sender.sendTl("unsupportedFeature");
             return;
         }
 
@@ -58,7 +59,7 @@ public class Commandrecipe extends EssentialsCommand {
 
         if (args[0].equalsIgnoreCase("hand")) {
             if (!sender.isPlayer()) {
-                throw new Exception(tl("consoleCannotUseCommand"));
+                throw new TranslatableException("consoleCannotUseCommand");
             }
             
             itemType = Inventories.getItemInHand(sender.getPlayer());
@@ -72,21 +73,21 @@ public class Commandrecipe extends EssentialsCommand {
             if (NumberUtil.isInt(args[1])) {
                 recipeNo = Integer.parseInt(args[1]) - 1;
             } else {
-                throw new Exception(tl("invalidNumber"));
+                throw new TranslatableException("invalidNumber");
             }
         }
 
         final List<Recipe> recipesOfType = ess.getServer().getRecipesFor(itemType);
         if (recipesOfType.size() < 1) {
-            throw new Exception(tl("recipeNone", getMaterialName(itemType)));
+            throw new TranslatableException("recipeNone", getMaterialName(sender, itemType));
         }
 
         if (recipeNo < 0 || recipeNo >= recipesOfType.size()) {
-            throw new Exception(tl("recipeBadIndex"));
+            throw new TranslatableException("recipeBadIndex");
         }
 
         final Recipe selectedRecipe = recipesOfType.get(recipeNo);
-        sender.sendMessage(tl("recipe", getMaterialName(itemType), recipeNo + 1, recipesOfType.size()));
+        sender.sendTl("recipe", getMaterialName(sender, itemType), recipeNo + 1, recipesOfType.size());
 
         if (selectedRecipe instanceof FurnaceRecipe) {
             furnaceRecipe(sender, (FurnaceRecipe) selectedRecipe);
@@ -105,12 +106,12 @@ public class Commandrecipe extends EssentialsCommand {
         }
 
         if (recipesOfType.size() > 1 && args.length == 1) {
-            sender.sendMessage(tl("recipeMore", commandLabel, args[0], getMaterialName(itemType)));
+            sender.sendTl("recipeMore", commandLabel, args[0], getMaterialName(sender, itemType));
         }
     }
 
     public void furnaceRecipe(final CommandSource sender, final FurnaceRecipe recipe) {
-        sender.sendMessage(tl("recipeFurnace", getMaterialName(recipe.getInput())));
+        sender.sendTl("recipeFurnace", getMaterialName(sender, recipe.getInput()));
     }
 
     public void shapedRecipe(final CommandSource sender, final ShapedRecipe recipe, final boolean showWindow) {
@@ -132,7 +133,7 @@ public class Commandrecipe extends EssentialsCommand {
                     if (VersionUtil.PRE_FLATTENING && item.getDurability() == Short.MAX_VALUE) {
                         item.setDurability((short) 0);
                     }
-                    view.getTopInventory().setItem(j * 3 + k + 1, item);
+                    ess.getInventoryViewProvider().getTopInventory(view).setItem(j * 3 + k + 1, item);
                 }
             }
         } else {
@@ -151,16 +152,26 @@ public class Commandrecipe extends EssentialsCommand {
                     materials[j][k] = item == null ? null : item.getType();
                 }
             }
-            sender.sendMessage(tl("recipeGrid", colorMap.get(materials[0][0]), colorMap.get(materials[0][1]), colorMap.get(materials[0][2])));
-            sender.sendMessage(tl("recipeGrid", colorMap.get(materials[1][0]), colorMap.get(materials[1][1]), colorMap.get(materials[1][2])));
-            sender.sendMessage(tl("recipeGrid", colorMap.get(materials[2][0]), colorMap.get(materials[2][1]), colorMap.get(materials[2][2])));
+            sender.sendTl("recipeGrid", colorTag(colorMap, materials, 0, 0), colorTag(colorMap, materials, 0, 1), colorTag(colorMap, materials, 0, 2));
+            sender.sendTl("recipeGrid", colorTag(colorMap, materials, 1, 0), colorTag(colorMap, materials, 1, 1), colorTag(colorMap, materials, 1, 2));
+            sender.sendTl("recipeGrid", colorTag(colorMap, materials, 2, 0), colorTag(colorMap, materials, 2, 1), colorTag(colorMap, materials, 2, 2));
 
             final StringBuilder s = new StringBuilder();
             for (final Material items : colorMap.keySet().toArray(new Material[0])) {
-                s.append(tl("recipeGridItem", colorMap.get(items), getMaterialName(items)));
+                s.append(sender.tl("recipeGridItem", colorMap.get(items), getMaterialName(sender, items))).append(" ");
             }
-            sender.sendMessage(tl("recipeWhere", s.toString()));
+            sender.sendTl("recipeWhere", AdventureUtil.parsed(s.toString()));
         }
+    }
+
+    private AdventureUtil.ParsedPlaceholder colorTag(final Map<Material, String> colorMap, final Material[][] materials, final int x, final int y) {
+        final char colorChar = colorMap.get(materials[x][y]).charAt(0);
+        final NamedTextColor namedTextColor = AdventureUtil.fromChar(colorChar);
+        if (namedTextColor == null) {
+            throw new IllegalStateException("Illegal amount of materials in recipe");
+        }
+
+        return AdventureUtil.parsed("<" + namedTextColor + ">" + colorChar);
     }
 
     public void shapelessRecipe(final CommandSource sender, final ShapelessRecipe recipe, final boolean showWindow) {
@@ -175,32 +186,32 @@ public class Commandrecipe extends EssentialsCommand {
                 if (VersionUtil.PRE_FLATTENING && item.getDurability() == Short.MAX_VALUE) {
                     item.setDurability((short) 0);
                 }
-                view.setItem(i + 1, item);
+                ess.getInventoryViewProvider().setItem(view, i + 1, item);
             }
 
         } else {
             final StringBuilder s = new StringBuilder();
             for (int i = 0; i < ingredients.size(); i++) {
-                s.append(getMaterialName(ingredients.get(i)));
+                s.append(getMaterialName(sender, ingredients.get(i)));
                 if (i != ingredients.size() - 1) {
                     s.append(",");
                 }
                 s.append(" ");
             }
-            sender.sendMessage(tl("recipeShapeless", s.toString()));
+            sender.sendTl("recipeShapeless", s.toString());
         }
     }
 
-    public String getMaterialName(final ItemStack stack) {
+    public String getMaterialName(final CommandSource sender, final ItemStack stack) {
         if (stack == null) {
-            return tl("recipeNothing");
+            return sender.tl("recipeNothing");
         }
-        return getMaterialName(stack.getType());
+        return getMaterialName(sender, stack.getType());
     }
 
-    public String getMaterialName(final Material type) {
+    public String getMaterialName(final CommandSource sender, final Material type) {
         if (type == null) {
-            return tl("recipeNothing");
+            return sender.tl("recipeNothing");
         }
         return type.toString().replace("_", " ").toLowerCase(Locale.ENGLISH);
     }

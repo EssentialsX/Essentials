@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.TreeType;
@@ -10,8 +11,6 @@ import org.bukkit.TreeType;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandtree extends EssentialsCommand {
     public Commandtree() {
@@ -40,14 +39,14 @@ public class Commandtree extends EssentialsCommand {
 
         final Location loc = LocationUtil.getTarget(user.getBase(), ess.getSettings().getMaxTreeCommandRange()).add(0, 1, 0);
         if (loc.getBlock().getType().isSolid()) {
-            throw new Exception(tl("treeFailure"));
+            throw new TranslatableException("treeFailure");
         }
 
         if (user.getWorld().generateTree(loc, tree)) {
-            user.sendMessage(tl("treeSpawned"));
+            user.sendTl("treeSpawned");
             return;
         }
-        user.sendMessage(tl("treeFailure"));
+        user.sendTl("treeFailure");
     }
 
     @Override

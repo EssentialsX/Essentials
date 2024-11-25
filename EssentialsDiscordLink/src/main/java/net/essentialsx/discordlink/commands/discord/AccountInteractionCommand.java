@@ -11,14 +11,14 @@ import net.essentialsx.discordlink.AccountLinkManager;
 
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class AccountInteractionCommand implements InteractionCommand {
     private final List<InteractionCommandArgument> arguments;
     private final AccountLinkManager accounts;
 
     public AccountInteractionCommand(AccountLinkManager accounts) {
-        this.arguments = ImmutableList.of(new InteractionCommandArgument("user", tl("discordCommandAccountArgumentUser"), InteractionCommandArgumentType.USER, false));
+        this.arguments = ImmutableList.of(new InteractionCommandArgument("user", tlLiteral("discordCommandAccountArgumentUser"), InteractionCommandArgumentType.USER, false));
         this.accounts = accounts;
     }
 
@@ -39,7 +39,7 @@ public class AccountInteractionCommand implements InteractionCommand {
 
     @Override
     public String getDescription() {
-        return tl("discordCommandAccountDescription");
+        return tlLiteral("discordCommandAccountDescription");
     }
 
     @Override
@@ -53,14 +53,14 @@ public class AccountInteractionCommand implements InteractionCommand {
         final InteractionMember effectiveUser = userArg == null ? event.getMember() : userArg;
         final IUser user = accounts.getUser(effectiveUser.getId());
         if (user == null) {
-            event.reply(tl(event.getMember().getId().equals(effectiveUser.getId()) ? "discordCommandAccountResponseNotLinked" : "discordCommandAccountResponseNotLinkedOther", effectiveUser.getAsMention()));
+            event.replyTl(event.getMember().getId().equals(effectiveUser.getId()) ? "discordCommandAccountResponseNotLinked" : "discordCommandAccountResponseNotLinkedOther", effectiveUser.getAsMention());
             return;
         }
 
         if (event.getMember().getId().equals(effectiveUser.getId())) {
-            event.reply(tl("discordCommandAccountResponseLinked", user.getName()));
+            event.replyTl("discordCommandAccountResponseLinked", user.getName());
             return;
         }
-        event.reply(tl("discordCommandAccountResponseLinkedOther", effectiveUser.getAsMention(), user.getName()));
+        event.replyTl("discordCommandAccountResponseLinkedOther", effectiveUser.getAsMention(), user.getName());
     }
 }

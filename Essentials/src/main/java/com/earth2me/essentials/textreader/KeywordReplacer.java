@@ -30,8 +30,6 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
-
 //When adding a keyword here, you also need to add the implementation above
 enum KeywordType {
     PLAYER(KeywordCachable.CACHEABLE),
@@ -344,7 +342,7 @@ public class KeywordReplacer implements IText {
                     case COORDS:
                         if (user != null) {
                             final Location location = user.getLocation();
-                            replacer = tl("coordsKeyword", location.getBlockX(), location.getBlockY(), location.getBlockZ());
+                            replacer = user.playerTl("coordsKeyword", location.getBlockX(), location.getBlockY(), location.getBlockZ());
                         }
                         break;
                     case TPS:

@@ -6,6 +6,7 @@ import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -18,8 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandclearinventory extends EssentialsCommand {
     private static final int EXTENDED_CAP = 8;
@@ -55,7 +54,7 @@ public class Commandclearinventory extends EssentialsCommand {
         }
 
         if (allowAll && args.length > 0 && args[0].contentEquals("*")) {
-            sender.sendMessage(tl("inventoryClearingFromAll"));
+            sender.sendTl("inventoryClearingFromAll");
             offset = 1;
             players = ess.getOnlinePlayers();
         } else if (allowOthers && args.length > 0 && args[0].trim().length() > 2) {
@@ -72,7 +71,7 @@ public class Commandclearinventory extends EssentialsCommand {
         if (senderUser != null && senderUser.isPromptingClearConfirm()) {
             if (!formattedCommand.equals(previousClearCommand)) {
                 senderUser.setConfirmingClearCommand(formattedCommand);
-                senderUser.sendMessage(tl("confirmClear", formattedCommand));
+                senderUser.sendTl("confirmClear", formattedCommand);
                 return;
             }
         }
@@ -82,7 +81,7 @@ public class Commandclearinventory extends EssentialsCommand {
         }
     }
 
-    protected void clearHandler(final CommandSource sender, final Player player, final String[] args, final int offset, final boolean showExtended) {
+    protected void clearHandler(final CommandSource sender, final Player player, final String[] args, final int offset, final boolean showExtended) throws TranslatableException {
         ClearHandlerType type = ClearHandlerType.ALL_EXCEPT_ARMOR;
         final Set<Item> items = new HashSet<>();
         int amount = -1;
@@ -115,7 +114,7 @@ public class Commandclearinventory extends EssentialsCommand {
         if (type != ClearHandlerType.SPECIFIC_ITEM) {
             final boolean armor = type == ClearHandlerType.ALL_INCLUDING_ARMOR;
             if (showExtended) {
-                sender.sendMessage(tl(armor ? "inventoryClearingAllArmor" : "inventoryClearingAllItems", player.getDisplayName()));
+                sender.sendTl(armor ? "inventoryClearingAllArmor" : "inventoryClearingAllItems", player.getDisplayName());
             }
             Inventories.removeItems(player, item -> true, armor);
         } else {
@@ -126,19 +125,23 @@ public class Commandclearinventory extends EssentialsCommand {
                     stack.setDurability(item.getData());
                 }
 
+                // can't remove a negative amount of items. (it adds them)
+                if (amount < -1) {
+                    throw new TranslatableException("cannotRemoveNegativeItems");
+                }
+
                 // amount -1 means all items will be cleared
                 if (amount == -1) {
                     final int removedAmount = Inventories.removeItemSimilar(player, stack, true);
                     if (removedAmount > 0 || showExtended) {
-                        sender.sendMessage(tl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+                        sender.sendTl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName());
                     }
                 } else {
-                    stack.setAmount(amount < 0 ? 1 : amount);
                     if (Inventories.removeItemAmount(player, stack, amount)) {
-                        sender.sendMessage(tl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+                        sender.sendTl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName());
                     } else {
                         if (showExtended) {
-                            sender.sendMessage(tl("inventoryClearFail", player.getDisplayName(), amount, stack.getType().toString().toLowerCase(Locale.ENGLISH)));
+                            sender.sendTl("inventoryClearFail", player.getDisplayName(), amount, stack.getType().toString().toLowerCase(Locale.ENGLISH));
                         }
                     }
                 }
