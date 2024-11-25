@@ -439,12 +439,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             execTimer.mark("Init(Providers)");
             reload();
 
-            if (randomTeleport.getPreCache()) {
-                randomTeleport.cacheRandomLocations(randomTeleport.getCenter(), randomTeleport.getMinRange(), randomTeleport.getMaxRange());
-            }
-            execTimer.mark("PreCache(RandomTeleport)");
-
-            // The item spawn blacklist is loaded with all other settings, before the item
+            // The item spawn blacklist is loaded with all other settings, before the item\
             // DB, but it depends on the item DB, so we need to reload it again here:
             ((Settings) settings)._lateLoadItemSpawnBlacklist();
             backup = new Backup(this);
