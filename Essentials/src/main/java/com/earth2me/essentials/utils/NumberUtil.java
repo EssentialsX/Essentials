@@ -65,21 +65,22 @@ public final class NumberUtil {
         return str;
     }
 
+    /**
+     * Note: this *can* return MiniMessage, make sure if this is sent to a player that it is wrapped in AdventureUtil#parsed.
+     */
     public static String displayCurrency(final BigDecimal value, final IEssentials ess) {
-        String currency = formatAsPrettyCurrency(value);
-        String sign = "";
-        if (value.signum() < 0) {
-            currency = currency.substring(1);
-            sign = "-";
-        }
-        if (ess.getSettings().isCurrencySymbolSuffixed()) {
-            return sign + tlLiteral("currency", currency, ess.getSettings().getCurrencySymbol());
-        }
-        return sign + tlLiteral("currency", ess.getSettings().getCurrencySymbol(), currency);
+        return displayCurrency(value, ess, false);
     }
 
+    /**
+     * Note: this *can* return MiniMessage, make sure if this is sent to a player that it is wrapped in AdventureUtil#parsed.
+     */
     public static String displayCurrencyExactly(final BigDecimal value, final IEssentials ess) {
-        String currency = value.toPlainString();
+        return displayCurrency(value, ess, true);
+    }
+
+    private static String displayCurrency(final BigDecimal value, final IEssentials ess, final boolean exact) {
+        String currency = exact ? value.toPlainString() : formatAsPrettyCurrency(value);
         String sign = "";
         if (value.signum() < 0) {
             currency = currency.substring(1);
