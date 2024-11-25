@@ -13,7 +13,6 @@ import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
 import com.earth2me.essentials.config.serializers.MailMessageSerializer;
 import com.earth2me.essentials.config.serializers.MaterialTypeSerializer;
 import com.earth2me.essentials.utils.AdventureUtil;
-import net.ess3.api.InvalidWorldException;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -123,7 +122,7 @@ public class EssentialsConfiguration {
         setInternal(path, LazyLocation.fromLocation(location));
     }
 
-    public LazyLocation getLocation(final String path) throws InvalidWorldException {
+    public LazyLocation getLocation(final String path) {
         final CommentedConfigurationNode node = path == null ? getRootNode() : getSection(path);
         if (node == null) {
             return null;

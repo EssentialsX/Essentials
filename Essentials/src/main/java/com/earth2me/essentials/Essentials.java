@@ -154,6 +154,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -357,6 +358,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             upgrade.convertKits();
             execTimer.mark("Kits");
 
+            randomTeleport = new RandomTeleport(this);
+            confList.add(randomTeleport);
+            execTimer.mark("Init(RandomTeleport)");
+
             upgrade.afterSettings();
             execTimer.mark("Upgrade3");
 
@@ -371,13 +376,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             itemDb = getItemDbFromConfig();
             confList.add(itemDb);
             execTimer.mark("Init(ItemDB)");
-
-            randomTeleport = new RandomTeleport(this);
-            if (randomTeleport.getPreCache()) {
-                randomTeleport.cacheRandomLocations(randomTeleport.getCenter(), randomTeleport.getMinRange(), randomTeleport.getMaxRange());
-            }
-            confList.add(randomTeleport);
-            execTimer.mark("Init(RandomTeleport)");
 
             customItemResolver = new CustomItemResolver(this);
             try {
@@ -812,7 +810,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 } catch (final Exception ex) {
                     LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
                     if (cSender instanceof Player) {
-                        cSender.sendMessage(tlLocale(I18n.getLocale(getPlayerLocaleProvider().getLocale((Player) cSender)), "internalError"));
+                        getBukkitAudience().sender(cSender).sendMessage(AdventureUtil.miniMessage().deserialize(tlLocale(I18n.getLocale(getPlayerLocaleProvider().getLocale((Player) cSender)), "internalError")));
                     } else {
                         cSender.sendMessage(tlLiteral("internalError"));
                     }
@@ -903,7 +901,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             } catch (final NotEnoughArgumentsException ex) {
                 if (getSettings().isVerboseCommandUsages() && !cmd.getUsageStrings().isEmpty()) {
                     sender.sendTl("commandHelpLine1", commandLabel);
-                    sender.sendTl("commandHelpLine2", command.getDescription());
+                    String description = command.getDescription();
+                    try {
+                        description = sender.tl(command.getName() + "CommandDescription");
+                    } catch (MissingResourceException ignored) {}
+                    sender.sendTl("commandHelpLine2", description);
                     sender.sendTl("commandHelpLine3");
                     for (Map.Entry<String, String> usage : cmd.getUsageStrings().entrySet()) {
                         sender.sendTl("commandHelpLineUsage", AdventureUtil.parsed(usage.getKey().replace("<command>", commandLabel)), AdventureUtil.parsed(usage.getValue()));

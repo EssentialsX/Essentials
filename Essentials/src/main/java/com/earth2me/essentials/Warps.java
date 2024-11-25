@@ -5,7 +5,6 @@ import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.InvalidNameException;
-import net.ess3.api.InvalidWorldException;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 
@@ -54,7 +53,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     }
 
     @Override
-    public Location getWarp(final String warp) throws WarpNotFoundException, InvalidWorldException {
+    public Location getWarp(final String warp) throws WarpNotFoundException {
         final EssentialsConfiguration conf = warpPoints.get(new StringIgnoreCase(warp));
         if (conf == null) {
             throw new WarpNotFoundException();
@@ -79,7 +78,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         if (conf == null) {
             final File confFile = new File(warpsFolder, filename + ".yml");
             if (confFile.exists()) {
-                throw new Exception(user == null ? tlLiteral("similarWarpExist") : user.playerTl("similarWarpExist"));
+                throw new TranslatableException("similarWarpExist");
             }
             conf = new EssentialsConfiguration(confFile);
             conf.load();

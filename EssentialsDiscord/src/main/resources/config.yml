@@ -423,7 +423,8 @@ messages:
   # ... PlaceholderAPI placeholders are also supported here too!
   action: ":person_biking: {displayname} *{action}*"
   # This is the message sent to Discord when the server starts.
-  server-start: ":white_check_mark: The server has started!"
+  # - {starttimeseconds}: The amount of seconds it took to start the server (measured from JVM start time).
+  server-start: ":white_check_mark: The server has started in {starttimeseconds} seconds!"
   # This is the message sent to Discord when the server stops.
   server-stop: ":octagonal_sign: The server has stopped!"
   # This is the message sent to Discord when a player is kicked from the server.

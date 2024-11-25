@@ -218,6 +218,9 @@ public enum MobData {
     WOODS_WOLF("woods", EntityType.WOLF, "wolf:WOODS", true),
     CHESTNUT_WOLF("chestnut", EntityType.WOLF, "wolf:CHESTNUT", true),
     STRIPED_WOLF("striped", EntityType.WOLF, "wolf:STRIPED", true),
+    SMALL_SALMON("small", MobCompat.SALMON, "salmon:SMALL", true),
+    MEDIUM_SALMON("medium", MobCompat.SALMON, "salmon:MEDIUM", true),
+    LARGE_SALMON("large", MobCompat.SALMON, "salmon:LARGE", true),
     ;
 
     final private String nickname;
@@ -435,6 +438,9 @@ public enum MobData {
                     break;
                 case "wolf":
                     MobCompat.setWolfVariant(spawned, split[1]);
+                    break;
+                case "salmon":
+                    MobCompat.setSalmonSize(spawned, split[1]);
                     break;
             }
         } else {

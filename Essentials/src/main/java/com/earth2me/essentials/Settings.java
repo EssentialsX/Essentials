@@ -164,6 +164,16 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public String getRandomSpawnLocation() {
+        return config.getString("random-spawn-location", "none");
+    }
+
+    @Override
+    public String getRandomRespawnLocation() {
+        return config.getString("random-respawn-location", "none");
+    }
+
+    @Override
     public boolean isRespawnAtAnchor() {
         return config.getBoolean("respawn-at-anchor", false);
     }
