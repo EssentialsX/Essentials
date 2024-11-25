@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.Lists;
@@ -70,7 +71,7 @@ public class Commandpay extends EssentialsLoopCommand {
         final BigDecimal amount = tempAmount;
 
         if (amount.compareTo(ess.getSettings().getMinimumPayAmount()) < 0) { // Check if amount is less than minimum-pay-amount
-            throw new TranslatableException("minimumPayAmount", NumberUtil.displayCurrencyExactly(ess.getSettings().getMinimumPayAmount(), ess));
+            throw new TranslatableException("minimumPayAmount", AdventureUtil.parsed(NumberUtil.displayCurrencyExactly(ess.getSettings().getMinimumPayAmount(), ess)));
         }
         final AtomicBoolean informToConfirm = new AtomicBoolean(false);
         final boolean canPayOffline = user.isAuthorized("essentials.pay.offline");
@@ -117,7 +118,7 @@ public class Commandpay extends EssentialsLoopCommand {
         });
         if (informToConfirm.get()) {
             final String cmd = "/" + commandLabel + " " + StringUtil.joinList(" ", args);
-            user.sendTl("confirmPayment", NumberUtil.displayCurrency(amount, ess), cmd);
+            user.sendTl("confirmPayment", AdventureUtil.parsed(NumberUtil.displayCurrency(amount, ess)), cmd);
         }
     }
 
