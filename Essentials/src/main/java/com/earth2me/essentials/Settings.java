@@ -603,10 +603,11 @@ public class Settings implements net.ess3.api.ISettings {
             mFormat = mFormat.replace("{TEAMPREFIX}", "{3}");
             mFormat = mFormat.replace("{TEAMSUFFIX}", "{4}");
             mFormat = mFormat.replace("{TEAMNAME}", "{5}");
-            mFormat = mFormat.replace("{PREFIX}", "{6}");
-            mFormat = mFormat.replace("{SUFFIX}", "{7}");
-            mFormat = mFormat.replace("{USERNAME}", "{8}");
-            mFormat = mFormat.replace("{NICKNAME}", "{9}");
+            mFormat = mFormat.replace("{TEAMCOLOR}", "{6}");
+            mFormat = mFormat.replace("{PREFIX}", "{7}");
+            mFormat = mFormat.replace("{SUFFIX}", "{8}");
+            mFormat = mFormat.replace("{USERNAME}", "{9}");
+            mFormat = mFormat.replace("{NICKNAME}", "{10}");
             mFormat = "§r".concat(mFormat);
             chatFormats.put(group, mFormat);
         }
