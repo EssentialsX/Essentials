@@ -5,6 +5,7 @@ import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
@@ -61,7 +62,7 @@ public class VaultEconomyProvider implements Economy {
 
     @Override
     public String format(double amount) {
-        return NumberUtil.displayCurrency(BigDecimal.valueOf(amount), ess);
+        return AdventureUtil.miniToLegacy(NumberUtil.displayCurrency(BigDecimal.valueOf(amount), ess));
     }
 
     @Override

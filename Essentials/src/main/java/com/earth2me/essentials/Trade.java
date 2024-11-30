@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
@@ -191,7 +192,7 @@ public class Trade {
         }
 
         if (getMoney() != null && getMoney().signum() > 0 && !user.canAfford(getMoney())) {
-            future.completeExceptionally(new ChargeException("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess)));
+            future.completeExceptionally(new ChargeException("notEnoughMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(getMoney(), ess))));
             return;
         }
 
@@ -202,7 +203,7 @@ public class Trade {
 
         final BigDecimal money;
         if (command != null && !command.isEmpty() && (money = getCommandCost(user)).signum() > 0 && !user.canAfford(money)) {
-            future.completeExceptionally(new ChargeException("notEnoughMoney", NumberUtil.displayCurrency(money, ess)));
+            future.completeExceptionally(new ChargeException("notEnoughMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(money, ess))));
             return;
         }
 
@@ -285,7 +286,7 @@ public class Trade {
                 ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " money " + getMoney().toPlainString());
             }
             if (!user.canAfford(getMoney()) && getMoney().signum() > 0) {
-                future.completeExceptionally(new ChargeException("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess)));
+                future.completeExceptionally(new ChargeException("notEnoughMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(getMoney(), ess))));
                 return;
             }
             user.takeMoney(getMoney());
@@ -304,7 +305,7 @@ public class Trade {
         if (command != null) {
             final BigDecimal cost = getCommandCost(user);
             if (!user.canAfford(cost) && cost.signum() > 0) {
-                future.completeExceptionally(new ChargeException("notEnoughMoney", NumberUtil.displayCurrency(cost, ess)));
+                future.completeExceptionally(new ChargeException("notEnoughMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(cost, ess))));
                 return;
             }
             user.takeMoney(cost);

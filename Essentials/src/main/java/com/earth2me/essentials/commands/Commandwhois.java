@@ -43,7 +43,7 @@ public class Commandwhois extends EssentialsCommand {
         final long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50L);
         sender.sendTl("whoisPlaytime", DateUtil.formatDateDiff(playtimeMs));
         if (!ess.getSettings().isEcoDisabled()) {
-            sender.sendTl("whoisMoney", NumberUtil.displayCurrency(user.getMoney(), ess));
+            sender.sendTl("whoisMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(user.getMoney(), ess)));
         }
         if (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.whois.ip")) {
             sender.sendTl("whoisIPAddress", user.getBase().getAddress().getAddress().toString());

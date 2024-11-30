@@ -82,7 +82,7 @@ public class Commandsell extends EssentialsCommand {
             ess.showError(user.getSource(), new TranslatableException("cannotSellTheseNamedItems", String.join(ChatColor.RESET + ", ", names)), commandLabel);
         }
         if (count != 1) {
-            final String totalWorthStr = NumberUtil.displayCurrency(totalWorth, ess);
+            final AdventureUtil.ParsedPlaceholder totalWorthStr = AdventureUtil.parsed(NumberUtil.displayCurrency(totalWorth, ess));
             if (args[0].equalsIgnoreCase("blocks")) {
                 user.sendTl("totalWorthBlocks", totalWorthStr, totalWorthStr);
             } else {
@@ -101,7 +101,7 @@ public class Commandsell extends EssentialsCommand {
 
         if (amount <= 0) {
             if (!isBulkSell) {
-                user.sendTl("itemSold", NumberUtil.displayCurrency(BigDecimal.ZERO, ess), BigDecimal.ZERO, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess));
+                user.sendTl("itemSold", AdventureUtil.parsed(NumberUtil.displayCurrency(BigDecimal.ZERO, ess)), BigDecimal.ZERO, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess));
             }
             return BigDecimal.ZERO;
         }
@@ -120,9 +120,9 @@ public class Commandsell extends EssentialsCommand {
         Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), user.getMoney(), ess);
         user.giveMoney(result, null, UserBalanceUpdateEvent.Cause.COMMAND_SELL);
         final String typeName = is.getType().toString().toLowerCase(Locale.ENGLISH);
-        final String worthDisplay = NumberUtil.displayCurrency(worth, ess);
-        user.sendTl("itemSold", NumberUtil.displayCurrency(result, ess), amount, typeName, worthDisplay);
-        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("itemSoldConsole", user.getName(), typeName, NumberUtil.displayCurrency(result, ess), amount, worthDisplay, user.getDisplayName())));
+        final AdventureUtil.ParsedPlaceholder worthDisplay = AdventureUtil.parsed(NumberUtil.displayCurrency(worth, ess));
+        user.sendTl("itemSold", AdventureUtil.parsed(NumberUtil.displayCurrency(result, ess)), amount, typeName, worthDisplay);
+        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("itemSoldConsole", user.getName(), typeName, AdventureUtil.miniToLegacy(NumberUtil.displayCurrency(result, ess)), amount, AdventureUtil.miniToLegacy(worthDisplay.toString()), user.getDisplayName())));
         return result;
     }
 
