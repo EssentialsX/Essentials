@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import net.ess3.provider.PlayerLocaleProvider;
 import org.bukkit.Server;
 
 import java.math.BigDecimal;
@@ -42,7 +43,7 @@ public class Commandpay extends EssentialsLoopCommand {
 
         final BigDecimal amount;
         if (ess.getSettings().isPerPlayerLocale()) {
-            amount = NumberUtil.parseStringToBDecimal(ogStr, user.getPlayerLocale(ess.getPlayerLocaleProvider().getLocale(user.getBase())));
+            amount = NumberUtil.parseStringToBDecimal(ogStr, user.getPlayerLocale(ess.getProviders().get(PlayerLocaleProvider.class).getLocale(user.getBase())));
         } else {
             amount = NumberUtil.parseStringToBDecimal(ogStr);
         }
