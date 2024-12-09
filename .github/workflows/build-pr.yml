@@ -11,6 +11,9 @@ on:
     - mc/*
     - dev/*
 
+permissions:
+  checks: write
+
 jobs:
   build:
     name: Build and upload

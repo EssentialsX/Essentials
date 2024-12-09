@@ -879,6 +879,15 @@ baltop-requirements:
 # For 1'234,50 use fr-ch
 #currency-symbol-format-locale: en-US
 
+# Allow players to receive multipliers for items sold with /sell or the sell sign.
+# You can set the default multiplier using the 'default' rank below.
+# To grant different multipliers to different people, you need to define a 'multiplier-rank' below.
+# Create the 'multiplier-rank' below, and give the matching permission: essentials.sell.multiplier.<multiplier-rank>
+sell-multipliers:
+  default: 1.0
+  double: 2.0
+  triple: 3.0
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                         Help                         | #
@@ -914,6 +923,7 @@ chat:
 
   # Chat formatting can be done in two ways, you can either define a standard format for all chat.
   # Or you can give a group specific chat format, to give some extra variation.
+  # For each of these formats, you can specify a sub format for each chat type.
   # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting
   # Note: Using the {PREFIX} and {SUFFIX} placeholders along with {DISPLAYNAME} may cause double prefixes/suffixes to be shown in chat unless add-prefix-suffix is uncommented and set to false.
 
@@ -936,9 +946,21 @@ chat:
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
   #format: '&7{PREFIX}&r {DISPLAYNAME}&r &7{SUFFIX}&r: {MESSAGE}'
 
+  # You can also specify a format for each type of chat.
+  #format:
+  #  normal: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
+  #  question: '{WORLDNAME} &4{DISPLAYNAME}&7:&r {MESSAGE}'
+  #  shout: '{WORLDNAME} &c[{GROUP}]&r &4{DISPLAYNAME}&7:&c {MESSAGE}'
+
+  # You can specify a format for each group.
   group-formats:
   #  default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
   #  admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
+
+  # You can also specify a format for each type of chat for each group.
+  #  admins:
+  #    question: '{WORLDNAME} &4{DISPLAYNAME}&7:&r {MESSAGE}'
+  #    shout: '{WORLDNAME} &c[{GROUP}]&r &4{DISPLAYNAME}&7:&c {MESSAGE}'
 
   # If you are using group formats make sure to remove the '#' to allow the setting to be read.
   # Note: Group names are case-sensitive so you must match them up with your permission plugin.
