@@ -879,6 +879,15 @@ baltop-requirements:
 # For 1'234,50 use fr-ch
 #currency-symbol-format-locale: en-US
 
+# Allow players to receive multipliers for items sold with /sell or the sell sign.
+# You can set the default multiplier using the 'default' rank below.
+# To grant different multipliers to different people, you need to define a 'multiplier-rank' below.
+# Create the 'multiplier-rank' below, and give the matching permission: essentials.sell.multiplier.<multiplier-rank>
+sell-multipliers:
+  default: 1.0
+  double: 2.0
+  triple: 3.0
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                         Help                         | #

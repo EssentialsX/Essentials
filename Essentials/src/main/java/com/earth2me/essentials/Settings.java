@@ -151,6 +151,8 @@ public class Settings implements net.ess3.api.ISettings {
     private Map<String, String> worldAliases;
     private Tag primaryColor = DEFAULT_PRIMARY_COLOR;
     private Tag secondaryColor = DEFAULT_SECONDARY_COLOR;
+    private Set<String> multiplierPerms;
+    private BigDecimal defaultMultiplier;
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -929,6 +931,8 @@ public class Settings implements net.ess3.api.ISettings {
         worldAliases = _getWorldAliases();
         primaryColor = _getPrimaryColor();
         secondaryColor = _getSecondaryColor();
+        multiplierPerms = _getMultiplierPerms();
+        defaultMultiplier = _getDefaultMultiplier();
 
         reloadCount.incrementAndGet();
     }
@@ -2098,6 +2102,33 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public BigDecimal getMultiplier(final User user) {
+        BigDecimal multiplier = defaultMultiplier;
+        if (multiplierPerms == null) {
+            return defaultMultiplier;
+        }
+
+        for (final String multiplierPerm : multiplierPerms) {
+            if (user.isAuthorized("essentials.sell.multiplier." + multiplierPerm)) {
+                final BigDecimal value = config.getBigDecimal("sell-multipliers." + multiplierPerm, BigDecimal.ZERO);
+                if (value.compareTo(multiplier) > 0) {
+                    multiplier = value;
+                }
+            }
+        }
+
+        return multiplier;
+    }
+
+    private BigDecimal _getDefaultMultiplier() {
+        return config.getBigDecimal("sell-multipliers.default", BigDecimal.ONE);
+    }
+
+    private Set<String> _getMultiplierPerms() {
+        final CommentedConfigurationNode section = config.getSection("sell-multipliers");
+        return section == null ? null : ConfigurateUtil.getKeys(section);
+    }
+
     public int getMaxItemLore() {
         return config.getInt("max-itemlore-lines", 10);
     }

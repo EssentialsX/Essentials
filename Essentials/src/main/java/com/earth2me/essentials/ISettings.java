@@ -418,6 +418,8 @@ public interface ISettings extends IConf {
 
     boolean showZeroBaltop();
 
+    BigDecimal getMultiplier(final User user);
+
     int getMaxItemLore();
 
     Tag getPrimaryColor();
