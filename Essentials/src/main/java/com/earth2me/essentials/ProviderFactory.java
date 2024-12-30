@@ -78,18 +78,24 @@ public class ProviderFactory {
                 providers.put(providerClass, getProviderInstance(highestProvider));
             } else if (!nullable) {
                 throw new IllegalStateException("No provider found for " + providerClass.getName());
+            } else {
+                essentials.getLogger().info("No provider found for " + providerClass.getSimpleName() + ", but it is nullable");
             }
         }
         registeredProviders.clear();
     }
 
     private boolean testProvider(final Class<?> providerClass) throws InvocationTargetException, IllegalAccessException {
-        for (final Method method : providerClass.getMethods()) {
-            if (method.isAnnotationPresent(ProviderTest.class)) {
-                return (Boolean) method.invoke(null);
+        try {
+            for (final Method method : providerClass.getMethods()) {
+                if (method.isAnnotationPresent(ProviderTest.class)) {
+                    return (Boolean) method.invoke(null);
+                }
             }
+            return true;
+        } catch (final NoClassDefFoundError ignored) {
+            return false;
         }
-        return true;
     }
 
     private <P extends Provider> P getProviderInstance(final Class<P> provider) {
