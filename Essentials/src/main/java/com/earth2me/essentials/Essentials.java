@@ -432,6 +432,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                             ((Cancellable) event).setCancelled(true);
                         }
                     });
+                    if (getSettings().isDebug()) {
+                        LOGGER.log(Level.INFO, "Registered Paper Recipe Book Event Listener");
+                    }
                 } catch (final ClassNotFoundException ignored) {
                 }
             }
@@ -439,7 +442,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             execTimer.mark("Init(Providers)");
             reload();
 
-            // The item spawn blacklist is loaded with all other settings, before the item\
+            // The item spawn blacklist is loaded with all other settings, before the item
             // DB, but it depends on the item DB, so we need to reload it again here:
             ((Settings) settings)._lateLoadItemSpawnBlacklist();
             backup = new Backup(this);
@@ -667,11 +670,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // Check for disabled commands
             if (getSettings().isCommandDisabled(commandLabel)) {
-                if (provider(KnownCommandsProvider.class).getKnownCommands().containsKey(commandLabel)) {
-                    final Command newCmd = provider(KnownCommandsProvider.class).getKnownCommands().get(commandLabel);
-                    if (!(newCmd instanceof PluginIdentifiableCommand) || ((PluginIdentifiableCommand) newCmd).getPlugin() != this) {
-                        return newCmd.tabComplete(cSender, commandLabel, args);
-                    }
+                final Command newCmd = provider(KnownCommandsProvider.class).getKnownCommands().get(commandLabel);
+                if (newCmd != null && (!(newCmd instanceof PluginIdentifiableCommand) || ((PluginIdentifiableCommand) newCmd).getPlugin() != this)) {
+                    return newCmd.tabComplete(cSender, commandLabel, args);
                 }
                 return Collections.emptyList();
             }
@@ -778,11 +779,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // Check for disabled commands
             if (getSettings().isCommandDisabled(commandLabel)) {
-                if (provider(KnownCommandsProvider.class).getKnownCommands().containsKey(commandLabel)) {
-                    final Command newCmd = provider(KnownCommandsProvider.class).getKnownCommands().get(commandLabel);
-                    if (!(newCmd instanceof PluginIdentifiableCommand) || !isEssentialsPlugin(((PluginIdentifiableCommand) newCmd).getPlugin())) {
-                        return newCmd.execute(cSender, commandLabel, args);
-                    }
+                final Command newCmd = provider(KnownCommandsProvider.class).getKnownCommands().get(commandLabel);
+                if (newCmd != null && (!(newCmd instanceof PluginIdentifiableCommand) || !isEssentialsPlugin(((PluginIdentifiableCommand) newCmd).getPlugin()))) {
+                    return newCmd.execute(cSender, commandLabel, args);
                 }
                 sender.sendTl("commandDisabled", commandLabel);
                 return true;

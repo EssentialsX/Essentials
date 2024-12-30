@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import io.papermc.lib.PaperLib;
 import net.ess3.provider.Provider;
+import net.essentialsx.providers.NullableProvider;
 import net.essentialsx.providers.ProviderData;
 import net.essentialsx.providers.ProviderTest;
 import org.bukkit.plugin.Plugin;
@@ -55,6 +56,7 @@ public class ProviderFactory {
     public void finalizeRegistration() {
         for (final Map.Entry<Class<? extends Provider>, List<Class<? extends Provider>>> entry : registeredProviders.entrySet()) {
             final Class<? extends Provider> providerClass = entry.getKey();
+            final boolean nullable = providerClass.isAnnotationPresent(NullableProvider.class);
             Class<? extends Provider> highestProvider = null;
             ProviderData highestProviderData = null;
             int highestWeight = -1;
@@ -70,12 +72,13 @@ public class ProviderFactory {
                     essentials.getLogger().log(Level.SEVERE, "Failed to initialize provider " + provider.getName(), e);
                 }
             }
-            if (highestProvider == null) {
+
+            if (highestProvider != null) {
+                essentials.getLogger().info("Selected " + highestProviderData.description() + " as the provider for " + providerClass.getSimpleName());
+                providers.put(providerClass, getProviderInstance(highestProvider));
+            } else if (!nullable) {
                 throw new IllegalStateException("No provider found for " + providerClass.getName());
             }
-
-            essentials.getLogger().info("Selected " + highestProviderData.description() + " as the provider for " + providerClass.getSimpleName());
-            providers.put(providerClass, getProviderInstance(highestProvider));
         }
         registeredProviders.clear();
     }

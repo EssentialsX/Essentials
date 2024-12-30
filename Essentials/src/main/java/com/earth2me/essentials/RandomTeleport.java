@@ -35,7 +35,7 @@ public class RandomTeleport implements IConf {
     public RandomTeleport(final IEssentials essentials) {
         this.ess = essentials;
         config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "tpr.yml"), "/tpr.yml",
-                "Configuration for the random teleport command.\nSome settings may be defaulted, and can be changed via the /settpr command in-game.");
+                "Configuration for the random teleport command.\nUse the /settpr command in-game to set random teleport locations.");
     }
 
     public EssentialsConfiguration getConfig() {
