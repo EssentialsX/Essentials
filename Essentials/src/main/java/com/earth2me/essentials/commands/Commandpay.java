@@ -43,7 +43,8 @@ public class Commandpay extends EssentialsLoopCommand {
 
         final BigDecimal amount;
         if (ess.getSettings().isPerPlayerLocale()) {
-            amount = NumberUtil.parseStringToBDecimal(ogStr, user.getPlayerLocale(ess.getProviders().get(PlayerLocaleProvider.class).getLocale(user.getBase())));
+            final String playerLocale = ess.provider(PlayerLocaleProvider.class).getLocale(user.getBase());
+            amount = NumberUtil.parseStringToBDecimal(ogStr, user.getPlayerLocale(playerLocale));
         } else {
             amount = NumberUtil.parseStringToBDecimal(ogStr);
         }
