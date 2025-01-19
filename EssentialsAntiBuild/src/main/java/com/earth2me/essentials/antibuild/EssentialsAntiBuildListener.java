@@ -281,13 +281,15 @@ public class EssentialsAntiBuildListener implements Listener {
             return;
         }
 
-        final boolean permCheck = type == null ? user.isAuthorized("essentials.build.break.END_CRYSTAL") : metaPermCheck(user, "break", type);
-        if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build") && !permCheck) {
-            if (ess.getSettings().warnOnBuildDisallow()) {
-                user.sendTl("antiBuildBreak", type != null ? type.toString() : "END_CRYSTAL");
+        if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build")) {
+            final boolean permCheck = type == null ? user.isAuthorized("essentials.build.break.END_CRYSTAL") : metaPermCheck(user, "break", type);
+            if (!permCheck) {
+                if (ess.getSettings().warnOnBuildDisallow()) {
+                    user.sendTl("antiBuildBreak", type != null ? type.toString() : "END_CRYSTAL");
+                }
+                event.setCancelled(true);
+                return;
             }
-            event.setCancelled(true);
-            return;
         }
 
         final boolean blacklistCheck = type == null ? prot.checkProtectionItems(AntiBuildConfig.blacklist_break, "END_CRYSTAL") : prot.checkProtectionItems(AntiBuildConfig.blacklist_break, type);
