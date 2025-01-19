@@ -344,6 +344,8 @@ public interface ISettings extends IConf {
 
     boolean isWorldChangeFlyResetEnabled();
 
+    boolean isWorldChangePreserveFlying();
+
     boolean isWorldChangeSpeedResetEnabled();
 
     long getCommandCooldownMs(String label);

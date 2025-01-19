@@ -102,6 +102,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     // Misc
     private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
     private transient long lastVanishTime = System.currentTimeMillis();
+    private transient int flightTick = -1;
     private String lastLocaleString;
     private Locale playerLocale;
 
@@ -1298,5 +1299,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return toggleShout = isShouting();
         }
         return toggleShout == null ? toggleShout = ess.getSettings().isShoutDefault() : toggleShout;
+    }
+
+    public int getFlightTick() {
+        return flightTick;
+    }
+
+    public void setFlightTick(int flightTick) {
+        this.flightTick = flightTick;
     }
 }

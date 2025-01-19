@@ -1920,6 +1920,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isWorldChangePreserveFlying() {
+        return config.getBoolean("world-change-preserve-flying", true);
+    }
+
+    @Override
     public boolean isWorldChangeSpeedResetEnabled() {
         return config.getBoolean("world-change-speed-reset", true);
     }
