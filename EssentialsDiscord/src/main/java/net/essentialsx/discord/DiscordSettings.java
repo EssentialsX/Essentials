@@ -9,10 +9,12 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Role;
 import net.essentialsx.api.v2.ChatType;
+import net.essentialsx.discord.util.MessageUtil;
 import org.apache.logging.log4j.Level;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -427,7 +429,12 @@ public class DiscordSettings implements IConf {
     }
 
     public String getStartMessage() {
-        return config.getString("messages.server-start", ":white_check_mark: The server has started!");
+        final MessageFormat format = generateMessageFormat(getFormatString("server-start"), ":white_check_mark: The server has started in {starttimeseconds} seconds!", false,
+                "starttimeseconds");
+        return MessageUtil.formatMessage(format,
+                // measures time since the JVM started and converts it to seconds
+                String.format("%.2f", (float)Math.abs(ManagementFactory.getRuntimeMXBean().getStartTime() - System.currentTimeMillis()) / 1000)
+        );
     }
 
     public String getStopMessage() {

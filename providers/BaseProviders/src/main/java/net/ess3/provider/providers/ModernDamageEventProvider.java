@@ -1,12 +1,15 @@
 package net.ess3.provider.providers;
 
 import net.ess3.provider.DamageEventProvider;
+import net.essentialsx.providers.ProviderData;
+import net.essentialsx.providers.ProviderTest;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 @SuppressWarnings("UnstableApiUsage")
+@ProviderData(description = "1.20.4+ Damage Event Provider", weight = 1)
 public class ModernDamageEventProvider implements DamageEventProvider {
     private final DamageSource MAGIC_SOURCE = DamageSource.builder(DamageType.MAGIC).build();
 
@@ -17,8 +20,13 @@ public class ModernDamageEventProvider implements DamageEventProvider {
         return ede;
     }
 
-    @Override
-    public String getDescription() {
-        return "1.20.4+ Damage Event Provider";
+    @ProviderTest
+    public static boolean test() {
+        try {
+            Class.forName("org.bukkit.damage.DamageSource");
+            return true;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
     }
 }

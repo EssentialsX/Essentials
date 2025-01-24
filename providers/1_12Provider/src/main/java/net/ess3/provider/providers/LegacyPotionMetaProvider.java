@@ -2,6 +2,8 @@ package net.ess3.provider.providers;
 
 import com.google.common.collect.ImmutableMap;
 import net.ess3.provider.PotionMetaProvider;
+import net.essentialsx.providers.ProviderData;
+import net.essentialsx.providers.ProviderTest;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -12,6 +14,7 @@ import org.bukkit.potion.PotionType;
 import java.util.Collection;
 import java.util.Map;
 
+@ProviderData(description = "1.9-1.20.4 Potion Meta Provider", weight = 1)
 public class LegacyPotionMetaProvider implements PotionMetaProvider {
     private static final Map<Integer, PotionType> damageValueToType = ImmutableMap.<Integer, PotionType>builder()
         .put(1, PotionType.REGEN)
@@ -127,8 +130,14 @@ public class LegacyPotionMetaProvider implements PotionMetaProvider {
         stack.setItemMeta(meta);
     }
 
-    @Override
-    public String getDescription() {
-        return "1.9-1.20.4 Potion Meta Provider";
+    @ProviderTest
+    public static boolean test() {
+        try {
+            // This provider was created to support the new PotionData API introduced in 1.9
+            Class.forName("org.bukkit.potion.PotionData");
+            return false;
+        } catch (final Throwable ignored) {
+            return true;
+        }
     }
 }

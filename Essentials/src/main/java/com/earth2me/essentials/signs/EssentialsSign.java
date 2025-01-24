@@ -15,6 +15,7 @@ import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.SignBreakEvent;
 import net.ess3.api.events.SignCreateEvent;
 import net.ess3.api.events.SignInteractEvent;
+import net.ess3.provider.SignDataProvider;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -166,24 +167,26 @@ public class EssentialsSign {
     }
 
     public void setOwnerData(final IEssentials ess, final User user, final ISign signProvider) {
-        if (ess.getSignDataProvider() == null) {
+        final SignDataProvider dataProvider = ess.provider(SignDataProvider.class);
+        if (dataProvider == null) {
             return;
         }
         final Sign sign = (Sign) signProvider.getBlock().getState();
-        ess.getSignDataProvider().setSignData(sign, SIGN_OWNER_KEY, user.getUUID().toString());
+        dataProvider.setSignData(sign, SIGN_OWNER_KEY, user.getUUID().toString());
     }
 
     public boolean isOwner(final IEssentials ess, final User user, final ISign signProvider, final int nameIndex, final String namePrefix) {
+        final SignDataProvider dataProvider = ess.provider(SignDataProvider.class);
         final Sign sign = (Sign) signProvider.getBlock().getState();
-        if (ess.getSignDataProvider() == null || ess.getSignDataProvider().getSignData(sign, SIGN_OWNER_KEY) == null) {
+        if (dataProvider == null || dataProvider.getSignData(sign, SIGN_OWNER_KEY) == null) {
             final boolean isLegacyOwner = FormatUtil.stripFormat(signProvider.getLine(nameIndex)).equalsIgnoreCase(getUsername(user));
-            if (ess.getSignDataProvider() != null && isLegacyOwner) {
-                ess.getSignDataProvider().setSignData(sign, SIGN_OWNER_KEY, user.getUUID().toString());
+            if (dataProvider != null && isLegacyOwner) {
+                dataProvider.setSignData(sign, SIGN_OWNER_KEY, user.getUUID().toString());
             }
             return isLegacyOwner;
         }
 
-        if (user.getUUID().toString().equals(ess.getSignDataProvider().getSignData(sign, SIGN_OWNER_KEY))) {
+        if (user.getUUID().toString().equals(dataProvider.getSignData(sign, SIGN_OWNER_KEY))) {
             signProvider.setLine(nameIndex, namePrefix + getUsername(user));
             return true;
         }

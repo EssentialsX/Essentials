@@ -2,6 +2,7 @@ package net.essentialsx.api.v2.services.discordlink;
 
 import net.essentialsx.api.v2.services.discord.InteractionMember;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -82,4 +83,12 @@ public interface DiscordLinkService {
      * {@link InteractionMember}, otherwise false.
      */
     boolean unlinkAccount(final InteractionMember member);
+
+    /**
+     * Gets a map of all linked players, where the key is the Minecraft UUID and the value is the Discord ID.
+     * The returned map is immutable and cannot be modified.
+     *
+     * @return an immutable map of all linked players.
+     */
+    Map<String, String> getAllLinkedPlayers();
 }

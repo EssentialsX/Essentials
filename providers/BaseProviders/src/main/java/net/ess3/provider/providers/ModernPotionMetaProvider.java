@@ -1,6 +1,8 @@
 package net.ess3.provider.providers;
 
 import net.ess3.provider.PotionMetaProvider;
+import net.essentialsx.providers.ProviderData;
+import net.essentialsx.providers.ProviderTest;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -9,6 +11,7 @@ import org.bukkit.potion.PotionType;
 
 import java.util.Collection;
 
+@ProviderData(description = "1.20.6+ Potion Meta Provider", weight = 2)
 public class ModernPotionMetaProvider implements PotionMetaProvider {
     @Override
     public ItemStack createPotionItem(Material initial, int effectId) {
@@ -100,8 +103,14 @@ public class ModernPotionMetaProvider implements PotionMetaProvider {
         }
     }
 
-    @Override
-    public String getDescription() {
-        return "1.20.5+ Potion Meta Provider";
+    @ProviderTest
+    public static boolean test() {
+        try {
+            // This provider was created due to Potion being removed in 1.20.6
+            Class.forName("org.bukkit.potion.Potion");
+            return false;
+        } catch (final Throwable ignored) {
+            return true;
+        }
     }
 }

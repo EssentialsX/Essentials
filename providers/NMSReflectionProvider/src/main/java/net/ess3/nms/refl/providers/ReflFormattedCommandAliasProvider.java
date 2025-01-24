@@ -2,6 +2,7 @@ package net.ess3.nms.refl.providers;
 
 import net.ess3.nms.refl.ReflUtil;
 import net.ess3.provider.FormattedCommandAliasProvider;
+import net.essentialsx.providers.ProviderData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.FormattedCommandAlias;
 
@@ -12,15 +13,14 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+@ProviderData(description = "Reflection Formatted Command Alias Provider")
 public class ReflFormattedCommandAliasProvider implements FormattedCommandAliasProvider {
-
-    private final boolean paper;
+    private final boolean senderArg;
     private final Field formatStringsField;
     private final MethodHandle buildCommandMethodHandle;
 
-    public ReflFormattedCommandAliasProvider(boolean paper) {
-        this.paper = paper;
-
+    public ReflFormattedCommandAliasProvider() {
+        boolean senderArg = true;
         final Class<? extends FormattedCommandAlias> formattedCommandAliasClass;
         Field formatStringsField = null;
         MethodHandle buildCommandMethodHandle = null;
@@ -28,14 +28,16 @@ public class ReflFormattedCommandAliasProvider implements FormattedCommandAliasP
             formattedCommandAliasClass = FormattedCommandAlias.class;
             formatStringsField = ReflUtil.getFieldCached(formattedCommandAliasClass, "formatStrings");
 
-            final Class<?>[] parameterTypes;
-            if (paper) {
-                parameterTypes = new Class[] {CommandSender.class, String.class, String[].class};
-            } else {
-                parameterTypes = new Class[] {String.class, String[].class};
+            Method buildCommandMethod = ReflUtil.getMethodCached(formattedCommandAliasClass, "buildCommand", CommandSender.class, String.class, String[].class);
+            if (buildCommandMethod == null) {
+                senderArg = false;
+                buildCommandMethod = ReflUtil.getMethodCached(formattedCommandAliasClass, "buildCommand", String.class, String[].class);
             }
 
-            final Method buildCommandMethod = ReflUtil.getMethodCached(formattedCommandAliasClass, "buildCommand", parameterTypes);
+            if (buildCommandMethod == null) {
+                throw new NoSuchMethodException("Could not find buildCommand method in FormattedCommandAlias");
+            }
+
             buildCommandMethod.setAccessible(true);
             buildCommandMethodHandle = MethodHandles.lookup().unreflect(buildCommandMethod);
         } catch (final Exception ex) {
@@ -43,6 +45,7 @@ public class ReflFormattedCommandAliasProvider implements FormattedCommandAliasP
         } finally {
             this.formatStringsField = formatStringsField;
             this.buildCommandMethodHandle = buildCommandMethodHandle;
+            this.senderArg = senderArg;
         }
     }
 
@@ -75,7 +78,7 @@ public class ReflFormattedCommandAliasProvider implements FormattedCommandAliasP
     @Override
     public String buildCommand(FormattedCommandAlias command, CommandSender sender, String formatString, String[] args) {
         try {
-            if (paper) {
+            if (senderArg) {
                 return (String) buildCommandMethodHandle.invoke(command, sender, formatString, args);
             } else {
                 return (String) buildCommandMethodHandle.invoke(command, formatString, args);
@@ -85,8 +88,4 @@ public class ReflFormattedCommandAliasProvider implements FormattedCommandAliasP
         }
     }
 
-    @Override
-    public String getDescription() {
-        return "NMS Reflection Provider for FormattedCommandAlias methods";
-    }
 }

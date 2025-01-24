@@ -21,6 +21,7 @@ import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import net.ess3.provider.PlayerLocaleProvider;
 import net.essentialsx.api.v2.events.TransactionEvent;
 import net.essentialsx.api.v2.services.mail.MailSender;
 import net.kyori.adventure.text.Component;
@@ -247,9 +248,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
         setMoney(getMoney().add(value), cause);
-        sendTl("addedToAccount", NumberUtil.displayCurrency(value, ess));
+        sendTl("addedToAccount", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)));
         if (initiator != null) {
-            initiator.sendTl("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess));
+            initiator.sendTl("addedToOthersAccount", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)), getDisplayName(), AdventureUtil.parsed(NumberUtil.displayCurrency(getMoney(), ess)));
         }
     }
 
@@ -266,12 +267,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (canAfford(value)) {
             setMoney(getMoney().subtract(value), cause);
             reciever.setMoney(reciever.getMoney().add(value), cause);
-            sendTl("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName());
-            reciever.sendTl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName());
+            sendTl("moneySentTo", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)), reciever.getDisplayName());
+            reciever.sendTl("moneyRecievedFrom", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)), getDisplayName());
             final TransactionEvent transactionEvent = new TransactionEvent(this.getSource(), reciever, value);
             ess.getServer().getPluginManager().callEvent(transactionEvent);
         } else {
-            throw new ChargeException("notEnoughMoney", NumberUtil.displayCurrency(value, ess));
+            throw new ChargeException("notEnoughMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)));
         }
     }
 
@@ -294,9 +295,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } catch (final MaxMoneyException ex) {
             ess.getLogger().log(Level.WARNING, "Invalid call to takeMoney, total balance can't be more than the max-money limit.", ex);
         }
-        sendTl("takenFromAccount", NumberUtil.displayCurrency(value, ess));
+        sendTl("takenFromAccount", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)));
         if (initiator != null) {
-            initiator.sendTl("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess));
+            initiator.sendTl("takenFromOthersAccount", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)), getDisplayName(), AdventureUtil.parsed(NumberUtil.displayCurrency(getMoney(), ess)));
         }
     }
 
@@ -1088,7 +1089,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public String playerTl(String tlKey, Object... args) {
         if (ess.getSettings().isPerPlayerLocale()) {
-            return tlLocale(getPlayerLocale(ess.getPlayerLocaleProvider().getLocale(base)), tlKey, args);
+            final PlayerLocaleProvider provider = ess.provider(PlayerLocaleProvider.class);
+            return tlLocale(getPlayerLocale(provider.getLocale(base)), tlKey, args);
         }
         return tlLiteral(tlKey, args);
     }

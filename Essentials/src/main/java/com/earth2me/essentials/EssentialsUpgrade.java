@@ -164,26 +164,28 @@ public class EssentialsUpgrade {
 
         final EssentialsConfiguration config = ess.getRandomTeleport().getConfig();
 
-        final LazyLocation center = config.getLocation("center");
-        final Location centerLoc = center != null ? center.location() : null;
-        if (center != null && centerLoc != null) {
-            final double minRange = config.getDouble("min-range", Double.MIN_VALUE);
-            final double maxRange = config.getDouble("max-range", Double.MIN_VALUE);
-            for (final World world : ess.getServer().getWorlds()) {
-                final String propPrefix = "locations." + world.getName() + ".";
-                config.setProperty(propPrefix + "center", centerLoc);
+        if (config.getRootNode() != null) {
+            final LazyLocation center = config.getLocation("center");
+            final Location centerLoc = center != null ? center.location() : null;
+            if (center != null && centerLoc != null) {
+                final double minRange = config.getDouble("min-range", Double.MIN_VALUE);
+                final double maxRange = config.getDouble("max-range", Double.MIN_VALUE);
+                for (final World world : ess.getServer().getWorlds()) {
+                    final String propPrefix = "locations." + world.getName() + ".";
+                    config.setProperty(propPrefix + "center", centerLoc);
 
-                if (minRange != Double.MIN_VALUE) {
-                    config.setProperty(propPrefix + "min-range", minRange);
-                }
-                if (maxRange != Double.MIN_VALUE) {
-                    config.setProperty(propPrefix + "max-range", maxRange);
+                    if (minRange != Double.MIN_VALUE) {
+                        config.setProperty(propPrefix + "min-range", minRange);
+                    }
+                    if (maxRange != Double.MIN_VALUE) {
+                        config.setProperty(propPrefix + "max-range", maxRange);
+                    }
                 }
             }
-        }
-        config.removeProperty("center");
+            config.removeProperty("center");
 
-        config.blockingSave();
+            config.blockingSave();
+        }
 
         doneFile.setProperty("updateRandomTeleport", true);
         doneFile.save();

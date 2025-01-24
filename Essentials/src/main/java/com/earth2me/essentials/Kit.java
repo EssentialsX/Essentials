@@ -12,6 +12,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.KitClaimEvent;
+import net.ess3.provider.SerializationProvider;
 import net.essentialsx.api.v2.events.KitPreExpandItemsEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -191,13 +192,14 @@ public class Kit {
                 }
 
                 final ItemStack stack;
+                final SerializationProvider serializationProvider = ess.provider(SerializationProvider.class);
 
                 if (kitItem.startsWith("@")) {
-                    if (ess.getSerializationProvider() == null) {
+                    if (serializationProvider == null) {
                         ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("kitError3", kitName, user.getName())));
                         continue;
                     }
-                    stack = ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
+                    stack = serializationProvider.deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
                 } else {
                     final String[] parts = kitItem.split(" +");
                     final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
