@@ -89,7 +89,7 @@ public class Commandskull extends EssentialsCommand {
 
         if (itemSkull != null && MaterialUtil.isPlayerHead(itemSkull) && user == player) {
             metaSkull = (SkullMeta) itemSkull.getItemMeta();
-        } else if (user.isAuthorized("essentials.skull.spawn")) {
+        } else if (user == player ? user.isAuthorized("essentials.skull.spawn") : user.isAuthorized("essentials.skull.spawn.others")) {
             itemSkull = new ItemStack(SKULL_ITEM, 1, (byte) 3);
             metaSkull = (SkullMeta) itemSkull.getItemMeta();
             spawn = true;
