@@ -40,7 +40,7 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Jails implements net.ess3.api.IJails {
-    private static transient boolean enabled = false;
+    private static boolean enabled = false;
     private final IEssentials ess;
     private final EssentialsConfiguration config;
     private final Map<String, LazyLocation> jails = new HashMap<>();
@@ -138,28 +138,6 @@ public class Jails implements net.ess3.api.IJails {
             if (jails.remove(jail) != null) {
                 config.getSection("jails").node(jail).set(null);
                 config.save();
-            }
-        }
-    }
-
-    /**
-     * @deprecated This method does not use asynchronous teleportation. Use {@link Jails#sendToJail(IUser, String, CompletableFuture)}
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    @Deprecated
-    public void sendToJail(final IUser user, String jail) throws Exception {
-        if (jail == null || jail.isEmpty()) {
-            return;
-        }
-
-        jail = jail.toLowerCase(Locale.ENGLISH);
-        synchronized (jails) {
-            if (jails.containsKey(jail)) {
-                if (user.getBase().isOnline()) {
-                    user.getTeleport().now(getJail(jail), false, TeleportCause.COMMAND);
-                }
-                user.setJail(jail);
             }
         }
     }
