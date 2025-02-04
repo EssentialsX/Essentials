@@ -1091,14 +1091,23 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public List<Material> getProtectList(final String configName) {
-        final List<Material> list = new ArrayList<>();
+    public List<String> getProtectListRaw(String configName) {
+        final List<String> list = new ArrayList<>();
         for (String itemName : config.getString(configName, "").split(",")) {
             itemName = itemName.trim();
             if (itemName.isEmpty()) {
                 continue;
             }
 
+            list.add(itemName);
+        }
+        return list;
+    }
+
+    @Override
+    public List<Material> getProtectList(final String configName) {
+        final List<Material> list = new ArrayList<>();
+        for (String itemName : getProtectListRaw(configName)) {
             Material mat = EnumUtil.getMaterial(itemName.toUpperCase());
 
             if (mat == null) {
@@ -1917,6 +1926,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isWorldChangeFlyResetEnabled() {
         return config.getBoolean("world-change-fly-reset", true);
+    }
+
+    @Override
+    public boolean isWorldChangePreserveFlying() {
+        return config.getBoolean("world-change-preserve-flying", true);
     }
 
     @Override

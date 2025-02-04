@@ -103,6 +103,8 @@ public interface ISettings extends IConf {
 
     List<Material> getProtectList(final String configName);
 
+    List<String> getProtectListRaw(final String configName);
+
     boolean getProtectPreventSpawn(final String creatureName);
 
     String getProtectString(final String configName);
@@ -343,6 +345,8 @@ public interface ISettings extends IConf {
     boolean isCommandCooldownsEnabled();
 
     boolean isWorldChangeFlyResetEnabled();
+
+    boolean isWorldChangePreserveFlying();
 
     boolean isWorldChangeSpeedResetEnabled();
 
