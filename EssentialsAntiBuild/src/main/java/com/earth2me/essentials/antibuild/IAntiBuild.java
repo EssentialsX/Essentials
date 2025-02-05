@@ -9,6 +9,8 @@ import java.util.Map;
 public interface IAntiBuild extends Plugin {
     boolean checkProtectionItems(final AntiBuildConfig list, final Material mat);
 
+    boolean checkProtectionItems(final AntiBuildConfig list, final String mat);
+
     boolean getSettingBool(final AntiBuildConfig protectConfig);
 
     EssentialsConnect getEssentialsConnect();

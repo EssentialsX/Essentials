@@ -63,8 +63,6 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     // User modules
     private final IMessageRecipient messageRecipient;
     private transient final AsyncTeleport teleport;
-    @SuppressWarnings("deprecation")
-    private transient final Teleport legacyTeleport;
 
     // User command confirmation strings
     private final Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
@@ -109,8 +107,6 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
         teleport = new AsyncTeleport(this, ess);
-        //noinspection deprecation
-        legacyTeleport = new Teleport(this, ess);
         if (isAfk()) {
             afkPosition = this.getLocation();
         }
@@ -377,13 +373,6 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         teleportRequestQueue.put(request.getName(), request);
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    @Deprecated
-    public boolean hasOutstandingTeleportRequest() {
-        return getNextTpaRequest(false, false, false) != null;
-    }
-
     public Collection<String> getPendingTpaKeys() {
         return teleportRequestQueue.keySet();
     }
@@ -565,16 +554,6 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public AsyncTeleport getAsyncTeleport() {
         return teleport;
-    }
-
-    /**
-     * @deprecated This API is not asynchronous. Use {@link User#getAsyncTeleport()}
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    @Deprecated
-    public Teleport getTeleport() {
-        return legacyTeleport;
     }
 
     public long getLastOnlineActivity() {
