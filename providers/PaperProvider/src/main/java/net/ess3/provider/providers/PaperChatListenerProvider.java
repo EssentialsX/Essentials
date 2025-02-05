@@ -19,7 +19,7 @@ public abstract class PaperChatListenerProvider implements Listener {
     public PaperChatListenerProvider() {
         this.serializer = LegacyComponentSerializer.builder()
                 .flattener(ComponentFlattener.basic())
-                .extractUrls()
+                .extractUrls(AbstractChatEvent.URL_PATTERN)
                 .useUnusualXRepeatedCharacterHexFormat().build();
     }
 
