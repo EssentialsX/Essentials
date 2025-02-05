@@ -20,6 +20,7 @@ public final class AdventureUtil {
     static {
         final LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder()
                 .flattener(ComponentFlattener.basic())
+                .extractUrls()
                 .useUnusualXRepeatedCharacterHexFormat();
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
             builder.hexColors();
