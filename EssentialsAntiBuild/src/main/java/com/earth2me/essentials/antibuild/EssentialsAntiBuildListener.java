@@ -1,6 +1,7 @@
 package com.earth2me.essentials.antibuild;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
@@ -274,29 +275,35 @@ public class EssentialsAntiBuildListener implements Listener {
         } else if (event.getEntity() instanceof ArmorStand) {
             type = Material.ARMOR_STAND;
         } else if (event.getEntity() instanceof EnderCrystal) {
-            type = Material.END_CRYSTAL;
+            // There is no Material for Ender Crystals before 1.9.
+            type = EnumUtil.getMaterial("END_CRYSTAL");
         } else {
             return;
         }
 
-        if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build") && !metaPermCheck(user, "break", type)) {
+        if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build")) {
+            final boolean permCheck = type == null ? user.isAuthorized("essentials.build.break.END_CRYSTAL") : metaPermCheck(user, "break", type);
+            if (!permCheck) {
+                if (ess.getSettings().warnOnBuildDisallow()) {
+                    user.sendTl("antiBuildBreak", type != null ? type.toString() : "END_CRYSTAL");
+                }
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        final boolean blacklistCheck = type == null ? prot.checkProtectionItems(AntiBuildConfig.blacklist_break, "END_CRYSTAL") : prot.checkProtectionItems(AntiBuildConfig.blacklist_break, type);
+        if (blacklistCheck && !user.isAuthorized("essentials.protect.exemptbreak")) {
             if (ess.getSettings().warnOnBuildDisallow()) {
-                user.sendTl("antiBuildBreak", type.toString());
+                user.sendTl("antiBuildBreak", type != null ? type.toString() : "END_CRYSTAL");
             }
             event.setCancelled(true);
             return;
         }
 
-        if (prot.checkProtectionItems(AntiBuildConfig.blacklist_break, type) && !user.isAuthorized("essentials.protect.exemptbreak")) {
-            if (ess.getSettings().warnOnBuildDisallow()) {
-                user.sendTl("antiBuildBreak", type.toString());
-            }
-            event.setCancelled(true);
-            return;
-        }
-
-        if (prot.checkProtectionItems(AntiBuildConfig.alert_on_break, type) && !user.isAuthorized("essentials.protect.alerts.notrigger")) {
-            prot.getEssentialsConnect().alert(user, type.toString(), "alertBroke");
+        final boolean alertCheck = type == null ? prot.checkProtectionItems(AntiBuildConfig.alert_on_break, "END_CRYSTAL") : prot.checkProtectionItems(AntiBuildConfig.alert_on_break, type);
+        if (alertCheck && !user.isAuthorized("essentials.protect.alerts.notrigger")) {
+            prot.getEssentialsConnect().alert(user, type != null ? type.toString() : "END_CRYSTAL", "alertBroke");
         }
     }
 

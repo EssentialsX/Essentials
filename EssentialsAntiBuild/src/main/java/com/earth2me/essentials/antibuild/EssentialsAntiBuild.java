@@ -46,6 +46,12 @@ public class EssentialsAntiBuild extends JavaPlugin implements IAntiBuild {
     }
 
     @Override
+    public boolean checkProtectionItems(final AntiBuildConfig list, final String mat) {
+        final List<String> protectList = ess.getEssentials().getSettings().getProtectListRaw(list.getConfigName());
+        return protectList != null && !protectList.isEmpty() && protectList.contains(mat);
+    }
+
+    @Override
     public EssentialsConnect getEssentialsConnect() {
         return ess;
     }
