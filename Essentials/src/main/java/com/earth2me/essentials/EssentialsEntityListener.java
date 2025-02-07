@@ -190,7 +190,15 @@ public class EssentialsEntityListener implements Listener {
         final User user = ess.getUser(event.getEntity());
         if (user.isAuthorized("essentials.keepinv")) {
             event.setKeepInventory(true);
-            event.getDrops().clear();
+            // We don't do getDrops().clear() here because it would remove any loot tables that were added by other plugins/datapacks.
+            // Instead, we remove the items from the drops that are in the player's inventory. This way, the loot tables can still drop items.
+            // This is the same behavior as the vanilla /gamerule keepInventory.
+            final ItemStack[] inventory = Inventories.getInventory(event.getEntity(), true);
+            for (final ItemStack item : inventory) {
+                if (item != null) {
+                    event.getDrops().remove(item);
+                }
+            }
             final ISettings.KeepInvPolicy vanish = ess.getSettings().getVanishingItemsPolicy();
             final ISettings.KeepInvPolicy bind = ess.getSettings().getBindingItemsPolicy();
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01) && (vanish != ISettings.KeepInvPolicy.KEEP || bind != ISettings.KeepInvPolicy.KEEP)) {
