@@ -135,9 +135,9 @@ public class LegacyPotionMetaProvider implements PotionMetaProvider {
         try {
             // This provider was created to support the new PotionData API introduced in 1.9
             Class.forName("org.bukkit.potion.PotionData");
-            return false;
-        } catch (final Throwable ignored) {
             return true;
+        } catch (final Throwable ignored) {
+            return false;
         }
     }
 }
