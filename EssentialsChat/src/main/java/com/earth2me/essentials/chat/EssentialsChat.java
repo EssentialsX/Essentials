@@ -34,7 +34,7 @@ public class EssentialsChat extends JavaPlugin {
             return;
         }
 
-        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01) && VersionUtil.isPaper()) {
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01) && VersionUtil.isPaper() && ess.getSettings().isUsePaperChatEvent()) {
             final PaperChatHandler paperHandler = new PaperChatHandler((Essentials) ess, this);
             paperHandler.registerListeners();
         } else {

@@ -56,6 +56,8 @@ public interface ISettings extends IConf {
 
     boolean isChatQuestionEnabled();
 
+    boolean isUsePaperChatEvent();
+
     BigDecimal getCommandCost(IEssentialsCommand cmd);
 
     BigDecimal getCommandCost(String label);

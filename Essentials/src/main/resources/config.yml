@@ -988,6 +988,12 @@ chat:
   # Whether chat questions should be enabled or not.
   question-enabled: true
 
+  # Whether EssentialsX should use Paper's modern chat event system in 1.16.5+.
+  # This is required for modern chat features such as hover events and click events.
+  # If you're experiencing issues with other plugins that use the chat event system, you can disable this.
+  # You must restart your server after changing this setting.
+  paper-chat-events: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                 EssentialsX Protect                  | #
