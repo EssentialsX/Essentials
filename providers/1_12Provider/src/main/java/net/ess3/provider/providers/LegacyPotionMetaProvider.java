@@ -16,7 +16,7 @@ import java.util.Map;
 
 @ProviderData(description = "1.9-1.20.4 Potion Meta Provider", weight = 1)
 public class LegacyPotionMetaProvider implements PotionMetaProvider {
-    private static final Map<Integer, PotionType> damageValueToType = ImmutableMap.<Integer, PotionType>builder()
+    private final Map<Integer, PotionType> damageValueToType = ImmutableMap.<Integer, PotionType>builder()
         .put(1, PotionType.REGEN)
         .put(2, PotionType.SPEED)
         .put(3, PotionType.FIRE_RESISTANCE)
