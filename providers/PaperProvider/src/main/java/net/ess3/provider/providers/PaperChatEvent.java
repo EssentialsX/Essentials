@@ -3,6 +3,7 @@ package net.ess3.provider.providers;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.ess3.provider.AbstractChatEvent;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
@@ -12,12 +13,12 @@ import java.util.function.Predicate;
 
 public class PaperChatEvent implements AbstractChatEvent {
     private final AsyncChatEvent event;
+    private final LegacyComponentSerializer serializer;
     private String fakeFormat;
-    private String fakeMessage;
 
-    public PaperChatEvent(final AsyncChatEvent event) {
+    public PaperChatEvent(final AsyncChatEvent event, final LegacyComponentSerializer serializer) {
         this.event = event;
-        this.fakeMessage = event.signedMessage().message();
+        this.serializer = serializer;
     }
 
     @Override
@@ -47,12 +48,12 @@ public class PaperChatEvent implements AbstractChatEvent {
 
     @Override
     public String getMessage() {
-        return fakeMessage;
+        return serializer.serialize(event.message());
     }
 
     @Override
     public void setMessage(String message) {
-        this.fakeMessage = message;
+        event.message(serializer.deserialize(message));
     }
 
     @Override

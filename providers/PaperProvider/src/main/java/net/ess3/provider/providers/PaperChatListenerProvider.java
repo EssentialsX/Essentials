@@ -68,7 +68,7 @@ public abstract class PaperChatListenerProvider implements Listener {
             return paperChatEvent;
         }
 
-        paperChatEvent = new PaperChatEvent(event);
+        paperChatEvent = new PaperChatEvent(event, serializer);
         eventMap.put(event, paperChatEvent);
 
         return paperChatEvent;
