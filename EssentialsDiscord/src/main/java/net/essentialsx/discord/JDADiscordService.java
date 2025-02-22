@@ -89,7 +89,6 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     private DiscordCommandDispatcher commandDispatcher;
     private InteractionControllerImpl interactionController;
     private Listener chatListener;
-    private Listener paperChatListener;
     private boolean invalidStartup = false;
 
     public JDADiscordService(EssentialsDiscord plugin) {
@@ -351,10 +350,6 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             HandlerList.unregisterAll(chatListener);
             chatListener = null;
         }
-        if (paperChatListener != null) {
-            HandlerList.unregisterAll(paperChatListener);
-            paperChatListener = null;
-        }
 
         if (getSettings().isUseEssentialsEvents() && plugin.isEssentialsChat()) {
             chatListener = new EssentialsChatListener(this);
@@ -365,9 +360,6 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         }
 
         Bukkit.getPluginManager().registerEvents(chatListener, plugin);
-        if (paperChatListener != null) {
-            Bukkit.getPluginManager().registerEvents(paperChatListener, plugin);
-        }
     }
 
     public void updatePresence() {
