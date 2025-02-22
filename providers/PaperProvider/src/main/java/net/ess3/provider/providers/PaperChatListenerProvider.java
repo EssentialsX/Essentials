@@ -23,41 +23,58 @@ public abstract class PaperChatListenerProvider implements Listener {
                 .useUnusualXRepeatedCharacterHexFormat().build();
     }
 
-    public abstract void onChatLowest(final AbstractChatEvent event);
+    public void onChatLowest(final AbstractChatEvent event) {
 
-    public abstract void onChatNormal(final AbstractChatEvent event);
+    }
 
-    public abstract void onChatHighest(final AbstractChatEvent event);
+    public void onChatNormal(final AbstractChatEvent event) {
+
+    }
+
+    public void onChatHighest(final AbstractChatEvent event) {
+
+    }
+
+    public void onChatMonitor(final AbstractChatEvent event) {
+
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onLowest(final AsyncChatEvent event) {
+    public final void onLowest(final AsyncChatEvent event) {
         onChatLowest(wrap(event));
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onNormal(final AsyncChatEvent event) {
+    public final void onNormal(final AsyncChatEvent event) {
         onChatNormal(wrap(event));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onHighest(final AsyncChatEvent event) {
+    public final void onHighest(final AsyncChatEvent event) {
         final PaperChatEvent paperChatEvent = wrap(event);
         onChatHighest(paperChatEvent);
 
-        if (!event.isCancelled()) {
-            final TextComponent format = serializer.deserialize(paperChatEvent.getFormat());
-            final TextComponent eventMessage = serializer.deserialize(paperChatEvent.getMessage());
-
-            event.renderer(ChatRenderer.viewerUnaware((player, displayName, message) ->
-                    format.replaceText(builder -> builder
-                            .match("%(\\d)\\$s").replacement((index, match) -> {
-                                if (index.group(1).equals("1")) {
-                                    return displayName;
-                                }
-                                return eventMessage;
-                            })
-                    )));
+        if (event.isCancelled()) {
+            return;
         }
+
+        final TextComponent format = serializer.deserialize(paperChatEvent.getFormat());
+        final TextComponent eventMessage = serializer.deserialize(paperChatEvent.getMessage());
+
+        event.renderer(ChatRenderer.viewerUnaware((player, displayName, message) ->
+                format.replaceText(builder -> builder
+                        .match("%(\\d)\\$s").replacement((index, match) -> {
+                            if (index.group(1).equals("1")) {
+                                return displayName;
+                            }
+                            return eventMessage;
+                        })
+                )));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public final void onMonitor(final AsyncChatEvent event) {
+        onChatMonitor(wrap(event));
 
         eventMap.remove(event);
     }
