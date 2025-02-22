@@ -68,7 +68,7 @@ public class ProviderFactory {
                         highestProvider = provider;
                         highestProviderData = providerData;
                     }
-                } catch (final Exception e) {
+                } catch (final Throwable e) {
                     essentials.getLogger().log(Level.SEVERE, "Failed to initialize provider " + provider.getName(), e);
                 }
             }

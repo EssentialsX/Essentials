@@ -93,6 +93,7 @@ import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperSerializationProvider;
 import net.ess3.provider.providers.PaperServerStateProvider;
+import net.ess3.provider.providers.PaperTickCountProvider;
 import net.ess3.provider.providers.PrehistoricPotionMetaProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
@@ -421,6 +422,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Biome Key Provider
             providerFactory.registerProvider(PaperBiomeKeyProvider.class);
 
+            // Tick Count Provider
+            providerFactory.registerProvider(PaperTickCountProvider.class);
+
             providerFactory.finalizeRegistration();
 
             // Event Providers
@@ -608,8 +612,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         for (final String commandName : this.getDescription().getCommands().keySet()) {
             final Command command = this.getCommand(commandName);
             if (command != null) {
-                command.setDescription(tlLiteral(commandName + "CommandDescription"));
-                command.setUsage(tlLiteral(commandName + "CommandUsage"));
+                command.setDescription(AdventureUtil.miniToLegacy(tlLiteral(commandName + "CommandDescription")));
+                command.setUsage(AdventureUtil.miniToLegacy(tlLiteral(commandName + "CommandUsage")));
             }
         }
 

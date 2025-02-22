@@ -224,6 +224,11 @@ socialspy-uses-displaynames: true
 # This will disable flight if the player does not have essentials.fly.
 world-change-fly-reset: true
 
+# Starting in 1.17, Minecraft no longer preserves the abilities of a player when they change worlds.
+# Setting this to true will make EssentialsX preserve if users flying when they change worlds.
+# This will only work if the player has the essentials.fly permission.
+world-change-preserve-flying: true
+
 # When a player changes world, should we reset their speed according to their permissions?
 # This resets the player's speed to the default if they don't have essentials.speed.
 # If the player doesn't have essentials.speed.bypass, this resets their speed to the maximum specified above.
@@ -982,6 +987,12 @@ chat:
 
   # Whether chat questions should be enabled or not.
   question-enabled: true
+
+  # Whether EssentialsX should use Paper's modern chat event system in 1.16.5+.
+  # This is required for modern chat features such as hover events and click events.
+  # If you're experiencing issues with other plugins that use the chat event system, you can disable this.
+  # You must restart your server after changing this setting.
+  paper-chat-events: true
 
 ############################################################
 # +------------------------------------------------------+ #
