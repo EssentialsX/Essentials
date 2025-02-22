@@ -612,8 +612,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         for (final String commandName : this.getDescription().getCommands().keySet()) {
             final Command command = this.getCommand(commandName);
             if (command != null) {
-                command.setDescription(tlLiteral(commandName + "CommandDescription"));
-                command.setUsage(tlLiteral(commandName + "CommandUsage"));
+                command.setDescription(AdventureUtil.miniToLegacy(tlLiteral(commandName + "CommandDescription")));
+                command.setUsage(AdventureUtil.miniToLegacy(tlLiteral(commandName + "CommandUsage")));
             }
         }
 

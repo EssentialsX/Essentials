@@ -266,6 +266,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("chat.question-enabled", true);
     }
 
+    @Override
+    public boolean isUsePaperChatEvent() {
+        return config.getBoolean("chat.paper-chat-events", true);
+    }
+
     public boolean _isTeleportSafetyEnabled() {
         return config.getBoolean("teleport-safety", true);
     }
@@ -1091,14 +1096,23 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public List<Material> getProtectList(final String configName) {
-        final List<Material> list = new ArrayList<>();
+    public List<String> getProtectListRaw(String configName) {
+        final List<String> list = new ArrayList<>();
         for (String itemName : config.getString(configName, "").split(",")) {
             itemName = itemName.trim();
             if (itemName.isEmpty()) {
                 continue;
             }
 
+            list.add(itemName);
+        }
+        return list;
+    }
+
+    @Override
+    public List<Material> getProtectList(final String configName) {
+        final List<Material> list = new ArrayList<>();
+        for (String itemName : getProtectListRaw(configName)) {
             Material mat = EnumUtil.getMaterial(itemName.toUpperCase());
 
             if (mat == null) {
