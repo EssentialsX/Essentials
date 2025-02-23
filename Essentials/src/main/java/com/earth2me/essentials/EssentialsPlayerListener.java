@@ -778,7 +778,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
 
         final TickCountProvider tickCountProvider = ess.provider(TickCountProvider.class);
-        if (tickCountProvider != null && user.getFlightTick() == tickCountProvider.getTickCount()) {
+        if (tickCountProvider != null && user.getFlightTick() == tickCountProvider.getTickCount() && user.isAuthorized("essentials.fly")) {
             user.getBase().setAllowFlight(true);
             user.getBase().setFlying(true);
         }
