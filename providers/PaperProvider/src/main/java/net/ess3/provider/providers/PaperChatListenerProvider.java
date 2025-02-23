@@ -10,11 +10,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 public abstract class PaperChatListenerProvider implements Listener {
     private final LegacyComponentSerializer serializer;
-    private final HashMap<AsyncChatEvent, PaperChatEvent> eventMap = new HashMap<>();
+    private final Map<AsyncChatEvent, PaperChatEvent> eventMap = new IdentityHashMap<>();
 
     public PaperChatListenerProvider() {
         this.serializer = LegacyComponentSerializer.builder()
