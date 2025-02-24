@@ -1,6 +1,7 @@
 package com.earth2me.essentials.utils;
 
 import net.ess3.api.IEssentials;
+import net.ess3.provider.AbstractChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -20,6 +21,7 @@ public final class AdventureUtil {
     static {
         final LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder()
                 .flattener(ComponentFlattener.basic())
+                .extractUrls(AbstractChatEvent.URL_PATTERN)
                 .useUnusualXRepeatedCharacterHexFormat();
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
             builder.hexColors();

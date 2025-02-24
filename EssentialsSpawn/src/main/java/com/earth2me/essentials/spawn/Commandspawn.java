@@ -71,7 +71,6 @@ public class Commandspawn extends EssentialsCommand {
         if (spawn == null) {
             return;
         }
-        sender.sendTl("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ());
         future.exceptionally(e -> {
             showError(sender.getSender(), e, commandLabel);
             return false;
@@ -83,8 +82,14 @@ public class Commandspawn extends EssentialsCommand {
         }
         if (teleportOwner == null) {
             teleportee.getAsyncTeleport().now(spawn, false, TeleportCause.COMMAND, future);
-            return;
+        } else {
+            teleportOwner.getAsyncTeleport().teleportPlayer(teleportee, spawn, charge, TeleportCause.COMMAND, future);
         }
-        teleportOwner.getAsyncTeleport().teleportPlayer(teleportee, spawn, charge, TeleportCause.COMMAND, future);
+        future.thenAccept(success -> {
+            if (success) {
+                sender.sendTl("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ());
+            }
+        });
+
     }
 }

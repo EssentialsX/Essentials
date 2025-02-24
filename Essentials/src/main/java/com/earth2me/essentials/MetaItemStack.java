@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.textreader.BookInput;
 import com.earth2me.essentials.textreader.BookPager;
 import com.earth2me.essentials.textreader.IText;
-import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -217,8 +216,6 @@ public class MetaItemStack {
             return;
         }
 
-        final Material WRITTEN_BOOK = EnumUtil.getMaterial("WRITTEN_BOOK");
-
         if (split.length > 1 && split[0].equalsIgnoreCase("name") && hasMetaPermission(sender, "name", false, true, ess)) {
             final String displayName = FormatUtil.replaceFormat(split[1].replaceAll("(?<!\\\\)_", " ").replace("\\_", "_"));
             final ItemMeta meta = stack.getItemMeta();
@@ -254,7 +251,7 @@ public class MetaItemStack {
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
             // This fix only applies to written books - which require an author and a title. https://bugs.mojang.com/browse/MC-59153
-            if (stack.getType() == WRITTEN_BOOK) {
+            if (stack.getType() == Material.WRITTEN_BOOK) {
                 if (!meta.hasAuthor()) {
                     // The sender can be null when this method is called from {@link  com.earth2me.essentials.signs.EssentialsSign#getItemMeta(ItemStack, String, IEssentials)}
                     meta.setAuthor(sender == null ? Console.getInstance().getDisplayName() : sender.getPlayer().getName());
@@ -267,12 +264,12 @@ public class MetaItemStack {
             final List<String> pages = pager.getPages(split[1]);
             meta.setPages(pages);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == WRITTEN_BOOK && hasMetaPermission(sender, "author", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "author", false, true, ess)) {
             final String author = FormatUtil.replaceFormat(split[1]);
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setAuthor(author);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == WRITTEN_BOOK && hasMetaPermission(sender, "title", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "title", false, true, ess)) {
             final String title = FormatUtil.replaceFormat(split[1].replaceAll("(?<!\\\\)_", " ").replace("\\_", "_"));
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
