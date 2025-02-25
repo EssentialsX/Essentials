@@ -31,7 +31,7 @@ public final class SignTransactionEvent extends SignInteractEvent implements Can
 
     /**
      *
-     * @return if the event should be cancelled.
+     * @return if the event should bee cancelled.
      */
 
     @Override
