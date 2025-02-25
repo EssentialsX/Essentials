@@ -3,10 +3,9 @@ package com.earth2me.essentials.signs;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.signs.event.SignTransactionEvent;
+import net.ess3.api.events.SignTransactionEvent;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
@@ -47,11 +46,13 @@ public class SignBuy extends EssentialsSign {
         }
 
         charge.isAffordableFor(player);
-        SignTransactionEvent signTransactionEvent = new SignTransactionEvent(
+        final SignTransactionEvent signTransactionEvent = new SignTransactionEvent(
+                sign,
+                this,
+                player,
                 items.getItemStack(),
-                player.getBase(),
-                sign.getBlock().getLocation(),
-                SignTransactionEvent.TransactionType.BUY
+                SignTransactionEvent.TransactionType.BUY,
+                charge.getMoney()
         );
 
         ess.getServer().getPluginManager().callEvent(signTransactionEvent);
