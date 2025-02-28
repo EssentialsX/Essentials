@@ -59,8 +59,8 @@ public final class SignTransactionEvent extends SignInteractEvent implements Can
     }
 
     /**
-     *
-     * @return the type of transaction executed.
+     * Gets the type of transaction, either buy or sell.
+     * @return The transaction type.
      */
     public @NotNull TransactionType getTransactionType() {
         return transactionType;
