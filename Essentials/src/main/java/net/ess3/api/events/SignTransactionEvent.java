@@ -67,10 +67,9 @@ public final class SignTransactionEvent extends SignInteractEvent implements Can
     }
 
     /**
-     *
-     * @return how much was either sold or bought through the sign.
+     * Gets the value of the item being bought or sold.
+     * @return The item's value.
      */
-
     public BigDecimal getTransactionValue() {
         return transactionValue;
     }
