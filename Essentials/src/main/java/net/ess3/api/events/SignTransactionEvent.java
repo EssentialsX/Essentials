@@ -50,10 +50,9 @@ public final class SignTransactionEvent extends SignInteractEvent implements Can
     }
 
     /**
-     *
-     * @return a copy of the itemstack in the current transaction.
+     * Gets the ItemStack that is about to be bought or sold in this transition.
+     * @return The ItemStack being bought or sold.
      */
-
     public @NotNull ItemStack getItemStack() {
         return itemStack.clone();
     }
