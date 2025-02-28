@@ -29,11 +29,6 @@ public final class SignTransactionEvent extends SignInteractEvent implements Can
         this.transactionValue = transactionValue;
     }
 
-    /**
-     *
-     * @return if the event should be cancelled.
-     */
-
     @Override
     public boolean isCancelled() {
         return this.isCancelled;
