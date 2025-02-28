@@ -17,12 +17,7 @@ public final class SignTransactionEvent extends SignInteractEvent implements Can
     private final BigDecimal transactionValue;
     private boolean isCancelled = false;
 
-    public SignTransactionEvent(EssentialsSign.ISign sign,
-                                EssentialsSign essSign,
-                                IUser user,
-                                @NotNull ItemStack itemStack,
-                                @NotNull TransactionType transactionType,
-                                BigDecimal transactionValue) {
+    public SignTransactionEvent(EssentialsSign.ISign sign, EssentialsSign essSign, IUser user, ItemStack itemStack, TransactionType transactionType, BigDecimal transactionValue) {
         super(sign, essSign, user);
         this.itemStack = itemStack;
         this.transactionType = transactionType;
