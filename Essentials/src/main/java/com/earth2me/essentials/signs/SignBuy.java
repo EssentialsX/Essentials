@@ -46,14 +46,7 @@ public class SignBuy extends EssentialsSign {
         }
 
         charge.isAffordableFor(player);
-        final SignTransactionEvent signTransactionEvent = new SignTransactionEvent(
-                sign,
-                this,
-                player,
-                items.getItemStack(),
-                SignTransactionEvent.TransactionType.BUY,
-                charge.getMoney()
-        );
+        final SignTransactionEvent signTransactionEvent = new SignTransactionEvent(sign, this, player, items.getItemStack(), SignTransactionEvent.TransactionType.BUY, charge.getMoney());
 
         ess.getServer().getPluginManager().callEvent(signTransactionEvent);
         if (signTransactionEvent.isCancelled()) {
