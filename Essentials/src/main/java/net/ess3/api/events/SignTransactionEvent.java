@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigDecimal;
 
 /**
- * Fired when a player either buys or sells from an essentials sign
+ * Fired when a player either buys or sells from an Essentials sign
  */
 public final class SignTransactionEvent extends SignInteractEvent implements Cancellable {
     private final ItemStack itemStack;
