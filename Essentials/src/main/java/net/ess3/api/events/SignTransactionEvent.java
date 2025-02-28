@@ -39,11 +39,6 @@ public final class SignTransactionEvent extends SignInteractEvent implements Can
         return this.isCancelled;
     }
 
-    /**
-     *
-     * @param cancelled sets the event to be cancelled, this will cancel the transaction.
-     */
-
     @Override
     public void setCancelled(boolean cancelled) {
         this.isCancelled = cancelled;
