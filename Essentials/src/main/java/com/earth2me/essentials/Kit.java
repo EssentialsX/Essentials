@@ -242,10 +242,10 @@ public class Kit {
 
             for (final ItemStack itemStack : leftover.values()) {
                 int spillAmount = itemStack.getAmount();
-                if (maxStackSize != 0) {
-                    itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
-                }
                 while (spillAmount > 0) {
+                    if (maxStackSize != 0) {
+                        itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
+                    }
                     user.getWorld().dropItemNaturally(user.getLocation(), itemStack);
                     spillAmount -= itemStack.getAmount();
                 }

@@ -12,6 +12,7 @@ public class PaperChatListener extends PaperChatListenerProvider {
     private final JDADiscordService jda;
 
     public PaperChatListener(JDADiscordService jda) {
+        super(false);
         this.jda = jda;
     }
 

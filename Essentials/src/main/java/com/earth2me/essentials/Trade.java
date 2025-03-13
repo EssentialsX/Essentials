@@ -242,8 +242,8 @@ public class Trade {
                 } else {
                     for (final ItemStack itemStack : leftover.values()) {
                         int spillAmount = itemStack.getAmount();
-                        itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
                         while (spillAmount > 0) {
+                            itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
                             user.getBase().getWorld().dropItemNaturally(user.getBase().getLocation(), itemStack);
                             spillAmount -= itemStack.getAmount();
                         }
