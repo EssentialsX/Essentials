@@ -53,15 +53,15 @@ change-displayname: true
 # This option will cause Essentials to show players' displaynames instead of usernames when tab completing Essentials commands.
 change-tab-complete-name: false
 
-# When this option is enabled, the (tab) player list will be updated with the displayname.
-# The value of change-displayname (above) has to be true.
-#change-playerlist: true
-
 # When EssentialsChat.jar isn't used, force essentials to add the prefix and suffix from permission plugins to displayname.
 # This setting is ignored if EssentialsChat.jar is used, and defaults to 'true'.
 # The value of change-displayname (above) has to be true.
 # Do not edit this setting unless you know what you are doing!
 #add-prefix-suffix: false
+
+# When this option is enabled, the (tab) player list will be updated with the displayname.
+# The value of change-displayname (above) has to be true.
+#change-playerlist: true
 
 # When this option is enabled, player prefixes will be shown in the playerlist.
 # This feature only works for Minecraft version 1.8 and higher.
