@@ -371,20 +371,18 @@ enabledSigns:
   #- color
   #- balance
   #- buy
+  #- free
   #- sell
   #- trade
-  #- free
-  #- warp
-  #- kit
-  #- mail
   #- enchant
+  #- repair
   #- gamemode
   #- heal
   #- info
-  #- spawnmob
-  #- repair
-  #- time
-  #- weather
+  #- kit
+  #- mail
+  #- randomteleport
+  #- warp
   #- anvil
   #- cartography
   #- disposal
@@ -392,7 +390,9 @@ enabledSigns:
   #- loom
   #- smithing
   #- workbench
-  #- randomteleport
+  #- spawnmob
+  #- time
+  #- weather
 
 # How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.
