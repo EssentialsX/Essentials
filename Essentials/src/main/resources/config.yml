@@ -183,27 +183,27 @@ verbose-command-usages: true
 # remove commands that are used for something you dont want to spy on.
 # Set - '*' in order to listen on all possible commands.
 socialspy-commands:
-  - msg
-  - w
-  - r
-  - mail
-  - m
-  - t
-  - whisper
-  - emsg
-  - tell
-  - er
-  - reply
-  - ereply
-  - email
   - action
   - describe
-  - eme
   - eaction
   - edescribe
+  - email
+  - eme
+  - emsg
+  - er
+  - ereply
   - etell
   - ewhisper
+  - m
+  - mail
+  - msg
   - pm
+  - r
+  - reply
+  - t
+  - tell
+  - w
+  - whisper
 
 # Whether the private and public messages from muted players should appear in the social spy.
 # If so, they will be differentiated from those sent by normal players.
