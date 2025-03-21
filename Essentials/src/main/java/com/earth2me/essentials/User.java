@@ -990,7 +990,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
             setHidden(false);
             ess.getVanishedPlayersNew().remove(getName());
-            this.getBase().setMetadata("vanished", new FixedMetadataValue(ess, false));
+            //this.getBase().setMetadata("vanished", new FixedMetadataValue(ess, false));
+            this.getBase().removeMetadata("vanished", ess);
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().removePotionEffect(PotionEffectType.INVISIBILITY);
             }
