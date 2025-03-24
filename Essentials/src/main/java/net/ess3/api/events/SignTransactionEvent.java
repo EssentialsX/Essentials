@@ -60,6 +60,9 @@ public final class SignTransactionEvent extends SignInteractEvent implements Can
         return transactionValue;
     }
 
+    /**
+    * The type of transaction for this sign transaction.
+    */
     public enum TransactionType {
         BUY,
         SELL
