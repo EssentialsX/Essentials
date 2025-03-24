@@ -5,6 +5,7 @@ import net.ess3.api.IUser;
 import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
 
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
  * Fired when a player either buys or sells from an essentials sign
  */
 public final class SignTransactionEvent extends SignInteractEvent implements Cancellable {
+    private static final HandlerList handlers = new HandlerList();
     private final ItemStack itemStack;
     private final TransactionType transactionType;
     private final BigDecimal transactionValue;
@@ -82,5 +84,14 @@ public final class SignTransactionEvent extends SignInteractEvent implements Can
     public enum TransactionType {
         BUY,
         SELL
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }
