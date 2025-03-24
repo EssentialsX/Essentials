@@ -1,5 +1,5 @@
 # Configuration for the random teleport command.
-# Some settings may be defaulted, and can be changed via the /settpr command in-game.
+# Some settings may be defaulted and can be changed using the '/settpr' command in-game.
 default-location: '{world}'
 excluded-biomes:
   - cold_ocean
