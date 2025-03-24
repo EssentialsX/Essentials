@@ -1,8 +1,10 @@
 package net.ess3.provider;
 
+import net.essentialsx.providers.NullableProvider;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 
+@NullableProvider
 public interface ContainerProvider extends Provider {
 
     InventoryView openAnvil(Player player);

@@ -41,6 +41,7 @@ public class SignSell extends EssentialsSign {
                 //noinspection BigDecimalMethodWithoutRoundingCalled
                 BigDecimal pricePerSingleItem = chargeAmount.divide(new BigDecimal(initialItemAmount));
                 pricePerSingleItem = pricePerSingleItem.multiply(new BigDecimal(newItemAmount));
+                pricePerSingleItem = pricePerSingleItem.multiply(ess.getSettings().getMultiplier(player));
                 money = new Trade(pricePerSingleItem, ess);
             }
         }

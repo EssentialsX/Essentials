@@ -243,6 +243,10 @@ public final class Inventories {
     }
 
     public static boolean removeItemAmount(final Player player, final ItemStack toRemove, int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative.");
+        }
+
         final List<Integer> clearSlots = new ArrayList<>();
         final ItemStack[] items = player.getInventory().getContents();
 

@@ -1130,12 +1130,12 @@ public final class FakeServer implements Server {
 
         @Override
         public void registerEvent(final Class<? extends Event> event, final Listener listener, final EventPriority priority, final EventExecutor executor, final Plugin plugin) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            listeners.add(new RegisteredListener(listener, executor, priority, plugin, false));
         }
 
         @Override
         public void registerEvent(final Class<? extends Event> event, final Listener listener, final EventPriority priority, final EventExecutor executor, final Plugin plugin, final boolean ignoreCancelled) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            listeners.add(new RegisteredListener(listener, executor, priority, plugin, false));
         }
 
         @Override

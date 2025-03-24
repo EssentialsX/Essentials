@@ -8,6 +8,7 @@ import net.essentialsx.api.v2.services.discord.InteractionMember;
 import net.essentialsx.api.v2.services.discordlink.DiscordLinkService;
 import net.essentialsx.discordlink.rolesync.RoleSyncManager;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -161,5 +162,10 @@ public class AccountLinkManager implements IEssentialsModule, DiscordLinkService
             return generateCode();
         }
         return result;
+    }
+
+    @Override
+    public Map<String, String> getAllLinkedPlayers() {
+        return Collections.unmodifiableMap(storage.getRawStorageMap());
     }
 }

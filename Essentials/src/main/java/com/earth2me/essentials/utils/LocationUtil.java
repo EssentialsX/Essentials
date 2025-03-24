@@ -1,7 +1,10 @@
 package com.earth2me.essentials.utils;
 
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import net.ess3.api.IUser;
+import net.ess3.api.TranslatableException;
+import net.ess3.provider.WorldInfoProvider;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,8 +18,6 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public final class LocationUtil {
     public static final int RADIUS = 3;
@@ -41,10 +42,14 @@ public final class LocationUtil {
     private static final Set<Material> TRANSPARENT_MATERIALS = EnumSet.noneOf(Material.class);
 
     static {
-        // Materials from Material.isTransparent()
-        for (final Material mat : Material.values()) {
-            if (mat.isTransparent()) {
-                HOLLOW_MATERIALS.add(mat);
+        // If the server is running in a test environment, the isTransparent() method will blow up since
+        // it requires the registry to be initialized. This is a workaround to prevent that from happening.
+        if (!Essentials.TESTING) {
+            // Materials from Material.isTransparent()
+            for (final Material mat : Material.values()) {
+                if (mat.isTransparent()) {
+                    HOLLOW_MATERIALS.add(mat);
+                }
             }
         }
 
@@ -109,7 +114,7 @@ public final class LocationUtil {
     }
 
     public static boolean isBlockAboveAir(IEssentials ess, final World world, final int x, final int y, final int z) {
-        return y > ess.getWorldInfoProvider().getMaxHeight(world) || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
+        return y > ess.provider(WorldInfoProvider.class).getMaxHeight(world) || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
     }
 
     public static boolean isBlockOutsideWorldBorder(final World world, final int x, final int z) {
@@ -212,12 +217,14 @@ public final class LocationUtil {
 
     public static Location getSafeDestination(IEssentials ess, final Location loc) throws Exception {
         if (loc == null || loc.getWorld() == null) {
-            throw new Exception(tl("destinationNotSet"));
+            throw new TranslatableException("destinationNotSet");
         }
+        final WorldInfoProvider worldInfoProvider = ess.provider(WorldInfoProvider.class);
+
         final World world = loc.getWorld();
-        final int worldMinY = ess.getWorldInfoProvider().getMinHeight(world);
-        final int worldLogicalY = ess.getWorldInfoProvider().getLogicalHeight(world);
-        final int worldMaxY = loc.getBlockY() < worldLogicalY ? worldLogicalY : ess.getWorldInfoProvider().getMaxHeight(world);
+        final int worldMinY = worldInfoProvider.getMinHeight(world);
+        final int worldLogicalY = worldInfoProvider.getLogicalHeight(world);
+        final int worldMaxY = loc.getBlockY() < worldLogicalY ? worldLogicalY : worldInfoProvider.getMaxHeight(world);
         int x = loc.getBlockX();
         int y = (int) Math.round(loc.getY());
         int z = loc.getBlockZ();
@@ -266,7 +273,7 @@ public final class LocationUtil {
                 // Allow spawning at the top of the world, but not above the nether roof
                 y = Math.min(world.getHighestBlockYAt(x, z) + 1, worldMaxY);
                 if (x - 48 > loc.getBlockX()) {
-                    throw new Exception(tl("holeInFloor"));
+                    throw new TranslatableException("holeInFloor");
                 }
             }
         }
@@ -274,13 +281,14 @@ public final class LocationUtil {
     }
 
     public static boolean shouldFly(IEssentials ess, final Location loc) {
+        final WorldInfoProvider worldInfoProvider = ess.provider(WorldInfoProvider.class);
         final World world = loc.getWorld();
         final int x = loc.getBlockX();
         int y = (int) Math.round(loc.getY());
         final int z = loc.getBlockZ();
         int count = 0;
         // Check whether more than 2 unsafe block are below player.
-        while (LocationUtil.isBlockUnsafe(ess, world, x, y, z) && y >= ess.getWorldInfoProvider().getMinHeight(world)) {
+        while (LocationUtil.isBlockUnsafe(ess, world, x, y, z) && y >= worldInfoProvider.getMinHeight(world)) {
             y--;
             count++;
             if (count > 2) {
@@ -289,7 +297,7 @@ public final class LocationUtil {
         }
 
         // If not then check if player is in the void
-        return y < ess.getWorldInfoProvider().getMinHeight(world);
+        return y < worldInfoProvider.getMinHeight(world);
     }
 
     public static class Vector3D {

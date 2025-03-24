@@ -10,9 +10,9 @@ plugins {
 val baseExtension = extensions.create<EssentialsBaseExtension>("essentials", project)
 
 val checkstyleVersion = "8.36.2"
-val spigotVersion = "1.20.1-R0.1-SNAPSHOT"
-val junit5Version = "5.7.0"
-val mockitoVersion = "3.2.0"
+val spigotVersion = "1.21.4-R0.1-SNAPSHOT"
+val junit5Version = "5.10.2"
+val mockitoVersion = "3.12.4"
 
 dependencies {
     testImplementation("org.junit.jupiter", "junit-jupiter", junit5Version)
@@ -26,6 +26,12 @@ dependencies {
     }
 }
 
+tasks.test {
+    testLogging {
+        events("PASSED", "SKIPPED", "FAILED")
+    }
+}
+
 afterEvaluate {
     if (baseExtension.injectBukkitApi.get()) {
         dependencies {
@@ -34,7 +40,7 @@ afterEvaluate {
     }
     if (baseExtension.injectBstats.get()) {
         dependencies {
-            implementation("org.bstats", "bstats-bukkit", "1.8")
+            implementation("org.bstats", "bstats-bukkit", "2.2.1")
         }
     }
 }
@@ -69,6 +75,9 @@ tasks {
     }
     withType<Jar> {
         archiveVersion.set(rootProject.ext["FULL_VERSION"] as String)
+        manifest {
+            attributes("paperweight-mappings-namespace" to "mojang")
+        }
     }
     withType<Sign> {
         onlyIf { project.hasProperty("forceSign") }
@@ -116,7 +125,9 @@ indra {
 
     javaVersions {
         target(8)
-        minimumToolchain(17)
+        minimumToolchain(21)
+        // Don't enforce running tests on Java 8; we only care about the release for compiling, not running tests
+        strictVersions(false)
     }
 }
 

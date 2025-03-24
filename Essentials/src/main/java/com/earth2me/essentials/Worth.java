@@ -5,6 +5,7 @@ import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.VersionUtil;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -12,8 +13,6 @@ import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Worth implements IConf {
     private final EssentialsConfiguration config;
@@ -78,7 +77,7 @@ public class Worth implements IConf {
      */
     public int getAmount(final IEssentials ess, final User user, final ItemStack is, final String[] args, final boolean isBulkSell) throws Exception {
         if (is == null || is.getType() == Material.AIR) {
-            throw new Exception(tl("itemSellAir"));
+            throw new TranslatableException("itemSellAir");
         }
 
         int amount = 0;
@@ -98,7 +97,7 @@ public class Worth implements IConf {
         final boolean requireStack = ess.getSettings().isTradeInStacks(is.getType());
 
         if (requireStack && !stack) {
-            throw new Exception(tl("itemMustBeStacked"));
+            throw new TranslatableException("itemMustBeStacked");
         }
 
         int max = 0;
@@ -121,9 +120,9 @@ public class Worth implements IConf {
         }
         if (amount > max || amount < 1) {
             if (!isBulkSell) {
-                user.sendMessage(tl("itemNotEnough2"));
-                user.sendMessage(tl("itemNotEnough3"));
-                throw new Exception(tl("itemNotEnough1"));
+                user.sendTl("itemNotEnough2");
+                user.sendTl("itemNotEnough3");
+                throw new TranslatableException("itemNotEnough1");
             } else {
                 return amount;
             }

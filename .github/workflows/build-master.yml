@@ -16,26 +16,32 @@ jobs:
 
     steps:
     - name: Checkout Git repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Set up JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: 17
 
     - name: Setup Gradle
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v3
 
     - name: Build with Gradle
       run: |
         chmod +x gradlew
         ./gradlew build --stacktrace
 
+    - name: Publish JUnit report
+      uses: mikepenz/action-junit-report@v4
+      if: success() || failure() # Run even if the previous step fails
+      with:
+        report_paths: '**/build/test-results/test*/TEST-*.xml'
+
     - name: Archive plugin jars on GitHub
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: EssentialsX plugin jars
         path: jars/
@@ -61,7 +67,7 @@ jobs:
         cp -r EssentialsXMPP/build/docs/javadoc/ javadocs/EssentialsXMPP/
 
     - name: Archive Javadocs
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: javadocs
         path: javadocs/
@@ -74,12 +80,12 @@ jobs:
 
     steps:
     - name: Setup Node
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 16
 
     - name: Download Javadocs
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: javadocs
         path: javadocs/

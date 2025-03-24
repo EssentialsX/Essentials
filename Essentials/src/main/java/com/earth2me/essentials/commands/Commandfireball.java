@@ -5,6 +5,7 @@ import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.DragonFireball;
@@ -18,6 +19,7 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.entity.SplashPotion;
 import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.entity.Trident;
+import org.bukkit.entity.WindCharge;
 import org.bukkit.entity.WitherSkull;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
@@ -26,8 +28,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandfireball extends EssentialsCommand {
 
@@ -56,6 +56,10 @@ public class Commandfireball extends EssentialsCommand {
             builder.put("trident", Trident.class);
         }
 
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_21_R01)) {
+            builder.put("windcharge", WindCharge.class);
+        }
+
         types = builder.build();
     }
 
@@ -78,7 +82,7 @@ public class Commandfireball extends EssentialsCommand {
         }
 
         if (!user.isAuthorized("essentials.fireball." + type)) {
-            throw new Exception(tl("noPerm", "essentials.fireball." + type));
+            throw new TranslatableException("noPerm", "essentials.fireball." + type);
         }
 
         final Vector direction = user.getBase().getEyeLocation().getDirection().multiply(speed);

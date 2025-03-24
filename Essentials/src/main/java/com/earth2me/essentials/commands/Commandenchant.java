@@ -5,6 +5,7 @@ import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
@@ -13,12 +14,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandenchant extends EssentialsCommand {
     public Commandenchant() {
@@ -30,18 +28,18 @@ public class Commandenchant extends EssentialsCommand {
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack stack = user.getItemInHand();
         if (stack == null || stack.getType() == Material.AIR) {
-            throw new Exception(tl("nothingInHand"));
+            throw new TranslatableException("nothingInHand");
         }
 
         if (args.length == 0) {
             final Set<String> usableEnchants = new TreeSet<>();
             for (final Map.Entry<String, Enchantment> entry : Enchantments.entrySet()) {
-                final String name = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
+                final String name = Enchantments.getRealName(entry.getValue());
                 if (usableEnchants.contains(name) || (user.isAuthorized("essentials.enchantments." + name) && entry.getValue().canEnchantItem(stack))) {
                     usableEnchants.add(entry.getKey());
                 }
             }
-            throw new NotEnoughArgumentsException(tl("enchantments", StringUtil.joinList(usableEnchants.toArray())));
+            throw new NotEnoughArgumentsException(user.playerTl("enchantments", StringUtil.joinList(usableEnchants.toArray())));
         }
 
         int level = 1;
@@ -58,11 +56,11 @@ public class Commandenchant extends EssentialsCommand {
         metaStack.addEnchantment(user.getSource(), ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchantments.allowunsafe"), enchantment, level);
         stack.setItemMeta(metaStack.getItemStack().getItemMeta());
         user.getBase().updateInventory();
-        final String enchantName = enchantment.getName().toLowerCase(Locale.ENGLISH).replace('_', ' ');
+        final String enchantName = Enchantments.getRealName(enchantment).replace('_', ' ');
         if (level == 0) {
-            user.sendMessage(tl("enchantmentRemoved", enchantName));
+            user.sendTl("enchantmentRemoved", enchantName);
         } else {
-            user.sendMessage(tl("enchantmentApplied", enchantName));
+            user.sendTl("enchantmentApplied", enchantName);
         }
     }
 

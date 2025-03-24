@@ -49,17 +49,6 @@ public interface IJails extends IConf {
     /**
      * Attempts to send the given user to the given jail
      *
-     * @param user the user to send to jail
-     * @param jail the jail to send the user to
-     * @throws Exception if the user is offline or jail does not exist
-     * @deprecated Use {@link IJails#sendToJail(IUser, String, CompletableFuture)}
-     */
-    @Deprecated
-    void sendToJail(IUser user, String jail) throws Exception;
-
-    /**
-     * Attempts to send the given user to the given jail
-     *
      * @param user   the user to send to jail
      * @param jail   the jail to send the user to
      * @param future Future which is completed with the success status of the execution

@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -26,8 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public final class SpawnMob {
 
@@ -49,7 +48,7 @@ public final class SpawnMob {
             }
         }
         if (availableList.isEmpty()) {
-            availableList.add(tl("none"));
+            availableList.add(user.playerTl("none"));
         }
         return StringUtil.joinList(availableList);
     }
@@ -91,7 +90,7 @@ public final class SpawnMob {
     public static void spawnmob(final IEssentials ess, final Server server, final User user, final List<String> parts, final List<String> data, final int mobCount) throws Exception {
         final Block block = LocationUtil.getTarget(user.getBase()).getBlock();
         if (block == null) {
-            throw new Exception(tl("unableToSpawnMob"));
+            throw new TranslatableException("unableToSpawnMob");
         }
         spawnmob(ess, server, user.getSource(), user, block.getLocation(), parts, data, mobCount);
     }
@@ -122,7 +121,7 @@ public final class SpawnMob {
 
         if (mobCount > effectiveLimit) {
             mobCount = effectiveLimit;
-            sender.sendMessage(tl("mobSpawnLimit"));
+            sender.sendTl("mobSpawnLimit");
         }
 
         final Mob mob = Mob.fromName(parts.get(0)); // Get the first mob
@@ -130,13 +129,13 @@ public final class SpawnMob {
             for (int i = 0; i < mobCount; i++) {
                 spawnMob(ess, server, sender, target, sloc, parts, data);
             }
-            sender.sendMessage(mobCount * parts.size() + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + tl("spawned"));
+            sender.sendMessage(mobCount * parts.size() + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + sender.tl("spawned"));
         } catch (final MobException e1) {
-            throw new Exception(tl("unableToSpawnMob"), e1);
+            throw new TranslatableException(e1, "unableToSpawnMob");
         } catch (final NumberFormatException e2) {
-            throw new Exception(tl("numberRequired"), e2);
+            throw new TranslatableException(e2, "numberRequired");
         } catch (final NullPointerException np) {
-            throw new Exception(tl("soloMob"), np);
+            throw new TranslatableException(np, "soloMob");
         }
     }
 
@@ -176,15 +175,15 @@ public final class SpawnMob {
 
     private static void checkSpawnable(final IEssentials ess, final CommandSource sender, final Mob mob) throws Exception {
         if (mob == null || mob.getType() == null) {
-            throw new Exception(tl("invalidMob"));
+            throw new TranslatableException("invalidMob");
         }
 
         if (ess.getSettings().getProtectPreventSpawn(mob.getType().toString().toLowerCase(Locale.ENGLISH))) {
-            throw new Exception(tl("disabledToSpawnMob"));
+            throw new TranslatableException("disabledToSpawnMob");
         }
 
         if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.spawnmob." + mob.name.toLowerCase(Locale.ENGLISH))) {
-            throw new Exception(tl("noPermToSpawnMob"));
+            throw new TranslatableException("noPermToSpawnMob");
         }
     }
 
@@ -192,7 +191,7 @@ public final class SpawnMob {
         String data = inputData;
 
         if (data.isEmpty()) {
-            sender.sendMessage(tl("mobDataList", StringUtil.joinList(MobData.getValidHelp(spawned))));
+            sender.sendTl("mobDataList", StringUtil.joinList(MobData.getValidHelp(spawned)));
         }
 
         if (spawned instanceof Zombie) {

@@ -1,13 +1,9 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n.tl;
+import net.ess3.api.TranslatableException;
 
-public class WarpNotFoundException extends Exception {
+public class WarpNotFoundException extends TranslatableException {
     public WarpNotFoundException() {
-        super(tl("warpNotExist"));
-    }
-
-    public WarpNotFoundException(final String message) {
-        super(message);
+        super("warpNotExist");
     }
 }

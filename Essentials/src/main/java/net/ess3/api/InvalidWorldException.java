@@ -1,16 +1,16 @@
 package net.ess3.api;
-
-import static com.earth2me.essentials.I18n.tl;
-
 /**
  * Fired when trying to teleport a user to an invalid world. This usually only occurs if a world has been removed from
  * the server and a player tries to teleport to a warp or home in that world.
+ *
+ * @deprecated no longer thrown.
  */
-public class InvalidWorldException extends Exception {
+@Deprecated
+public class InvalidWorldException extends TranslatableException {
     private final String world;
 
     public InvalidWorldException(final String world) {
-        super(tl("invalidWorld"));
+        super("invalidWorld");
         this.world = world;
     }
 

@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.BanList;
 import org.bukkit.Server;
@@ -12,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandbanip extends EssentialsCommand {
     public Commandbanip() {
@@ -48,13 +49,13 @@ public class Commandbanip extends EssentialsCommand {
         if (args.length > 1) {
             banReason = FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
         } else {
-            banReason = tl("defaultBanReason");
+            banReason = tlLiteral("defaultBanReason");
         }
 
-        final String banDisplay = tl("banFormat", banReason, senderDisplayName);
+        final String banDisplay = AdventureUtil.miniToLegacy(tlLiteral("banFormat", banReason, senderDisplayName));
 
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
-        ess.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderDisplayName, ipAddress, banReason));
+        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("playerBanIpAddress", senderDisplayName, ipAddress, banReason)));
 
         for (final Player player : ess.getServer().getOnlinePlayers()) {
             if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
@@ -62,7 +63,7 @@ public class Commandbanip extends EssentialsCommand {
             }
         }
 
-        ess.broadcastMessage("essentials.banip.notify", tl("playerBanIpAddress", senderDisplayName, ipAddress, banReason));
+        ess.broadcastTl(null, u -> !u.isAuthorized("essentials.banip.notify"), "playerBanIpAddress", senderDisplayName, ipAddress, banReason);
     }
 
     @Override
