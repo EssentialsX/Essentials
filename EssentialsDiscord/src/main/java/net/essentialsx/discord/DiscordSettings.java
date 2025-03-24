@@ -586,7 +586,7 @@ public class DiscordSettings implements IConf {
                 "username", "displayname", "controllername", "controllerdisplayname", "reason");
         kickFormat = generateMessageFormat(getFormatString("kick"), "{displayname} was kicked with reason: {reason}", false,
                 "username", "displayname", "reason");
-        pmToDiscordFormat = generateMessageFormat(getFormatString("private-chat"), "{sender-username} -> {receiver-username}: {message}", false,
+        pmToDiscordFormat = generateMessageFormat(getFormatString("private-chat"), "[SocialSpy] {sender-username} -> {receiver-username}: {message}", false,
                 "sender-username", "sender-displayname", "receiver-username", "receiver-displayname", "message");
 
         plugin.onReload();

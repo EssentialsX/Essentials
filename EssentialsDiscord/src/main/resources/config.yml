@@ -442,4 +442,4 @@ messages:
   # - {receiver-username}: The username of the player receiving the message
   # - {receiver-displayname}: The display name of the player receiving the message (This would be their nickname)
   # - {message}: The content of the message being sent
-  pms-to-discord: "{sender-username} -> {receiver-username}: {message}"
+  pms-to-discord: "[SocialSpy] {sender-username} -> {receiver-username}: {message}"
