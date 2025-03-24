@@ -10,7 +10,7 @@ import org.bukkit.event.HandlerList;
 import java.math.BigDecimal;
 
 /**
- * Fired when a player either buys or sells from an essentials sign
+ * Fired when a player either buys or sells from an Essentials sign
  */
 public final class SignTransactionEvent extends SignInteractEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
@@ -19,32 +19,17 @@ public final class SignTransactionEvent extends SignInteractEvent implements Can
     private final BigDecimal transactionValue;
     private boolean isCancelled = false;
 
-    public SignTransactionEvent(EssentialsSign.ISign sign,
-                                EssentialsSign essSign,
-                                IUser user,
-                                @NotNull ItemStack itemStack,
-                                @NotNull TransactionType transactionType,
-                                BigDecimal transactionValue) {
+    public SignTransactionEvent(EssentialsSign.ISign sign, EssentialsSign essSign, IUser user, ItemStack itemStack, TransactionType transactionType, BigDecimal transactionValue) {
         super(sign, essSign, user);
         this.itemStack = itemStack;
         this.transactionType = transactionType;
         this.transactionValue = transactionValue;
     }
 
-    /**
-     *
-     * @return if the event should be cancelled.
-     */
-
     @Override
     public boolean isCancelled() {
         return this.isCancelled;
     }
-
-    /**
-     *
-     * @param cancelled sets the event to be cancelled, this will cancel the transaction.
-     */
 
     @Override
     public void setCancelled(boolean cancelled) {
@@ -52,34 +37,28 @@ public final class SignTransactionEvent extends SignInteractEvent implements Can
     }
 
     /**
-     *
-     * @return a copy of the itemstack in the current transaction.
+     * Gets the ItemStack that is about to be bought or sold in this transition.
+     * @return The ItemStack being bought or sold.
      */
-
     public @NotNull ItemStack getItemStack() {
         return itemStack.clone();
     }
 
     /**
-     *
-     * @return the type of transaction executed.
+     * Gets the type of transaction, either buy or sell.
+     * @return The transaction type.
      */
     public @NotNull TransactionType getTransactionType() {
         return transactionType;
     }
 
     /**
-     *
-     * @return how much was either sold or bought through the sign.
+     * Gets the value of the item being bought or sold.
+     * @return The item's value.
      */
-
     public BigDecimal getTransactionValue() {
         return transactionValue;
     }
-
-    /**
-     * Transaction type of the event
-     */
 
     public enum TransactionType {
         BUY,

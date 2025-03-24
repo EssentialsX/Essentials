@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     compileOnly project(':EssentialsX')
-    implementation('net.dv8tion:JDA:5.1.2') {
+    implementation('net.dv8tion:JDA:5.3.0') {
         exclude(module: 'opus-java')
     }
     implementation 'com.github.MinnDevelopment:emoji-java:v6.1.0'

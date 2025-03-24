@@ -177,6 +177,17 @@ public interface IUser {
 
     String getFormattedJailTime();
 
+    /**
+     * Returns last activity time.
+     * <p>
+     * It is used internally to determine if user's afk status should be set to
+     * true because of ACTIVITY {@link AfkStatusChangeEvent.Cause}, or the player
+     * should be kicked for being afk too long.
+     *
+     * @return Last activity time (Epoch Milliseconds)
+     */
+    long getLastActivityTime();
+
     @Deprecated
     List<String> getMails();
 

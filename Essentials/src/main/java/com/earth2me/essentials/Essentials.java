@@ -86,6 +86,7 @@ import net.ess3.provider.providers.ModernPersistentDataProvider;
 import net.ess3.provider.providers.ModernPlayerLocaleProvider;
 import net.ess3.provider.providers.ModernPotionMetaProvider;
 import net.ess3.provider.providers.ModernSignDataProvider;
+import net.ess3.provider.providers.ModernSyncCommandsProvider;
 import net.ess3.provider.providers.PaperBiomeKeyProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
@@ -393,7 +394,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             providerFactory.registerProvider(BukkitMaterialTagProvider.class, PaperMaterialTagProvider.class);
 
             // Sync Commands Provider
-            providerFactory.registerProvider(ReflSyncCommandsProvider.class);
+            providerFactory.registerProvider(ReflSyncCommandsProvider.class, ModernSyncCommandsProvider.class);
 
             // Persistent Data Provider
             providerFactory.registerProvider(ReflPersistentDataProvider.class, ModernPersistentDataProvider.class);

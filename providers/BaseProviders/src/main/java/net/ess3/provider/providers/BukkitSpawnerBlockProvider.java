@@ -20,7 +20,7 @@ public class BukkitSpawnerBlockProvider implements SpawnerBlockProvider {
     @ProviderTest
     public static boolean test() {
         try {
-            CreatureSpawner.class.getDeclaredMethod("setMaxSpawnDelay", int.class);
+            CreatureSpawner.class.getMethod("setMaxSpawnDelay", int.class);
             return true;
         } catch (final NoSuchMethodException ignored) {
             return false;

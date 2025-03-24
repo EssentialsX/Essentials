@@ -12,6 +12,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
+import net.ess3.api.TranslatableException;
 import net.ess3.api.events.SignBreakEvent;
 import net.ess3.api.events.SignCreateEvent;
 import net.ess3.api.events.SignInteractEvent;
@@ -411,6 +412,10 @@ public class EssentialsSign {
             item.setAmount(quantity);
             return item;
         } catch (final Exception ex) {
+            if (ex instanceof TranslatableException) {
+                final TranslatableException te = (TranslatableException) ex;
+                throw new SignException(ex, te.getTlKey(), te.getArgs());
+            }
             throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
     }
