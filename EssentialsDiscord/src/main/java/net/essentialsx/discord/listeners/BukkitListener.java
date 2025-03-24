@@ -51,7 +51,7 @@ public class BukkitListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPrivateMessage(PrivateMessageSentEvent event) {
 
-        if (event.getSender() instanceOf IUser && ((IUser) event.getSender()).isAuthorized("essentials.chat.spy.exempt")) {
+        if (event.getSender() instanceof IUser && ((IUser) event.getSender()).isAuthorized("essentials.chat.spy.exempt")) {
             return;
         }
 
