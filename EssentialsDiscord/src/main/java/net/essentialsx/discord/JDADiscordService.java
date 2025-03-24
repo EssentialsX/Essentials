@@ -75,6 +75,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     private final static Logger logger = EssentialsDiscord.getWrappedLogger();
     private final EssentialsDiscord plugin;
     private final Unsafe unsafe = this::getJda;
+
     private JDA jda;
     private Guild guild;
     private TextChannel primaryChannel;
@@ -88,20 +89,24 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     private InteractionControllerImpl interactionController;
     private Listener chatListener;
     private boolean invalidStartup = false;
+
     public JDADiscordService(EssentialsDiscord plugin) {
         this.plugin = plugin;
         for (final MessageType type : MessageType.DefaultTypes.values()) {
             registerMessageType(plugin, type);
         }
     }
+
     public TextChannel getChannel(String key, boolean primaryFallback) {
         if (NumberUtil.isLong(key)) {
             return getDefinedChannel(key, primaryFallback);
         }
         return getDefinedChannel(getSettings().getMessageChannel(key), primaryFallback);
     }
+
     public TextChannel getDefinedChannel(String key, boolean primaryFallback) {
         final long resolvedId = getSettings().getChannelId(key);
+
         if (isDebug()) {
             logger.log(Level.INFO, "Channel definition " + key + " resolved as " + resolvedId);
         }
