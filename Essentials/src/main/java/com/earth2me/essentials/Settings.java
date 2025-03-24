@@ -2122,7 +2122,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public String getNickRegex() {
-        return config.getString("nick-regex", "^[a-zA-Z_0-9§]+$");
+        return config.getString("allowed-nicks-regex", "^[a-zA-Z_0-9§]+$");
     }
   
     @Override

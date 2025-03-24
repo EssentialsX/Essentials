@@ -33,10 +33,10 @@ nickname-prefix: '~'
 # The maximum length allowed in nicknames. The nickname prefix is not included in this.
 max-nick-length: 15
 
-# The regex pattern to use when checking the nickname change.
-# If the pattern is not matched, the nickname will be rejected.
-# To bypass this check, users need the essentials.nick.allowunsafe permission.
-nick-regex: '^[a-zA-Z_0-9§]+$'
+# The regex pattern used to determine if a requested nickname should be allowed for use.
+# If the a request nickname does not matched this pattern, the nickname will be rejected.
+# Users with essentials.nick.allowunsafe will be able to bypass this check.
+allowed-nicks-regex: '^[a-zA-Z_0-9§]+$'
 
 # A list of phrases that cannot be used in nicknames. You can include regular expressions here.
 # Users with essentials.nick.blacklist.bypass will be able to bypass this filter.
