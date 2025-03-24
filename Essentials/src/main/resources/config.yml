@@ -34,7 +34,7 @@ nickname-prefix: '~'
 max-nick-length: 15
 
 # The regex pattern used to determine if a requested nickname should be allowed for use.
-# If the a request nickname does not matched this pattern, the nickname will be rejected.
+# If the a requested nickname does not matched this pattern, the nickname will be rejected.
 # Users with essentials.nick.allowunsafe will be able to bypass this check.
 allowed-nicks-regex: '^[a-zA-Z_0-9§]+$'
 
