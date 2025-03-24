@@ -17,7 +17,6 @@ import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.entity.Player;
@@ -51,19 +50,17 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPrivateMessage(PrivateMessageSentEvent event) {
-        final Player sender = Bukkit.getPlayer(event.getSender().getUUID());
-        final Player recipient = Bukkit.getPlayer(event.getRecipient().getUUID());
 
-        if (sender.hasPermission("essentials.chat.spy.exempt")) {
+        if (event.getSender() instanceOf IUser && ((IUser) event.getSender()).isAuthorized("essentials.chat.spy.exempt")) {
             return;
         }
 
         sendDiscordMessage(MessageType.DefaultTypes.PRIVATE_CHAT,
                 MessageUtil.formatMessage(jda.getSettings().getPmToDiscordFormat(),
-                        MessageUtil.sanitizeDiscordMarkdown(sender.getName()),
-                        MessageUtil.sanitizeDiscordMarkdown(sender.getDisplayName()),
-                        MessageUtil.sanitizeDiscordMarkdown(recipient.getName()),
-                        MessageUtil.sanitizeDiscordMarkdown(recipient.getDisplayName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getSender().getName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getSender().getDisplayName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getRecipient().getName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getRecipient().getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getMessage())),
                 sender);
     }
