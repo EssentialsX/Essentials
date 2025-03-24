@@ -62,7 +62,7 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(event.getRecipient().getName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getRecipient().getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getMessage())),
-                sender);
+                        sender);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
