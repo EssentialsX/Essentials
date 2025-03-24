@@ -72,7 +72,7 @@ public class SignTrade extends EssentialsSign {
             if (!trade.pay(player)) {
                 subtractAmount(sign, 1, charge, ess);
                 addAmount(sign, 2, trade, ess);
-                throw new ChargeException("Full inventory");
+                throw new ChargeException("inventoryFull");
             }
             charge.charge(player);
             Trade.log("Sign", "Trade", "Interact", sign.getLine(3).substring(2), charge, username, trade, sign.getBlock().getLocation(), player.getMoney(), ess);

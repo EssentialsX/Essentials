@@ -17,6 +17,10 @@ import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.provider.CommandSendListenerProvider;
+import net.ess3.provider.FormattedCommandAliasProvider;
+import net.ess3.provider.InventoryViewProvider;
+import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.provider.TickCountProvider;
 import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
 import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
@@ -65,7 +69,6 @@ import java.lang.management.ManagementFactory;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -299,7 +302,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
         user.setLogoutLocation();
         if (user.isRecipeSee()) {
-            user.getBase().getOpenInventory().getTopInventory().clear();
+            ess.provider(InventoryViewProvider.class).getTopInventory(user.getBase().getOpenInventory()).clear();
         }
 
         final ArrayList<HumanEntity> viewers = new ArrayList<>(user.getBase().getInventory().getViewers());
@@ -545,14 +548,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 final Date banExpiry = banEntry.getExpiration();
                 if (banExpiry != null) {
                     final String expiry = DateUtil.formatDateDiff(banExpiry.getTime());
-                    event.setKickMessage(tlLiteral("tempbanJoin", expiry, banEntry.getReason()));
+                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("tempbanJoin", expiry, banEntry.getReason())));
                 } else {
-                    event.setKickMessage(tlLiteral("banJoin", banEntry.getReason()));
+                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("banJoin", banEntry.getReason())));
                 }
             } else {
                 banEntry = ess.getServer().getBanList(BanList.Type.IP).getBanEntry(event.getAddress().getHostAddress());
                 if (banEntry != null) {
-                    event.setKickMessage(tlLiteral("banIpJoin", banEntry.getReason()));
+                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("banIpJoin", banEntry.getReason())));
                 }
             }
         }
@@ -586,6 +589,21 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         if (ess.getSettings().isTeleportInvulnerability()) {
             user.enableInvulnerabilityAfterTeleport();
         }
+
+        // Mitigation for https://github.com/EssentialsX/Essentials/issues/4325
+        final TickCountProvider tickCountProvider = ess.provider(TickCountProvider.class);
+        if (tickCountProvider != null && ess.getSettings().isWorldChangePreserveFlying() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_17_R01)) {
+            if (user.isAuthorized("essentials.fly")) {
+                //noinspection DataFlowIssue - not real
+                if (event.getFrom().getWorld() != event.getTo().getWorld() && player.getAllowFlight()) {
+                    // If the player is not flying but has the ability to fly, we set the sign of the tick count to -1
+                    // Later on in the PlayerChangedWorldEvent, we will set the player's flying state to true if the tick count is positive.
+                    // If the tick count is negative, we simply just set the player's flight ability to true.
+                    final int tick = player.isFlying() ? tickCountProvider.getTickCount() : -tickCountProvider.getTickCount();
+                    user.setFlightTick(tick);
+                }
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -609,17 +627,17 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
-        final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
+        final String cmd = event.getMessage().split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
         final int argStartIndex = event.getMessage().indexOf(" ");
         final String args = argStartIndex == -1 ? "" // No arguments present
                 : event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
 
         // If the plugin command does not exist, check if it is an alias from commands.yml
         if (ess.getServer().getPluginCommand(cmd) == null) {
-            final Command knownCommand = ess.getKnownCommandsProvider().getKnownCommands().get(cmd);
+            final Command knownCommand = ess.provider(KnownCommandsProvider.class).getKnownCommands().get(cmd);
             if (knownCommand instanceof FormattedCommandAlias) {
                 final FormattedCommandAlias command = (FormattedCommandAlias) knownCommand;
-                for (String fullCommand : ess.getFormattedCommandAliasProvider().createCommands(command, event.getPlayer(), args.split(" "))) {
+                for (String fullCommand : ess.provider(FormattedCommandAliasProvider.class).createCommands(command, event.getPlayer(), args.split(" "))) {
                     handlePlayerCommandPreprocess(event, fullCommand);
                 }
                 return;
@@ -632,7 +650,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
     public void handlePlayerCommandPreprocess(final PlayerCommandPreprocessEvent event, final String effectiveCommand) {
         final Player player = event.getPlayer();
-        final String cmd = effectiveCommand.toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
+        final String cmd = effectiveCommand.split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
         final PluginCommand pluginCommand = ess.getServer().getPluginCommand(cmd);
 
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
@@ -705,21 +723,17 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             // If so, no need to check for (and write) new ones.
             boolean cooldownFound = false;
 
-            // Iterate over a copy of getCommandCooldowns in case of concurrent modifications
-            for (final Entry<Pattern, Long> entry : new HashMap<>(user.getCommandCooldowns()).entrySet()) {
+            for (final Entry<Pattern, Long> entry : user.getCommandCooldowns().entrySet()) {
                 // Remove any expired cooldowns
                 if (entry.getValue() <= System.currentTimeMillis()) {
                     user.clearCommandCooldown(entry.getKey());
                     // Don't break in case there are other command cooldowns left to clear.
                 } else if (entry.getKey().matcher(fullCommand).matches()) {
                     // User's current cooldown hasn't expired, inform and terminate cooldown code.
-                    if (entry.getValue() > System.currentTimeMillis()) {
-                        final String commandCooldownTime = DateUtil.formatDateDiff(entry.getValue());
-                        user.sendTl("commandCooldown", commandCooldownTime);
-                        cooldownFound = true;
-                        event.setCancelled(true);
-                        break;
-                    }
+                    final String commandCooldownTime = DateUtil.formatDateDiff(entry.getValue());
+                    user.sendTl("commandCooldown", commandCooldownTime);
+                    cooldownFound = true;
+                    event.setCancelled(true);
                 }
             }
 
@@ -743,8 +757,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         if (ess.getSettings().isWorldChangeFlyResetEnabled()) {
             if (user.getBase().getGameMode() != GameMode.CREATIVE
-                // COMPAT: String compare for 1.7.10
-                && !user.getBase().getGameMode().name().equals("SPECTATOR")
+                && user.getBase().getGameMode() != GameMode.SPECTATOR
                 && !user.isAuthorized("essentials.fly")) {
                 user.getBase().setFallDistance(0f);
                 user.getBase().setAllowFlight(false);
@@ -767,6 +780,16 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 }
             }
         }
+
+        final TickCountProvider tickCountProvider = ess.provider(TickCountProvider.class);
+        final int flightTick = user.getFlightTick();
+        if (tickCountProvider != null && Math.abs(flightTick) == tickCountProvider.getTickCount() && user.isAuthorized("essentials.fly")) {
+            user.getBase().setAllowFlight(true);
+            if (flightTick > 0) {
+                user.getBase().setFlying(true);
+            }
+        }
+        user.setFlightTick(-1);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -897,14 +920,15 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onInventoryClickEvent(final InventoryClickEvent event) {
         Player refreshPlayer = null;
-        final Inventory top = event.getView().getTopInventory();
+        final InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
+        final Inventory top = provider.getTopInventory(event.getView());
         final InventoryType type = top.getType();
 
         final Inventory clickedInventory;
         if (event.getRawSlot() < 0) {
             clickedInventory = null;
         } else {
-            clickedInventory = event.getRawSlot() < top.getSize() ? top : event.getView().getBottomInventory();
+            clickedInventory = event.getRawSlot() < top.getSize() ? top : provider.getBottomInventory(event.getView());
         }
 
         final User user = ess.getUser((Player) event.getWhoClicked());
@@ -963,7 +987,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryCloseEvent(final InventoryCloseEvent event) {
         Player refreshPlayer = null;
-        final Inventory top = event.getView().getTopInventory();
+        final InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
+        final Inventory top = provider.getTopInventory(event.getView());
         final InventoryType type = top.getType();
         if (type == InventoryType.PLAYER) {
             final User user = ess.getUser((Player) event.getPlayer());
@@ -977,7 +1002,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             final User user = ess.getUser((Player) event.getPlayer());
             if (user.isRecipeSee()) {
                 user.setRecipeSee(false);
-                event.getView().getTopInventory().clear();
+                provider.getTopInventory(event.getView()).clear();
                 refreshPlayer = user.getBase();
             }
         } else if (type == InventoryType.CHEST && top.getSize() == 9) {

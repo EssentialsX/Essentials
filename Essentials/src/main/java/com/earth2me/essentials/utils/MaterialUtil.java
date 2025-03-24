@@ -86,7 +86,7 @@ public final class MaterialUtil {
             "OAK_SIGN", "SPRUCE_SIGN",
             "CRIMSON_SIGN", "WARPED_SIGN",
             "MANGROVE_SIGN", "CHERRY_SIGN",
-            "BAMBOO_SIGN");
+            "BAMBOO_SIGN", "PALE_OAK_SIGN");
 
         WALL_SIGNS = EnumUtil.getAllMatching(Material.class, "WALL_SIGN",
             "ACACIA_WALL_SIGN", "BIRCH_WALL_SIGN",
@@ -94,21 +94,21 @@ public final class MaterialUtil {
             "OAK_WALL_SIGN", "SPRUCE_WALL_SIGN",
             "CRIMSON_WALL_SIGN", "WARPED_WALL_SIGN",
             "MANGROVE_WALL_SIGN", "CHERRY_WALL_SIGN",
-            "BAMBOO_WALL_SIGN");
+            "BAMBOO_WALL_SIGN", "PALE_OAK_WALL_SIGN");
 
         HANGING_SIGNS = EnumUtil.getAllMatching(Material.class, "ACACIA_HANGING_SIGN", "BIRCH_HANGING_SIGN",
             "DARK_OAK_HANGING_SIGN", "JUNGLE_HANGING_SIGN",
             "OAK_HANGING_SIGN", "SPRUCE_HANGING_SIGN",
             "CRIMSON_HANGING_SIGN", "WARPED_HANGING_SIGN",
             "MANGROVE_HANGING_SIGN", "CHERRY_HANGING_SIGN",
-            "BAMBOO_HANGING_SIGN");
+            "BAMBOO_HANGING_SIGN", "PALE_OAK_HANGING_SIGN");
 
         HANGING_WALL_SIGNS = EnumUtil.getAllMatching(Material.class, "ACACIA_WALL_HANGING_SIGN", "BIRCH_WALL_HANGING_SIGN",
                 "DARK_OAK_WALL_HANGING_SIGN", "JUNGLE_WALL_HANGING_SIGN",
                 "OAK_WALL_HANGING_SIGN", "SPRUCE_WALL_HANGING_SIGN",
                 "CRIMSON_WALL_HANGING_SIGN", "WARPED_WALL_HANGING_SIGN",
                 "MANGROVE_WALL_HANGING_SIGN", "CHERRY_WALL_HANGING_SIGN",
-                "BAMBOO_WALL_HANGING_SIGN");
+                "BAMBOO_WALL_HANGING_SIGN", "PALE_OAK_WALL_HANGING_SIGN");
     }
 
     private MaterialUtil() {

@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.textreader.BookInput;
 import com.earth2me.essentials.textreader.BookPager;
 import com.earth2me.essentials.textreader.IText;
-import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -11,6 +10,9 @@ import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
 import net.ess3.api.TranslatableException;
+import net.ess3.provider.BannerDataProvider;
+import net.ess3.provider.ItemUnbreakableProvider;
+import net.ess3.provider.PotionMetaProvider;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -30,7 +32,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -130,21 +131,30 @@ public class MetaItemStack {
     }
 
     public boolean canSpawn(final IEssentials ess) {
-        try {
-            ess.getServer().getUnsafe().modifyItemStack(stack.clone(), "{}");
-            return true;
-        } catch (final NoSuchMethodError nsme) {
-            return true;
-        } catch (final Throwable npe) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
+        if (VersionUtil.PRE_FLATTENING) {
+            try {
+                ess.getServer().getUnsafe().modifyItemStack(stack.clone(), "{}");
+                return true;
+            } catch (final NoSuchMethodError nsme) {
+                return true;
+            } catch (final Throwable npe) {
+                if (ess.getSettings().isDebug()) {
+                    ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
+                }
+                return false;
             }
-            return false;
         }
+        return stack.getType().isItem();
     }
 
     public void parseStringMeta(final CommandSource sender, final boolean allowUnsafe, final String[] string, final int fromArg, final IEssentials ess) throws Exception {
+        final boolean nbtIsKill = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_6_R01);
+
         if (string[fromArg].startsWith("{") && hasMetaPermission(sender, "vanilla", false, true, ess)) {
+            if (nbtIsKill) {
+                throw new TranslatableException("noMetaNbtKill");
+            }
+
             try {
                 stack = ess.getServer().getUnsafe().modifyItemStack(stack, Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length)));
             } catch (final NullPointerException npe) {
@@ -153,6 +163,22 @@ public class MetaItemStack {
                 }
             } catch (final NoSuchMethodError nsme) {
                 throw new TranslatableException(nsme, "noMetaJson");
+            } catch (final Throwable throwable) {
+                throw new Exception(throwable.getMessage(), throwable);
+            }
+        } else if (string[fromArg].startsWith("[") && hasMetaPermission(sender, "vanilla", false, true, ess)) {
+            if (!nbtIsKill) {
+                throw new TranslatableException("noMetaComponents");
+            }
+
+            try {
+                final String components = Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length));
+                // modifyItemStack requires that the item namespaced key is prepended to the components for some reason
+                stack = ess.getServer().getUnsafe().modifyItemStack(stack, stack.getType().getKey() + components);
+            } catch (final NullPointerException npe) {
+                if (ess.getSettings().isDebug()) {
+                    ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
+                }
             } catch (final Throwable throwable) {
                 throw new Exception(throwable.getMessage(), throwable);
             }
@@ -190,8 +216,6 @@ public class MetaItemStack {
             return;
         }
 
-        final Material WRITTEN_BOOK = EnumUtil.getMaterial("WRITTEN_BOOK");
-
         if (split.length > 1 && split[0].equalsIgnoreCase("name") && hasMetaPermission(sender, "name", false, true, ess)) {
             final String displayName = FormatUtil.replaceFormat(split[1].replaceAll("(?<!\\\\)_", " ").replace("\\_", "_"));
             final ItemMeta meta = stack.getItemMeta();
@@ -227,7 +251,7 @@ public class MetaItemStack {
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
             // This fix only applies to written books - which require an author and a title. https://bugs.mojang.com/browse/MC-59153
-            if (stack.getType() == WRITTEN_BOOK) {
+            if (stack.getType() == Material.WRITTEN_BOOK) {
                 if (!meta.hasAuthor()) {
                     // The sender can be null when this method is called from {@link  com.earth2me.essentials.signs.EssentialsSign#getItemMeta(ItemStack, String, IEssentials)}
                     meta.setAuthor(sender == null ? Console.getInstance().getDisplayName() : sender.getPlayer().getName());
@@ -240,12 +264,12 @@ public class MetaItemStack {
             final List<String> pages = pager.getPages(split[1]);
             meta.setPages(pages);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == WRITTEN_BOOK && hasMetaPermission(sender, "author", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "author", false, true, ess)) {
             final String author = FormatUtil.replaceFormat(split[1]);
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setAuthor(author);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == WRITTEN_BOOK && hasMetaPermission(sender, "title", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "title", false, true, ess)) {
             final String title = FormatUtil.replaceFormat(split[1].replaceAll("(?<!\\\\)_", " ").replace("\\_", "_"));
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
@@ -541,17 +565,7 @@ public class MetaItemStack {
                 }
                 pmeta.addCustomEffect(pEffect, true);
                 stack.setItemMeta(pmeta);
-                if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
-                    if (isSplashPotion && stack.getType() == Material.POTION) {
-                        stack.setType(Material.SPLASH_POTION);
-                    } else if (!isSplashPotion && stack.getType() == Material.SPLASH_POTION) {
-                        stack.setType(Material.POTION);
-                    }
-                } else {
-                    final Potion potion = Potion.fromDamage(stack.getDurability());
-                    potion.setSplash(isSplashPotion);
-                    potion.apply(stack);
-                }
+                ess.provider(PotionMetaProvider.class).setSplashPotion(stack, isSplashPotion);
                 resetPotionMeta();
             }
         }
@@ -562,7 +576,7 @@ public class MetaItemStack {
         if (enchantment == null) {
             return false;
         }
-        if (hasMetaPermission(sender, "enchantments." + enchantment.getName().toLowerCase(Locale.ENGLISH), false, false, ess)) {
+        if (hasMetaPermission(sender, "enchantments." + Enchantments.getRealName(enchantment), false, false, ess)) {
             int level = -1;
             if (split.length > 1) {
                 try {
@@ -605,7 +619,7 @@ public class MetaItemStack {
                 }
             }
         } catch (final Exception ex) {
-            throw new Exception("Enchantment " + enchantment.getName() + ": " + ex.getMessage(), ex);
+            throw new Exception("Enchantment " + Enchantments.getRealName(enchantment) + ": " + ex.getMessage(), ex);
         }
     }
 
@@ -615,7 +629,7 @@ public class MetaItemStack {
             return null;
         }
 
-        final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
+        final String enchantmentName = Enchantments.getRealName(enchantment);
 
         if (!hasMetaPermission(user, "enchantments." + enchantmentName, true, false)) {
             throw new TranslatableException("enchantmentPerm", enchantmentName);
@@ -633,16 +647,18 @@ public class MetaItemStack {
 
             PatternType patternType = null;
             try {
-                patternType = PatternType.valueOf(split[0]);
+                //noinspection removal
+                patternType = PatternType.getByIdentifier(split[0]);
             } catch (final Exception ignored) {
             }
 
             final BannerMeta meta = (BannerMeta) stack.getItemMeta();
             if (split[0].equalsIgnoreCase("basecolor")) {
                 final Color color = Color.fromRGB(Integer.parseInt(split[1]));
-                meta.setBaseColor(DyeColor.getByColor(color));
+                ess.provider(BannerDataProvider.class).setBaseColor(stack, DyeColor.getByColor(color));
             } else if (patternType != null) {
-                final PatternType type = PatternType.valueOf(split[0]);
+                //noinspection removal
+                final PatternType type = PatternType.getByIdentifier(split[0]);
                 final DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
                 final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
                 meta.addPattern(pattern);
@@ -658,7 +674,8 @@ public class MetaItemStack {
 
             PatternType patternType = null;
             try {
-                patternType = PatternType.valueOf(split[0]);
+                //noinspection removal
+                patternType = PatternType.getByIdentifier(split[0]);
             } catch (final Exception ignored) {
             }
 
@@ -669,7 +686,8 @@ public class MetaItemStack {
                 final Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 banner.setBaseColor(DyeColor.getByColor(color));
             } else if (patternType != null) {
-                final PatternType type = PatternType.valueOf(split[0]);
+                //noinspection removal
+                final PatternType type = PatternType.getByIdentifier(split[0]);
                 final DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
                 final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
                 banner.addPattern(pattern);
@@ -700,7 +718,7 @@ public class MetaItemStack {
 
     private void setUnbreakable(final IEssentials ess, final ItemStack is, final boolean unbreakable) {
         final ItemMeta meta = is.getItemMeta();
-        ess.getItemUnbreakableProvider().setUnbreakable(meta, unbreakable);
+        ess.provider(ItemUnbreakableProvider.class).setUnbreakable(meta, unbreakable);
         is.setItemMeta(meta);
     }
 }

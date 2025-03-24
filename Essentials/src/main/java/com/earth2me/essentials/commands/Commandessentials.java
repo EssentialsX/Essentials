@@ -10,10 +10,10 @@ import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommandMapUtil;
 import com.earth2me.essentials.utils.DateUtil;
-import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.PasteUtil;
+import com.earth2me.essentials.utils.RegistryUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -22,6 +22,8 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.ess3.api.TranslatableException;
+import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.provider.OnlineModeProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -67,8 +69,8 @@ import static com.earth2me.essentials.I18n.tlLiteral;
 // This command has 4 undocumented behaviours #EasterEgg
 public class Commandessentials extends EssentialsCommand {
 
-    private static final Sound NOTE_HARP = EnumUtil.valueOf(Sound.class, "BLOCK_NOTE_BLOCK_HARP", "BLOCK_NOTE_HARP", "NOTE_PIANO");
-    private static final Sound MOO_SOUND = EnumUtil.valueOf(Sound.class, "COW_IDLE", "ENTITY_COW_MILK");
+    private static final Sound NOTE_HARP = RegistryUtil.valueOf(Sound.class, "BLOCK_NOTE_BLOCK_HARP", "BLOCK_NOTE_HARP", "NOTE_PIANO");
+    private static final Sound MOO_SOUND = RegistryUtil.valueOf(Sound.class, "COW_IDLE", "ENTITY_COW_MILK");
 
     private static final String HOMES_USAGE = "/<command> homes (fix | delete [world])";
 
@@ -263,7 +265,7 @@ public class Commandessentials extends EssentialsCommand {
         serverData.addProperty("bukkit-version", Bukkit.getBukkitVersion());
         serverData.addProperty("server-version", Bukkit.getVersion());
         serverData.addProperty("server-brand", Bukkit.getName());
-        serverData.addProperty("online-mode", ess.getOnlineModeProvider().getOnlineModeString());
+        serverData.addProperty("online-mode", ess.provider(OnlineModeProvider.class).getOnlineModeString());
         final JsonObject supportStatus = new JsonObject();
         final VersionUtil.SupportStatus status = VersionUtil.getServerSupportStatus();
         supportStatus.addProperty("status", status.name());
@@ -334,7 +336,7 @@ public class Commandessentials extends EssentialsCommand {
         final Plugin essDiscordLink = Bukkit.getPluginManager().getPlugin("EssentialsDiscordLink");
         final Plugin essSpawn = Bukkit.getPluginManager().getPlugin("EssentialsSpawn");
 
-        final Map<String, Command> knownCommandsCopy = new HashMap<>(ess.getKnownCommandsProvider().getKnownCommands());
+        final Map<String, Command> knownCommandsCopy = new HashMap<>(ess.provider(KnownCommandsProvider.class).getKnownCommands());
         final Map<String, String> disabledCommandsCopy = new HashMap<>(ess.getAlternativeCommandsHandler().disabledCommands());
 
         // Further operations will be heavy IO
@@ -459,12 +461,14 @@ public class Commandessentials extends EssentialsCommand {
             final CompletableFuture<PasteUtil.PasteResult> future = PasteUtil.createPaste(files);
             future.thenAccept(result -> {
                 if (result != null) {
-                    final String dumpUrl = "https://essentialsx.net/dump.html?id=" + result.getPasteId();
+                    final String dumpUrl = "https://essentialsx.net/dump.html?bytebin=" + result.getPasteId();
                     sender.sendTl("dumpUrl", dumpUrl);
-                    sender.sendTl("dumpDeleteKey", result.getDeletionKey());
+                    // pastes.dev doesn't support deletion keys
+                    //sender.sendTl("dumpDeleteKey", result.getDeletionKey());
                     if (sender.isPlayer()) {
                         ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpConsoleUrl", dumpUrl)));
-                        ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpDeleteKey", result.getDeletionKey())));
+                        // pastes.dev doesn't support deletion keys
+                        //ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpDeleteKey", result.getDeletionKey())));
                     }
                 }
                 files.clear();

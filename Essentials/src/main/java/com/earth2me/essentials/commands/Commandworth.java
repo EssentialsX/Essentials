@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
@@ -45,7 +46,7 @@ public class Commandworth extends EssentialsCommand {
             }
         }
         if (count > 1) {
-            final String totalWorthStr = NumberUtil.displayCurrency(totalWorth, ess);
+            final AdventureUtil.ParsedPlaceholder totalWorthStr = AdventureUtil.parsed(NumberUtil.displayCurrency(totalWorth, ess));
             if (args.length > 0 && args[0].equalsIgnoreCase("blocks")) {
                 user.sendTl("totalSellableBlocks", totalWorthStr, totalWorthStr);
                 return;
@@ -88,8 +89,8 @@ public class Commandworth extends EssentialsCommand {
 
         final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
         final String typeName = is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-        final String resultDisplay = NumberUtil.displayCurrency(result, ess);
-        final String worthDisplay = NumberUtil.displayCurrency(worth, ess);
+        final AdventureUtil.ParsedPlaceholder resultDisplay = AdventureUtil.parsed(NumberUtil.displayCurrency(result, ess));
+        final AdventureUtil.ParsedPlaceholder worthDisplay = AdventureUtil.parsed(NumberUtil.displayCurrency(worth, ess));
         if (MaterialUtil.getDamage(is) != 0) {
             sender.sendTl("worthMeta", typeName, MaterialUtil.getDamage(is), resultDisplay, amount, worthDisplay);
         } else {

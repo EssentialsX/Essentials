@@ -33,6 +33,11 @@ nickname-prefix: '~'
 # The maximum length allowed in nicknames. The nickname prefix is not included in this.
 max-nick-length: 15
 
+# The regex pattern used to determine if a requested nickname should be allowed for use.
+# If the a request nickname does not matched this pattern, the nickname will be rejected.
+# Users with essentials.nick.allowunsafe will be able to bypass this check.
+allowed-nicks-regex: '^[a-zA-Z_0-9§]+$'
+
 # A list of phrases that cannot be used in nicknames. You can include regular expressions here.
 # Users with essentials.nick.blacklist.bypass will be able to bypass this filter.
 nick-blacklist:
@@ -224,6 +229,11 @@ socialspy-uses-displaynames: true
 # This will disable flight if the player does not have essentials.fly.
 world-change-fly-reset: true
 
+# Starting in 1.17, Minecraft no longer preserves the abilities of a player when they change worlds.
+# Setting this to true will make EssentialsX preserve if users flying when they change worlds.
+# This will only work if the player has the essentials.fly permission.
+world-change-preserve-flying: true
+
 # When a player changes world, should we reset their speed according to their permissions?
 # This resets the player's speed to the default if they don't have essentials.speed.
 # If the player doesn't have essentials.speed.bypass, this resets their speed to the maximum specified above.
@@ -387,6 +397,7 @@ enabledSigns:
   #- loom
   #- smithing
   #- workbench
+  #- randomteleport
 
 # How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.
@@ -859,6 +870,12 @@ pay-excludes-ignore-list: false
 # NOTE: After reloading the config, you must also run '/baltop force' for this to appear
 show-zero-baltop: true
 
+# Requirements which must be met by the player to get their name shown in the balance top list.
+# Playtime is in seconds.
+baltop-requirements:
+  minimum-balance: 0
+  minimum-playtime: 0
+
 # The format of currency, excluding symbols. See currency-symbol-format-locale for symbol configuration.
 #
 # "#,##0.00" is how the majority of countries display currency.
@@ -871,6 +888,15 @@ show-zero-baltop: true
 # For 1,234.50 use en-US
 # For 1'234,50 use fr-ch
 #currency-symbol-format-locale: en-US
+
+# Allow players to receive multipliers for items sold with /sell or the sell sign.
+# You can set the default multiplier using the 'default' rank below.
+# To grant different multipliers to different people, you need to define a 'multiplier-rank' below.
+# Create the 'multiplier-rank' below, and give the matching permission: essentials.sell.multiplier.<multiplier-rank>
+sell-multipliers:
+  default: 1.0
+  double: 2.0
+  triple: 3.0
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -907,6 +933,7 @@ chat:
 
   # Chat formatting can be done in two ways, you can either define a standard format for all chat.
   # Or you can give a group specific chat format, to give some extra variation.
+  # For each of these formats, you can specify a sub format for each chat type.
   # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting
   # Note: Using the {PREFIX} and {SUFFIX} placeholders along with {DISPLAYNAME} may cause double prefixes/suffixes to be shown in chat unless add-prefix-suffix is uncommented and set to false.
 
@@ -929,13 +956,25 @@ chat:
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
   #format: '&7{PREFIX}&r {DISPLAYNAME}&r &7{SUFFIX}&r: {MESSAGE}'
 
+  # You can also specify a format for each type of chat.
+  #format:
+  #  normal: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
+  #  question: '{WORLDNAME} &4{DISPLAYNAME}&7:&r {MESSAGE}'
+  #  shout: '{WORLDNAME} &c[{GROUP}]&r &4{DISPLAYNAME}&7:&c {MESSAGE}'
+
+  # You can specify a format for each group.
   group-formats:
   #  default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
   #  admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
 
+  # You can also specify a format for each type of chat for each group.
+  #  admins:
+  #    question: '{WORLDNAME} &4{DISPLAYNAME}&7:&r {MESSAGE}'
+  #    shout: '{WORLDNAME} &c[{GROUP}]&r &4{DISPLAYNAME}&7:&c {MESSAGE}'
+
   # If you are using group formats make sure to remove the '#' to allow the setting to be read.
   # Note: Group names are case-sensitive so you must match them up with your permission plugin.
-  
+
   # You can use permissions to control whether players can use formatting codes in their chat messages.
   # See https://essentialsx.net/wiki/Color-Permissions.html for more information.
 
@@ -953,6 +992,12 @@ chat:
 
   # Whether chat questions should be enabled or not.
   question-enabled: true
+
+  # Whether EssentialsX should use Paper's modern chat event system in 1.16.5+.
+  # This is required for modern chat features such as hover events and click events.
+  # If you're experiencing issues with other plugins that use the chat event system, you can disable this.
+  # You must restart your server after changing this setting.
+  paper-chat-events: true
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -1196,6 +1241,12 @@ respawn-at-home-bed: true
 
 # When users die, should EssentialsSpawn respect users' respawn anchors?
 respawn-at-anchor: false
+
+# If configured, users will spawn at the random spawn location instead of the newbies spawnpoint.
+random-spawn-location: "none"
+
+# If configured, when users die, they will respawn at the random respawn location.
+random-respawn-location: "none"
 
 # Teleport all joining players to the spawnpoint
 spawn-on-join: false

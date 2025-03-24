@@ -36,7 +36,9 @@ public class CommandSource {
         }
 
         final String translation = tlLiteral(tlKey, args);
-        sendComponent(AdventureUtil.miniMessage().deserialize(translation));
+        if (!translation.isEmpty()) {
+            sendComponent(AdventureUtil.miniMessage().deserialize(translation));
+        }
     }
 
     public String tl(final String tlKey, final Object... args) {

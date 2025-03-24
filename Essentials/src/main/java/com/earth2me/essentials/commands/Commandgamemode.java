@@ -55,7 +55,7 @@ public class Commandgamemode extends EssentialsLoopCommand {
         }
 
         if (isProhibitedChange(user, gameMode)) {
-            user.sendTl("cantGamemode", gameMode.name());
+            user.sendTl("cantGamemode", user.playerTl(gameMode.toString().toLowerCase(Locale.ENGLISH)));
             return;
         }
 

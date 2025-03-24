@@ -1,9 +1,11 @@
 package net.ess3.api;
-
 /**
  * Fired when trying to teleport a user to an invalid world. This usually only occurs if a world has been removed from
  * the server and a player tries to teleport to a warp or home in that world.
+ *
+ * @deprecated no longer thrown.
  */
+@Deprecated
 public class InvalidWorldException extends TranslatableException {
     private final String world;
 
