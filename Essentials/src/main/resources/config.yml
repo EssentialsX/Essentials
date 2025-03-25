@@ -9,10 +9,10 @@
 
 # If you want to use special characters in this document, such as accented letters, you MUST save the file as UTF-8, not ANSI.
 # If you receive an error when Essentials loads, ensure that:
-#   - No tabs are present: YAML only allows spaces
-#   - Indents are correct: YAML hierarchy is based entirely on indentation
-#   - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrophe)
-#   - Text with symbols is enclosed in single or double quotation marks
+#  - No tabs are present: YAML only allows spaces
+#  - Indents are correct: YAML hierarchy is based entirely on indentation
+#  - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrophe)
+#  - Text with symbols is enclosed in single or double quotation marks
 
 # After editing the config, run '/essentials reload' in-game to apply the changes.
 
@@ -38,8 +38,8 @@ max-nick-length: 15
 # A list of phrases that cannot be used in nicknames. You can include regular expressions here.
 # Players with 'essentials.nick.blacklist.bypass' will be able to bypass this filter.
 nick-blacklist:
-#- Notch
-#- '^Dinnerbone'
+  #- Notch
+  #- '^Dinnerbone'
 
 # When this option is enabled, nickname length checking will exclude color codes in player names.
 # For example, if "&6Notch" has 7 characters (2 are part of a color code), a length of 5 is used when this option is set to true.
@@ -922,8 +922,8 @@ chat:
   radius: 0
 
   # Chat formatting can be configured in two ways: 
-  # - A standard format for all chat ('format' section)
-  # - Group-specific chat formats for extra variation ('group-formats' section)
+  #  - A standard format for all chat ('format' section)
+  #  - Group-specific chat formats for extra variation ('group-formats' section)
   #
   # You can use permissions to control whether players can use formatting codes in their chat messages.
   # See https://essentialsx.net/wiki/Color-Permissions.html for more information.
