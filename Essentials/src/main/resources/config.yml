@@ -29,50 +29,50 @@
 ops-name-color: '4'
 
 # The character(s) to prefix all nicknames, so that you know they are not true usernames.
-# Users with 'essentials.nick.hideprefix' will not be prefixed with the character(s).
+# Players with 'essentials.nick.hideprefix' will not be prefixed with the character(s).
 nickname-prefix: '~'
 
 # The maximum length allowed in nicknames. The nickname prefix is not included in this.
 max-nick-length: 15
 
 # A list of phrases that cannot be used in nicknames. You can include regular expressions here.
-# Users with 'essentials.nick.blacklist.bypass' will be able to bypass this filter.
+# Players with 'essentials.nick.blacklist.bypass' will be able to bypass this filter.
 nick-blacklist:
 #- Notch
 #- '^Dinnerbone'
 
 # When this option is enabled, nickname length checking will exclude color codes in player names.
-# i.e., if "&6Notch" has 7 characters (2 are part of a color code), a length of 5 is used when this option is set to true.
+# For example, if "&6Notch" has 7 characters (2 are part of a color code), a length of 5 is used when this option is set to true.
 ignore-colors-in-max-nick-length: false
 
-# When this option is enabled, display names for hidden users will not be shown. This prevents players from being
+# When this option is enabled, display names for hidden players will not be shown. This prevents players from being
 # able to see that they are online while vanished.
 hide-displayname-in-vanish: true
 
-# Disable this if you have any other plugin that modifies the displayname of a user.
+# Disable this if you have any other plugin that modifies the display name of a player.
 change-displayname: true
 
-# This option will cause Essentials to show players' displaynames instead of usernames when tab completing Essentials commands.
+# This option will cause Essentials to show players' display names instead of usernames when tab completing Essentials commands.
 change-tab-complete-name: false
 
-# When EssentialsChat.jar isn't used, force essentials to add the prefix and suffix from permission plugins to displaynames.
+# When EssentialsChat.jar isn't used, force essentials to add the prefix and suffix from permission plugins to display names.
 # This setting is ignored if EssentialsChat.jar is used, and defaults to 'true'.
-# The value of change-displayname has to be true.
+# The value of 'change-displayname' must be true.
 # Do not edit this setting unless you know what you are doing!
 #add-prefix-suffix: false
 
-# When this option is enabled, the (tab) player list will be updated with the displayname.
-# The value of change-displayname has to be true.
+# When this option is enabled, the (tab) player list will be updated with the display name.
+# The value of 'change-displayname' must be true.
 #change-playerlist: true
 
 # When this option is enabled, player prefixes will be shown in the (tab) player list.
 # This feature only works for Minecraft version 1.8 and higher.
-# The value of change-playerlist has to be true.
+# The value of 'change-playerlist' must be true.
 #add-prefix-in-playerlist: true
 
 # When this option is enabled, player suffixes will be shown in the (tab) player list.
 # This feature only works for Minecraft version 1.8 and higher. 
-# The value of change-playerlist has to be true.
+# The value of 'change-playerlist' must be true.
 #add-suffix-in-playerlist: true
 
 # If the teleport destination is unsafe, should players be teleported to the nearest safe location?
@@ -81,7 +81,7 @@ change-tab-complete-name: false
 teleport-safety: true
 
 # This forcefully disables teleport safety checks without a warning if attempting to teleport to unsafe locations.
-# teleport-safety and this option need to be set to true to force teleportation to dangerous locations.
+# 'teleport-safety' and this option need to be set to true to force teleportation to dangerous locations.
 force-disable-teleport-safety: false
 
 # If a player is teleporting to an unsafe location in creative, adventure, or god mode, they will not be teleported to a
@@ -100,7 +100,7 @@ teleport-passenger-dismount: true
 # The delay, in seconds, required between /home, /tp, etc.
 teleport-cooldown: 0
 
-# The delay, in seconds, before a user actually teleports. If the user moves or gets attacked in this timeframe, the teleport is cancelled.
+# The delay, in seconds, before a player actually teleports. If the player moves or gets attacked in this timeframe, the teleport is cancelled.
 teleport-delay: 0
 
 # The delay, in seconds, during which a player can't be attacked by other players after being teleported by a command.
@@ -120,11 +120,11 @@ remove-effects-on-heal: true
 near-radius: 200
 
 # What to prevent from /item and /give.
-# e.g. item-spawn-blacklist: lava_bucket,tnt,end_crystal
+# Example: item-spawn-blacklist: lava_bucket,tnt,end_crystal
 item-spawn-blacklist:
 
 # Set this to true if you want permission-based item spawn rules.
-# Note: item-spawn-blacklist will be ignored if set to true.
+# Note: 'item-spawn-blacklist' above will be ignored if set to true.
 # Example permissions (these go in your permissions manager):
 #  - essentials.itemspawn.item-all
 #  - essentials.itemspawn.item-[itemname]
@@ -132,7 +132,7 @@ item-spawn-blacklist:
 #  - essentials.give.item-[itemname]
 #  - essentials.unlimited.item-all
 #  - essentials.unlimited.item-[itemname]
-#  - essentials.unlimited.item-waterbucket # Unlimited water placing
+#  - essentials.unlimited.item-waterbucket (Unlimited water placing)
 #
 # For more information, visit https://wiki.ess3.net/wiki/Command_Reference/ICheat#Item.2FGive
 permission-based-item-spawn: false
@@ -140,7 +140,7 @@ permission-based-item-spawn: false
 # The maximum number of entities that can be spawned per use of the /spawnmob command.
 spawnmob-limit: 10
 
-# Shall Essentials notify smitten users when /lightning is used?
+# Shall Essentials notify smitten players when /lightning is used?
 warn-on-smite: true
 
 # Should items be dropped at a player's feet if their inventory is full instead of not giving the item(s)?
@@ -158,7 +158,7 @@ notify-player-of-mail-cooldown: 60
 # In this state, which plugin 'wins' may appear almost random.
 #
 # If you have two plugins with the same command and want to force Essentials to take over, you must set an alias.
-# To force Essentials to handle 'god', alias 'god' to 'essentials:god $1-' in the commands.yml file located in your server's root folder.
+# To force Essentials to handle 'god', alias 'god' to 'essentials:god $1-' in the 'commands.yml' file located in your server's root folder.
 # See https://breezewiki.com/bukkit/wiki/Commands.yml#aliases for more information.
 overridden-commands:
   #- god
@@ -219,18 +219,18 @@ socialspy-uses-displaynames: true
 # If you use another plugin to control speed and flight, you should change these to false.
 
 # When a player changes worlds, should Essentials reset their flight?
-# This will disable flight if the player does not have essentials.fly.
+# This will disable flight if the player does not have 'essentials.fly'.
 world-change-fly-reset: true
 
 # Starting in 1.17, Minecraft no longer preserves a player's abilities when they change worlds.
 # Setting this to true will make Essentials preserve a player's flight status when they change worlds.
-# This will only work if the player has the essentials.fly permission.
+# This will only work if the player has the 'essentials.fly' permission.
 world-change-preserve-flying: true
 
 # When a player changes worlds, should Essentials reset their speed according to their permissions?
-# This resets the player's speed to the default if they don't have essentials.speed.
-# If the player doesn't have essentials.speed.bypass, their speed will be reset to the maximum values
-# specified in max-walk-speed and max-fly-speed below.
+# This resets the player's speed to the default if they don't have 'essentials.speed'.
+# If the player doesn't have 'essentials.speed.bypass', their speed will be reset to the maximum values
+# specified in 'max-walk-speed' and 'max-fly-speed' below.
 world-change-speed-reset: true
 
 # These commands will be disabled when a player is muted.
@@ -248,7 +248,7 @@ mute-commands:
 # Whitelist the commands and permissions you wish to give players by default (everything else is OP only).
 # These are the permissions without the 'essentials.' part.
 #
-# To enable this feature, ensure use-bukkit-permissions is set to false.
+# To enable this feature, ensure 'use-bukkit-permissions' is set to false.
 player-commands:
   - afk
   - afk.auto
@@ -333,7 +333,7 @@ player-commands:
 
 # Use this option to force superperms-based permissions handler regardless of detected installed perms plugin.
 # This is useful if you want superperms-based permissions (with wildcards) for custom permissions plugins.
-# If you wish to use Essentials' built-in permissions using the player-commands section above, set this to false.
+# If you wish to use Essentials' built-in permissions using the 'player-commands' section above, set this to false.
 # Default is true.
 use-bukkit-permissions: true
 
@@ -346,7 +346,7 @@ kit-auto-equip: false
 
 # Determines the functionality of the /createkit command.
 # If this is true, /createkit will give the user a link with the kit code.
-# If this is false, /createkit will add the kit to the kits.yml config file directly.
+# If this is false, /createkit will add the kit to the 'kits.yml' config file directly.
 # Default is false.
 pastebin-createkit: false
 
@@ -432,7 +432,7 @@ list:
     # List the groups, separated by spaces, that you wish to merge.
     #Staff: owner admin moderator
     Admins: owner admin
-    # To truncate group lists, set a max user limit.
+    # To truncate group lists, set a max player limit.
     #builder: 20
     # To hide groups, set the group as hidden.
     #default: hidden
@@ -447,7 +447,7 @@ debug: false
 
 # Set the locale for all messages.
 # If you don't set this, the default locale of the server will be used.
-# For example, to set the language to English, set locale to en. It will then use the file "messages_en.properties".
+# For example, to set the language to English, set locale to 'en'. It will then use the file 'messages_en.properties'.
 # Don't forget to remove the # in front of the line.
 # For more information, visit https://essentialsx.net/wiki/Locale.html
 #locale: en
@@ -469,13 +469,13 @@ message-colors:
 # Turn off god mode when the player leaves the server.
 remove-god-on-disconnect: false
 
-# After this timeout in seconds, the user will be set as AFK.
-# This feature requires the player to have the essentials.afk.auto permission.
+# After this timeout in seconds, the player will be set as AFK.
+# This feature requires the player to have the 'essentials.afk.auto' permission.
 # Set to -1 for no timeout.
 auto-afk: 300
 
-# After this timeout in seconds, the user will be kicked from the server.
-# The essentials.afk.kickexempt permission overrides this feature.
+# After this timeout in seconds, the player will be kicked from the server.
+# The 'essentials.afk.kickexempt' permission overrides this feature.
 # Set to -1 for no timeout.
 auto-afk-kick: -1
 
@@ -502,12 +502,12 @@ cancel-afk-on-chat: true
 
 # Should AFK players be ignored when other players are trying to sleep?
 # When this setting is false, players won't be able to skip the night if some players are AFK.
-# Users with the permission essentials.sleepingignored will always be ignored.
+# Players with the permission 'essentials.sleepingignored' will always be ignored.
 sleep-ignores-afk-players: true
 
 # Should vanished players be ignored when other players are trying to sleep?
 # When this setting is false, players won't be able to skip the night if vanished players are not sleeping.
-# Users with the permission essentials.sleepingignored will always be ignored.
+# Players with the permission 'essentials.sleepingignored' will always be ignored.
 sleep-ignores-vanished-player: true
 
 # Change the player's list (not tab) name when they are AFK. This is none by default, which specifies that Essentials
@@ -523,31 +523,31 @@ broadcast-afk-message: true
 # You can disable the Minecraft death messages here.
 death-messages: true
 
-# How should Essentials handle players with the essentials.keepinv permission who have items with
+# How should Essentials handle players with the 'essentials.keepinv' permission who have items with
 # Curse of Vanishing when they die?
-# You can set this to "keep" (to keep the item), "drop" (to drop the item), or "delete" (to delete the item).
-# Defaults to "keep".
+# You can set this to 'keep' (to keep the item), 'drop' (to drop the item), or 'delete' (to delete the item).
+# Defaults to 'keep'.
 vanishing-items-policy: keep
 
-# How should essentials handle players with the essentials.keepinv permission who have items with
+# How should essentials handle players with the 'essentials.keepinv' permission who have items with
 # Curse of Binding when they die?
-# You can set this to "keep" (to keep the item), "drop" (to drop the item), or "delete" (to delete the item).
-# Defaults to "keep".
+# You can set this to 'keep' (to keep the item), 'drop' (to drop the item), or 'delete' (to delete the item).
+# Defaults to 'keep'.
 binding-items-policy: keep
 
 # When players die, should they receive the coordinates they died at?
 send-info-after-death: false
 
 # Should players with permissions be able to join and quit silently?
-# You can control this with essentials.silentjoin and essentials.silentquit permissions if it is enabled.
-# In addition, people with essentials.silentjoin.vanish will be vanished upon joining.
+# You can control this with 'essentials.silentjoin' and 'essentials.silentquit' permissions if it is enabled.
+# In addition, people with 'essentials.silentjoin.vanish' will be vanished upon joining.
 allow-silent-join-quit: false
 
 # You can set custom join and quit messages here. Set this to "none" to use the default Minecraft message,
 # or set this to "" to hide the message entirely.
 #
 # Available placeholders:
-# {PLAYER} - The player's displayname.
+# {PLAYER} - The player's display name.
 # {USERNAME} - The player's username.
 # {PREFIX} - The player's prefix.
 # {SUFFIX} - The player's suffix.
@@ -557,13 +557,13 @@ allow-silent-join-quit: false
 custom-join-message: "none"
 custom-quit-message: "none"
 
-# You can set a custom join message for users who join with an updated username here.
-# This message will only be used if a user has joined before and has since changed their username.
-# This will be displayed INSTEAD OF custom-join-message, so if you intend to keep them similar, make sure they match.
-# Set this to "none" to use the "custom-join-message" above for every join.
+# You can set a custom join message for players who join with an updated username here.
+# This message will only be used if a player has joined before and has since changed their username.
+# This will be displayed INSTEAD OF 'custom-join-message', so if you intend to keep them similar, make sure they match.
+# Set this to "none" to use the 'custom-join-message' setting above for every join.
 #
 # Available placeholders:
-# {PLAYER} - The player's displayname. 
+# {PLAYER} - The player's display name. 
 # {USERNAME} - The player's username.
 # {OLDUSERNAME} - The player's old username.
 # {PREFIX} - The player's prefix.
@@ -588,23 +588,23 @@ no-god-in-worlds:
 
 # Set to true to enable per-world permissions for teleporting between worlds with Essentials commands.
 # This applies to /world, /back, /tp[a|o|here|all] but not warps.
-# Give someone permission to teleport to a world with essentials.worlds.<worldname>.
-# This does not affect the /home command; use world-home-permissions below.
+# Give someone permission to teleport to a world with 'essentials.worlds.<worldname>'.
+# This does not affect the /home command; use 'world-home-permissions' below.
 world-teleport-permissions: false
 
 # The number of items given if the quantity parameter is left out in /item or /give.
-# If this number is below 1, the maximum stack size is given. If oversized-stacksize below
+# If this number is below 1, the maximum stack size is given. If 'oversized-stacksize' below
 # is not changed, any number higher than the maximum stack size results in multiple stacks.
 default-stack-size: -1
 
 # Oversized stacks are stacks that ignore the normal max stack size.
-# They can be obtained using /give and /item if the player has the essentials.oversizedstacks permission.
+# They can be obtained using /give and /item if the player has the 'essentials.oversizedstacks' permission.
 # How many items should be in an oversized stack?
 oversized-stacksize: 64
 
 # Allow repairing enchanted weapons and armor.
 # If you set this to false, you can still allow it for certain players
-# using the permission essentials.repair.enchanted.
+# using the permission 'essentials.repair.enchanted'.
 repair-enchanted: true
 
 # Allow 'unsafe' enchantments in kits and item spawning.
@@ -632,11 +632,11 @@ max-fly-speed: 0.8
 mails-per-minute: 1000
 
 # Set the maximum duration, in seconds, that /mute can be applied for.
-# Set to -1 to disable the limit. Players with the essentials.mute.unlimited permission can bypass this restriction.
+# Set to -1 to disable the limit. Players with the 'essentials.mute.unlimited' permission can bypass this restriction.
 max-mute-time: -1
 
 # Set the maximum duration, in seconds, that /tempban can be applied for.
-# Set to -1 to disable the limit. Players with the essentials.tempban.unlimited permission can bypass this restriction.
+# Set to -1 to disable the limit. Players with the 'essentials.tempban.unlimited' permission can bypass this restriction.
 max-tempban-time: -1
 
 # Changes the default /reply functionality. This can be changed on a per-player basis using /rtoggle.
@@ -644,7 +644,7 @@ max-tempban-time: -1
 # If false, /r goes to the last person that messaged you.
 last-message-reply-recipient: true
 
-# If last-message-reply-recipient is enabled for a particular player,
+# If 'last-message-reply-recipient' is enabled for a particular player,
 # this specifies the duration, in seconds, that would need to elapse for the
 # reply recipient to update when receiving a message.
 # Default is 180 (3 minutes).
@@ -663,19 +663,19 @@ send-fly-enable-on-join: true
 
 # Set to true to enable per-world permissions for setting the time of individual worlds with Essentials commands.
 # This applies to the /time, /day, and /night commands.
-# Give someone permission to set time in a world with essentials.time.world.<worldname>.
+# Give someone permission to set time in a world with 'essentials.time.world.<worldname>'.
 world-time-permissions: false
 
 # Specify cooldowns for both Essentials commands and external commands.
 # Commands do not start with a forward slash (/). For example, instead of '/msg', write 'msg'.
 #
-# Wildcards are supported. E.g.,
+# Wildcards are supported. For example,
 # - '*i*': 50
 # adds a 50-second cooldown to all commands that include the letter "i".
 #
 # Essentials supports regex by starting the command with a caret (^).
 # For example, to target commands starting with "ban" but not "banip", use:
-#  '^ban([^ip])( .*)?': 60 # 60-second /ban cooldown.
+#  '^ban([^ip])( .*)?': 60 # 60-second /ban cooldown
 # Note: If you have a command that starts with ^, escape it using a backslash (\). E.g., \^command: 123
 command-cooldowns:
   #feed: 100 # 100-second cooldown on /feed command
@@ -702,7 +702,7 @@ allow-selling-named-items: false
 delay-motd: 0
 
 # A list of commands that should have their complementary confirm commands enabled by default.
-# This is empty by default. For the latest list of valid commands, refer to the latest source config.yml.
+# This is empty by default. For the latest list of valid commands, refer to the latest source 'config.yml'.
 default-enabled-confirm-commands:
   #- pay
   #- clearinventory
@@ -712,7 +712,7 @@ default-enabled-confirm-commands:
 # "spawn" to send them to the spawnpoint, or "off" to disable teleportation upon release.
 teleport-when-freed: back
 
-# Whether jail time should only be counted while the user is online.
+# Whether jail time should only be counted while the player is online.
 # If true, a jailed player's time will only decrement when they are online.
 jail-online-time: false
 
@@ -745,7 +745,7 @@ log-command-block-commands: true
 max-projectile-speed: 8
 
 # Set the maximum amount of lore lines a user can set with the /itemlore command.
-# Users with the essentials.itemlore.bypass permission will be able to bypass this limit.
+# Players with the 'essentials.itemlore.bypass' permission will be able to bypass this limit.
 max-itemlore-lines: 10
 
 # Should Essentials check for updates?
@@ -765,16 +765,16 @@ update-bed-at-daytime: true
 
 # Set to true to enable per-world permissions for using homes to teleport between worlds.
 # This applies to the /home command only.
-# Give someone permission to teleport to a world with essentials.worlds.<worldname>.
+# Give someone permission to teleport to a world with 'essentials.worlds.<worldname>'.
 world-home-permissions: false
 
 # Allow players to have multiple homes.
-# Players need essentials.sethome.multiple before they can have more than 1 home.
+# Players need 'essentials.sethome.multiple' before they can have more than 1 home.
 # You can set the default number of multiple homes using the 'default' rank below.
 # To remove the home limit entirely, give people 'essentials.sethome.multiple.unlimited'.
 #
 # To grant different home amounts to different people, you need to define a "home rank" below.
-# Once created, give the matching permission: essentials.sethome.multiple.<home_rank>.
+# Once created, give the matching permission: 'essentials.sethome.multiple.<home_rank>'.
 # Note: The "home ranks" defined below do not need to match your permission plugin's group names.
 #
 # In this example, someone with 'essentials.sethome.multiple' and 'essentials.sethome.multiple.vip' will have 5 homes.
@@ -806,7 +806,7 @@ confirm-home-overwrite: false
 
 # For more information, visit https://wiki.ess3.net/wiki/Essentials_Economy
 
-# You can control the values of items that are sold to the server by using the /setworth command and worth.yml.
+# You can control the values of items that are sold to the server by using the /setworth command and 'worth.yml'.
 
 # Defines the balance new players start with. Defaults to 0.
 starting-balance: 0
@@ -834,7 +834,7 @@ max-money: 10000000000000
 
 # Set the minimum amount of money a player can have (must be greater than the negative value of max-money).
 # Setting this to 0 will disable overdrafts/loans completely.
-# Users need 'essentials.eco.loan' permission to have a negative balance.
+# Players need 'essentials.eco.loan' permission to have a negative balance.
 min-money: -10000
 
 # Enable this to log all interactions with buy/sell/trade signs and the sell command.
@@ -847,10 +847,10 @@ economy-log-update-enabled: false
 # The minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
 
-# Enable this to block users who try to /pay someone who is ignoring them.
+# Enable this to block players who try to /pay someone who is ignoring them.
 pay-excludes-ignore-list: false
 
-# Whether users with a balance of $0 or less should be shown in the balance top list.
+# Whether players with a balance of $0 or less should be shown in the balance top list.
 # Setting this to false will hide balances with $0 or less.
 # Note: After reloading the config, run '/baltop force' for changes to take effect.
 show-zero-baltop: true
@@ -861,7 +861,7 @@ baltop-requirements:
   minimum-balance: 0
   minimum-playtime: 0
 
-# The format of currency, excluding symbols. For symbol configuration, see currency-symbol-format-locale.
+# The format of currency, excluding symbols. For symbol configuration, see 'currency-symbol-format-locale'.
 #
 # "#,##0.00" is how the majority of countries display currency.
 #currency-format: "#,##0.00"
@@ -881,7 +881,7 @@ baltop-requirements:
 # You can set the default multiplier using the 'default' rank below.
 #
 # To grant different multipliers to different people, you need to define a "multiplier rank" below.
-# Once created, give the matching permission: essentials.sell.multiplier.<multiplier_rank>.
+# Once created, give the matching permission: 'essentials.sell.multiplier.<multiplier_rank>'.
 # Note: The "multiplier ranks" defined below do not need to match your permission plugin's group names.
 sell-multipliers:
   default: 1.0
@@ -898,8 +898,8 @@ sell-multipliers:
 non-ess-in-help: true
 
 # Hide plugins that players do not have permission to use.
-# You can override this by adding the 'essentials.help.<plugin>' permission to a user or group.
-# Users with 'essentials.*' or '*' will see all help regardless.
+# You can override this by adding the 'essentials.help.<plugin>' permission to a player or group.
+# Players with 'essentials.*' or '*' will see all help regardless.
 # You can also use negative permissions to remove access to a specific plugin's help if this is enabled.
 hide-permissionless-help: true
 
@@ -915,10 +915,10 @@ hide-permissionless-help: true
 chat:
 
   # If Essentials Chat is installed, this sets how many blocks a player's chat will travel. Set to 0 for global chat.
-  # Users with 'essentials.chat.spy' will see everything, regardless of this setting.
-  # Users with 'essentials.chat.shout' can override this by prefixing their message with an exclamation mark (!).
-  # Users with 'essentials.chat.question' can override this by prefixing their message with a question mark (?).
-  # You can add command costs for shout/question by adding 'chat-shout' and 'chat-question' to the command-costs section.
+  # Players with 'essentials.chat.spy' will see everything, regardless of this setting.
+  # Players with 'essentials.chat.shout' can override this by prefixing their message with an exclamation mark (!).
+  # Players with 'essentials.chat.question' can override this by prefixing their message with a question mark (?).
+  # You can add command costs for shout/question by adding 'chat-shout' and 'chat-question' to the 'command-costs' section.
   radius: 0
 
   # Chat formatting can be configured in two ways: 
@@ -961,7 +961,7 @@ chat:
 
   # You can also specify a format for each group.
   # If using group formats, remove the # to activate the setting.
-  # Note: Group names are case-sensitive so you must match them up with your permission plugin.
+  # Note: Group names are case-sensitive, so you must match them up with your permission plugin.
   group-formats:
     #default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
     #admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
@@ -1097,7 +1097,7 @@ protect:
       phantom: false
 
   # The maximum height a creeper can explode. -1 allows them to explode everywhere.
-  # Set 'prevent.creeper-explosion' above to true if you want to disable creeper explosions completely.
+  # Set 'creeper-explosion' above to true if you want to disable creeper explosions completely.
   creeper:
     max-height: -1
 
@@ -1107,8 +1107,8 @@ protect:
     fall: false
 
     # Should PvP be disabled?
-    # Users with the 'essentials.protect.pvp' permission will still be able to attack each other if this is set to true.
-    # However, they will be unable to attack users without the permission node.
+    # Players with the 'essentials.protect.pvp' permission will still be able to attack each other if this is set to true.
+    # However, they will be unable to attack players without the permission node.
     pvp: false
 
     # Should drowning damage be disabled?
@@ -1121,7 +1121,7 @@ protect:
     # Items that fall into lava will still burn to a crisp. ;)
     lavadmg: false
 
-    # Should projectile (e.g. arrow) damage be disabled?
+    # Should projectile damage, such as from arrows, be disabled?
     projectiles: false
 
     # Should contact damage be disabled?
@@ -1224,25 +1224,25 @@ respawn-listener-priority: high
 
 # What priority should Essentials use for handling spawning on joining the server?
 # See 'respawn-listener-priority' above for possible values.
-# Note: Changing this may impact or break spawn-on-join functionality.
+# Note: Changing this may impact or break 'spawn-on-join' functionality.
 # Note: Changes will not apply until after the server is restarted.
 spawn-join-listener-priority: high
 
-# When users die, should they respawn at their first home or bed instead of the spawnpoint?
+# When players die, should they respawn at their first home or bed instead of the spawnpoint?
 respawn-at-home: false
 
-# When users die, should they respawn at their bed instead of their first home or the spawnpoint?
+# When players die, should they respawn at their bed instead of their first home or the spawnpoint?
 # The 'respawn-at-home' setting above must also be true for this to take effect.
 respawn-at-home-bed: true
 
-# When users die, should Essentials respect users' respawn anchors?
+# When players die, should Essentials respect their respawn anchors?
 respawn-at-anchor: false
 
 # If configured, players will spawn at a random location instead of their spawnpoint.
 # This will override the newbies spawnpoint set above.
 #
-# The location must first be set using the '/settpr' command or in tpr.yml.
-# After a tpr location is created, set the world name (or the name defined in tpr.yml) below.
+# The location must first be set using the '/settpr' command or in 'tpr.yml'.
+# After a tpr location is created, set the world name (or the name defined in 'tpr.yml') below.
 random-spawn-location: "none"
 
 # If configured, players will respawn at the random respawn location when they die.
