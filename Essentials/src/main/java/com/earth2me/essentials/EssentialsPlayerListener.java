@@ -991,8 +991,12 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         if (!user.isInvSee()) {
             return;
         }
-        if (event.getNewItems().keySet().stream().anyMatch(slot -> slot > 35)) {
-            event.setCancelled(true);
+
+        for (int slot : event.getNewItems().keySet()) {
+            if (Inventories.isBottomInventorySlot(slot)) {
+                event.setCancelled(true);
+                break;
+            }
         }
     }
 

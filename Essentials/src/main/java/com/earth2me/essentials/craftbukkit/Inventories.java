@@ -406,4 +406,8 @@ public final class Inventories {
     private static boolean isArmorSlot(final int slot) {
         return slot == HELM_SLOT || slot == CHEST_SLOT || slot == LEG_SLOT || slot == BOOT_SLOT;
     }
+
+    public static boolean isBottomInventorySlot(final int slot) {
+        return slot > 35;
+    }
 }
