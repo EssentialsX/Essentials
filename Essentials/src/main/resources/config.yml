@@ -55,8 +55,8 @@ change-displayname: true
 # This option will cause Essentials to show players' display names instead of usernames when tab completing Essentials commands.
 change-tab-complete-name: false
 
-# When EssentialsChat.jar isn't used, force essentials to add the prefix and suffix from permission plugins to display names.
-# This setting is ignored if EssentialsChat.jar is used, and defaults to 'true'.
+# When EssentialsChat.jar isn't used, force Essentials to add the prefix and suffix from permissions plugins to display names.
+# This setting is ignored if EssentialsChat.jar is used, and defaults to true.
 # The value of 'change-displayname' must be true.
 # Do not edit this setting unless you know what you are doing!
 #add-prefix-suffix: false
@@ -154,11 +154,11 @@ notify-no-new-mail: true
 notify-player-of-mail-cooldown: 60
 
 # When a command conflicts with another plugin, Essentials will, by default, try to force the OTHER plugin to take priority.
-# Commands in this list will tell Essentials not to 'give up' the command to other plugins.
-# In this state, which plugin 'wins' may appear almost random.
+# Commands in this list will tell Essentials not to "give up" the command to other plugins.
+# In this state, which plugin "wins" may appear almost random.
 #
 # If you have two plugins with the same command and want to force Essentials to take over, you must set an alias.
-# To force Essentials to handle 'god', alias 'god' to 'essentials:god $1-' in the 'commands.yml' file located in your server's root folder.
+# To force Essentials to handle '/god', alias 'god' to 'essentials:god $1-' in the 'commands.yml' file located in your server's root folder.
 # See https://breezewiki.com/bukkit/wiki/Commands.yml#aliases for more information.
 overridden-commands:
   #- god
@@ -529,7 +529,7 @@ death-messages: true
 # Defaults to 'keep'.
 vanishing-items-policy: keep
 
-# How should essentials handle players with the 'essentials.keepinv' permission who have items with
+# How should Essentials handle players with the 'essentials.keepinv' permission who have items with
 # Curse of Binding when they die?
 # You can set this to 'keep' (to keep the item), 'drop' (to drop the item), or 'delete' (to delete the item).
 # Defaults to 'keep'.
@@ -607,7 +607,7 @@ oversized-stacksize: 64
 # using the permission 'essentials.repair.enchanted'.
 repair-enchanted: true
 
-# Allow 'unsafe' enchantments in kits and item spawning.
+# Allow "unsafe" enchantments in kits and item spawning.
 # Warning: Mixing and overleveling some enchantments can cause issues with clients, servers, and plugins.
 unsafe-enchantments: false
 
@@ -708,8 +708,8 @@ default-enabled-confirm-commands:
   #- clearinventory
 
 # Where should Essentials teleport players when they are freed from jail?
-# Set to "back" to teleport them to their previous location before being jailed,
-# "spawn" to send them to the spawnpoint, or "off" to disable teleportation upon release.
+# Set to 'back' to teleport them to their previous location before being jailed,
+# 'spawn' to send them to the spawnpoint, or 'off' to disable teleportation upon release.
 teleport-when-freed: back
 
 # Whether jail time should only be counted while the player is online.
@@ -775,7 +775,7 @@ world-home-permissions: false
 #
 # To grant different home amounts to different people, you need to define a "home rank" below.
 # Once created, give the matching permission: 'essentials.sethome.multiple.<home_rank>'.
-# Note: The "home ranks" defined below do not need to match your permission plugin's group names.
+# Note: The "home ranks" defined below do not need to match your permissions plugin's group names.
 #
 # In this example, someone with 'essentials.sethome.multiple' and 'essentials.sethome.multiple.vip' will have 5 homes.
 # Remember, they must have BOTH permission nodes in order to be able to set multiple homes.
@@ -882,7 +882,7 @@ baltop-requirements:
 #
 # To grant different multipliers to different people, you need to define a "multiplier rank" below.
 # Once created, give the matching permission: 'essentials.sell.multiplier.<multiplier_rank>'.
-# Note: The "multiplier ranks" defined below do not need to match your permission plugin's group names.
+# Note: The "multiplier ranks" defined below do not need to match your permissions plugin's group names.
 sell-multipliers:
   default: 1.0
   double: 2.0
@@ -961,7 +961,7 @@ chat:
 
   # You can also specify a format for each group.
   # If using group formats, remove the # to activate the setting.
-  # Note: Group names are case-sensitive, so you must match them up with your permission plugin.
+  # Note: Group names are case-sensitive, so you must match them up with your permissions plugin.
   group-formats:
     #default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
     #admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
