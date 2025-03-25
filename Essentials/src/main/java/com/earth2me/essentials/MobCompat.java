@@ -9,6 +9,8 @@ import org.bukkit.TreeSpecies;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Camel;
+import org.bukkit.entity.Chicken;
+import org.bukkit.entity.Cow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
@@ -18,6 +20,7 @@ import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Panda;
 import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Salmon;
 import org.bukkit.entity.TropicalFish;
@@ -25,6 +28,9 @@ import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 
 import static com.earth2me.essentials.utils.EnumUtil.getEntityType;
@@ -32,8 +38,21 @@ import static com.earth2me.essentials.utils.EnumUtil.getEntityType;
 public final class MobCompat {
 
     // Constants for mob interfaces added in later versions
-    @SuppressWarnings("rawtypes")
-    public static final Class RAIDER = ReflUtil.getClassCached("org.bukkit.entity.Raider");
+    public static final Class<?> RAIDER = ReflUtil.getClassCached("org.bukkit.entity.Raider");
+
+    // Stupid hacks to avoid Commodore rewrites.
+    private static final Class<?> COW = ReflUtil.getClassCached("org.bukkit.entity.Cow");
+    private static final Class<?> COW_VARIANT = ReflUtil.getClassCached("org.bukkit.entity.Cow$Variant");
+    private static final MethodHandle COW_VARIANT_HANDLE;
+
+    static {
+        MethodHandle handle = null;
+        try {
+            handle = MethodHandles.lookup().findVirtual(COW, "setVariant", MethodType.methodType(void.class, COW_VARIANT));
+        } catch (NoSuchMethodException | IllegalAccessException ignored) {
+        }
+        COW_VARIANT_HANDLE = handle;
+    }
 
     // Constants for mobs added in later versions
     public static final EntityType LLAMA = getEntityType("LLAMA");
@@ -247,6 +266,41 @@ public final class MobCompat {
 
         if (spawned instanceof org.bukkit.entity.Salmon) {
             ((Salmon) spawned).setVariant(Salmon.Variant.valueOf(s));
+        }
+    }
+
+    public static void setCowVariant(final Entity spawned, final String variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_21_5_R01) || COW_VARIANT_HANDLE == null) {
+            return;
+        }
+
+        if (spawned instanceof Cow) {
+            try {
+                COW_VARIANT_HANDLE.invoke(spawned, RegistryUtil.valueOf(COW_VARIANT, variant));
+            } catch (Throwable ignored) {
+            }
+        }
+    }
+
+    public static void setChickenVariant(final Entity spawned, final String variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_21_5_R01)) {
+            return;
+        }
+
+        if (spawned instanceof Chicken) {
+            //noinspection DataFlowIssue
+            ((Chicken) spawned).setVariant(RegistryUtil.valueOf(Chicken.Variant.class, variant));
+        }
+    }
+
+    public static void setPigVariant(final Entity spawned, final String variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_21_5_R01)) {
+            return;
+        }
+
+        if (spawned instanceof Pig) {
+            //noinspection DataFlowIssue
+            ((Pig) spawned).setVariant(RegistryUtil.valueOf(Pig.Variant.class, variant));
         }
     }
 
