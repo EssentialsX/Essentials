@@ -57,22 +57,22 @@ change-tab-complete-name: false
 
 # When EssentialsChat.jar isn't used, force Essentials to add the prefix and suffix from permissions plugins to display names.
 # This setting is ignored if EssentialsChat.jar is used, and defaults to true.
-# The value of 'change-displayname' must be true.
+# The value of 'change-displayname' above must be true.
 # Do not edit this setting unless you know what you are doing!
 #add-prefix-suffix: false
 
 # When this option is enabled, the (tab) player list will be updated with the display name.
-# The value of 'change-displayname' must be true.
+# The value of 'change-displayname' above must be true.
 #change-playerlist: true
 
 # When this option is enabled, player prefixes will be shown in the (tab) player list.
 # This feature only works for Minecraft version 1.8 and higher.
-# The value of 'change-playerlist' must be true.
+# The value of 'change-playerlist' above must be true.
 #add-prefix-in-playerlist: true
 
 # When this option is enabled, player suffixes will be shown in the (tab) player list.
 # This feature only works for Minecraft version 1.8 and higher. 
-# The value of 'change-playerlist' must be true.
+# The value of 'change-playerlist' above must be true.
 #add-suffix-in-playerlist: true
 
 # If the teleport destination is unsafe, should players be teleported to the nearest safe location?
@@ -81,7 +81,7 @@ change-tab-complete-name: false
 teleport-safety: true
 
 # This forcefully disables teleport safety checks without a warning if attempting to teleport to unsafe locations.
-# 'teleport-safety' and this option need to be set to true to force teleportation to dangerous locations.
+# Both 'teleport-safety' above and this option must be set to true to force teleportation to dangerous locations.
 force-disable-teleport-safety: false
 
 # If a player is teleporting to an unsafe location in creative, adventure, or god mode, they will not be teleported to a
@@ -248,7 +248,7 @@ mute-commands:
 # Whitelist the commands and permissions you wish to give players by default (everything else is OP only).
 # These are the permissions without the 'essentials.' part.
 #
-# To enable this feature, ensure 'use-bukkit-permissions' is set to false.
+# To enable this feature, ensure 'use-bukkit-permissions' below is set to false.
 player-commands:
   - afk
   - afk.auto
@@ -460,7 +460,7 @@ debug: false
 per-player-locale: false
 
 # Change the default primary and secondary colors used in Essentials messages.
-# Some messages may use custom colors, which will need to be edited in the appropriate message files.
+# Some messages may use custom colors, which must be edited in the appropriate message files.
 # For more information on customizing messages, see https://essentialsx.net/wiki/Locale.html
 message-colors:
   primary: '#ffaa00'
@@ -525,13 +525,13 @@ death-messages: true
 
 # How should Essentials handle players with the 'essentials.keepinv' permission who have items with
 # Curse of Vanishing when they die?
-# You can set this to 'keep' (to keep the item), 'drop' (to drop the item), or 'delete' (to delete the item).
+# Valid options are: 'keep', 'drop', and 'delete'.
 # Defaults to 'keep'.
 vanishing-items-policy: keep
 
 # How should Essentials handle players with the 'essentials.keepinv' permission who have items with
 # Curse of Binding when they die?
-# You can set this to 'keep' (to keep the item), 'drop' (to drop the item), or 'delete' (to delete the item).
+# Valid options are: 'keep', 'drop', and 'delete'.
 # Defaults to 'keep'.
 binding-items-policy: keep
 
@@ -559,8 +559,8 @@ custom-quit-message: "none"
 
 # You can set a custom join message for players who join with an updated username here.
 # This message will only be used if a player has joined before and has since changed their username.
-# This will be displayed INSTEAD OF 'custom-join-message', so if you intend to keep them similar, make sure they match.
-# Set this to "none" to use the 'custom-join-message' setting above for every join.
+# This will be displayed INSTEAD OF 'custom-join-message' above, so if you intend to keep them similar, make sure they match.
+# Set this to "none" to use the 'custom-join-message' setting for every join.
 #
 # Available placeholders:
 # {PLAYER} - The player's display name. 
@@ -608,7 +608,7 @@ oversized-stacksize: 64
 repair-enchanted: true
 
 # Allow "unsafe" enchantments in kits and item spawning.
-# Warning: Mixing and overleveling some enchantments can cause issues with clients, servers, and plugins.
+# Warning: Mixing and over-leveling some enchantments can cause issues with clients, servers, and plugins.
 unsafe-enchantments: false
 
 # The maximum distance in blocks from the player that the /tree and /bigtree commands can spawn trees.
@@ -861,7 +861,7 @@ baltop-requirements:
   minimum-balance: 0
   minimum-playtime: 0
 
-# The format of currency, excluding symbols. For symbol configuration, see 'currency-symbol-format-locale'.
+# The format of currency, excluding symbols. For symbol configuration, see 'currency-symbol-format-locale' below.
 #
 # "#,##0.00" is how the majority of countries display currency.
 #currency-format: "#,##0.00"
@@ -918,7 +918,7 @@ chat:
   # Players with 'essentials.chat.spy' will see everything, regardless of this setting.
   # Players with 'essentials.chat.shout' can override this by prefixing their message with an exclamation mark (!).
   # Players with 'essentials.chat.question' can override this by prefixing their message with a question mark (?).
-  # You can add command costs for shout/question by adding 'chat-shout' and 'chat-question' to the 'command-costs' section.
+  # You can add command costs for shout/question by adding 'chat-shout' and 'chat-question' to the 'command-costs' section above.
   radius: 0
 
   # Chat formatting can be configured in two ways: 
@@ -1224,7 +1224,7 @@ respawn-listener-priority: high
 
 # What priority should Essentials use for handling spawning on joining the server?
 # See 'respawn-listener-priority' above for possible values.
-# Note: Changing this may impact or break 'spawn-on-join' functionality.
+# Note: Changing this may impact or break 'spawn-on-join' functionality below.
 # Note: Changes will not apply until after the server is restarted.
 spawn-join-listener-priority: high
 
@@ -1241,7 +1241,7 @@ respawn-at-anchor: false
 # If configured, players will spawn at a random location instead of their spawnpoint.
 # This will override the newbies spawnpoint set above.
 #
-# The location must first be set using the '/settpr' command or in 'tpr.yml'.
+# The location must first be set using the /settpr command or in 'tpr.yml'.
 # After a tpr location is created, set the world name (or the name defined in 'tpr.yml') below.
 random-spawn-location: "none"
 
