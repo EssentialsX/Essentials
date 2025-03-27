@@ -937,9 +937,6 @@ chat:
   # You can also specify a sub-format for each chat type.
   # For more information on chat formatting, visit the wiki: https://wiki.ess3.net/wiki/Chat_Formatting#Chat_Formatting
   #
-  # Note: The {DISPLAYNAME} placeholder includes {PREFIX} and {SUFFIX} by default.
-  # Using these together may result in double prefixes/suffixes in chat.
-  #
   # Available placeholders:
   # {MESSAGE} - The content of the chat message.
   # {USERNAME} - The sender's username.
@@ -954,6 +951,9 @@ chat:
   # {TEAMNAME} - The sender's scoreboard team name.
   # {TEAMPREFIX} - The sender's scoreboard team prefix.
   # {TEAMSUFFIX} - The sender's scoreboard team suffix.
+  #
+  # Note: The {DISPLAYNAME} placeholder includes {PREFIX} and {SUFFIX} by default.
+  # Using these together may result in double prefixes/suffixes in chat.
 
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
