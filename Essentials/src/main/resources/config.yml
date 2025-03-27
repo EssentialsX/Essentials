@@ -939,7 +939,7 @@ chat:
   #
   # Note: The {DISPLAYNAME} placeholder includes {PREFIX} and {SUFFIX} by default.
   # Using these together may result in double prefixes/suffixes in chat.
-
+  #
   # Available placeholders:
   # {MESSAGE} - The content of the chat message.
   # {USERNAME} - The sender's username.
