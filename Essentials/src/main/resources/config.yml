@@ -6,6 +6,7 @@
 
 # This is the config file for EssentialsX.
 # This config was generated for version ${full.version}.
+# View the up-to-date default config at https://git.io/JG4z1
 
 # If you want to use special characters in this document, such as accented letters, you MUST save the file as UTF-8, not ANSI.
 # If you receive an error when Essentials loads, ensure that:
@@ -340,7 +341,6 @@ player-commands:
 # Use this option to force superperms-based permissions handler regardless of detected installed perms plugin.
 # This is useful if you want superperms-based permissions (with wildcards) for custom permissions plugins.
 # If you wish to use Essentials' built-in permissions using the 'player-commands' section above, set this to false.
-# Default is true.
 use-bukkit-permissions: true
 
 # When this option is enabled, one-time use kits (i.e., delay < 0) will be
@@ -353,7 +353,6 @@ kit-auto-equip: false
 # Determines the functionality of the /createkit command.
 # If this is true, /createkit will give the user a link with the kit code.
 # If this is false, /createkit will add the kit to the 'kits.yml' config file directly.
-# Default is false.
 pastebin-createkit: false
 
 # Determines if /createkit will generate kits using NBT item serialization.
@@ -362,7 +361,6 @@ pastebin-createkit: false
 # WARNING: This option only works on 1.15.2+ Paper servers, and it will bypass any custom serializers from other plugins such as Magic.
 # WARNING: When creating kits via /createkit with this option enabled, you will not be able to downgrade your server with these kit items.
 # This option only affects /createkit - you can still create kits by hand in 'kits.yml' using Essentials' human-readable item format.
-# Default is false.
 use-nbt-serialization-in-createkit: false
 
 # See https://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
@@ -532,13 +530,11 @@ death-messages: true
 # How should Essentials handle players with the 'essentials.keepinv' permission who have items with
 # Curse of Vanishing when they die?
 # Valid options are: 'keep', 'drop', and 'delete'.
-# Defaults to 'keep'.
 vanishing-items-policy: keep
 
 # How should Essentials handle players with the 'essentials.keepinv' permission who have items with
 # Curse of Binding when they die?
 # Valid options are: 'keep', 'drop', and 'delete'.
-# Defaults to 'keep'.
 binding-items-policy: keep
 
 # When players die, should they receive the coordinates they died at?
@@ -653,7 +649,7 @@ last-message-reply-recipient: true
 # If 'last-message-reply-recipient' is enabled for a particular player,
 # this specifies the duration, in seconds, that would need to elapse for the
 # reply recipient to update when receiving a message.
-# Default is 180 (3 minutes).
+# 180 seconds = 3 minutes
 last-message-reply-recipient-timeout: 180
 
 # Changes the default /reply functionality.
@@ -728,7 +724,6 @@ tpa-accept-cancellation: 120
 
 # The maximum number of simultaneous teleport requests that can be pending for any player.
 # Once past this threshold, old requests will instantly time out.
-# Defaults to 5.
 tpa-max-requests: 5
 
 # Allow players to set hats by clicking on their helmet slot with an item.
@@ -814,7 +809,7 @@ confirm-home-overwrite: false
 
 # You can control the values of items that are sold to the server by using the /setworth command and 'worth.yml'.
 
-# Defines the balance new players start with. Defaults to 0.
+# Defines the balance new players start with.
 starting-balance: 0
 
 # Defines the cost to use the given commands PER USE.
