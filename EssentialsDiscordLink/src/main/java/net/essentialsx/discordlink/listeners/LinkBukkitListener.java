@@ -140,7 +140,13 @@ public class LinkBukkitListener implements Listener {
     @EventHandler
     public void onUserLinkStatusChange(final DiscordLinkStatusChangeEvent event) {
         if (event.isLinked() || ess.getSettings().getLinkPolicy() == DiscordLinkSettings.LinkPolicy.NONE) {
-            event.getUser().setFreeze(false);
+            if (event.getUser() != null) {
+                event.getUser().setFreeze(false);
+            }
+            return;
+        }
+
+        if (event.getUser() == null || !event.getUser().getBase().isOnline()) {
             return;
         }
 
