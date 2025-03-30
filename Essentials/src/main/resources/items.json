@@ -2003,6 +2003,11 @@
   "bludye": "blue_dye",
   "bluedye": "blue_dye",
   "minecraft:blue_dye": "blue_dye",
+  "blue_egg": {
+    "material": "BLUE_EGG"
+  },
+  "blueegg": "blue_egg",
+  "minecraft:blue_egg": "blue_egg",
   "blue_glazed_terracotta": {
     "material": "BLUE_GLAZED_TERRACOTTA"
   },
@@ -2322,6 +2327,11 @@
   "brodye": "brown_dye",
   "browndye": "brown_dye",
   "minecraft:brown_dye": "brown_dye",
+  "brown_egg": {
+    "material": "BROWN_EGG"
+  },
+  "brownegg": "brown_egg",
+  "minecraft:brown_egg": "brown_egg",
   "brown_glazed_terracotta": {
     "material": "BROWN_GLAZED_TERRACOTTA"
   },
@@ -2469,12 +2479,28 @@
   "burnpotterysherd": "burn_pottery_sherd",
   "burnsherd": "burn_pottery_sherd",
   "minecraft:burn_pottery_sherd": "burn_pottery_sherd",
+  "bush": {
+    "material": "BUSH"
+  },
+  "gbush": "bush",
+  "grassbush": "bush",
+  "minecraft:bush": "bush",
   "cactus": {
     "material": "CACTUS"
   },
   "cacti": "cactus",
   "cactuses": "cactus",
   "minecraft:cactus": "cactus",
+  "cactus_flower": {
+    "material": "CACTUS_FLOWER"
+  },
+  "cactiflower": "cactus_flower",
+  "cactusflower": "cactus_flower",
+  "cflower": "cactus_flower",
+  "flowerc": "cactus_flower",
+  "flowercacti": "cactus_flower",
+  "flowercactus": "cactus_flower",
+  "minecraft:cactus_flower": "cactus_flower",
   "cake": {
     "material": "CAKE"
   },
@@ -5712,7 +5738,6 @@
   "dead_bush": {
     "material": "DEAD_BUSH"
   },
-  "bush": "dead_bush",
   "dbush": "dead_bush",
   "deadbush": "dead_bush",
   "deadsapling": "dead_bush",
@@ -7425,6 +7450,13 @@
   "firerestarr": "fire_resistance_tipped_arrow",
   "firerestarrow": "fire_resistance_tipped_arrow",
   "firerestippedarrow": "fire_resistance_tipped_arrow",
+  "firefly_bush": {
+    "material": "FIREFLY_BUSH"
+  },
+  "ffbush": "firefly_bush",
+  "firebush": "firefly_bush",
+  "fireflybush": "firefly_bush",
+  "minecraft:firefly_bush": "firefly_bush",
   "firework_rocket": {
     "material": "FIREWORK_ROCKET"
   },
@@ -11428,6 +11460,15 @@
     "material": "LEAD"
   },
   "minecraft:lead": "lead",
+  "leaf_litter": {
+    "material": "LEAF_LITTER"
+  },
+  "leaflit": "leaf_litter",
+  "leaflitter": "leaf_litter",
+  "litter": "leaf_litter",
+  "llitter": "leaf_litter",
+  "minecraft:leaf_litter": "leaf_litter",
+  "spottedleaf": "leaf_litter",
   "leaping_lingering_potion": {
     "potionData": {
       "type": "LEAPING",
@@ -27238,6 +27279,14 @@
   "minecraft:shield": "shield",
   "woodenshield": "shield",
   "woodshield": "shield",
+  "short_dry_grass": {
+    "material": "SHORT_DRY_GRASS"
+  },
+  "minecraft:short_dry_grass": "short_dry_grass",
+  "sdgrass": "short_dry_grass",
+  "sdrygrass": "short_dry_grass",
+  "shortdgrass": "short_dry_grass",
+  "shortdrygrass": "short_dry_grass",
   "short_grass": {
     "material": "SHORT_GRASS",
     "fallbacks": [
@@ -33146,6 +33195,14 @@
   "tadpolemonsterspawner": "tadpole_spawner",
   "tadpolemspawner": "tadpole_spawner",
   "tadpolespawner": "tadpole_spawner",
+  "tall_dry_grass": {
+    "material": "TALL_DRY_GRASS"
+  },
+  "minecraft:tall_dry_grass": "tall_dry_grass",
+  "talldgrass": "tall_dry_grass",
+  "talldrygrass": "tall_dry_grass",
+  "tdgrass": "tall_dry_grass",
+  "tdrygrass": "tall_dry_grass",
   "tall_grass": {
     "material": "TALL_GRASS"
   },
@@ -33167,6 +33224,16 @@
     "material": "TERRACOTTA"
   },
   "minecraft:terracotta": "terracotta",
+  "test_block": {
+    "material": "TEST_BLOCK"
+  },
+  "minecraft:test_block": "test_block",
+  "testblock": "test_block",
+  "test_instance_block": {
+    "material": "TEST_INSTANCE_BLOCK"
+  },
+  "minecraft:test_instance_block": "test_instance_block",
+  "testinstanceblock": "test_instance_block",
   "thick_lingering_potion": {
     "potionData": {
       "type": "THICK",
@@ -46809,6 +46876,13 @@
   "minecraft:wild_armor_trim_smithing_template": "wild_armor_trim_smithing_template",
   "wildarmortrimsmithingtemplate": "wild_armor_trim_smithing_template",
   "wildtrim": "wild_armor_trim_smithing_template",
+  "wildflowers": {
+    "material": "WILDFLOWERS"
+  },
+  "minecraft:wildflowers": "wildflowers",
+  "wflower": "wildflowers",
+  "wflowers": "wildflowers",
+  "wildflower": "wildflowers",
   "wind_charge": {
     "material": "WIND_CHARGE"
   },

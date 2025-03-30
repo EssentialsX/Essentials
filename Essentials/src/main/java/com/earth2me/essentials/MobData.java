@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.ChestedHorse;
+import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -221,6 +222,15 @@ public enum MobData {
     SMALL_SALMON("small", MobCompat.SALMON, "salmon:SMALL", true),
     MEDIUM_SALMON("medium", MobCompat.SALMON, "salmon:MEDIUM", true),
     LARGE_SALMON("large", MobCompat.SALMON, "salmon:LARGE", true),
+    TEMPERATE_COW("temperate", EntityType.COW.getEntityClass(), "cow:TEMPERATE", true),
+    WARM_COW("warm", EntityType.COW.getEntityClass(), "cow:WARM", true),
+    COLD_COW("cold", EntityType.COW.getEntityClass(), "cow:COLD", true),
+    TEMPERATE_CHICKEN("temperate", Chicken.class, "chicken:TEMPERATE", true),
+    WARM_CHICKEN("warm", Chicken.class, "chicken:WARM", true),
+    COLD_CHICKEN("cold", Chicken.class, "chicken:COLD", true),
+    TEMPERATE_PIG("temperate", Pig.class, "pig:TEMPERATE", true),
+    WARM_PIG("warm", Pig.class, "pig:WARM", true),
+    COLD_PIG("cold", Pig.class, "pig:COLD", true),
     ;
 
     final private String nickname;
@@ -441,6 +451,15 @@ public enum MobData {
                     break;
                 case "salmon":
                     MobCompat.setSalmonSize(spawned, split[1]);
+                    break;
+                case "cow":
+                    MobCompat.setCowVariant(spawned, split[1]);
+                    break;
+                case "chicken":
+                    MobCompat.setChickenVariant(spawned, split[1]);
+                    break;
+                case "pig":
+                    MobCompat.setPigVariant(spawned, split[1]);
                     break;
             }
         } else {
