@@ -46,14 +46,14 @@ public class SignTrade extends EssentialsSign {
             final Trade stored;
             try {
                 stored = getTrade(sign, 1, AmountType.TOTAL, true, true, ess);
-                subtractAmount(sign, 1, stored, ess);
+                subtractAmount(sign, 1, stored, ess, false);
 
                 final Map<Integer, ItemStack> withdraw = stored.pay(player, OverflowType.RETURN);
 
                 if (withdraw == null) {
                     Trade.log("Sign", "Trade", "Withdraw", username, store, username, null, sign.getBlock().getLocation(), player.getMoney(), ess);
                 } else {
-                    setAmount(sign, 1, BigDecimal.valueOf(withdraw.get(0).getAmount()), ess);
+                    setAmount(sign, 1, BigDecimal.valueOf(withdraw.get(0).getAmount()), ess, false);
                     Trade.log("Sign", "Trade", "Withdraw", username, stored, username, new Trade(withdraw.get(0), ess), sign.getBlock().getLocation(), player.getMoney(), ess);
                 }
             } catch (final SignException e) {
@@ -71,11 +71,11 @@ public class SignTrade extends EssentialsSign {
             addAmount(sign, 1, charge, ess, true);
             subtractAmount(sign, 2, trade, ess, true);
 
-            addAmount(sign, 1, charge, ess);
-            subtractAmount(sign, 2, trade, ess);
+            addAmount(sign, 1, charge, ess, false);
+            subtractAmount(sign, 2, trade, ess, false);
             if (!trade.pay(player)) {
-                subtractAmount(sign, 1, charge, ess);
-                addAmount(sign, 2, trade, ess);
+                subtractAmount(sign, 1, charge, ess, false);
+                addAmount(sign, 2, trade, ess, false);
                 throw new ChargeException("inventoryFull");
             }
             charge.charge(player);
@@ -97,7 +97,7 @@ public class SignTrade extends EssentialsSign {
                 stack = stack.clone();
                 stack.setAmount(amount);
                 final Trade store = new Trade(stack, ess);
-                addAmount(sign, 2, store, ess);
+                addAmount(sign, 2, store, ess, false);
                 store.charge(player);
                 return store;
             }
@@ -131,10 +131,10 @@ public class SignTrade extends EssentialsSign {
                     return true;
                 }
 
-                setAmount(sign, 1, BigDecimal.valueOf(withdraw1 == null ? 0L : withdraw1.get(0).getAmount()), ess);
+                setAmount(sign, 1, BigDecimal.valueOf(withdraw1 == null ? 0L : withdraw1.get(0).getAmount()), ess, false);
                 Trade.log("Sign", "Trade", "Withdraw", signOwner.substring(2), stored1, username, withdraw1 == null ? null : new Trade(withdraw1.get(0), ess), sign.getBlock().getLocation(), player.getMoney(), ess);
 
-                setAmount(sign, 2, BigDecimal.valueOf(withdraw2 == null ? 0L : withdraw2.get(0).getAmount()), ess);
+                setAmount(sign, 2, BigDecimal.valueOf(withdraw2 == null ? 0L : withdraw2.get(0).getAmount()), ess, false);
                 Trade.log("Sign", "Trade", "Withdraw", signOwner.substring(2), stored2, username, withdraw2 == null ? null : new Trade(withdraw2.get(0), ess), sign.getBlock().getLocation(), player.getMoney(), ess);
 
                 sign.updateSign();
@@ -271,10 +271,6 @@ public class SignTrade extends EssentialsSign {
         throw new SignException("invalidSignLine", index + 1);
     }
 
-    protected final void subtractAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException {
-        subtractAmount(sign, index, trade, ess, false);
-    }
-
     protected final void subtractAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess, final boolean validationRun) throws SignException {
         final BigDecimal money = trade.getMoney();
         if (money != null) {
@@ -288,10 +284,6 @@ public class SignTrade extends EssentialsSign {
         if (exp != null) {
             changeAmount(sign, index, BigDecimal.valueOf(-exp), ess, validationRun);
         }
-    }
-
-    protected final void addAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException {
-        addAmount(sign, index, trade, ess, false);
     }
 
     protected final void addAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess, final boolean validationRun) throws SignException {
@@ -327,10 +319,6 @@ public class SignTrade extends EssentialsSign {
             return;
         }
         throw new SignException("invalidSignLine", index + 1);
-    }
-
-    private void setAmount(final ISign sign, final int index, final BigDecimal value, final IEssentials ess) throws SignException {
-        setAmount(sign, index, value, ess, false);
     }
 
     private void setAmount(final ISign sign, final int index, final BigDecimal value, final IEssentials ess, final boolean validationRun) throws SignException {
