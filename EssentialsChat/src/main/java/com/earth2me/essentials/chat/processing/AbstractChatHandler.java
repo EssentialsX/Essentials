@@ -141,8 +141,9 @@ public abstract class AbstractChatHandler {
 
         final ChatProcessingCache.Chat chat = cache.getProcessedChat(event.getPlayer());
 
-        // If local chat is enabled, handle the recipients here; else we have nothing to do
+        // If local chat is enabled, handle the recipients here; else we can just fire the chat event and return
         if (chat.getRadius() < 1) {
+            callChatEvent(event, chat.getType(), null);
             return;
         }
         final long radiusSquared = chat.getRadius() * chat.getRadius();
