@@ -16,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import java.math.BigDecimal;
 import java.util.Map;
 
-//TODO: TL exceptions
 public class SignTrade extends EssentialsSign {
     private static final int MAX_STOCK_LINE_LENGTH = 15;
 
@@ -67,6 +66,11 @@ public class SignTrade extends EssentialsSign {
             final Trade charge = getTrade(sign, 1, AmountType.COST, false, true, ess);
             final Trade trade = getTrade(sign, 2, AmountType.COST, true, true, ess);
             charge.isAffordableFor(player);
+
+            // validate addAmount + subtractAmount first to ensure they both do not throw exceptions
+            addAmount(sign, 1, charge, ess, true);
+            subtractAmount(sign, 2, trade, ess, true);
+
             addAmount(sign, 1, charge, ess);
             subtractAmount(sign, 2, trade, ess);
             if (!trade.pay(player)) {
@@ -268,37 +272,44 @@ public class SignTrade extends EssentialsSign {
     }
 
     protected final void subtractAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException {
+        subtractAmount(sign, index, trade, ess, false);
+    }
+
+    protected final void subtractAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess, final boolean validationRun) throws SignException {
         final BigDecimal money = trade.getMoney();
         if (money != null) {
-            changeAmount(sign, index, money.negate(), ess);
+            changeAmount(sign, index, money.negate(), ess, validationRun);
         }
         final ItemStack item = trade.getItemStack();
         if (item != null) {
-            changeAmount(sign, index, BigDecimal.valueOf(-item.getAmount()), ess);
+            changeAmount(sign, index, BigDecimal.valueOf(-item.getAmount()), ess, validationRun);
         }
         final Integer exp = trade.getExperience();
         if (exp != null) {
-            changeAmount(sign, index, BigDecimal.valueOf(-exp), ess);
+            changeAmount(sign, index, BigDecimal.valueOf(-exp), ess, validationRun);
         }
     }
 
     protected final void addAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException {
+        addAmount(sign, index, trade, ess, false);
+    }
+
+    protected final void addAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess, final boolean validationRun) throws SignException {
         final BigDecimal money = trade.getMoney();
         if (money != null) {
-            changeAmount(sign, index, money, ess);
+            changeAmount(sign, index, money, ess, validationRun);
         }
         final ItemStack item = trade.getItemStack();
         if (item != null) {
-            changeAmount(sign, index, BigDecimal.valueOf(item.getAmount()), ess);
+            changeAmount(sign, index, BigDecimal.valueOf(item.getAmount()), ess, validationRun);
         }
         final Integer exp = trade.getExperience();
         if (exp != null) {
-            changeAmount(sign, index, BigDecimal.valueOf(exp), ess);
+            changeAmount(sign, index, BigDecimal.valueOf(exp), ess, validationRun);
         }
     }
 
-    //TODO: Translate these exceptions.
-    private void changeAmount(final ISign sign, final int index, final BigDecimal value, final IEssentials ess) throws SignException {
+    private void changeAmount(final ISign sign, final int index, final BigDecimal value, final IEssentials ess, final boolean validationRun) throws SignException {
         final String line = sign.getLine(index).trim();
         if (line.isEmpty()) {
             throw new SignException("emptySignLine", index + 1);
@@ -307,20 +318,22 @@ public class SignTrade extends EssentialsSign {
 
         if (split.length == 2) {
             final BigDecimal amount = getBigDecimal(split[1], ess).add(value);
-            setAmount(sign, index, amount, ess);
+            setAmount(sign, index, amount, ess, validationRun);
             return;
         }
         if (split.length == 3) {
             final BigDecimal amount = getBigDecimal(split[2], ess).add(value);
-            setAmount(sign, index, amount, ess);
+            setAmount(sign, index, amount, ess, validationRun);
             return;
         }
         throw new SignException("invalidSignLine", index + 1);
     }
 
-    //TODO: Translate these exceptions.
     private void setAmount(final ISign sign, final int index, final BigDecimal value, final IEssentials ess) throws SignException {
+        setAmount(sign, index, value, ess, false);
+    }
 
+    private void setAmount(final ISign sign, final int index, final BigDecimal value, final IEssentials ess, final boolean validationRun) throws SignException {
         final String line = sign.getLine(index).trim();
         if (line.isEmpty()) {
             throw new SignException("emptySignLine", index + 1);
@@ -333,7 +346,9 @@ public class SignTrade extends EssentialsSign {
             if (money != null && amount != null) {
                 final String newline = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.formatAsCurrency(value);
                 validateSignLength(newline);
-                sign.setLine(index, newline);
+                if (!validationRun) {
+                    sign.setLine(index, newline);
+                }
                 return;
             }
         }
@@ -343,12 +358,16 @@ public class SignTrade extends EssentialsSign {
             if (split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp")) {
                 final String newline = stackAmount + " " + split[1] + ":" + value.intValueExact();
                 validateSignLength(newline);
-                sign.setLine(index, newline);
+                if (!validationRun) {
+                    sign.setLine(index, newline);
+                }
             } else {
                 getItemStack(split[1], stackAmount, ess);
                 final String newline = stackAmount + " " + split[1] + ":" + value.intValueExact();
                 validateSignLength(newline);
-                sign.setLine(index, newline);
+                if (!validationRun) {
+                    sign.setLine(index, newline);
+                }
             }
             return;
         }
