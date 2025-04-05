@@ -49,7 +49,7 @@ public final class MobCompat {
         MethodHandle handle = null;
         try {
             handle = MethodHandles.lookup().findVirtual(COW, "setVariant", MethodType.methodType(void.class, COW_VARIANT));
-        } catch (NoSuchMethodException | IllegalAccessException ignored) {
+        } catch (final Throwable ignored) {
         }
         COW_VARIANT_HANDLE = handle;
     }
