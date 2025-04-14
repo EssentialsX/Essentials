@@ -595,8 +595,12 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         if (tickCountProvider != null && ess.getSettings().isWorldChangePreserveFlying() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_17_R01)) {
             if (user.isAuthorized("essentials.fly")) {
                 //noinspection DataFlowIssue - not real
-                if (event.getFrom().getWorld() != event.getTo().getWorld() && player.isFlying()) {
-                    user.setFlightTick(tickCountProvider.getTickCount());
+                if (event.getFrom().getWorld() != event.getTo().getWorld() && player.getAllowFlight()) {
+                    // If the player is not flying but has the ability to fly, we set the sign of the tick count to -1
+                    // Later on in the PlayerChangedWorldEvent, we will set the player's flying state to true if the tick count is positive.
+                    // If the tick count is negative, we simply just set the player's flight ability to true.
+                    final int tick = player.isFlying() ? tickCountProvider.getTickCount() : -tickCountProvider.getTickCount();
+                    user.setFlightTick(tick);
                 }
             }
         }
@@ -778,9 +782,12 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
 
         final TickCountProvider tickCountProvider = ess.provider(TickCountProvider.class);
-        if (tickCountProvider != null && user.getFlightTick() == tickCountProvider.getTickCount() && user.isAuthorized("essentials.fly")) {
+        final int flightTick = user.getFlightTick();
+        if (tickCountProvider != null && Math.abs(flightTick) == tickCountProvider.getTickCount() && user.isAuthorized("essentials.fly")) {
             user.getBase().setAllowFlight(true);
-            user.getBase().setFlying(true);
+            if (flightTick > 0) {
+                user.getBase().setFlying(true);
+            }
         }
         user.setFlightTick(-1);
     }

@@ -775,6 +775,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
+    @Override
+    public long getLastActivityTime() {
+        return this.lastActivity;
+    }
+
     @Deprecated
     public void updateActivity(final boolean broadcast) {
         updateActivity(broadcast, AfkStatusChangeEvent.Cause.UNKNOWN);
