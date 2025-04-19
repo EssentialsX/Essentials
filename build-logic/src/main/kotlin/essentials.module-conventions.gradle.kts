@@ -29,6 +29,6 @@ tasks {
 
     register<CommandDataTask>("commandData") {
         destination.set(rootProject.layout.projectDirectory.dir("generated").file("${project.name}-commands.json"))
-        destination.set(rootProject.layout.projectDirectory.dir("generated").file("${project.name}-permissions.json"))
+        permissionDestination.set(rootProject.layout.projectDirectory.dir("generated").file("${project.name}-permissions.json"))
     }
 }

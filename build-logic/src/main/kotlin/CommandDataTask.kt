@@ -8,6 +8,8 @@ import java.util.*
 abstract class CommandDataTask : DefaultTask() {
     @OutputFile
     val destination = project.objects.fileProperty()
+    @OutputFile
+    val permissionDestination = project.objects.fileProperty()
 
     @TaskAction
     private fun harvest() {
@@ -111,7 +113,7 @@ abstract class CommandDataTask : DefaultTask() {
         val authOutputFile = project.file("build/generated/${project.name}-permissions.json")
         authOutputFile.parentFile.mkdirs()
         authOutputFile.writeText(authJson)
-        destination.get().asFile.parentFile.mkdirs()
-        authOutputFile.copyTo(destination.get().asFile, overwrite = true)
+        permissionDestination.get().asFile.parentFile.mkdirs()
+        authOutputFile.copyTo(permissionDestination.get().asFile, overwrite = true)
     }
 }
