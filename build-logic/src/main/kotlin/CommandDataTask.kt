@@ -81,12 +81,37 @@ abstract class CommandDataTask : DefaultTask() {
         }
 
         val json = GsonBuilder().create().toJson(extractedCommands)
-
         val output = project.file("build/generated/${project.name}-commands.json")
         output.parentFile.mkdirs()
         output.writeText(json)
-
         destination.get().asFile.parentFile.mkdirs()
         output.copyTo(destination.get().asFile, overwrite = true)
+
+        val sourceDir = project.file("src/main/java")
+        if (!sourceDir.exists() || !sourceDir.isDirectory) {
+            logger.warn("No Java source directory found at src/main/java; skipping isAuthorized scanning.")
+            return
+        }
+
+        val authCallRegex = Regex("""\.\s*isAuthorized\s*\(\s*"([^"]+)""")
+        val permissionsFound = mutableSetOf<String>()
+
+        sourceDir.walkTopDown().filter { it.isFile && it.extension == "java" }.forEach { file ->
+            file.forEachLine { line ->
+                authCallRegex.findAll(line).forEach { matchResult ->
+                    val permission = matchResult.groupValues[1]
+                    if (permission.isNotBlank()) {
+                        permissionsFound.add(permission)
+                    }
+                }
+            }
+        }
+
+        val authJson = GsonBuilder().create().toJson(permissionsFound)
+        val authOutputFile = project.file("build/generated/${project.name}-permissions.json")
+        authOutputFile.parentFile.mkdirs()
+        authOutputFile.writeText(authJson)
+        destination.get().asFile.parentFile.mkdirs()
+        authOutputFile.copyTo(destination.get().asFile, overwrite = true)
     }
 }
