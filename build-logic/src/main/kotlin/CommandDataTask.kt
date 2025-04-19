@@ -49,52 +49,55 @@ abstract class CommandDataTask : DefaultTask() {
 
         if (extractedCommands.isEmpty()) {
             logger.warn("No commands found in plugin.yml for ${project.name}")
-            return
-        }
+        } else {
 
-        val properties = Properties()
-        messagesProps.inputStream().use { properties.load(it) }
+            val properties = Properties()
+            messagesProps.inputStream().use { properties.load(it) }
 
-        properties.forEach { key, value ->
-            val commandKeyRegex = Regex("^(\\w+)Command(Description|Usage)(\\d*)$")
-            val match = commandKeyRegex.matchEntire(key.toString())
+            properties.forEach { key, value ->
+                val commandKeyRegex = Regex("^(\\w+)Command(Description|Usage)(\\d*)$")
+                val match = commandKeyRegex.matchEntire(key.toString())
 
-            if (match != null) {
-                val (command, type, index) = match.destructured
-                val commandData = extractedCommands[command] ?: return@forEach
+                if (match != null) {
+                    val (command, type, index) = match.destructured
+                    val commandData = extractedCommands[command] ?: return@forEach
 
-                if (index.isEmpty()) {
-                    // main description and usage
-                    when (type) {
-                        "Description" -> extractedCommands[command] = commandData + ("description" to value.toString())
-                        "Usage" -> extractedCommands[command] = commandData + ("usage" to value.toString())
-                    }
-                } else {
-                    @Suppress("UNCHECKED_CAST")
-                    val usagesList = commandData["usages"] as MutableList<Map<String, String>> // verbose command usages
-                    usagesList.add(
-                        mapOf(
-                            "usage" to value.toString(),
-                            "description" to properties["${command}CommandUsage${index}Description"]?.toString().orEmpty()
+                    if (index.isEmpty()) {
+                        // main description and usage
+                        when (type) {
+                            "Description" -> extractedCommands[command] =
+                                commandData + ("description" to value.toString())
+
+                            "Usage" -> extractedCommands[command] = commandData + ("usage" to value.toString())
+                        }
+                    } else {
+                        @Suppress("UNCHECKED_CAST")
+                        val usagesList =
+                            commandData["usages"] as MutableList<Map<String, String>> // verbose command usages
+                        usagesList.add(
+                            mapOf(
+                                "usage" to value.toString(),
+                                "description" to properties["${command}CommandUsage${index}Description"]?.toString()
+                                    .orEmpty()
+                            )
                         )
-                    )
+                    }
                 }
             }
-        }
 
-        val json = GsonBuilder().create().toJson(extractedCommands)
-        val output = project.file("build/generated/${project.name}-commands.json")
-        output.parentFile.mkdirs()
-        output.writeText(json)
-        destination.get().asFile.parentFile.mkdirs()
-        output.copyTo(destination.get().asFile, overwrite = true)
+            val json = GsonBuilder().create().toJson(extractedCommands)
+            val output = project.file("build/generated/${project.name}-commands.json")
+            output.parentFile.mkdirs()
+            output.writeText(json)
+            destination.get().asFile.parentFile.mkdirs()
+            output.copyTo(destination.get().asFile, overwrite = true)
+        }
 
         val sourceDir = project.file("src/main/java")
         if (!sourceDir.exists() || !sourceDir.isDirectory) {
             logger.warn("No Java source directory found at src/main/java; skipping isAuthorized scanning.")
             return
         }
-
         val authCallRegex = Regex("""\.\s*isAuthorized\s*\(\s*"([^"]+)""")
         val permissionsFound = mutableSetOf<String>()
 
