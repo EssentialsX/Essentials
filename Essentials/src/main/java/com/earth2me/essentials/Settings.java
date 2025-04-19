@@ -2121,6 +2121,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public String getNickRegex() {
+        return config.getString("allowed-nicks-regex", "^[a-zA-Z_0-9§]+$");
+    }
+  
+    @Override
     public BigDecimal getMultiplier(final User user) {
         BigDecimal multiplier = defaultMultiplier;
         if (multiplierPerms == null) {
