@@ -18,6 +18,12 @@ commands:
     usage: /<command> [player]
     aliases: [espawn]
 permissions:
+  essentials.spawn:
+    description: Allows access to the /spawn command
+  essentials.spawn.others:
+    description: Allows access to the /spawn command for other players
+  essentials.setspawn:
+    description: Allows access to the /setspawn command
   essentials.spawn-on-join.exempt:
     default: false
-    description: "Bypass spawn teleportation on join when spawn-on-join is true."
+    description: Bypass spawn teleportation on join when spawn-on-join is true
