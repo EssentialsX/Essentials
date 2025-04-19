@@ -17,3 +17,20 @@ commands:
     description: Sends the discord invite link to the player.
     usage: /<command>
     aliases: [ediscord]
+permissions:
+  essentials.discord.markdown:
+    description: Allows the bearer to bypass the Discord markdown filter
+  essentials.discord.ping:
+    description: Allows the bearer to ping users in Discord
+  essentials.discord.receive.<channel>:
+    description: Allows the bearer to receive messages from the specified channel
+  essentials.discord:
+    description: Allows access to the /discord command
+  essentials.discordbroadcast:
+    description: Allows access to the /discordbroadcast command
+  essentials.discordbroadcast.markdown:
+    description: Allows the bearer to bypass the Discord markdown filter for /discordbroadcast
+  essentials.discordbroadcast.ping:
+    description: Allows the bearer to ping users in Discord for /discordbroadcast
+  essentials.discordbroadcast.<channel>:
+    description: Allows access to the /discordbroadcast command for the specified channel
