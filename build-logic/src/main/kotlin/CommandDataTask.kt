@@ -11,6 +11,8 @@ abstract class CommandDataTask : DefaultTask() {
     @OutputFile
     val permissionDestination = project.objects.fileProperty()
 
+    // i promise i will be safe
+    @Suppress("UNCHECKED_CAST")
     @TaskAction
     private fun harvest() {
         val pluginYml = project.file("src/main/resources/plugin.yml")
@@ -27,9 +29,6 @@ abstract class CommandDataTask : DefaultTask() {
 
         val yaml = Yaml()
         val data: Map<String, Any> = yaml.load(pluginYml.inputStream())
-
-        // i promise i will be safe
-        @Suppress("UNCHECKED_CAST")
         val commands = data["commands"] as? Map<String, Map<String, Any>> ?: emptyMap()
 
         val extractedCommands = commands.mapValues { (_, details) ->
@@ -44,6 +43,20 @@ abstract class CommandDataTask : DefaultTask() {
                 "description" to "",
                 "usage" to "",
                 "usages" to mutableListOf<Map<String, String>>()
+            )
+        }.toMutableMap()
+
+        val permissions = data["permissions"] as? Map<String, Map<String, Any>> ?: emptyMap()
+
+        val extractedPermissions = permissions.mapValues { (_, value) ->
+            val default = value["default"] ?: "op"
+            val description = value["description"] as? String ?: ""
+            val children = value["children"] as? Map<String, Any> ?: emptyMap()
+
+            mapOf(
+                "default" to default,
+                "description" to description,
+                "children" to children
             )
         }.toMutableMap()
 
@@ -71,7 +84,6 @@ abstract class CommandDataTask : DefaultTask() {
                             "Usage" -> extractedCommands[command] = commandData + ("usage" to value.toString())
                         }
                     } else {
-                        @Suppress("UNCHECKED_CAST")
                         val usagesList =
                             commandData["usages"] as MutableList<Map<String, String>> // verbose command usages
                         usagesList.add(
@@ -93,30 +105,15 @@ abstract class CommandDataTask : DefaultTask() {
             output.copyTo(destination.get().asFile, overwrite = true)
         }
 
-        val sourceDir = project.file("src/main/java")
-        if (!sourceDir.exists() || !sourceDir.isDirectory) {
-            logger.warn("No Java source directory found at src/main/java; skipping isAuthorized scanning.")
-            return
+        if (extractedPermissions.isEmpty()) {
+            logger.warn("No permissions found in plugin.yml for ${project.name}")
+        } else {
+            val json = GsonBuilder().create().toJson(extractedPermissions)
+            val output = project.file("build/generated/${project.name}-permissions.json")
+            output.parentFile.mkdirs()
+            output.writeText(json)
+            permissionDestination.get().asFile.parentFile.mkdirs()
+            output.copyTo(permissionDestination.get().asFile, overwrite = true)
         }
-        val authCallRegex = Regex("""\.\s*isAuthorized\s*\(\s*"([^"]+)""")
-        val permissionsFound = mutableSetOf<String>()
-
-        sourceDir.walkTopDown().filter { it.isFile && it.extension == "java" }.forEach { file ->
-            file.forEachLine { line ->
-                authCallRegex.findAll(line).forEach { matchResult ->
-                    val permission = matchResult.groupValues[1]
-                    if (permission.isNotBlank()) {
-                        permissionsFound.add(permission)
-                    }
-                }
-            }
-        }
-
-        val authJson = GsonBuilder().create().toJson(permissionsFound)
-        val authOutputFile = project.file("build/generated/${project.name}-permissions.json")
-        authOutputFile.parentFile.mkdirs()
-        authOutputFile.writeText(authJson)
-        permissionDestination.get().asFile.parentFile.mkdirs()
-        authOutputFile.copyTo(permissionDestination.get().asFile, overwrite = true)
     }
 }
