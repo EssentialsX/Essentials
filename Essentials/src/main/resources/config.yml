@@ -147,7 +147,7 @@ permission-based-item-spawn: false
 # The maximum number of entities that can be spawned per use of the /spawnmob command.
 spawnmob-limit: 10
 
-# Shall Essentials notify smitten players when /lightning is used?
+# Should Essentials notify smitten players when /lightning is used?
 warn-on-smite: true
 
 # Should items be dropped at a player's feet if their inventory is full instead of not giving the item(s)?
@@ -161,7 +161,7 @@ notify-no-new-mail: true
 notify-player-of-mail-cooldown: 60
 
 # When a command conflicts with another plugin, Essentials will, by default, try to force the OTHER plugin to take priority.
-# Commands in this list will tell Essentials not to "give up" the command to other plugins.
+# Adding commands to this list will tell Essentials not to "give up" the command to other plugins.
 # In this state, which plugin "wins" may appear almost random.
 #
 # If you have two plugins with the same command and want to force Essentials to take over, you must set an alias.
@@ -456,7 +456,7 @@ debug: false
 # For more information, visit https://essentialsx.net/wiki/Locale.html
 #locale: en
 
-# Should Essentials use player's language instead of the server's when sending messages?
+# Should Essentials use the player's language instead of the server's when sending messages?
 # This is useful if you want to use a different language for your server than for your players.
 # For example, if your server is set to English and a player speaks French, you can set this to true.
 # Essentials will then send messages in French to the player, while messages in the console will remain in English.
