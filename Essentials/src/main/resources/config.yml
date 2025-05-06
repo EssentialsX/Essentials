@@ -433,7 +433,7 @@ per-warp-permission: false
 # You can hide and merge the groups displayed in /list by defining the desired behavior here.
 # Detailed instructions and examples can be found on the wiki: https://wiki.ess3.net/wiki/List
 list:
-    # List the groups, separated by spaces, that you wish to merge.
+    # To merge groups under one name in /list, list each group on one line, separated by spaces.
     #Staff: owner admin moderator
     Admins: owner admin
     # To truncate group lists, set a max player limit.
