@@ -363,10 +363,10 @@ pastebin-createkit: false
 # This option only affects /createkit - you can still create kits by hand in 'kits.yml' using Essentials' human-readable item format.
 use-nbt-serialization-in-createkit: false
 
-# See https://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
 # To enable signs, remove the # symbol. To disable all signs, comment out or remove each sign.
+# See https://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
 # Essentials' colored sign support will be enabled when any sign type is enabled.
-# 'color' is not an actual sign type; it enables using color codes on signs when the correct permissions are given.
+# Note: 'color' is not an actual sign type; it enables using color codes on signs when the correct permissions are given.
 enabledSigns:
   #- color
   #- balance
@@ -514,8 +514,8 @@ sleep-ignores-afk-players: true
 # Players with the permission 'essentials.sleepingignored' will always be ignored.
 sleep-ignores-vanished-player: true
 
-# Change the player's list (not tab) name when they are AFK. This is none by default, which specifies that Essentials
-# should not interfere with the AFK player's list name.
+# Change the player's /list name when they are AFK. This is none by default, which specifies that Essentials
+# should not interfere with the AFK player's /list name.
 # You may use color codes, {USERNAME} for the player's name, or {PLAYER} for the player's display name.
 afk-list-name: "none"
 
@@ -610,7 +610,7 @@ oversized-stacksize: 64
 repair-enchanted: true
 
 # Allow "unsafe" enchantments in kits and item spawning.
-# Warning: Mixing and over-leveling some enchantments can cause issues with clients, servers, and plugins.
+# WARNING: Mixing and over-leveling some enchantments can cause issues with clients, servers, and plugins.
 unsafe-enchantments: false
 
 # The maximum distance in blocks from the player that the /tree and /bigtree commands can spawn trees.
@@ -906,7 +906,7 @@ hide-permissionless-help: true
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                   Essentials Chat                    | #
+# |                   EssentialsX Chat                   | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -963,6 +963,7 @@ chat:
   # You can also specify a format for each group.
   # If using group formats, remove the # to activate the setting.
   # Note: Group names are case-sensitive, so you must match them up with your permissions plugin.
+  # Note: If a LuckPerms group display name (alias) is set, you must use it instead of the original group name.
   group-formats:
     #default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
     #admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
@@ -995,7 +996,7 @@ chat:
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                  Essentials Protect                  | #
+# |                  EssentialsX Protect                 | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -1146,7 +1147,7 @@ protect:
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                 Essentials AntiBuild                 | #
+# |                 EssentialsX AntiBuild                | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -1190,7 +1191,7 @@ protect:
 
 ############################################################
 # +------------------------------------------------------+ #
-# |            Essentials Spawn + New Players            | #
+# |            EssentialsX Spawn + New Players           | #
 # +------------------------------------------------------+ #
 ############################################################
 
