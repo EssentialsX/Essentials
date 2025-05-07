@@ -27,6 +27,9 @@ public class SignBuy extends EssentialsSign {
         Trade items = getTrade(sign, 1, 2, player, ess);
         Trade charge = getTrade(sign, 3, ess);
 
+        if (!player.isAuthorized("essentials.item.buy."+ items.getItemStack().getType()) && ess.getSettings().perItemTransactionPermissions()){
+            throw new SignException("buySpecificItemPermission", items.getItemStack().getType());
+        }
         // Check if the player is trying to buy in bulk.
         if (ess.getSettings().isAllowBulkBuySell() && player.getBase().isSneaking()) {
             final ItemStack heldItem = player.getItemInHand();

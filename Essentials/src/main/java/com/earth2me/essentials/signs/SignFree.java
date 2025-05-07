@@ -32,6 +32,10 @@ public class SignFree extends EssentialsSign {
         itemStack = getItemMeta(player.getSource(), itemStack, sign.getLine(2), ess);
         final ItemStack item = getItemMeta(player.getSource(), itemStack, sign.getLine(3), ess);
 
+        if (!player.isAuthorized("essentials.item.free."+ item.getType()) && ess.getSettings().perItemTransactionPermissions()){
+            throw new SignException("freeSpecificItemPermission", item.getType().toString());
+        }
+
         if (item.getType() == Material.AIR) {
             throw new SignException("cantSpawnItem", "Air");
         }

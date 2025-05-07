@@ -344,6 +344,10 @@ player-commands:
 # Default is true.
 use-bukkit-permissions: true
 
+# When set to true, a player will need the permission essentials.item.<buy|sell|free>.[itemName] in order to buy and
+# sell items by command and sign.
+per-item-transaction-permissions: false
+
 # When this option is enabled, one-time use kits (ie. delay < 0) will be
 # removed from the /kit list when a player can no longer use it
 skip-used-one-time-kits-from-kit-list: false
@@ -417,6 +421,9 @@ allow-old-id-signs: false
 # See https://github.com/drtshock/Essentials/pull/699 for more information.
 unprotected-sign-names:
   #- kit
+
+# When set to true, users will also need the permission essentials.enchantments.[enchantmentName] to use an enchantment sign.
+enchant-sign-restrictions: false
 
 # Backup runs a custom batch/bash command at a specified interval.
 # The server will save the world before executing the backup command, and disable

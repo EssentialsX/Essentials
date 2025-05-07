@@ -56,6 +56,13 @@ public class Commandsell extends EssentialsCommand {
                 }
             }
             try {
+                if (!user.isAuthorized("essentials.item.sell."+ stack.getType()) && ess.getSettings().perItemTransactionPermissions()){
+                    if (isBulk) {
+                        notSold.add(stack);
+                        continue;
+                    }
+                    throw new TranslatableException("sellSpecificItemPermission", stack.getType().toString());
+                }
                 if (stack.getAmount() > 0) {
                     totalWorth = totalWorth.add(sellItem(user, stack, args, isBulk));
                     stack = stack.clone();

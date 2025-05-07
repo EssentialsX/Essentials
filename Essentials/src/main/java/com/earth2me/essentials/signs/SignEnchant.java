@@ -5,11 +5,13 @@ import com.earth2me.essentials.Enchantments;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
+import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.provider.MaterialTagProvider;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 
 public class SignEnchant extends EssentialsSign {
@@ -46,8 +48,8 @@ public class SignEnchant extends EssentialsSign {
         final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && player.isAuthorized("essentials.enchantments.allowunsafe") && player.isAuthorized("essentials.signs.enchant.allowunsafe");
         if (level < 0 || (!allowUnsafe && level > enchantment.getMaxLevel())) {
             level = enchantment.getMaxLevel();
-            sign.setLine(2, enchantLevel[0] + ":" + level);
         }
+        sign.setLine(2, enchantLevel[0].toLowerCase().replaceFirst("^[a-zA-Z]", enchantLevel[0].substring(0,1).toUpperCase()) + ":" + level);
         try {
             if (stack != null) {
                 if (allowUnsafe) {
@@ -59,7 +61,11 @@ public class SignEnchant extends EssentialsSign {
         } catch (final Throwable ex) {
             throw new SignException(ex, "errorWithMessage", ex.getMessage());
         }
-        getTrade(sign, 3, ess);
+        final Trade trade = getTrade(sign, 3, 0, ess);
+        final BigDecimal money = trade.getMoney();
+        if (money != null) {
+            sign.setLine(3, NumberUtil.shortCurrency(money, ess));
+        }
         return true;
     }
 
@@ -76,6 +82,11 @@ public class SignEnchant extends EssentialsSign {
         if (enchantment == null) {
             throw new SignException("enchantmentNotFound");
         }
+
+        if (!player.isAuthorized("essentials.enchantments."+enchantment.getKey().getKey()) && ess.getSettings().isEnchantSignRestricted()){
+            throw new SignException("enchantmentPerm", enchantment.getKey().getKey());
+        }
+
         int level = 1;
         if (enchantLevel.length > 1) {
             try {

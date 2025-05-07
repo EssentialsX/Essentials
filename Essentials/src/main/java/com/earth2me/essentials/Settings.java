@@ -1220,6 +1220,16 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("use-bukkit-permissions", false);
     }
 
+    @Override
+    public boolean perItemTransactionPermissions() {
+        return config.getBoolean("per-item-transaction-permissions", false);
+    }
+
+    @Override
+    public boolean isEnchantSignRestricted(){
+        return config.getBoolean("enchant-sign-restrictions", false);
+    }
+
     private boolean _addPrefixSuffix() {
         return config.getBoolean("add-prefix-suffix", false);
     }

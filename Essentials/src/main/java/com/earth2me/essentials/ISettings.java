@@ -200,6 +200,8 @@ public interface ISettings extends IConf {
 
     boolean useBukkitPermissions();
 
+    boolean perItemTransactionPermissions();
+
     boolean addPrefixSuffix();
 
     boolean disablePrefix();
@@ -363,6 +365,8 @@ public interface ISettings extends IConf {
     NumberFormat getCurrencyFormat();
 
     List<EssentialsSign> getUnprotectedSignNames();
+
+    boolean isEnchantSignRestricted();
 
     boolean isKitAutoEquip();
 
