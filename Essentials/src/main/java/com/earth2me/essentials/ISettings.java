@@ -56,6 +56,8 @@ public interface ISettings extends IConf {
 
     boolean isChatQuestionEnabled();
 
+    boolean isUsePaperChatEvent();
+
     BigDecimal getCommandCost(IEssentialsCommand cmd);
 
     BigDecimal getCommandCost(String label);
@@ -102,6 +104,8 @@ public interface ISettings extends IConf {
     int getProtectCreeperMaxHeight();
 
     List<Material> getProtectList(final String configName);
+
+    List<String> getProtectListRaw(final String configName);
 
     boolean getProtectPreventSpawn(final String creatureName);
 
@@ -346,6 +350,8 @@ public interface ISettings extends IConf {
 
     boolean isWorldChangeFlyResetEnabled();
 
+    boolean isWorldChangePreserveFlying();
+
     boolean isWorldChangeSpeedResetEnabled();
 
     long getCommandCooldownMs(String label);
@@ -421,6 +427,10 @@ public interface ISettings extends IConf {
     boolean isUpdateCheckEnabled();
 
     boolean showZeroBaltop();
+
+    String getNickRegex();
+
+    BigDecimal getMultiplier(final User user);
 
     int getMaxItemLore();
 

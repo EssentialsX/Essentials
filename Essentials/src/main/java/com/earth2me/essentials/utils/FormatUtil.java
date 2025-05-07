@@ -1,6 +1,7 @@
 package com.earth2me.essentials.utils;
 
 import net.ess3.api.IUser;
+import net.ess3.provider.AbstractChatEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 
@@ -24,7 +25,6 @@ public final class FormatUtil {
     private static final Pattern REPLACE_ALL_RGB_PATTERN = Pattern.compile("(&)?&#([0-9a-fA-F]{6})");
     //Used to prepare xmpp output
     private static final Pattern LOGCOLOR_PATTERN = Pattern.compile("\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]");
-    private static final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-zA-Z]{2,3}(?:/\\S+)?)");
     //Used to strip ANSI control codes from console
     private static final Pattern ANSI_CONTROL_PATTERN = Pattern.compile("[\\x1B\\x9B][\\[\\]()#;?]*(?:(?:(?:;[-a-zA-Z\\d/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d/#&.:=?%@~_]*)*)?\\x07|(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~])");
     private static final Pattern PAPER_CONTROL_PATTERN = Pattern.compile("(?i)" + (char) 0x7f + "[0-9A-FK-ORX]");
@@ -297,9 +297,9 @@ public final class FormatUtil {
         if (input == null) {
             return null;
         }
-        String text = URL_PATTERN.matcher(input).replaceAll("$1 $2");
-        while (URL_PATTERN.matcher(text).find()) {
-            text = URL_PATTERN.matcher(text).replaceAll("$1 $2");
+        String text = AbstractChatEvent.URL_PATTERN.matcher(input).replaceAll("$1 $2");
+        while (AbstractChatEvent.URL_PATTERN.matcher(text).find()) {
+            text = AbstractChatEvent.URL_PATTERN.matcher(text).replaceAll("$1 $2");
         }
         return text;
     }

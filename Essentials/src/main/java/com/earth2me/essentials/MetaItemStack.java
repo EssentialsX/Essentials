@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.textreader.BookInput;
 import com.earth2me.essentials.textreader.BookPager;
 import com.earth2me.essentials.textreader.IText;
-import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -11,6 +10,9 @@ import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
 import net.ess3.api.TranslatableException;
+import net.ess3.provider.BannerDataProvider;
+import net.ess3.provider.ItemUnbreakableProvider;
+import net.ess3.provider.PotionMetaProvider;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -214,8 +216,6 @@ public class MetaItemStack {
             return;
         }
 
-        final Material WRITTEN_BOOK = EnumUtil.getMaterial("WRITTEN_BOOK");
-
         if (split.length > 1 && split[0].equalsIgnoreCase("name") && hasMetaPermission(sender, "name", false, true, ess)) {
             final String displayName = FormatUtil.replaceFormat(split[1].replaceAll("(?<!\\\\)_", " ").replace("\\_", "_"));
             final ItemMeta meta = stack.getItemMeta();
@@ -251,7 +251,7 @@ public class MetaItemStack {
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
             // This fix only applies to written books - which require an author and a title. https://bugs.mojang.com/browse/MC-59153
-            if (stack.getType() == WRITTEN_BOOK) {
+            if (stack.getType() == Material.WRITTEN_BOOK) {
                 if (!meta.hasAuthor()) {
                     // The sender can be null when this method is called from {@link  com.earth2me.essentials.signs.EssentialsSign#getItemMeta(ItemStack, String, IEssentials)}
                     meta.setAuthor(sender == null ? Console.getInstance().getDisplayName() : sender.getPlayer().getName());
@@ -264,12 +264,12 @@ public class MetaItemStack {
             final List<String> pages = pager.getPages(split[1]);
             meta.setPages(pages);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == WRITTEN_BOOK && hasMetaPermission(sender, "author", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "author", false, true, ess)) {
             final String author = FormatUtil.replaceFormat(split[1]);
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setAuthor(author);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == WRITTEN_BOOK && hasMetaPermission(sender, "title", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "title", false, true, ess)) {
             final String title = FormatUtil.replaceFormat(split[1].replaceAll("(?<!\\\\)_", " ").replace("\\_", "_"));
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
@@ -565,7 +565,7 @@ public class MetaItemStack {
                 }
                 pmeta.addCustomEffect(pEffect, true);
                 stack.setItemMeta(pmeta);
-                ess.getPotionMetaProvider().setSplashPotion(stack, isSplashPotion);
+                ess.provider(PotionMetaProvider.class).setSplashPotion(stack, isSplashPotion);
                 resetPotionMeta();
             }
         }
@@ -655,7 +655,7 @@ public class MetaItemStack {
             final BannerMeta meta = (BannerMeta) stack.getItemMeta();
             if (split[0].equalsIgnoreCase("basecolor")) {
                 final Color color = Color.fromRGB(Integer.parseInt(split[1]));
-                ess.getBannerDataProvider().setBaseColor(stack, DyeColor.getByColor(color));
+                ess.provider(BannerDataProvider.class).setBaseColor(stack, DyeColor.getByColor(color));
             } else if (patternType != null) {
                 //noinspection removal
                 final PatternType type = PatternType.getByIdentifier(split[0]);
@@ -718,7 +718,7 @@ public class MetaItemStack {
 
     private void setUnbreakable(final IEssentials ess, final ItemStack is, final boolean unbreakable) {
         final ItemMeta meta = is.getItemMeta();
-        ess.getItemUnbreakableProvider().setUnbreakable(meta, unbreakable);
+        ess.provider(ItemUnbreakableProvider.class).setUnbreakable(meta, unbreakable);
         is.setItemMeta(meta);
     }
 }

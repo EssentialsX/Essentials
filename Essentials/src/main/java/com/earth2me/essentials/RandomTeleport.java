@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.provider.BiomeKeyProvider;
+import net.ess3.provider.WorldInfoProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -29,12 +30,12 @@ public class RandomTeleport implements IConf {
     private final IEssentials ess;
     private final EssentialsConfiguration config;
     private final Map<String, ConcurrentLinkedQueue<Location>> cachedLocations = new HashMap<>();
+    private WorldInfoProvider worldInfoProvider;
 
     public RandomTeleport(final IEssentials essentials) {
         this.ess = essentials;
         config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "tpr.yml"), "/tpr.yml",
                 "Configuration for the random teleport command.\nUse the /settpr command in-game to set random teleport locations.");
-        reloadConfig();
     }
 
     public EssentialsConfiguration getConfig() {
@@ -43,6 +44,7 @@ public class RandomTeleport implements IConf {
 
     @Override
     public void reloadConfig() {
+        worldInfoProvider = ess.provider(WorldInfoProvider.class);
         config.load();
         cachedLocations.clear();
     }
@@ -200,7 +202,7 @@ public class RandomTeleport implements IConf {
         final Location location = new Location(
             center.getWorld(),
             center.getX() + offsetX,
-            ess.getWorldInfoProvider().getMaxHeight(center.getWorld()),
+            worldInfoProvider.getMaxHeight(center.getWorld()),
             center.getZ() + offsetZ,
             360 * RANDOM.nextFloat() - 180,
             0
@@ -219,7 +221,7 @@ public class RandomTeleport implements IConf {
     // Returns an appropriate elevation for a given location in the nether, or MIN_VALUE if none is found
     private double getNetherYAt(final Location location) {
         final World world = location.getWorld();
-        for (int y = 32; y < ess.getWorldInfoProvider().getMaxHeight(world); ++y) {
+        for (int y = 32; y < worldInfoProvider.getMaxHeight(world); ++y) {
             if (Material.BEDROCK.equals(world.getBlockAt(location.getBlockX(), y, location.getBlockZ()).getType())) {
                 break;
             }
@@ -231,7 +233,7 @@ public class RandomTeleport implements IConf {
     }
 
     private boolean isValidRandomLocation(final Location location) {
-        return location.getBlockY() > ess.getWorldInfoProvider().getMinHeight(location.getWorld()) && !isExcludedBiome(location);
+        return location.getBlockY() > worldInfoProvider.getMinHeight(location.getWorld()) && !isExcludedBiome(location);
     }
 
     // Exclude biome if enum or namespaced key matches
@@ -247,7 +249,7 @@ public class RandomTeleport implements IConf {
             return false;
         }
         final String biomeKey;
-        final BiomeKeyProvider biomeKeyProvider = ess.getBiomeKeyProvider();
+        final BiomeKeyProvider biomeKeyProvider = ess.provider(BiomeKeyProvider.class);
         if (biomeKeyProvider != null) {
             // Works with custom biome keys
             biomeKey = biomeKeyProvider.getBiomeKey(location.getBlock()).toString();

@@ -4,7 +4,6 @@ import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -17,10 +16,11 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.zip.GZIPOutputStream;
 
 public final class PasteUtil {
-    private static final String PASTE_URL = "https://paste.gg/";
-    private static final String PASTE_UPLOAD_URL = "https://api.paste.gg/v1/pastes";
+    private static final String PASTE_URL = "https://pastes.dev/";
+    private static final String PASTE_UPLOAD_URL = "https://api.pastes.dev/post";
     private static final ExecutorService PASTE_EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private static final Gson GSON = new Gson();
 
@@ -42,7 +42,8 @@ public final class PasteUtil {
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
                 connection.setRequestProperty("User-Agent", "EssentialsX plugin");
-                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Content-Type", "text/json");
+                connection.setRequestProperty("Content-Encoding", "gzip");
                 final JsonObject body = new JsonObject();
                 final JsonArray files = new JsonArray();
                 for (final PasteFile page : pages) {
@@ -56,24 +57,22 @@ public final class PasteUtil {
                 }
                 body.add("files", files);
 
-                try (final OutputStream os = connection.getOutputStream()) {
+                try (final OutputStream os = new GZIPOutputStream(connection.getOutputStream())) {
                     os.write(body.toString().getBytes(Charsets.UTF_8));
                 }
 
                 if (connection.getResponseCode() >= 400) {
-                    //noinspection UnstableApiUsage
                     future.completeExceptionally(new Error(CharStreams.toString(new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8))));
                     return;
                 }
 
                 // Read URL
                 final JsonObject object = GSON.fromJson(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8), JsonObject.class);
-                final String pasteId = object.get("result").getAsJsonObject().get("id").getAsString();
+                final String pasteId = object.get("key").getAsString();
                 final String pasteUrl = PASTE_URL + pasteId;
-                final JsonElement deletionKey = object.get("result").getAsJsonObject().get("deletion_key");
                 connection.disconnect();
 
-                final PasteResult result = new PasteResult(pasteId, pasteUrl, deletionKey != null ? deletionKey.getAsString() : null);
+                final PasteResult result = new PasteResult(pasteId, pasteUrl, null);
                 future.complete(result);
             } catch (Exception e) {
                 future.completeExceptionally(e);

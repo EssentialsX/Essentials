@@ -9,6 +9,8 @@ import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.PluginKey;
+import net.ess3.provider.BannerDataProvider;
+import net.ess3.provider.PotionMetaProvider;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -284,8 +286,9 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 serializeEffectMeta(sb, fireworkEffectMeta.getEffect());
             }
         } else if (MaterialUtil.isPotion(material)) {
-            final boolean splash = ess.getPotionMetaProvider().isSplashPotion(is);
-            final Collection<PotionEffect> effects = ess.getPotionMetaProvider().getCustomEffects(is);
+            final PotionMetaProvider provider = ess.provider(PotionMetaProvider.class);
+            final boolean splash = provider.isSplashPotion(is);
+            final Collection<PotionEffect> effects = provider.getCustomEffects(is);
 
             for (final PotionEffect e : effects) {
                 // long but needs to be effect:speed power:2 duration:120 in that order.
@@ -316,7 +319,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             } else {
                 final BannerMeta bannerMeta = (BannerMeta) is.getItemMeta();
                 if (bannerMeta != null) {
-                    DyeColor baseDyeColor = ess.getBannerDataProvider().getBaseColor(is);
+                    DyeColor baseDyeColor = ess.provider(BannerDataProvider.class).getBaseColor(is);
                     if (baseDyeColor == null) {
                         baseDyeColor = MaterialUtil.getColorOf(material);
                     }
