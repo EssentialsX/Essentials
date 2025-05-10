@@ -59,6 +59,7 @@ hide-displayname-in-vanish: true
 change-displayname: true
 
 # This option will cause Essentials to show players' display names instead of usernames when tab completing Essentials commands.
+# If your tab completions include prefixes and suffixes, set this option to false.
 change-tab-complete-name: false
 
 # When EssentialsChat.jar isn't used, force Essentials to add the prefix and suffix from permissions plugins to display names.
