@@ -97,17 +97,19 @@ public class Commandeditsign extends EssentialsCommand {
 
                 final String[] existingLines = sign.getLines();
 
-                if (callSignEvent(sign, user.getBase(), existingLines)) {
-                    return;
-                }
-
                 if (line == -1) {
                     for (int i = 0; i < 4; i++) {
                         existingLines[i] = FormatUtil.formatString(user, "essentials.editsign", user.getSignCopy().get(i));
                     }
+                    if (callSignEvent(sign, user.getBase(), existingLines)) {
+                        return;
+                    }
                     user.sendTl("editsignPaste", commandLabel);
                 } else {
                     existingLines[line] = FormatUtil.formatString(user, "essentials.editsign", user.getSignCopy().get(line));
+                    if (callSignEvent(sign, user.getBase(), existingLines)) {
+                        return;
+                    }
                     user.sendTl("editsignPasteLine", line + 1, commandLabel);
                 }
             } else {
