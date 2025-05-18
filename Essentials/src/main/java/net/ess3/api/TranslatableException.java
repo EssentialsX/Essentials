@@ -1,5 +1,7 @@
 package net.ess3.api;
 
+import com.earth2me.essentials.utils.AdventureUtil;
+
 import static com.earth2me.essentials.I18n.tlLiteral;
 
 /**
@@ -39,6 +41,7 @@ public class TranslatableException extends Exception {
 
     @Override
     public String getMessage() {
-        return tlLiteral(tlKey, args);
+        final String literal = tlLiteral(tlKey, args);
+        return AdventureUtil.miniToLegacy(literal);
     }
 }
