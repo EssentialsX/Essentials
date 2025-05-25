@@ -1,5 +1,6 @@
 package net.essentialsx.discord.listeners;
 
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.vdurmont.emoji.EmojiParser;
@@ -23,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -53,9 +53,7 @@ public class DiscordListener extends ListenerAdapter {
         // Get list of channel names that have this channel id mapped
         final List<String> keys = plugin.getPlugin().getSettings().getKeysFromChannelId(event.getChannel().getIdLong());
         if (keys == null || keys.size() == 0) {
-            if (plugin.isDebug()) {
-                logger.log(Level.INFO, "Skipping message due to no channel keys for id " + event.getChannel().getIdLong() + "!");
-            }
+            DebugLogUtil.debugLog("Skipping message due to no channel keys for id " + event.getChannel().getIdLong() + "!");
             return;
         }
 
@@ -67,9 +65,7 @@ public class DiscordListener extends ListenerAdapter {
         if (!plugin.getSettings().getDiscordFilters().isEmpty()) {
             for (final Pattern pattern : plugin.getSettings().getDiscordFilters()) {
                 if (pattern.matcher(message.getContentDisplay()).find()) {
-                    if (plugin.isDebug()) {
-                        logger.log(Level.INFO, "Skipping message " + message.getId() + " with content, \"" + message.getContentDisplay() + "\" as it matched the filter!");
-                    }
+                    DebugLogUtil.debugLog("Skipping message " + message.getId() + " with content, \"" + message.getContentDisplay() + "\" as it matched the filter!");
                     return;
                 }
             }
@@ -93,10 +89,8 @@ public class DiscordListener extends ListenerAdapter {
                 FormatUtil.replaceFormat(strippedMessage) : FormatUtil.stripFormat(strippedMessage);
 
         // Don't send blank messages
-        if (finalMessage.trim().length() == 0) {
-            if (plugin.isDebug()) {
-                logger.log(Level.INFO, "Skipping finalized empty message " + message.getId());
-            }
+        if (finalMessage.trim().isEmpty()) {
+            DebugLogUtil.debugLog("Skipping finalized empty message " + message.getId());
             return;
         }
 

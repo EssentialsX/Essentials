@@ -1,5 +1,6 @@
 package net.essentialsx.discordlink;
 
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
@@ -48,9 +49,7 @@ public class AccountStorage {
                 return;
             }
 
-            if (plugin.getEss().getSettings().isDebug()) {
-                plugin.getLogger().log(Level.INFO, "Saving linked discord accounts to disk...");
-            }
+            DebugLogUtil.debugLog("Saving linked discord accounts to disk...");
 
             final Map<String, String> clone;
             clone = new HashMap<>(uuidToDiscordIdMap);

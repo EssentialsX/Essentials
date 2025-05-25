@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.HomeModifyEvent;
 import org.bukkit.Bukkit;
@@ -22,9 +23,7 @@ public class Commanddelhome extends EssentialsCommand {
         final HomeModifyEvent event = new HomeModifyEvent(sender.getUser(), user, home, user.getHome(home), false);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("HomeModifyEvent canceled for /delhome execution by " + sender.getDisplayName());
-            }
+            DebugLogUtil.debugLog("HomeModifyEvent canceled for /delhome execution by " + sender.getDisplayName());
             return;
         }
 

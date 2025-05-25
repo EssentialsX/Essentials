@@ -2,6 +2,7 @@ package com.earth2me.essentials.userstorage;
 
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -76,9 +77,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         try {
             return userCache.get(uuid);
         } catch (ExecutionException e) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.WARNING, "Exception while getting user for " + uuid, e);
-            }
+            DebugLogUtil.debugLog("Exception while getting user for " + uuid, e);
             return null;
         }
     }
@@ -139,9 +138,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
             debugLogUncachedNonPlayer(base);
             user = new User(base, ess);
         } else if (!base.equals(user.getBase())) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Essentials updated the underlying Player object for " + user.getUUID());
-            }
+            DebugLogUtil.debugLog("Essentials updated the underlying Player object for " + user.getUUID());
             user.update(base);
         }
         uuidCache.updateCache(user.getUUID(), user.getName());

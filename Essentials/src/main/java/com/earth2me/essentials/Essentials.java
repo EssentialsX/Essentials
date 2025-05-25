@@ -41,6 +41,7 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
@@ -226,6 +227,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         balanceTop = new BalanceTopImpl(this);
         permissionsHandler = new PermissionsHandler(this, false);
         Economy.setEss(this);
+        DebugLogUtil.setEssentials(this);
         confList = new ArrayList<>();
         jails = new Jails(this);
         registerListeners(server.getPluginManager());
@@ -437,9 +439,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                             ((Cancellable) event).setCancelled(true);
                         }
                     });
-                    if (getSettings().isDebug()) {
-                        LOGGER.log(Level.INFO, "Registered Paper Recipe Book Event Listener");
-                    }
+                    DebugLogUtil.debugLog("Registered Paper Recipe Book Event Listener");
                 } catch (final ClassNotFoundException ignored) {
                 }
             }
@@ -458,6 +458,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             scheduleSyncRepeatingTask(timer, 1000, 50);
 
             Economy.setEss(this);
+            DebugLogUtil.setEssentials(this);
             execTimer.mark("RegHandler");
 
             // Register /hat and /back default permissions
@@ -477,9 +478,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             execTimer.mark("Init(External)");
 
             final String timeroutput = execTimer.end();
-            if (getSettings().isDebug()) {
-                LOGGER.log(Level.INFO, "Essentials load " + timeroutput);
-            }
+            DebugLogUtil.debugLog("Essentials load " + timeroutput);
         } catch (final NumberFormatException ex) {
             handleCrash(ex);
         } catch (final Error ex) {
@@ -506,9 +505,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private void registerListeners(final PluginManager pm) {
         HandlerList.unregisterAll(this);
 
-        if (getSettings().isDebug()) {
-            LOGGER.log(Level.INFO, "Registering Listeners");
-        }
+        DebugLogUtil.debugLog("Registering Listeners");
 
         final EssentialsPluginListener pluginListener = new EssentialsPluginListener(this);
         pm.registerEvents(pluginListener, this);
@@ -589,6 +586,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         this.getPermissionsHandler().unregisterContexts();
 
         Economy.setEss(null);
+        DebugLogUtil.setEssentials(null);
         Trade.closeLog();
         getUsers().shutdown();
 
@@ -729,9 +727,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public boolean onCommandEssentials(final CommandSender cSender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix, final IEssentialsModule module) {
         // Allow plugins to override the command via onCommand
         if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
-            if (getSettings().isDebug()) {
-                LOGGER.log(Level.INFO, "Searching for alternative to: " + commandLabel);
-            }
+            DebugLogUtil.debugLog("Searching for alternative to: " + commandLabel);
             final Command pc = alternativeCommandsHandler.getAlternative(commandLabel);
             if (pc != null) {
                 alternativeCommandsHandler.executed(commandLabel, pc);
@@ -893,9 +889,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         } else {
             sender.sendTl("errorWithMessage", exception.getMessage());
         }
-        if (getSettings().isDebug()) {
-            LOGGER.log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("errorCallingCommand", commandLabel)), exception);
-        }
+        DebugLogUtil.debugLog(AdventureUtil.miniToLegacy(tlLiteral("errorCallingCommand", commandLabel)), exception);
     }
 
     @Override

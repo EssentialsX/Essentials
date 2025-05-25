@@ -1,6 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import net.ess3.api.IEssentials;
@@ -48,9 +49,7 @@ public class SignBlockListener implements Listener {
     public boolean protectSignsAndBlocks(final Block block, final Player player) throws MaxMoneyException {
         // prevent any signs be broken by destroying the block they are attached to
         if (EssentialsSign.checkIfBlockBreaksSigns(block)) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Prevented that a block was broken next to a sign.");
-            }
+            DebugLogUtil.debugLog("Prevented that a block was broken next to a sign.");
             return true;
         }
 

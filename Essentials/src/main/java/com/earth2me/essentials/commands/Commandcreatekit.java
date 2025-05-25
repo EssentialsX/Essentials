@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.PasteUtil;
 import net.ess3.api.TranslatableException;
 import net.ess3.provider.SerializationProvider;
@@ -94,9 +95,7 @@ public class Commandcreatekit extends EssentialsCommand {
                         sender.sendMessage(separator);
                         sender.sendTl("createKitSuccess", kitName, delayFormat, result.getPasteUrl());
                         sender.sendMessage(separator);
-                        if (ess.getSettings().isDebug()) {
-                            ess.getLogger().info(sender.getSender().getName() + " created a kit: " + result.getPasteUrl());
-                        }
+                        DebugLogUtil.debugLog(sender.getSender().getName() + " created a kit: " + result.getPasteUrl());
                     }
                 });
                 future.exceptionally(throwable -> {

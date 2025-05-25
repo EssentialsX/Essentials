@@ -6,6 +6,7 @@ import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -159,9 +160,7 @@ public class KeywordReplacer implements IText {
 
         execTimer.mark("Text Replace");
         final String timeroutput = execTimer.end();
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "Keyword Replacer " + timeroutput);
-        }
+        DebugLogUtil.debugLog("Keyword Replacer " + timeroutput);
     }
 
     private String replaceLine(String line, final String fullMatch, final String[] matchTokens, final User user) {

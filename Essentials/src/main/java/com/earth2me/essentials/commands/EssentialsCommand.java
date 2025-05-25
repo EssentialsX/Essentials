@@ -5,6 +5,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -314,17 +315,13 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         }
 
         final int numArgs = args.length - index - 1;
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().info(numArgs + " " + index + " " + Arrays.toString(args));
-        }
+        DebugLogUtil.debugLog(numArgs + " " + index + " " + Arrays.toString(args));
         String[] effectiveArgs = new String[numArgs];
         System.arraycopy(args, index, effectiveArgs, 0, numArgs);
         if (effectiveArgs.length == 0) {
             effectiveArgs = new String[] {""};
         }
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().info(command + " -- " + Arrays.toString(effectiveArgs));
-        }
+        DebugLogUtil.debugLog(command + " -- " + Arrays.toString(effectiveArgs));
 
         return command.tabComplete(sender.getSender(), label, effectiveArgs);
     }

@@ -9,6 +9,7 @@ import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
@@ -610,9 +611,7 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public String getChatFormat(final String group, final ChatType chatType) {
         final String mFormat = chatFormats.getFormat(group, chatType, new ChatFormatConfigSupplier(group, chatType));
-        if (isDebug()) {
-            ess.getLogger().info(String.format("Found format '%s' for group '%s'", mFormat, group));
-        }
+        DebugLogUtil.debugLog(String.format("Found format '%s' for group '%s'", mFormat, group));
         return mFormat;
     }
 
@@ -824,9 +823,7 @@ public class Settings implements net.ess3.api.ISettings {
         if (knownCommandsProvider != null) {
             boolean mapModified = false;
             if (!disabledBukkitCommands.isEmpty()) {
-                if (isDebug()) {
-                    ess.getLogger().log(Level.INFO, "Re-adding " + disabledBukkitCommands.size() + " disabled commands!");
-                }
+                DebugLogUtil.debugLog("Re-adding " + disabledBukkitCommands.size() + " disabled commands!");
                 knownCommandsProvider.getKnownCommands().putAll(disabledBukkitCommands);
                 disabledBukkitCommands.clear();
                 mapModified = true;
@@ -848,14 +845,10 @@ public class Settings implements net.ess3.api.ISettings {
                 final String effectiveAlias = command.toLowerCase(Locale.ENGLISH);
                 final Command toDisable = ess.getPluginCommand(effectiveAlias);
                 if (toDisable != null) {
-                    if (isDebug()) {
-                        ess.getLogger().log(Level.INFO, "Attempting removal of " + effectiveAlias);
-                    }
+                    DebugLogUtil.debugLog("Attempting removal of " + effectiveAlias);
                     final Command removed = knownCommandsProvider.getKnownCommands().remove(effectiveAlias);
                     if (removed != null) {
-                        if (isDebug()) {
-                            ess.getLogger().log(Level.INFO, "Adding command " + effectiveAlias + " to disabled map!");
-                        }
+                        DebugLogUtil.debugLog("Adding command " + effectiveAlias + " to disabled map!");
                         disabledBukkitCommands.put(effectiveAlias, removed);
                     }
 
@@ -872,9 +865,7 @@ public class Settings implements net.ess3.api.ISettings {
             final SyncCommandsProvider syncCommandsProvider = ess.provider(SyncCommandsProvider.class);
 
             if (mapModified) {
-                if (isDebug()) {
-                    ess.getLogger().log(Level.INFO, "Syncing commands");
-                }
+                DebugLogUtil.debugLog("Syncing commands");
                 if (reloadCount.get() < 2) {
                     ess.scheduleSyncDelayedTask(syncCommandsProvider::syncCommands);
                 } else {
@@ -1804,9 +1795,7 @@ public class Settings implements net.ess3.api.ISettings {
             for (final Entry<Pattern, Long> entry : this.commandCooldowns.entrySet()) {
                 // Check if label matches current pattern (command-cooldown in config)
                 final boolean matches = entry.getKey().matcher(label).matches();
-                if (isDebug()) {
-                    ess.getLogger().info(String.format("Checking command '%s' against cooldown '%s': %s", label, entry.getKey(), matches));
-                }
+                DebugLogUtil.debugLog(String.format("Checking command '%s' against cooldown '%s': %s", label, entry.getKey(), matches));
 
                 if (matches) {
                     return entry;

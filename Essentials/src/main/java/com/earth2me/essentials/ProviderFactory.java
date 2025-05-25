@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.DebugLogUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.provider.Provider;
 import net.essentialsx.providers.NullableProvider;
@@ -46,9 +47,7 @@ public class ProviderFactory {
             if (Provider.class.isAssignableFrom(superclass)) {
                 //noinspection unchecked
                 registeredProviders.computeIfAbsent((Class<? extends Provider>) superclass, k -> new ArrayList<>()).add(provider);
-                if (essentials.getSettings().isDebug()) {
-                    essentials.getLogger().info("Registered provider " + provider.getSimpleName() + " for " + superclass.getSimpleName());
-                }
+                DebugLogUtil.debugLog("Registered provider " + provider.getSimpleName() + " for " + superclass.getSimpleName());
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.earth2me.essentials.antibuild;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
@@ -33,8 +34,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.logging.Level;
-
 public class EssentialsAntiBuildListener implements Listener {
     final private transient IAntiBuild prot;
     final private transient IEssentials ess;
@@ -61,9 +60,7 @@ public class EssentialsAntiBuildListener implements Listener {
 
     private boolean metaPermCheck(final User user, final String action, final Block block) {
         if (block == null) {
-            if (ess.getSettings().isDebug()) {
-                prot.getLogger().log(Level.INFO, "AntiBuild permission check failed, invalid block.");
-            }
+            DebugLogUtil.debugLog("AntiBuild permission check failed, invalid block.");
             return false;
         }
         if (VersionUtil.PRE_FLATTENING) {
@@ -74,9 +71,7 @@ public class EssentialsAntiBuildListener implements Listener {
 
     private boolean metaPermCheck(final User user, final String action, final ItemStack item) {
         if (item == null) {
-            if (ess.getSettings().isDebug()) {
-                prot.getLogger().log(Level.INFO, "AntiBuild permission check failed, invalid item.");
-            }
+            DebugLogUtil.debugLog("AntiBuild permission check failed, invalid item.");
             return false;
         }
         if (VersionUtil.PRE_FLATTENING) {
@@ -98,9 +93,7 @@ public class EssentialsAntiBuildListener implements Listener {
             if (user.getBase().isPermissionSet(dataPerm)) {
                 return user.isAuthorized(dataPerm);
             } else {
-                if (ess.getSettings().isDebug()) {
-                    prot.getLogger().log(Level.INFO, "DataValue perm on " + user.getName() + " is not directly set: " + dataPerm);
-                }
+                DebugLogUtil.debugLog("DataValue perm on " + user.getName() + " is not directly set: " + dataPerm);
             }
         }
 

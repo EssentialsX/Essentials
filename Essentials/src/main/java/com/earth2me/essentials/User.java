@@ -8,6 +8,7 @@ import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
 import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -137,18 +138,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public boolean isAuthorized(final String node) {
         final boolean result = isAuthorizedCheck(node);
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " has " + node + " - " + result);
-        }
+        DebugLogUtil.debugLog("checking if " + base.getName() + " has " + node + " - " + result);
         return result;
     }
 
     @Override
     public boolean isPermissionSet(final String node) {
         final boolean result = isPermSetCheck(node);
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " has " + node + " (set-explicit) - " + result);
-        }
+        DebugLogUtil.debugLog("checking if " + base.getName() + " has " + node + " (set-explicit) - " + result);
         return result;
     }
 
@@ -168,11 +165,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         try {
             return ess.getPermissionsHandler().hasPermission(base, node);
         } catch (final Exception ex) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
-            } else {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
-            }
+            DebugLogUtil.debugLog("Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+            ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
 
             return false;
         }
@@ -186,11 +180,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         try {
             return ess.getPermissionsHandler().isPermissionSet(base, node);
         } catch (final Exception ex) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
-            } else {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
-            }
+            DebugLogUtil.debugLog("Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+            ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
 
             return false;
         }
@@ -204,11 +195,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         try {
             return ess.getPermissionsHandler().isPermissionSetExact(base, node);
         } catch (final Exception ex) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
-            } else {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
-            }
+            DebugLogUtil.debugLog("Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+            ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
 
             return TriState.UNSET;
         }
@@ -528,9 +516,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 try {
                     this.getBase().setPlayerListName(name);
                 } catch (final IllegalArgumentException e) {
-                    if (ess.getSettings().isDebug()) {
-                        ess.getLogger().log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
-                    }
+                    DebugLogUtil.debugLog("Playerlist for " + name + " was not updated. Name clashed with another online player.");
                 }
             }
         }
@@ -582,9 +568,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     private BigDecimal _getMoney() {
         if (ess.getSettings().isEcoDisabled()) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("Internal economy functions disabled, aborting balance check.");
-            }
+            DebugLogUtil.debugLog("Internal economy functions disabled, aborting balance check.");
             return BigDecimal.ZERO;
         }
         final EconomyLayer layer = EconomyLayers.getSelectedLayer();
@@ -596,9 +580,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void setMoney(final BigDecimal value, final UserBalanceUpdateEvent.Cause cause) throws MaxMoneyException {
         if (ess.getSettings().isEcoDisabled()) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("Internal economy functions disabled, aborting balance change.");
-            }
+            DebugLogUtil.debugLog("Internal economy functions disabled, aborting balance change.");
             return;
         }
         final BigDecimal oldBalance = _getMoney();
@@ -882,18 +864,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public String getGroup() {
         final String result = ess.getPermissionsHandler().getGroup(base);
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "looking up groupname of " + base.getName() + " - " + result);
-        }
+        DebugLogUtil.debugLog("looking up groupname of " + base.getName() + " - " + result);
         return result;
     }
 
     @Override
     public boolean inGroup(final String group) {
         final boolean result = ess.getPermissionsHandler().inGroup(base, group);
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " is in group " + group + " - " + result);
-        }
+        DebugLogUtil.debugLog("checking if " + base.getName() + " is in group " + group + " - " + result);
         return result;
     }
 

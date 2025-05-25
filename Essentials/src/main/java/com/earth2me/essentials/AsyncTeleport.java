@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.api.IAsyncTeleport;
 import com.earth2me.essentials.commands.WarpNotFoundException;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
@@ -398,9 +399,7 @@ public class AsyncTeleport implements IAsyncTeleport {
             if (location != null) {
                 nowAsync(teleportee, new LocationTarget(location), cause, future);
             } else {
-                if (ess.getSettings().isDebug()) {
-                    ess.getLogger().info("Could not find bed spawn, forcing respawn event.");
-                }
+                DebugLogUtil.debugLog("Could not find bed spawn, forcing respawn event.");
                 final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, player.getWorld().getSpawnLocation(), false);
                 ess.getServer().getPluginManager().callEvent(pre);
                 nowAsync(teleportee, new LocationTarget(pre.getRespawnLocation()), cause, future);

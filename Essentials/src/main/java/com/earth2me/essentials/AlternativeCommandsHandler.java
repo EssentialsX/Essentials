@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import java.util.stream.Collectors;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import net.ess3.provider.KnownCommandsProvider;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginIdentifiableCommand;
@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class AlternativeCommandsHandler {
     private final transient Map<String, List<WeakReference<Command>>> altCommands = new HashMap<>();
@@ -45,9 +45,7 @@ public class AlternativeCommandsHandler {
             while (pluginCmdIterator.hasNext()) {
                 final Command cmd = pluginCmdIterator.next().get();
                 if (cmd == null) {
-                    if (ess.getSettings().isDebug()) {
-                        ess.getLogger().log(Level.INFO, "Essentials: Alternative command for " + commandName + " removed due to garbage collection");
-                    }
+                    DebugLogUtil.debugLog("Essentials: Alternative command for " + commandName + " removed due to garbage collection");
 
                     pluginCmdIterator.remove();
                     continue;
@@ -136,9 +134,7 @@ public class AlternativeCommandsHandler {
     public void executed(final String label, final Command pc) {
         if (pc instanceof PluginIdentifiableCommand) {
             final String altString = ((PluginIdentifiableCommand) pc).getPlugin().getName() + ":" + pc.getName();
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Essentials: Alternative command " + label + " found, using " + altString);
-            }
+            DebugLogUtil.debugLog("Essentials: Alternative command " + label + " found, using " + altString);
             disabledList.put(label, altString);
         }
     }

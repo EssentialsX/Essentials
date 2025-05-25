@@ -6,6 +6,7 @@ import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -111,9 +112,7 @@ public class EssentialsSign {
         final SignCreateEvent signEvent = new SignCreateEvent(sign, this, user);
         ess.getServer().getPluginManager().callEvent(signEvent);
         if (signEvent.isCancelled()) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("SignCreateEvent cancelled for sign " + signEvent.getEssentialsSign().getName());
-            }
+            DebugLogUtil.debugLog("SignCreateEvent cancelled for sign " + signEvent.getEssentialsSign().getName());
             return false;
         }
 

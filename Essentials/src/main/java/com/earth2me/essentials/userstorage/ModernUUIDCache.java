@@ -1,5 +1,6 @@
 package com.earth2me.essentials.userstorage;
 
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.io.Files;
 import net.ess3.api.IEssentials;
@@ -93,9 +94,7 @@ public class ModernUUIDCache {
             final String sanitizedName = getSanitizedName(name);
             final UUID replacedUuid = nameToUuidMap.put(sanitizedName, uuid);
             if (!uuid.equals(replacedUuid)) {
-                if (ess.getSettings().isDebug()) {
-                    ess.getLogger().log(Level.WARNING, "Replaced UUID during cache update for " + sanitizedName + ": " + replacedUuid + " -> " + uuid);
-                }
+                DebugLogUtil.debugLog("Replaced UUID during cache update for " + sanitizedName + ": " + replacedUuid + " -> " + uuid);
                 pendingNameWrite.set(true);
             }
         }
@@ -127,8 +126,6 @@ public class ModernUUIDCache {
     }
 
     private void loadCache() {
-        final boolean debug = ess.getSettings().isDebug();
-
         try {
             if (!nameToUuidFile.exists()) {
                 if (!nameToUuidFile.createNewFile()) {
@@ -137,9 +134,7 @@ public class ModernUUIDCache {
                 return;
             }
 
-            if (debug) {
-                ess.getLogger().log(Level.INFO, "Loading Name->UUID cache from disk...");
-            }
+            DebugLogUtil.debugLog("Loading Name->UUID cache from disk...");
 
             nameToUuidMap.clear();
 
@@ -148,8 +143,8 @@ public class ModernUUIDCache {
                     final String username = dis.readUTF();
                     final UUID uuid = new UUID(dis.readLong(), dis.readLong());
                     final UUID previous = nameToUuidMap.put(username, uuid);
-                    if (previous != null && debug) {
-                        ess.getLogger().log(Level.WARNING, "Replaced UUID during cache load for " + username + ": " + previous + " -> " + uuid);
+                    if (previous != null) {
+                        DebugLogUtil.debugLog("Replaced UUID during cache load for " + username + ": " + previous + " -> " + uuid);
                     }
                 }
             }
@@ -165,17 +160,15 @@ public class ModernUUIDCache {
                 return;
             }
 
-            if (debug) {
-                ess.getLogger().log(Level.INFO, "Loading UUID cache from disk...");
-            }
+            DebugLogUtil.debugLog("Loading UUID cache from disk...");
 
             uuidCache.clear();
 
             try (final DataInputStream dis = new DataInputStream(new FileInputStream(uuidCacheFile))) {
                 while (dis.available() > 0) {
                     final UUID uuid = new UUID(dis.readLong(), dis.readLong());
-                    if (uuidCache.contains(uuid) && debug) {
-                        ess.getLogger().log(Level.WARNING, "UUID " + uuid + " duplicated in cache");
+                    if (uuidCache.contains(uuid)) {
+                        DebugLogUtil.debugLog("UUID " + uuid + " duplicated in cache");
                     }
                     uuidCache.add(uuid);
                 }
@@ -186,9 +179,7 @@ public class ModernUUIDCache {
     }
 
     private void saveUuidCache() {
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "Saving UUID cache to disk...");
-        }
+        DebugLogUtil.debugLog("Saving UUID cache to disk...");
 
         try {
             final File tmpMap = File.createTempFile("uuids", ".tmp.bin", ess.getDataFolder());
@@ -202,9 +193,7 @@ public class ModernUUIDCache {
     }
 
     private void saveNameToUuidCache() {
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "Saving Name->UUID cache to disk...");
-        }
+        DebugLogUtil.debugLog("Saving Name->UUID cache to disk...");
 
         try {
             final File tmpMap = File.createTempFile("usermap", ".tmp.bin", ess.getDataFolder());

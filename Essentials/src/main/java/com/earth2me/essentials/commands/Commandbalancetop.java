@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -104,9 +105,7 @@ public class Commandbalancetop extends EssentialsCommand {
         @Override
         public void run() {
             if (ess.getSettings().isEcoDisabled()) {
-                if (ess.getSettings().isDebug()) {
-                    ess.getLogger().info("Internal economy functions disabled, aborting baltop.");
-                }
+                DebugLogUtil.debugLog("Internal economy functions disabled, aborting baltop.");
                 return;
             }
 

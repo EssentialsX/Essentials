@@ -6,6 +6,7 @@ import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
@@ -318,9 +319,7 @@ public class VaultEconomyProvider implements Economy {
         }
 
         // Loading a v4 UUID that we somehow didn't track, mark it as a normal player and hope for the best, vault sucks :/
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().info("Vault requested a player account creation for a v4 UUID: " + player);
-        }
+        DebugLogUtil.debugLog("Vault requested a player account creation for a v4 UUID: " + player);
 
         final Player userPlayer;
         if (player instanceof Player) {

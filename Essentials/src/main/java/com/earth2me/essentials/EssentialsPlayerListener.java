@@ -9,6 +9,7 @@ import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
@@ -203,11 +204,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 }
             }
         } catch (final UnsupportedOperationException ex) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Ignore could not block chat due to custom chat plugin event.", ex);
-            } else {
-                ess.getLogger().info("Ignore could not block chat due to custom chat plugin event.");
-            }
+            DebugLogUtil.debugLog("Ignore could not block chat due to custom chat plugin event.", ex);
+            ess.getLogger().info("Ignore could not block chat due to custom chat plugin event.");
         }
 
         user.updateActivityOnChat(true);
@@ -383,9 +381,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         final Player toVanish = ess.getServer().getPlayerExact(p);
                         if (toVanish != null && toVanish.isOnline()) {
                             user.getBase().hidePlayer(toVanish);
-                            if (ess.getSettings().isDebug()) {
-                                ess.getLogger().info("Hiding vanished player: " + p);
-                            }
+                            DebugLogUtil.debugLog("Hiding vanished player: " + p);
                         }
                     }
                 }
@@ -501,11 +497,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         try {
                             tempInput = new TextInput(user.getSource(), "motd", true, ess);
                         } catch (final IOException ex) {
-                            if (ess.getSettings().isDebug()) {
-                                ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
-                            } else {
-                                ess.getLogger().log(Level.WARNING, ex.getMessage());
-                            }
+                            DebugLogUtil.debugLog(ex.getMessage(), ex);
+                            ess.getLogger().log(Level.WARNING, ex.getMessage());
                         }
                     }
 
@@ -741,9 +734,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 final Entry<Pattern, Long> cooldownEntry = ess.getSettings().getCommandCooldownEntry(fullCommand);
 
                 if (cooldownEntry != null) {
-                    if (ess.getSettings().isDebug()) {
-                        ess.getLogger().info("Applying " + cooldownEntry.getValue() + "ms cooldown on /" + fullCommand + " for" + user.getName() + ".");
-                    }
+                    DebugLogUtil.debugLog("Applying " + cooldownEntry.getValue() + "ms cooldown on /" + fullCommand + " for" + user.getName() + ".");
                     final Date expiry = new Date(System.currentTimeMillis() + cooldownEntry.getValue());
                     user.addCommandCooldown(cooldownEntry.getKey(), expiry, ess.getSettings().isCommandCooldownPersistent(fullCommand));
                 }
@@ -881,9 +872,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
             ess.scheduleSyncDelayedTask(new DelayedClickJumpTask());
         } catch (final Exception ex) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
-            }
+            DebugLogUtil.debugLog(ex.getMessage(), ex);
         }
     }
 

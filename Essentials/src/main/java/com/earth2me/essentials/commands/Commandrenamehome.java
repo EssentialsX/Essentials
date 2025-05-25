@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
@@ -64,9 +65,7 @@ public class Commandrenamehome extends EssentialsCommand {
         final HomeModifyEvent event = new HomeModifyEvent(user, usersHome, oldName, newName, usersHome.getHome(oldName));
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("HomeModifyEvent canceled for /renamehome execution by " + user.getDisplayName());
-            }
+            DebugLogUtil.debugLog("HomeModifyEvent canceled for /renamehome execution by " + user.getDisplayName());
             return;
         }
 

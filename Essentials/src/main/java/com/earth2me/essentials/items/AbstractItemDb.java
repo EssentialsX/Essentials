@@ -4,6 +4,7 @@ import com.earth2me.essentials.Enchantments;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -104,9 +105,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
     ItemStack tryResolverDeserialize(final String id) {
         for (final PluginKey key : resolverMap.keySet()) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info(String.format("Trying to deserialize item '%s' with resolver '%s'...", id, key));
-            }
+            DebugLogUtil.debugLog(String.format("Trying to deserialize item '%s' with resolver '%s'...", id, key));
 
             final Function<String, ItemStack> resolver = resolverMap.get(key);
             final ItemStack stack = resolver.apply(id);
@@ -121,9 +120,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
     String tryResolverSerialize(final ItemStack stack) {
         for (final PluginKey key : resolverMap.keySet()) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info(String.format("Trying to serialize '%s' with resolver '%s'...", stack.toString(), key));
-            }
+            DebugLogUtil.debugLog(String.format("Trying to serialize '%s' with resolver '%s'...", stack.toString(), key));
 
             final ItemResolver resolver = resolverMap.get(key);
             final String serialized = resolver.serialize(stack);

@@ -1,5 +1,6 @@
 package net.essentialsx.discord.interactions;
 
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -94,16 +95,12 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
                 for (final Command command : success) {
                     commandMap.put(command.getName(), batchRegistrationQueue.get(command.getName()));
                     batchRegistrationQueue.remove(command.getName());
-                    if (jda.isDebug()) {
-                        logger.info("Registered guild command " + command.getName() + " with id " + command.getId());
-                    }
+                    DebugLogUtil.debugLog("Registered guild command " + command.getName() + " with id " + command.getId());
                 }
 
                 if (!batchRegistrationQueue.isEmpty()) {
                     logger.warning(batchRegistrationQueue.size() + " Discord commands were lost during command registration!");
-                    if (jda.isDebug()) {
-                        logger.warning("Lost commands: " + batchRegistrationQueue.keySet());
-                    }
+                    DebugLogUtil.debugLog("Lost commands: " + batchRegistrationQueue.keySet());
                     batchRegistrationQueue.clear();
                 }
             }, failure -> {
@@ -127,9 +124,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
         }
 
         if (!initialBatchRegistration) {
-            if (jda.isDebug()) {
-                logger.info("Marked guild command for batch registration: " + command.getName());
-            }
+            DebugLogUtil.debugLog("Marked guild command for batch registration: " + command.getName());
             batchRegistrationQueue.put(command.getName(), command);
             return;
         }
@@ -143,9 +138,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
 
         jda.getGuild().upsertCommand(data).queue(success -> {
             commandMap.put(command.getName(), command);
-            if (jda.isDebug()) {
-                logger.info("Registered guild command " + success.getName() + " with id " + success.getId());
-            }
+            DebugLogUtil.debugLog("Registered guild command " + success.getName() + " with id " + success.getId());
         }, failure -> {
             if (failure instanceof ErrorResponseException && ((ErrorResponseException) failure).getErrorResponse() == ErrorResponse.MISSING_ACCESS) {
                 logger.severe(tlLiteral("discordErrorCommand"));

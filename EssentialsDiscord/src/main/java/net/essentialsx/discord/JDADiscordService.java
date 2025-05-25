@@ -5,6 +5,7 @@ import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -108,14 +109,10 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     public TextChannel getDefinedChannel(String key, boolean primaryFallback) {
         final long resolvedId = getSettings().getChannelId(key);
 
-        if (isDebug()) {
-            logger.log(Level.INFO, "Channel definition " + key + " resolved as " + resolvedId);
-        }
+        DebugLogUtil.debugLog("Channel definition " + key + " resolved as " + resolvedId);
         TextChannel channel = guild.getTextChannelById(resolvedId);
         if (channel == null && primaryFallback) {
-            if (isDebug()) {
-                logger.log(Level.WARNING, "Resolved channel id " + resolvedId + " was not found! Falling back to primary channel.");
-            }
+            DebugLogUtil.debugLog("Resolved channel id " + resolvedId + " was not found! Falling back to primary channel.");
             channel = primaryChannel;
         }
         return channel;

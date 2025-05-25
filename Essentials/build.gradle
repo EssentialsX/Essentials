@@ -7,6 +7,7 @@ dependencies {
         exclude group: "org.bukkit", module: "bukkit"
     }
     compileOnly 'net.luckperms:api:5.3'
+    compileOnly 'org.apache.logging.log4j:log4j-core:2.17.1'
 
     api 'io.papermc:paperlib:1.0.6'
 

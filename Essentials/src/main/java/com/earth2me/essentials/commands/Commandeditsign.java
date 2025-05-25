@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -133,9 +134,7 @@ public class Commandeditsign extends EssentialsCommand {
 
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("SignChangeEvent canceled for /editsign execution by " + player.getName());
-            }
+            DebugLogUtil.debugLog("SignChangeEvent canceled for /editsign execution by " + player.getName());
             return true;
         }
 

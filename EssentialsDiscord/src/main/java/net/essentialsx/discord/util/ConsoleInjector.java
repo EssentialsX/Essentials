@@ -1,5 +1,6 @@
 package net.essentialsx.discord.util;
 
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.base.Splitter;
 import net.dv8tion.jda.api.entities.Message;
@@ -55,9 +56,7 @@ public class ConsoleInjector extends AbstractAppender {
                 }
 
                 final int backoff = recentRateLimit.incrementAndGet();
-                if (jda.isDebug()) {
-                    logger.warning("EssXBackoff: Webhook backoff in progress, skipping queue processing. Resuming in " + Math.abs(backoff) + " cycles.");
-                }
+                DebugLogUtil.debugLog("EssXBackoff: Webhook backoff in progress, skipping queue processing. Resuming in " + Math.abs(backoff) + " cycles.");
                 return;
             }
 
@@ -115,10 +114,8 @@ public class ConsoleInjector extends AbstractAppender {
                 }
             } else if (recentRateLimit.get() >= 2) {
                 // Start the webhook backoff, defaulting to 20s, which should reset our bucket.
-                if (jda.isDebug()) {
-                    totalBackoffEvents.getAndIncrement();
-                    logger.warning("EssXBackoff: Beginning Webhook Backoff");
-                }
+                totalBackoffEvents.getAndIncrement();
+                DebugLogUtil.debugLog("EssXBackoff: Beginning Webhook Backoff");
                 recentRateLimit.set(-20);
             }
             return;

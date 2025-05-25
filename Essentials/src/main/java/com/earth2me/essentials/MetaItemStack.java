@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.textreader.BookInput;
 import com.earth2me.essentials.textreader.BookPager;
 import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -138,9 +139,7 @@ public class MetaItemStack {
             } catch (final NoSuchMethodError nsme) {
                 return true;
             } catch (final Throwable npe) {
-                if (ess.getSettings().isDebug()) {
-                    ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
-                }
+                DebugLogUtil.debugLog("Itemstack is invalid", npe);
                 return false;
             }
         }
@@ -158,9 +157,7 @@ public class MetaItemStack {
             try {
                 stack = ess.getServer().getUnsafe().modifyItemStack(stack, Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length)));
             } catch (final NullPointerException npe) {
-                if (ess.getSettings().isDebug()) {
-                    ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
-                }
+                DebugLogUtil.debugLog("Itemstack is invalid", npe);
             } catch (final NoSuchMethodError nsme) {
                 throw new TranslatableException(nsme, "noMetaJson");
             } catch (final Throwable throwable) {
@@ -176,9 +173,7 @@ public class MetaItemStack {
                 // modifyItemStack requires that the item namespaced key is prepended to the components for some reason
                 stack = ess.getServer().getUnsafe().modifyItemStack(stack, stack.getType().getKey() + components);
             } catch (final NullPointerException npe) {
-                if (ess.getSettings().isDebug()) {
-                    ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
-                }
+                DebugLogUtil.debugLog("Itemstack is invalid", npe);
             } catch (final Throwable throwable) {
                 throw new Exception(throwable.getMessage(), throwable);
             }

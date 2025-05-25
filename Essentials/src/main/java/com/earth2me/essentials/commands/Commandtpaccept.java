@@ -4,6 +4,7 @@ import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.TeleportRequestResponseEvent;
 import org.bukkit.Bukkit;
@@ -97,9 +98,7 @@ public class Commandtpaccept extends EssentialsCommand {
         final TeleportRequestResponseEvent event = new TeleportRequestResponseEvent(user, requester, request, true);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("TPA accept cancelled by API for " + user.getName() + " (requested by " + requester.getName() + ")");
-            }
+            DebugLogUtil.debugLog("TPA accept cancelled by API for " + user.getName() + " (requested by " + requester.getName() + ")");
             return;
         }
 

@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 
 public class Commandkit extends EssentialsCommand {
     public Commandkit() {
@@ -86,9 +86,7 @@ public class Commandkit extends EssentialsCommand {
                 userTo.sendTl("kitReceive", kit.getName());
 
             } catch (final NoChargeException ex) {
-                if (ess.getSettings().isDebug()) {
-                    ess.getLogger().log(Level.INFO, "Soft kit error, abort spawning " + kit.getName(), ex);
-                }
+                DebugLogUtil.debugLog("Soft kit error, abort spawning " + kit.getName(), ex);
             } catch (final Exception ex) {
                 ess.showError(userFrom.getSource(), ex, "\\ kit: " + kit.getName());
             }

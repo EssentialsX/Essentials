@@ -10,6 +10,7 @@ import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommandMapUtil;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.DebugLogUtil;
 import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.PasteUtil;
@@ -578,9 +579,7 @@ public class Commandessentials extends EssentialsCommand {
                     continue;
                 }
 
-                if (ess.getSettings().isDebug()) {
-                    ess.getLogger().info("Deleting user: " + user.getName() + " Money: " + moneyCount + " Homes: " + homeCount + " Last seen: " + DateUtil.formatDateDiff(lastLog));
-                }
+                DebugLogUtil.debugLog("Deleting user: " + user.getName() + " Money: " + moneyCount + " Homes: " + homeCount + " Last seen: " + DateUtil.formatDateDiff(lastLog));
 
                 user.reset();
             }
