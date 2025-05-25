@@ -12,8 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.logging.Level;
-
 public class SignPlayerListener implements Listener {
     private final transient IEssentials ess;
 
