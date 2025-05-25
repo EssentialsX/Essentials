@@ -823,15 +823,12 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         break;
                     }
                     final User player = ess.getUser(event.getPlayer());
-                    final boolean isAuthorized = player.isAuthorized("essentials.sethome.bed");
-                    if (isAuthorized && player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
+                    if (player.isAuthorized("essentials.sethome.bed") && player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
                         player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
                         // In 1.15 and above, vanilla sends its own bed spawn message.
                         if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_15_R01)) {
                             player.sendTl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ());
                         }
-                    } else if (!isAuthorized) {
-                        event.setCancelled(true);
                     }
                 }
                 break;
