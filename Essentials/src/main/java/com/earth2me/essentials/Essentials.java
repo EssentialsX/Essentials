@@ -207,6 +207,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public void setupForTesting(final Server server) throws IOException, InvalidDescriptionException {
         TESTING = true;
         LOGGER = new BaseLoggerProvider(this, BUKKIT_LOGGER);
+        DebugLogUtil.setEssentials(this);
         final File dataFolder = File.createTempFile("essentialstest", "");
         if (!dataFolder.delete()) {
             throw new IOException();
@@ -227,7 +228,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         balanceTop = new BalanceTopImpl(this);
         permissionsHandler = new PermissionsHandler(this, false);
         Economy.setEss(this);
-        DebugLogUtil.setEssentials(this);
         confList = new ArrayList<>();
         jails = new Jails(this);
         registerListeners(server.getPluginManager());
