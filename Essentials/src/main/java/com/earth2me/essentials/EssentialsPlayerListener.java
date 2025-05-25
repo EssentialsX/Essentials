@@ -17,6 +17,10 @@ import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.provider.CommandSendListenerProvider;
+import net.ess3.provider.FormattedCommandAliasProvider;
+import net.ess3.provider.InventoryViewProvider;
+import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.provider.TickCountProvider;
 import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
 import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
@@ -298,7 +302,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
         user.setLogoutLocation();
         if (user.isRecipeSee()) {
-            ess.getInventoryViewProvider().getTopInventory(user.getBase().getOpenInventory()).clear();
+            ess.provider(InventoryViewProvider.class).getTopInventory(user.getBase().getOpenInventory()).clear();
         }
 
         final ArrayList<HumanEntity> viewers = new ArrayList<>(user.getBase().getInventory().getViewers());
@@ -585,6 +589,21 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         if (ess.getSettings().isTeleportInvulnerability()) {
             user.enableInvulnerabilityAfterTeleport();
         }
+
+        // Mitigation for https://github.com/EssentialsX/Essentials/issues/4325
+        final TickCountProvider tickCountProvider = ess.provider(TickCountProvider.class);
+        if (tickCountProvider != null && ess.getSettings().isWorldChangePreserveFlying() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_17_R01)) {
+            if (user.isAuthorized("essentials.fly")) {
+                //noinspection DataFlowIssue - not real
+                if (event.getFrom().getWorld() != event.getTo().getWorld() && player.getAllowFlight()) {
+                    // If the player is not flying but has the ability to fly, we set the sign of the tick count to -1
+                    // Later on in the PlayerChangedWorldEvent, we will set the player's flying state to true if the tick count is positive.
+                    // If the tick count is negative, we simply just set the player's flight ability to true.
+                    final int tick = player.isFlying() ? tickCountProvider.getTickCount() : -tickCountProvider.getTickCount();
+                    user.setFlightTick(tick);
+                }
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -615,10 +634,10 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         // If the plugin command does not exist, check if it is an alias from commands.yml
         if (ess.getServer().getPluginCommand(cmd) == null) {
-            final Command knownCommand = ess.getKnownCommandsProvider().getKnownCommands().get(cmd);
+            final Command knownCommand = ess.provider(KnownCommandsProvider.class).getKnownCommands().get(cmd);
             if (knownCommand instanceof FormattedCommandAlias) {
                 final FormattedCommandAlias command = (FormattedCommandAlias) knownCommand;
-                for (String fullCommand : ess.getFormattedCommandAliasProvider().createCommands(command, event.getPlayer(), args.split(" "))) {
+                for (String fullCommand : ess.provider(FormattedCommandAliasProvider.class).createCommands(command, event.getPlayer(), args.split(" "))) {
                     handlePlayerCommandPreprocess(event, fullCommand);
                 }
                 return;
@@ -738,8 +757,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         if (ess.getSettings().isWorldChangeFlyResetEnabled()) {
             if (user.getBase().getGameMode() != GameMode.CREATIVE
-                // COMPAT: String compare for 1.7.10
-                && !user.getBase().getGameMode().name().equals("SPECTATOR")
+                && user.getBase().getGameMode() != GameMode.SPECTATOR
                 && !user.isAuthorized("essentials.fly")) {
                 user.getBase().setFallDistance(0f);
                 user.getBase().setAllowFlight(false);
@@ -762,6 +780,16 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 }
             }
         }
+
+        final TickCountProvider tickCountProvider = ess.provider(TickCountProvider.class);
+        final int flightTick = user.getFlightTick();
+        if (tickCountProvider != null && Math.abs(flightTick) == tickCountProvider.getTickCount() && user.isAuthorized("essentials.fly")) {
+            user.getBase().setAllowFlight(true);
+            if (flightTick > 0) {
+                user.getBase().setFlying(true);
+            }
+        }
+        user.setFlightTick(-1);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -895,14 +923,15 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onInventoryClickEvent(final InventoryClickEvent event) {
         Player refreshPlayer = null;
-        final Inventory top = ess.getInventoryViewProvider().getTopInventory(event.getView());
+        final InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
+        final Inventory top = provider.getTopInventory(event.getView());
         final InventoryType type = top.getType();
 
         final Inventory clickedInventory;
         if (event.getRawSlot() < 0) {
             clickedInventory = null;
         } else {
-            clickedInventory = event.getRawSlot() < top.getSize() ? top : ess.getInventoryViewProvider().getBottomInventory(event.getView());
+            clickedInventory = event.getRawSlot() < top.getSize() ? top : provider.getBottomInventory(event.getView());
         }
 
         final User user = ess.getUser((Player) event.getWhoClicked());
@@ -961,7 +990,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryCloseEvent(final InventoryCloseEvent event) {
         Player refreshPlayer = null;
-        final Inventory top = ess.getInventoryViewProvider().getTopInventory(event.getView());
+        final InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
+        final Inventory top = provider.getTopInventory(event.getView());
         final InventoryType type = top.getType();
         if (type == InventoryType.PLAYER) {
             final User user = ess.getUser((Player) event.getPlayer());
@@ -975,7 +1005,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             final User user = ess.getUser((Player) event.getPlayer());
             if (user.isRecipeSee()) {
                 user.setRecipeSee(false);
-                ess.getInventoryViewProvider().getTopInventory(event.getView()).clear();
+                provider.getTopInventory(event.getView()).clear();
                 refreshPlayer = user.getBase();
             }
         } else if (type == InventoryType.CHEST && top.getSize() == 9) {

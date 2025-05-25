@@ -8,6 +8,7 @@ import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.TranslatableException;
+import net.ess3.provider.InventoryViewProvider;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -133,7 +134,7 @@ public class Commandrecipe extends EssentialsCommand {
                     if (VersionUtil.PRE_FLATTENING && item.getDurability() == Short.MAX_VALUE) {
                         item.setDurability((short) 0);
                     }
-                    ess.getInventoryViewProvider().getTopInventory(view).setItem(j * 3 + k + 1, item);
+                    ess.provider(InventoryViewProvider.class).getTopInventory(view).setItem(j * 3 + k + 1, item);
                 }
             }
         } else {
@@ -186,7 +187,7 @@ public class Commandrecipe extends EssentialsCommand {
                 if (VersionUtil.PRE_FLATTENING && item.getDurability() == Short.MAX_VALUE) {
                     item.setDurability((short) 0);
                 }
-                ess.getInventoryViewProvider().setItem(view, i + 1, item);
+                ess.provider(InventoryViewProvider.class).setItem(view, i + 1, item);
             }
 
         } else {

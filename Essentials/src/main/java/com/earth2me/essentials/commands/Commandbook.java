@@ -4,12 +4,14 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.WritableBookMeta;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +52,14 @@ public class Commandbook extends EssentialsCommand {
             } else {
                 if (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others")) {
                     final ItemStack newItem = new ItemStack(WRITABLE_BOOK, item.getAmount());
-                    newItem.setItemMeta(bmeta);
+                    if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_6_R01)) {
+                        final WritableBookMeta wbmeta = (WritableBookMeta) newItem.getItemMeta();
+                        //noinspection DataFlowIssue
+                        wbmeta.setPages(bmeta.getPages());
+                        newItem.setItemMeta(wbmeta);
+                    } else {
+                        newItem.setItemMeta(bmeta);
+                    }
                     Inventories.setItemInMainHand(user.getBase(), newItem);
                     user.sendTl("editBookContents");
                 } else {
@@ -63,7 +72,15 @@ public class Commandbook extends EssentialsCommand {
                 bmeta.setAuthor(player);
             }
             final ItemStack newItem = new ItemStack(Material.WRITTEN_BOOK, item.getAmount());
-            newItem.setItemMeta(bmeta);
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_6_R01)) {
+                final BookMeta real = (BookMeta) newItem.getItemMeta();
+                real.setAuthor(bmeta.getAuthor());
+                real.setTitle(bmeta.getTitle());
+                real.setPages(bmeta.getPages());
+                newItem.setItemMeta(real);
+            } else {
+                newItem.setItemMeta(bmeta);
+            }
             Inventories.setItemInMainHand(user.getBase(), newItem);
             user.sendTl("bookLocked");
         } else {

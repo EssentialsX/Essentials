@@ -348,7 +348,17 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public int getMailAmount() {
-        return holder.mail() == null ? 0 : holder.mail().size();
+        if (holder.mail() == null) {
+            return 0;
+        }
+
+        int amount = 0;
+        for (MailMessage element : holder.mail()) {
+            if (!element.isExpired()) {
+                amount++;
+            }
+        }
+        return amount;
     }
 
     public int getUnreadMailAmount() {
@@ -358,7 +368,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
         int unread = 0;
         for (MailMessage element : holder.mail()) {
-            if (!element.isRead()) {
+            if (!element.isRead() && !element.isExpired()) {
                 unread++;
             }
         }

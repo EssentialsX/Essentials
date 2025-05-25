@@ -37,11 +37,12 @@ import net.essentialsx.discord.interactions.InteractionRoleImpl;
 import net.essentialsx.discord.interactions.commands.ExecuteCommand;
 import net.essentialsx.discord.interactions.commands.ListCommand;
 import net.essentialsx.discord.interactions.commands.MessageCommand;
+import net.essentialsx.discord.listeners.BukkitChatListener;
 import net.essentialsx.discord.listeners.BukkitListener;
 import net.essentialsx.discord.listeners.DiscordCommandDispatcher;
 import net.essentialsx.discord.listeners.DiscordListener;
 import net.essentialsx.discord.listeners.EssentialsChatListener;
-import net.essentialsx.discord.listeners.BukkitChatListener;
+import net.essentialsx.discord.listeners.PaperChatListener;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
@@ -350,9 +351,13 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             chatListener = null;
         }
 
-        chatListener = getSettings().isUseEssentialsEvents() && plugin.isEssentialsChat()
-            ? new EssentialsChatListener(this)
-            : new BukkitChatListener(this);
+        if (getSettings().isUseEssentialsEvents() && plugin.isEssentialsChat()) {
+            chatListener = new EssentialsChatListener(this);
+        } else if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01) && VersionUtil.isPaper() && plugin.getEss().getSettings().isUsePaperChatEvent()) {
+            chatListener = new PaperChatListener(this);
+        } else {
+            chatListener = new BukkitChatListener(this);
+        }
 
         Bukkit.getPluginManager().registerEvents(chatListener, plugin);
     }

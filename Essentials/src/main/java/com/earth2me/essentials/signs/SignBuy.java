@@ -3,6 +3,7 @@ package com.earth2me.essentials.signs;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import net.ess3.api.events.SignTransactionEvent;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.inventory.ItemStack;
@@ -45,6 +46,12 @@ public class SignBuy extends EssentialsSign {
         }
 
         charge.isAffordableFor(player);
+        final SignTransactionEvent signTransactionEvent = new SignTransactionEvent(sign, this, player, items.getItemStack(), SignTransactionEvent.TransactionType.BUY, charge.getMoney());
+
+        ess.getServer().getPluginManager().callEvent(signTransactionEvent);
+        if (signTransactionEvent.isCancelled()) {
+            return true;
+        }
         if (!items.pay(player)) {
             throw new ChargeException("inventoryFull");
         }

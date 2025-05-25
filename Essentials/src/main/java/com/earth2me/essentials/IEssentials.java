@@ -8,25 +8,7 @@ import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.IUserMap;
-import net.ess3.nms.refl.providers.ReflOnlineModeProvider;
-import net.ess3.provider.BannerDataProvider;
-import net.ess3.provider.BiomeKeyProvider;
-import net.ess3.provider.ContainerProvider;
-import net.ess3.provider.DamageEventProvider;
-import net.ess3.provider.FormattedCommandAliasProvider;
-import net.ess3.provider.InventoryViewProvider;
-import net.ess3.provider.ItemUnbreakableProvider;
-import net.ess3.provider.KnownCommandsProvider;
-import net.ess3.provider.MaterialTagProvider;
-import net.ess3.provider.PersistentDataProvider;
-import net.ess3.provider.PlayerLocaleProvider;
-import net.ess3.provider.SerializationProvider;
-import net.ess3.provider.ServerStateProvider;
-import net.ess3.provider.SignDataProvider;
-import net.ess3.provider.SpawnerBlockProvider;
-import net.ess3.provider.SpawnerItemProvider;
-import net.ess3.provider.SyncCommandsProvider;
-import net.ess3.provider.WorldInfoProvider;
+import net.ess3.provider.Provider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
 import org.bukkit.Server;
@@ -157,43 +139,11 @@ public interface IEssentials extends Plugin {
 
     Iterable<User> getOnlineUsers();
 
-    SpawnerItemProvider getSpawnerItemProvider();
-
-    SpawnerBlockProvider getSpawnerBlockProvider();
-
-    ServerStateProvider getServerStateProvider();
-
-    MaterialTagProvider getMaterialTagProvider();
-
-    ContainerProvider getContainerProvider();
-
-    KnownCommandsProvider getKnownCommandsProvider();
-
-    SerializationProvider getSerializationProvider();
-
-    FormattedCommandAliasProvider getFormattedCommandAliasProvider();
-
-    SyncCommandsProvider getSyncCommandsProvider();
-
-    PersistentDataProvider getPersistentDataProvider();
-
-    ReflOnlineModeProvider getOnlineModeProvider();
-
-    ItemUnbreakableProvider getItemUnbreakableProvider();
-
-    WorldInfoProvider getWorldInfoProvider();
-
-    SignDataProvider getSignDataProvider();
-
-    PlayerLocaleProvider getPlayerLocaleProvider();
-
-    DamageEventProvider getDamageEventProvider();
-
-    BiomeKeyProvider getBiomeKeyProvider();
-
-    BannerDataProvider getBannerDataProvider();
-
-    InventoryViewProvider getInventoryViewProvider();
-
     PluginCommand getPluginCommand(String cmd);
+
+    ProviderFactory getProviders();
+
+    default <P extends Provider> P provider(final Class<P> providerClass) {
+        return getProviders().get(providerClass);
+    }
 }

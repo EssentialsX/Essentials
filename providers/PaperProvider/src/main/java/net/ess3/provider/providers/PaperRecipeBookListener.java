@@ -16,9 +16,4 @@ public class PaperRecipeBookListener extends ProviderListener {
     public void onPlayerRecipeBookClick(final PlayerRecipeBookClickEvent event) {
         function.accept(event);
     }
-
-    @Override
-    public String getDescription() {
-        return "Paper Player Recipe Book Click Event Provider";
-    }
 }

@@ -22,6 +22,8 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.ess3.api.TranslatableException;
+import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.provider.OnlineModeProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -263,7 +265,7 @@ public class Commandessentials extends EssentialsCommand {
         serverData.addProperty("bukkit-version", Bukkit.getBukkitVersion());
         serverData.addProperty("server-version", Bukkit.getVersion());
         serverData.addProperty("server-brand", Bukkit.getName());
-        serverData.addProperty("online-mode", ess.getOnlineModeProvider().getOnlineModeString());
+        serverData.addProperty("online-mode", ess.provider(OnlineModeProvider.class).getOnlineModeString());
         final JsonObject supportStatus = new JsonObject();
         final VersionUtil.SupportStatus status = VersionUtil.getServerSupportStatus();
         supportStatus.addProperty("status", status.name());
@@ -334,7 +336,7 @@ public class Commandessentials extends EssentialsCommand {
         final Plugin essDiscordLink = Bukkit.getPluginManager().getPlugin("EssentialsDiscordLink");
         final Plugin essSpawn = Bukkit.getPluginManager().getPlugin("EssentialsSpawn");
 
-        final Map<String, Command> knownCommandsCopy = new HashMap<>(ess.getKnownCommandsProvider().getKnownCommands());
+        final Map<String, Command> knownCommandsCopy = new HashMap<>(ess.provider(KnownCommandsProvider.class).getKnownCommands());
         final Map<String, String> disabledCommandsCopy = new HashMap<>(ess.getAlternativeCommandsHandler().disabledCommands());
 
         // Further operations will be heavy IO
@@ -459,12 +461,14 @@ public class Commandessentials extends EssentialsCommand {
             final CompletableFuture<PasteUtil.PasteResult> future = PasteUtil.createPaste(files);
             future.thenAccept(result -> {
                 if (result != null) {
-                    final String dumpUrl = "https://essentialsx.net/dump.html?id=" + result.getPasteId();
+                    final String dumpUrl = "https://essentialsx.net/dump.html?bytebin=" + result.getPasteId();
                     sender.sendTl("dumpUrl", dumpUrl);
-                    sender.sendTl("dumpDeleteKey", result.getDeletionKey());
+                    // pastes.dev doesn't support deletion keys
+                    //sender.sendTl("dumpDeleteKey", result.getDeletionKey());
                     if (sender.isPlayer()) {
                         ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpConsoleUrl", dumpUrl)));
-                        ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpDeleteKey", result.getDeletionKey())));
+                        // pastes.dev doesn't support deletion keys
+                        //ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpDeleteKey", result.getDeletionKey())));
                     }
                 }
                 files.clear();

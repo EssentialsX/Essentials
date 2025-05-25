@@ -1,10 +1,13 @@
 package net.ess3.provider.providers;
 
 import net.ess3.provider.InventoryViewProvider;
+import net.essentialsx.providers.ProviderData;
+import net.essentialsx.providers.ProviderTest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
+@ProviderData(description = "1.21+ InventoryView Interface ABI Provider", weight = 1)
 public class BaseInventoryViewProvider implements InventoryViewProvider {
     @Override
     public Inventory getTopInventory(InventoryView view) {
@@ -26,8 +29,8 @@ public class BaseInventoryViewProvider implements InventoryViewProvider {
         view.close();
     }
 
-    @Override
-    public String getDescription() {
-        return "1.21+ InventoryView Interface ABI Provider";
+    @ProviderTest
+    public static boolean test() {
+        return InventoryView.class.isInterface();
     }
 }
