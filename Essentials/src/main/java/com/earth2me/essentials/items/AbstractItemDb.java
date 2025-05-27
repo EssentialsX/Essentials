@@ -28,6 +28,8 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.ArmorMeta;
+import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 
@@ -341,6 +343,15 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) is.getItemMeta();
             final int rgb = leatherArmorMeta.getColor().asRGB();
             sb.append("color:").append(rgb).append(" ");
+        } else if (MaterialUtil.isArmor(material)) {
+            final ArmorTrim armorTrim = ((ArmorMeta) is.getItemMeta()).getTrim();
+
+            if (armorTrim != null) {
+                final String trimPattern = armorTrim.getPattern().getKey().getKey();
+                final String trimMaterial = armorTrim.getMaterial().getKey().getKey();
+
+                sb.append("trim:").append(trimPattern).append("|").append(trimMaterial).append(" ");
+            }
         }
 
         return sb.toString().trim().replaceAll("§", "&");

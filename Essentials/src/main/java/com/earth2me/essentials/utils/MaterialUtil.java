@@ -130,6 +130,10 @@ public final class MaterialUtil {
         return BOOTS.contains(material);
     }
 
+    public static boolean isArmor(final Material material) {
+        return isHelmet(material) || isChestplate(material) || isLeggings(material) || isBoots(material);
+    }
+
     public static boolean isBed(final Material material) {
         return BEDS.contains(material);
     }
