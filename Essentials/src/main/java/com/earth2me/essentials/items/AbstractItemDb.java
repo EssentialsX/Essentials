@@ -339,10 +339,6 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                     }
                 }
             }
-        } else if (MaterialUtil.isLeatherArmor(material)) {
-            final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) is.getItemMeta();
-            final int rgb = leatherArmorMeta.getColor().asRGB();
-            sb.append("color:").append(rgb).append(" ");
         } else if (MaterialUtil.isArmor(material)) {
             final ArmorTrim armorTrim = ((ArmorMeta) is.getItemMeta()).getTrim();
 
@@ -351,6 +347,12 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 final String trimMaterial = armorTrim.getMaterial().getKey().getKey();
 
                 sb.append("trim:").append(trimPattern).append("|").append(trimMaterial).append(" ");
+            }
+
+            if (MaterialUtil.isLeatherArmor(material)) {
+                final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) is.getItemMeta();
+                final int rgb = leatherArmorMeta.getColor().asRGB();
+                sb.append("color:").append(rgb).append(" ");
             }
         }
 
