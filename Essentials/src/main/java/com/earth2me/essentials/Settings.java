@@ -2116,6 +2116,16 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public String getDateFormat() {
+        return config.getString("date-format", "locale");
+    }
+
+    @Override
+    public String getTimeFormat() {
+        return config.getString("time-format", "locale");
+    }
+
+    @Override
     public boolean showZeroBaltop() {
         return config.getBoolean("show-zero-baltop", true);
     }
