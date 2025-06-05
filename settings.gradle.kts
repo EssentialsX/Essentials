@@ -1,5 +1,10 @@
 dependencyResolutionManagement {
     repositories {
+        mavenCentral {
+            content { includeGroup("net.dv8tion") }
+            content { includeGroup("net.kyori") }
+            content { includeGroup("org.apache.logging.log4j") }
+        }
         maven("https://hub.spigotmc.org/nexus/content/groups/public/") {
             content {
                 includeGroup("org.spigotmc")
@@ -19,11 +24,6 @@ dependencyResolutionManagement {
         }
         maven("https://libraries.minecraft.net/") {
             content { includeGroup("com.mojang") }
-        }
-        mavenCentral {
-            content { includeGroup("net.dv8tion") }
-            content { includeGroup("net.kyori") }
-            content { includeGroup("org.apache.logging.log4j") }
         }
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
