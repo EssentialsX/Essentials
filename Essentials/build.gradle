@@ -14,6 +14,7 @@ dependencies {
     implementation 'org.checkerframework:checker-qual:3.49.0'
     implementation 'nu.studer:java-ordered-properties:1.0.4'
 
+    // adventure-related
     implementation 'net.kyori:adventure-api:4.21.0'
     implementation 'net.kyori:adventure-text-minimessage:4.21.0'
     implementation 'net.kyori:adventure-platform-bukkit:4.4.0'
