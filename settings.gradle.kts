@@ -19,7 +19,7 @@ dependencyResolutionManagement {
         maven("https://repo.codemc.org/repository/maven-public") {
             content { includeGroup("org.bstats") }
         }
-        maven("https://repo.helpch.at/releases/") {
+        maven("https://repo.extendedclip.com/releases/") {
             content { includeGroup("me.clip") }
         }
         maven("https://libraries.minecraft.net/") {
