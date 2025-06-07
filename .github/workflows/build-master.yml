@@ -82,7 +82,7 @@ jobs:
     - name: Setup Node
       uses: actions/setup-node@v4
       with:
-        node-version: 16
+        node-version: 22
 
     - name: Download Javadocs
       uses: actions/download-artifact@v4
