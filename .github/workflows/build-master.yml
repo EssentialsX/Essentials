@@ -27,7 +27,7 @@ jobs:
         java-version: 17
 
     - name: Setup Gradle
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v4
 
     - name: Build with Gradle
       run: |
@@ -82,7 +82,7 @@ jobs:
     - name: Setup Node
       uses: actions/setup-node@v4
       with:
-        node-version: 16
+        node-version: 22
 
     - name: Download Javadocs
       uses: actions/download-artifact@v4

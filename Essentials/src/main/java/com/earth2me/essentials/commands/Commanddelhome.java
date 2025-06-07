@@ -30,10 +30,10 @@ public class Commanddelhome extends EssentialsCommand {
 
         try {
             user.delHome(home);
+            sender.sendTl("deleteHome", home);
         } catch (Exception e) {
             sender.sendTl("invalidHome", home);
         }
-        sender.sendTl("deleteHome", home);
     }
 
     @Override
