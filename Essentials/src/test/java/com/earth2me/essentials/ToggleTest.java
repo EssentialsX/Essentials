@@ -2,31 +2,45 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
-import junit.framework.TestCase;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.InvalidDescriptionException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.IOException;
 
-public class ToggleTest extends TestCase {
-    private final OfflinePlayerStub base1;
-    private final Essentials ess;
-    private final FakeServer server;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    public ToggleTest(final String testName) {
-        super(testName);
-        server = FakeServer.getServer();
-        ess = new Essentials(server);
+public class ToggleTest {
+    private PlayerMock base1;
+    private Essentials ess;
+    private ServerMock server;
+
+    @BeforeEach
+    public void setUp() {
+        this.server = MockBukkit.mock();
+        Essentials.TESTING = true;
+        ess = MockBukkit.load(Essentials.class);
         try {
             ess.setupForTesting(server);
         } catch (final InvalidDescriptionException ex) {
-            fail("InvalidDescriptionException");
+            Assertions.fail("InvalidDescriptionException");
         } catch (final IOException ex) {
-            fail("IOException");
+            Assertions.fail("IOException");
         }
-        base1 = server.createPlayer("testPlayer1");
-        server.addPlayer(base1);
+        base1 = server.addPlayer("testPlayer1");
         ess.getUser(base1);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        ess.tearDownForTesting();
+        MockBukkit.unmock();
     }
 
     private void runCommand(final String command, final User user, final String[] args) throws Exception {

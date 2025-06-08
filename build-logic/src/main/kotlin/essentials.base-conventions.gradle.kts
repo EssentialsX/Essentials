@@ -10,14 +10,14 @@ plugins {
 val baseExtension = extensions.create<EssentialsBaseExtension>("essentials", project)
 
 val checkstyleVersion = "8.36.2"
-val spigotVersion = "1.21.5-R0.1-SNAPSHOT"
-val junit5Version = "5.10.2"
-val mockitoVersion = "3.12.4"
+val paperVersion = "1.21.6-R0.1-SNAPSHOT"
+val junit5Version = "5.13.0"
+val mockitoVersion = "5.18.0"
 
 dependencies {
     testImplementation("org.junit.jupiter", "junit-jupiter", junit5Version)
-    testImplementation("org.junit.vintage", "junit-vintage-engine", junit5Version)
     testImplementation("org.mockito", "mockito-core", mockitoVersion)
+    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.50.0")
 
     constraints {
         implementation("org.yaml:snakeyaml:1.28") {
@@ -35,7 +35,11 @@ tasks.test {
 afterEvaluate {
     if (baseExtension.injectBukkitApi.get()) {
         dependencies {
-            api("org.spigotmc", "spigot-api", spigotVersion)
+            api("io.papermc.paper", "paper-api", paperVersion)
+        }
+
+        java {
+            disableAutoTargetJvm()
         }
     }
     if (baseExtension.injectBstats.get()) {

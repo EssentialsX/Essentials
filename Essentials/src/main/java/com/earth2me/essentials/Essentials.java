@@ -122,11 +122,9 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -187,17 +185,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         EconomyLayers.init();
     }
 
-    public Essentials() {
-    }
-
-    protected Essentials(final JavaPluginLoader loader, final PluginDescriptionFile description, final File dataFolder, final File file) {
-        super(loader, description, dataFolder, file);
-    }
-
-    public Essentials(final Server server) {
-        super(new JavaPluginLoader(server), new PluginDescriptionFile("Essentials", "", "com.earth2me.essentials.Essentials"), null, null);
-    }
-
     @Override
     public ISettings getSettings() {
         return settings;
@@ -230,7 +217,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         jails = new Jails(this);
         registerListeners(server.getPluginManager());
         kits = new Kits(this);
-        bukkitAudience = BukkitAudiences.create(this);
+        //bukkitAudience = BukkitAudiences.create(this);
+    }
+
+    public void tearDownForTesting() {
+        //bukkitAudience.close();
+        Economy.setEss(null);
     }
 
     @Override
@@ -246,6 +238,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onEnable() {
+        if (TESTING) {
+            return;
+        }
+
         try {
             if (BUKKIT_LOGGER != super.getLogger()) {
                 BUKKIT_LOGGER.setParent(super.getLogger());
@@ -554,6 +550,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
+        if (bukkitAudience != null) {
+            bukkitAudience.close();
+        }
+
+        if (TESTING) {
+            return;
+        }
+
         final boolean stopping = provider(ServerStateProvider.class).isStopping();
         if (!stopping) {
             LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("serverReloading")));

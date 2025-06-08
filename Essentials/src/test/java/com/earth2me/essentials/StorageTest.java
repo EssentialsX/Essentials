@@ -3,35 +3,47 @@ package com.earth2me.essentials;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.InvalidDescriptionException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.IOException;
 
 public class StorageTest {
-    private final Essentials ess;
-    private final FakeServer server;
-    private final World world;
+    private Essentials ess;
+    private ServerMock server;
+    private World world;
 
-    public StorageTest() {
-        server = FakeServer.getServer();
-        world = server.getWorld("testWorld");
-        ess = new Essentials(server);
+    @BeforeEach
+    public void setUp() {
+        this.server = MockBukkit.mock();
+        world = server.addSimpleWorld("testWorld");
+        Essentials.TESTING = true;
+        ess = MockBukkit.load(Essentials.class);
         try {
             ess.setupForTesting(server);
         } catch (final InvalidDescriptionException ex) {
-            Assert.fail("InvalidDescriptionException");
+            Assertions.fail("InvalidDescriptionException");
         } catch (final IOException ex) {
-            Assert.fail("IOException");
+            Assertions.fail("IOException");
         }
+    }
+
+    @AfterEach
+    public void tearDown() {
+        ess.tearDownForTesting();
+        MockBukkit.unmock();
     }
 
     @Test
     public void testOldUserdata() {
         final ExecuteTimer ext = new ExecuteTimer();
         ext.start();
-        final OfflinePlayerStub base1 = server.createPlayer("testPlayer1");
-        server.addPlayer(base1);
+        final PlayerMock base1 = server.addPlayer("testPlayer1");
         ext.mark("fake user created");
         final UserData user = ess.getUser(base1);
         ext.mark("load empty user");

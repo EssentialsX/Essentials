@@ -4,23 +4,31 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.InvalidDescriptionException;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.IOException;
 
-import static org.junit.Assert.fail;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class MessagingTest {
 
-    private final OfflinePlayerStub base1;
-    private final Essentials ess;
-    private final FakeServer server;
+    private PlayerMock base1;
+    private Essentials ess;
+    private ServerMock server;
 
-    public MessagingTest() {
-        server = FakeServer.getServer();
-        ess = new Essentials(server);
+    @BeforeEach
+    void setUp() {
+        this.server = MockBukkit.mock();
+        Essentials.TESTING = true;
+        ess = MockBukkit.load(Essentials.class);
         try {
             ess.setupForTesting(server);
         } catch (final InvalidDescriptionException ex) {
@@ -28,9 +36,14 @@ public class MessagingTest {
         } catch (final IOException ex) {
             fail("IOException");
         }
-        base1 = server.createPlayer("testPlayer1");
-        server.addPlayer(base1);
+        base1 = server.addPlayer("testPlayer1");
         ess.getUser(base1);
+    }
+
+    @AfterEach
+    void tearDown() {
+        ess.tearDownForTesting();
+        MockBukkit.unmock();
     }
 
     private void runCommand(final String command, final User user, final String args) throws Exception {
@@ -68,27 +81,29 @@ public class MessagingTest {
         }
     }
 
-    @Test(expected = Exception.class) // I really don't like this, but see note below about console reply
-    public void testNullLastMessageReplyRecipient() throws Exception {
-        final User user1 = ess.getUser(base1);
-        final Console console = Console.getInstance();
-        if (ess.getSettings().isLastMessageReplyRecipient()) {
-            assertNull(console.getReplyRecipient()); // console never messaged or received messages from anyone.
-
+    @Test
+    public void testNullLastMessageReplyRecipient() {
+        assertThrows(Exception.class, () -> {
+            final User user1 = ess.getUser(base1);
+            final Console console = Console.getInstance();
             if (ess.getSettings().isLastMessageReplyRecipient()) {
-                runCommand("r", user1, "This is me sending you a message using /r without you replying!");
+                assertNull(console.getReplyRecipient()); // console never messaged or received messages from anyone.
+
+                if (ess.getSettings().isLastMessageReplyRecipient()) {
+                    runCommand("r", user1, "This is me sending you a message using /r without you replying!");
+                }
+
+                // Not really much of a strict test, but just "testing" console output.
+                user1.setAfk(true);
+
+                // Console replies using "/r Hey, son!"
+                //
+                // This throws Exception because the console hasnt messaged anyone.
+                runConsoleCommand("r", "Hey, son!");
+            } else {
+                throw new Exception(); // Needed to prevent build failures.
             }
-
-            // Not really much of a strict test, but just "testing" console output. 
-            user1.setAfk(true);
-
-            // Console replies using "/r Hey, son!"
-            //
-            // This throws Exception because the console hasnt messaged anyone.
-            runConsoleCommand("r", "Hey, son!");
-        } else {
-            throw new Exception(); // Needed to prevent build failures.
-        }
+        });
     }
 
     @Test

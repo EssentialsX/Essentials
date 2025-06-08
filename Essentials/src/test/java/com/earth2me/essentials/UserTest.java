@@ -1,22 +1,32 @@
 package com.earth2me.essentials;
 
-import junit.framework.TestCase;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.InvalidDescriptionException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class UserTest extends TestCase {
-    private final OfflinePlayerStub base1;
-    private final Essentials ess;
-    private final FakeServer server;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
-    public UserTest(final String testName) {
-        super(testName);
-        server = FakeServer.getServer();
-        ess = new Essentials(server);
+public class UserTest {
+    private PlayerMock base1;
+    private Essentials ess;
+    private ServerMock server;
+
+    @BeforeEach
+    public void setUp() {
+        this.server = MockBukkit.mock();
+        Essentials.TESTING = true;
+        ess = MockBukkit.load(Essentials.class);
         try {
             ess.setupForTesting(server);
         } catch (final InvalidDescriptionException ex) {
@@ -24,17 +34,22 @@ public class UserTest extends TestCase {
         } catch (final IOException ex) {
             fail("IOException");
         }
-        base1 = server.createPlayer("testPlayer1");
-        server.addPlayer(base1);
+        base1 = server.addPlayer("testPlayer1");
         ess.getUser(base1);
     }
 
+    @AfterEach
+    public void tearEach() {
+        ess.tearDownForTesting();
+        MockBukkit.unmock();
+    }
+
     private void should(final String what) {
-        System.out.println(getName() + " should " + what);
+        System.out.println("UserTest should " + what);
     }
 
     public void testUpdate() {
-        final OfflinePlayerStub base1alt = server.createPlayer(base1.getName());
+        final Player base1alt = server.getPlayer(base1.getName());
         assertEquals(base1alt, ess.getUser(base1alt).getBase());
     }
 
@@ -43,7 +58,7 @@ public class UserTest extends TestCase {
         final Location loc = base1.getLocation();
         loc.setWorld(server.getWorlds().get(0));
         user.setHome("home", loc);
-        final OfflinePlayerStub base2 = server.createPlayer(base1.getName());
+        final Player base2 = server.getPlayer(base1.getName());
         final User user2 = ess.getUser(base2);
 
         final Location home = user2.getHome(loc);

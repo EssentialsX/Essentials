@@ -51,6 +51,9 @@ public final class ReflUtil {
     public static NMSVersion getNmsVersionObject() {
         if (nmsVersionObject == null) {
             try {
+                if (getNMSVersion().equals("ServerMock")) {
+                    return nmsVersionObject = new NMSVersion(99, 99, 99);
+                }
                 nmsVersionObject = NMSVersion.fromString(getNMSVersion());
             } catch (final IllegalArgumentException e) {
                 try {
