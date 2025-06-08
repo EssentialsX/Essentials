@@ -3,14 +3,13 @@ package com.earth2me.essentials;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,20 +26,12 @@ public class UserTest {
         this.server = MockBukkit.mock();
         Essentials.TESTING = true;
         ess = MockBukkit.load(Essentials.class);
-        try {
-            ess.setupForTesting(server);
-        } catch (final InvalidDescriptionException ex) {
-            fail("InvalidDescriptionException");
-        } catch (final IOException ex) {
-            fail("IOException");
-        }
         base1 = server.addPlayer("testPlayer1");
         ess.getUser(base1);
     }
 
     @AfterEach
     public void tearEach() {
-        ess.tearDownForTesting();
         MockBukkit.unmock();
     }
 
@@ -48,11 +39,13 @@ public class UserTest {
         System.out.println("UserTest should " + what);
     }
 
+    @Test
     public void testUpdate() {
         final Player base1alt = server.getPlayer(base1.getName());
         assertEquals(base1alt, ess.getUser(base1alt).getBase());
     }
 
+    @Test
     public void testHome() {
         final User user = ess.getUser(base1);
         final Location loc = base1.getLocation();
@@ -71,6 +64,7 @@ public class UserTest {
         assertEquals(loc.getPitch(), home.getPitch());
     }
 
+    @Test
     public void testMoney() {
         should("properly set, take, give, and get money");
         final User user = ess.getUser(base1);

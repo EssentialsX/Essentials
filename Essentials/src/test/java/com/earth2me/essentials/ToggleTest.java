@@ -3,15 +3,12 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
-
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,20 +23,12 @@ public class ToggleTest {
         this.server = MockBukkit.mock();
         Essentials.TESTING = true;
         ess = MockBukkit.load(Essentials.class);
-        try {
-            ess.setupForTesting(server);
-        } catch (final InvalidDescriptionException ex) {
-            Assertions.fail("InvalidDescriptionException");
-        } catch (final IOException ex) {
-            Assertions.fail("IOException");
-        }
         base1 = server.addPlayer("testPlayer1");
         ess.getUser(base1);
     }
 
     @AfterEach
     public void tearDown() {
-        ess.tearDownForTesting();
         MockBukkit.unmock();
     }
 
@@ -69,6 +58,7 @@ public class ToggleTest {
 
     }
 
+    @Test
     public void testFlyToggle() throws Exception {
         final User user = ess.getUser(base1);
 
@@ -93,6 +83,7 @@ public class ToggleTest {
         assertFalse(user.getBase().getAllowFlight());
     }
 
+    @Test
     public void testFlyDisOnToggle() throws Exception {
         final User user = ess.getUser(base1);
 
@@ -104,6 +95,7 @@ public class ToggleTest {
         assertFalse(user.getBase().isFlying());
     }
 
+    @Test
     public void testGodToggle() throws Exception {
         final User user = ess.getUser(base1);
 
@@ -128,6 +120,7 @@ public class ToggleTest {
         assertFalse(user.isGodModeEnabled());
     }
 
+    @Test
     public void testConsoleToggle() throws Exception {
         final User user = ess.getUser(base1);
 
@@ -152,6 +145,7 @@ public class ToggleTest {
         assertFalse(user.getBase().getAllowFlight());
     }
 
+    @Test
     public void testAliasesToggle() throws Exception {
         final User user = ess.getUser(base1);
 

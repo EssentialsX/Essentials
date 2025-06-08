@@ -3,13 +3,11 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
-import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -17,7 +15,6 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class UtilTest {
 
@@ -25,24 +22,17 @@ public class UtilTest {
 
     @BeforeEach
     public void setUp() {
-        final ServerMock server = MockBukkit.mock();
+        MockBukkit.mock();
         Essentials.TESTING = true;
         ess = MockBukkit.load(Essentials.class);
-        try {
-            ess.setupForTesting(server);
-        } catch (final InvalidDescriptionException ex) {
-            fail("InvalidDescriptionException");
-        } catch (final IOException ex) {
-            fail("IOException");
-        }
     }
 
     @AfterEach
     public void afterEach() {
-        ess.tearDownForTesting();
         MockBukkit.unmock();
     }
 
+    @Test
     public void testSafeLocation() {
         final Set<String> testSet = new HashSet<>();
         int count = 0;
@@ -72,12 +62,14 @@ public class UtilTest {
         assertEquals(diameter * diameter * diameter, count);
     }
 
+    @Test
     public void testFDDnow() {
         final Calendar c = new GregorianCalendar();
         final String resp = DateUtil.formatDateDiff(c, c);
         assertEquals(resp, "now");
     }
 
+    @Test
     public void testFDDfuture() {
         Calendar a, b;
         a = new GregorianCalendar(2010, Calendar.FEBRUARY, 1, 10, 0, 0);
@@ -145,6 +137,7 @@ public class UtilTest {
         assertEquals("5 minutes", DateUtil.formatDateDiff(a, b));
     }
 
+    @Test
     public void testFDDpast() {
         Calendar a, b;
         a = new GregorianCalendar(2010, Calendar.FEBRUARY, 1, 10, 0, 0);
@@ -209,6 +202,7 @@ public class UtilTest {
         assertEquals("10 years 6 months 10 days", DateUtil.formatDateDiff(a, b));
     }
 
+    @Test
     public void testVer() {
         VersionUtil.BukkitVersion v;
         v = VersionUtil.BukkitVersion.fromString("1.13.2-R0.1");

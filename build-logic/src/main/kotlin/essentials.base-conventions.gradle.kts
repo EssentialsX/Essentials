@@ -11,13 +11,19 @@ val baseExtension = extensions.create<EssentialsBaseExtension>("essentials", pro
 
 val checkstyleVersion = "8.36.2"
 val paperVersion = "1.21.6-R0.1-SNAPSHOT"
-val junit5Version = "5.13.0"
+val paperTestVersion = "1.21.5-R0.1-SNAPSHOT"
+val junit5Version = "5.12.2"
+val junitPlatformVersion = "1.12.2"
 val mockitoVersion = "5.18.0"
 
 dependencies {
     testImplementation("org.junit.jupiter", "junit-jupiter", junit5Version)
+    testImplementation("org.junit.platform", "junit-platform-launcher", junitPlatformVersion)
     testImplementation("org.mockito", "mockito-core", mockitoVersion)
-    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.50.0")
+    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.50.0") {
+        exclude(module = "paper-api")
+        exclude(module = "spigot-api")
+    }
 
     constraints {
         implementation("org.yaml:snakeyaml:1.28") {
@@ -27,6 +33,7 @@ dependencies {
 }
 
 tasks.test {
+    useJUnitPlatform()
     testLogging {
         events("PASSED", "SKIPPED", "FAILED")
     }
@@ -36,6 +43,26 @@ afterEvaluate {
     if (baseExtension.injectBukkitApi.get()) {
         dependencies {
             api("io.papermc.paper", "paper-api", paperVersion)
+            testImplementation("io.papermc.paper", "paper-api", paperTestVersion)
+        }
+
+        configurations {
+            testCompileClasspath {
+                resolutionStrategy {
+                    dependencySubstitution {
+                        substitute( module("io.papermc.paper:paper-api"))
+                            .using(module("io.papermc.paper:paper-api:$paperTestVersion"))
+                    }
+                }
+            }
+            testRuntimeClasspath {
+                resolutionStrategy {
+                    dependencySubstitution {
+                        substitute( module("io.papermc.paper:paper-api"))
+                            .using(module("io.papermc.paper:paper-api:$paperTestVersion"))
+                    }
+                }
+            }
         }
 
         java {

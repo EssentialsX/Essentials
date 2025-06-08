@@ -26,13 +26,13 @@ dependencies {
         exclude(module: 'paper-api')
     }
     api(project(':providers:NMSReflectionProvider')) {
-        exclude group: "org.bukkit", module: "bukkit"
+        exclude(module: 'bukkit')
     }
     api(project(':providers:1_8Provider')) {
-        exclude group: "org.spigotmc", module: "spigot-api"
+        exclude(module: 'spigot-api')
     }
     api(project(':providers:1_12Provider')) {
-        exclude group: "org.bukkit", module: "bukkit"
+        exclude(module: 'bukkit')
     }
 }
 

@@ -8,42 +8,40 @@ import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.Economy;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.InvalidDescriptionException;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 
-import java.io.IOException;
+import java.io.File;
 
 public class EconomyTest {
     private static final String NPCNAME = "npc1";
     private static final String PLAYERNAME = "testPlayer1";
     private static final String PLAYERNAME2 = "testPlayer2";
-    private static transient Essentials ess;
-    private static ServerMock server;
+    private Essentials ess;
+    private ServerMock server;
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+    void setUp() {
         server = MockBukkit.mock();
         Essentials.TESTING = true;
         ess = MockBukkit.load(Essentials.class);
-        try {
-            ess.setupForTesting(server);
-        } catch (final InvalidDescriptionException ex) {
-            Assertions.fail("InvalidDescriptionException");
-        } catch (final IOException ex) {
-            Assertions.fail("IOException");
+
+        // Proactively create the userdata folder to prevent async task failures
+        final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+        if (!userdataFolder.exists()) {
+            userdataFolder.mkdirs();
         }
+
         server.addPlayer(PLAYERNAME);
         server.addPlayer(PLAYERNAME2);
     }
 
-    @AfterAll
-    static void tearDown() {
-        ess.tearDownForTesting();
+    @AfterEach
+    void tearDown() {
         MockBukkit.unmock();
     }
 

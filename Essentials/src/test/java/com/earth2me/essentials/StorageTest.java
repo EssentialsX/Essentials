@@ -2,16 +2,12 @@ package com.earth2me.essentials;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
-
-import java.io.IOException;
 
 public class StorageTest {
     private Essentials ess;
@@ -24,18 +20,10 @@ public class StorageTest {
         world = server.addSimpleWorld("testWorld");
         Essentials.TESTING = true;
         ess = MockBukkit.load(Essentials.class);
-        try {
-            ess.setupForTesting(server);
-        } catch (final InvalidDescriptionException ex) {
-            Assertions.fail("InvalidDescriptionException");
-        } catch (final IOException ex) {
-            Assertions.fail("IOException");
-        }
     }
 
     @AfterEach
     public void tearDown() {
-        ess.tearDownForTesting();
         MockBukkit.unmock();
     }
 

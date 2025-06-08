@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,12 +10,9 @@ import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class MessagingTest {
 
@@ -29,20 +25,12 @@ public class MessagingTest {
         this.server = MockBukkit.mock();
         Essentials.TESTING = true;
         ess = MockBukkit.load(Essentials.class);
-        try {
-            ess.setupForTesting(server);
-        } catch (final InvalidDescriptionException ex) {
-            fail("InvalidDescriptionException");
-        } catch (final IOException ex) {
-            fail("IOException");
-        }
         base1 = server.addPlayer("testPlayer1");
         ess.getUser(base1);
     }
 
     @AfterEach
     void tearDown() {
-        ess.tearDownForTesting();
         MockBukkit.unmock();
     }
 
