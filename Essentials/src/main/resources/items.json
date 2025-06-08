@@ -1774,6 +1774,13 @@
   "blagtcotta": "black_glazed_terracotta",
   "blagterra": "black_glazed_terracotta",
   "minecraft:black_glazed_terracotta": "black_glazed_terracotta",
+  "black_harness": {
+    "material": "BLACK_HARNESS"
+  },
+  "bkharness": "black_harness",
+  "blackharness": "black_harness",
+  "blaharness": "black_harness",
+  "minecraft:black_harness": "black_harness",
   "black_shulker_box": {
     "material": "BLACK_SHULKER_BOX"
   },
@@ -2024,6 +2031,12 @@
   "blugtcotta": "blue_glazed_terracotta",
   "blugterra": "blue_glazed_terracotta",
   "minecraft:blue_glazed_terracotta": "blue_glazed_terracotta",
+  "blue_harness": {
+    "material": "BLUE_HARNESS"
+  },
+  "blueharness": "blue_harness",
+  "bluharness": "blue_harness",
+  "minecraft:blue_harness": "blue_harness",
   "blue_ice": {
     "material": "BLUE_ICE"
   },
@@ -2354,6 +2367,13 @@
   "browngtcotta": "brown_glazed_terracotta",
   "browngterra": "brown_glazed_terracotta",
   "minecraft:brown_glazed_terracotta": "brown_glazed_terracotta",
+  "brown_harness": {
+    "material": "BROWN_HARNESS"
+  },
+  "brharness": "brown_harness",
+  "broharness": "brown_harness",
+  "brownharness": "brown_harness",
+  "minecraft:brown_harness": "brown_harness",
   "brown_mushroom": {
     "material": "BROWN_MUSHROOM"
   },
@@ -5151,6 +5171,12 @@
   "cyangtcotta": "cyan_glazed_terracotta",
   "cyangterra": "cyan_glazed_terracotta",
   "minecraft:cyan_glazed_terracotta": "cyan_glazed_terracotta",
+  "cyan_harness": {
+    "material": "CYAN_HARNESS"
+  },
+  "charness": "cyan_harness",
+  "cyanharness": "cyan_harness",
+  "minecraft:cyan_harness": "cyan_harness",
   "cyan_shulker_box": {
     "material": "CYAN_SHULKER_BOX"
   },
@@ -6448,6 +6474,15 @@
   },
   "dragonhead": "dragon_head",
   "minecraft:dragon_head": "dragon_head",
+  "dried_ghast": {
+    "material": "DRIED_GHAST"
+  },
+  "driedg": "dried_ghast",
+  "driedghast": "dried_ghast",
+  "dryghast": "dried_ghast",
+  "ghastb": "dried_ghast",
+  "ghastblock": "dried_ghast",
+  "minecraft:dried_ghast": "dried_ghast",
   "dried_kelp": {
     "material": "DRIED_KELP"
   },
@@ -8374,6 +8409,19 @@
   "greygtcotta": "gray_glazed_terracotta",
   "greygterra": "gray_glazed_terracotta",
   "minecraft:gray_glazed_terracotta": "gray_glazed_terracotta",
+  "gray_harness": {
+    "material": "GRAY_HARNESS"
+  },
+  "darkgraharness": "gray_harness",
+  "darkgrayharness": "gray_harness",
+  "darkgreyharness": "gray_harness",
+  "dgraharness": "gray_harness",
+  "dgrayharness": "gray_harness",
+  "dgreyharness": "gray_harness",
+  "graharness": "gray_harness",
+  "grayharness": "gray_harness",
+  "greyharness": "gray_harness",
+  "minecraft:gray_harness": "gray_harness",
   "gray_shulker_box": {
     "material": "GRAY_SHULKER_BOX"
   },
@@ -8718,6 +8766,16 @@
   "gregtcotta": "green_glazed_terracotta",
   "gregterra": "green_glazed_terracotta",
   "minecraft:green_glazed_terracotta": "green_glazed_terracotta",
+  "green_harness": {
+    "material": "GREEN_HARNESS"
+  },
+  "darkgreenharness": "green_harness",
+  "darkgreharness": "green_harness",
+  "dgreenharness": "green_harness",
+  "dgreharness": "green_harness",
+  "greenharness": "green_harness",
+  "greharness": "green_harness",
+  "minecraft:green_harness": "green_harness",
   "green_shulker_box": {
     "material": "GREEN_SHULKER_BOX"
   },
@@ -8923,6 +8981,94 @@
   "hangroots": "hanging_roots",
   "hroots": "hanging_roots",
   "minecraft:hanging_roots": "hanging_roots",
+  "happy_ghast_spawn_egg": {
+    "material": "HAPPY_GHAST_SPAWN_EGG"
+  },
+  "eggghastling": "happy_ghast_spawn_egg",
+  "egghappy_ghast": "happy_ghast_spawn_egg",
+  "egghappyg": "happy_ghast_spawn_egg",
+  "egghappyghast": "happy_ghast_spawn_egg",
+  "egghghast": "happy_ghast_spawn_egg",
+  "ghastlingegg": "happy_ghast_spawn_egg",
+  "ghastlingsegg": "happy_ghast_spawn_egg",
+  "ghastlingspawn": "happy_ghast_spawn_egg",
+  "ghastlingspawnegg": "happy_ghast_spawn_egg",
+  "happy_ghastegg": "happy_ghast_spawn_egg",
+  "happy_ghastsegg": "happy_ghast_spawn_egg",
+  "happy_ghastspawn": "happy_ghast_spawn_egg",
+  "happy_ghastspawnegg": "happy_ghast_spawn_egg",
+  "happygegg": "happy_ghast_spawn_egg",
+  "happyghastegg": "happy_ghast_spawn_egg",
+  "happyghastsegg": "happy_ghast_spawn_egg",
+  "happyghastspawn": "happy_ghast_spawn_egg",
+  "happyghastspawnegg": "happy_ghast_spawn_egg",
+  "happygsegg": "happy_ghast_spawn_egg",
+  "happygspawn": "happy_ghast_spawn_egg",
+  "happygspawnegg": "happy_ghast_spawn_egg",
+  "hghastegg": "happy_ghast_spawn_egg",
+  "hghastsegg": "happy_ghast_spawn_egg",
+  "hghastspawn": "happy_ghast_spawn_egg",
+  "hghastspawnegg": "happy_ghast_spawn_egg",
+  "minecraft:happy_ghast_spawn_egg": "happy_ghast_spawn_egg",
+  "seggghastling": "happy_ghast_spawn_egg",
+  "segghappy_ghast": "happy_ghast_spawn_egg",
+  "segghappyg": "happy_ghast_spawn_egg",
+  "segghappyghast": "happy_ghast_spawn_egg",
+  "segghghast": "happy_ghast_spawn_egg",
+  "spawneggghastling": "happy_ghast_spawn_egg",
+  "spawnegghappy_ghast": "happy_ghast_spawn_egg",
+  "spawnegghappyg": "happy_ghast_spawn_egg",
+  "spawnegghappyghast": "happy_ghast_spawn_egg",
+  "spawnegghghast": "happy_ghast_spawn_egg",
+  "spawnghastling": "happy_ghast_spawn_egg",
+  "spawnhappy_ghast": "happy_ghast_spawn_egg",
+  "spawnhappyg": "happy_ghast_spawn_egg",
+  "spawnhappyghast": "happy_ghast_spawn_egg",
+  "spawnhghast": "happy_ghast_spawn_egg",
+  "happy_ghast_spawner": {
+    "entity": "HAPPY_GHAST",
+    "material": "SPAWNER"
+  },
+  "ghastlingcage": "happy_ghast_spawner",
+  "ghastlingmcage": "happy_ghast_spawner",
+  "ghastlingmobcage": "happy_ghast_spawner",
+  "ghastlingmobspawner": "happy_ghast_spawner",
+  "ghastlingmonstercage": "happy_ghast_spawner",
+  "ghastlingmonsterspawner": "happy_ghast_spawner",
+  "ghastlingmspawner": "happy_ghast_spawner",
+  "ghastlingspawner": "happy_ghast_spawner",
+  "happy_ghastcage": "happy_ghast_spawner",
+  "happy_ghastmcage": "happy_ghast_spawner",
+  "happy_ghastmobcage": "happy_ghast_spawner",
+  "happy_ghastmobspawner": "happy_ghast_spawner",
+  "happy_ghastmonstercage": "happy_ghast_spawner",
+  "happy_ghastmonsterspawner": "happy_ghast_spawner",
+  "happy_ghastmspawner": "happy_ghast_spawner",
+  "happy_ghastspawner": "happy_ghast_spawner",
+  "happygcage": "happy_ghast_spawner",
+  "happyghastcage": "happy_ghast_spawner",
+  "happyghastmcage": "happy_ghast_spawner",
+  "happyghastmobcage": "happy_ghast_spawner",
+  "happyghastmobspawner": "happy_ghast_spawner",
+  "happyghastmonstercage": "happy_ghast_spawner",
+  "happyghastmonsterspawner": "happy_ghast_spawner",
+  "happyghastmspawner": "happy_ghast_spawner",
+  "happyghastspawner": "happy_ghast_spawner",
+  "happygmcage": "happy_ghast_spawner",
+  "happygmobcage": "happy_ghast_spawner",
+  "happygmobspawner": "happy_ghast_spawner",
+  "happygmonstercage": "happy_ghast_spawner",
+  "happygmonsterspawner": "happy_ghast_spawner",
+  "happygmspawner": "happy_ghast_spawner",
+  "happygspawner": "happy_ghast_spawner",
+  "hghastcage": "happy_ghast_spawner",
+  "hghastmcage": "happy_ghast_spawner",
+  "hghastmobcage": "happy_ghast_spawner",
+  "hghastmobspawner": "happy_ghast_spawner",
+  "hghastmonstercage": "happy_ghast_spawner",
+  "hghastmonsterspawner": "happy_ghast_spawner",
+  "hghastmspawner": "happy_ghast_spawner",
+  "hghastspawner": "happy_ghast_spawner",
   "harming_lingering_potion": {
     "potionData": {
       "type": "HARMING",
@@ -11811,6 +11957,16 @@
   "lightblugtcotta": "light_blue_glazed_terracotta",
   "lightblugterra": "light_blue_glazed_terracotta",
   "minecraft:light_blue_glazed_terracotta": "light_blue_glazed_terracotta",
+  "light_blue_harness": {
+    "material": "LIGHT_BLUE_HARNESS"
+  },
+  "lbharness": "light_blue_harness",
+  "lblueharness": "light_blue_harness",
+  "lbluharness": "light_blue_harness",
+  "light_blueharness": "light_blue_harness",
+  "lightblueharness": "light_blue_harness",
+  "lightbluharness": "light_blue_harness",
+  "minecraft:light_blue_harness": "light_blue_harness",
   "light_blue_shulker_box": {
     "material": "LIGHT_BLUE_SHULKER_BOX"
   },
@@ -12190,6 +12346,21 @@
   "silverglazedterracotta": "light_gray_glazed_terracotta",
   "silvergtcotta": "light_gray_glazed_terracotta",
   "silvergterra": "light_gray_glazed_terracotta",
+  "light_gray_harness": {
+    "material": "LIGHT_GRAY_HARNESS"
+  },
+  "lgharness": "light_gray_harness",
+  "lgraharness": "light_gray_harness",
+  "lgrayharness": "light_gray_harness",
+  "lgreyharness": "light_gray_harness",
+  "light_grayharness": "light_gray_harness",
+  "lightgraharness": "light_gray_harness",
+  "lightgrayharness": "light_gray_harness",
+  "lightgreyharness": "light_gray_harness",
+  "minecraft:light_gray_harness": "light_gray_harness",
+  "siaharness": "light_gray_harness",
+  "siharness": "light_gray_harness",
+  "silverharness": "light_gray_harness",
   "light_gray_shulker_box": {
     "material": "LIGHT_GRAY_SHULKER_BOX"
   },
@@ -12597,6 +12768,16 @@
   "limegtcotta": "lime_glazed_terracotta",
   "limegterra": "lime_glazed_terracotta",
   "minecraft:lime_glazed_terracotta": "lime_glazed_terracotta",
+  "lime_harness": {
+    "material": "LIME_HARNESS"
+  },
+  "lgreenharness": "lime_harness",
+  "lgreharness": "lime_harness",
+  "lharness": "lime_harness",
+  "lightgreenharness": "lime_harness",
+  "lightgreharness": "lime_harness",
+  "limeharness": "lime_harness",
+  "minecraft:lime_harness": "lime_harness",
   "lime_shulker_box": {
     "material": "LIME_SHULKER_BOX"
   },
@@ -19919,6 +20100,12 @@
   "mgtcotta": "magenta_glazed_terracotta",
   "mgterra": "magenta_glazed_terracotta",
   "minecraft:magenta_glazed_terracotta": "magenta_glazed_terracotta",
+  "magenta_harness": {
+    "material": "MAGENTA_HARNESS"
+  },
+  "magentaharness": "magenta_harness",
+  "mharness": "magenta_harness",
+  "minecraft:magenta_harness": "magenta_harness",
   "magenta_shulker_box": {
     "material": "MAGENTA_SHULKER_BOX"
   },
@@ -21966,6 +22153,42 @@
   "whmusicdisk": "music_disc_strad",
   "whmusicrecord": "music_disc_strad",
   "whrecord": "music_disc_strad",
+  "music_disc_tears": {
+    "material": "MUSIC_DISC_TEARS"
+  },
+  "cdghast": "music_disc_tears",
+  "cdtears": "music_disc_tears",
+  "discghast": "music_disc_tears",
+  "disctears": "music_disc_tears",
+  "diskghast": "music_disc_tears",
+  "disktears": "music_disc_tears",
+  "ghastcd": "music_disc_tears",
+  "ghastdisc": "music_disc_tears",
+  "ghastdisk": "music_disc_tears",
+  "ghastmdisc": "music_disc_tears",
+  "ghastmusicdisc": "music_disc_tears",
+  "ghastmusicdisk": "music_disc_tears",
+  "ghastmusicrecord": "music_disc_tears",
+  "ghastrecord": "music_disc_tears",
+  "mdiscghast": "music_disc_tears",
+  "mdisctears": "music_disc_tears",
+  "minecraft:music_disc_tears": "music_disc_tears",
+  "musicdiscghast": "music_disc_tears",
+  "musicdisctears": "music_disc_tears",
+  "musicdiskghast": "music_disc_tears",
+  "musicdisktears": "music_disc_tears",
+  "musicrecordghast": "music_disc_tears",
+  "musicrecordtears": "music_disc_tears",
+  "recordghast": "music_disc_tears",
+  "recordtears": "music_disc_tears",
+  "tearscd": "music_disc_tears",
+  "tearsdisc": "music_disc_tears",
+  "tearsdisk": "music_disc_tears",
+  "tearsmdisc": "music_disc_tears",
+  "tearsmusicdisc": "music_disc_tears",
+  "tearsmusicdisk": "music_disc_tears",
+  "tearsmusicrecord": "music_disc_tears",
+  "tearsrecord": "music_disc_tears",
   "music_disc_wait": {
     "material": "MUSIC_DISC_WAIT"
   },
@@ -23277,6 +23500,12 @@
   "orangeglazedterracotta": "orange_glazed_terracotta",
   "orangegtcotta": "orange_glazed_terracotta",
   "orangegterra": "orange_glazed_terracotta",
+  "orange_harness": {
+    "material": "ORANGE_HARNESS"
+  },
+  "minecraft:orange_harness": "orange_harness",
+  "oharness": "orange_harness",
+  "orangeharness": "orange_harness",
   "orange_shulker_box": {
     "material": "ORANGE_SHULKER_BOX"
   },
@@ -24805,6 +25034,12 @@
   "pinkglazedterracotta": "pink_glazed_terracotta",
   "pinkgtcotta": "pink_glazed_terracotta",
   "pinkgterra": "pink_glazed_terracotta",
+  "pink_harness": {
+    "material": "PINK_HARNESS"
+  },
+  "minecraft:pink_harness": "pink_harness",
+  "piharness": "pink_harness",
+  "pinkharness": "pink_harness",
   "pink_petals": {
     "material": "PINK_PETALS"
   },
@@ -26057,6 +26292,12 @@
   "purpleglazedterracotta": "purple_glazed_terracotta",
   "purplegtcotta": "purple_glazed_terracotta",
   "purplegterra": "purple_glazed_terracotta",
+  "purple_harness": {
+    "material": "PURPLE_HARNESS"
+  },
+  "minecraft:purple_harness": "purple_harness",
+  "puharness": "purple_harness",
+  "purpleharness": "purple_harness",
   "purple_shulker_box": {
     "material": "PURPLE_SHULKER_BOX"
   },
@@ -26509,6 +26750,12 @@
   "rglazedterracotta": "red_glazed_terracotta",
   "rgtcotta": "red_glazed_terracotta",
   "rgterra": "red_glazed_terracotta",
+  "red_harness": {
+    "material": "RED_HARNESS"
+  },
+  "minecraft:red_harness": "red_harness",
+  "redharness": "red_harness",
+  "rharness": "red_harness",
   "red_mushroom": {
     "material": "RED_MUSHROOM"
   },
@@ -46804,6 +47051,12 @@
   "whiteglazedterracotta": "white_glazed_terracotta",
   "whitegtcotta": "white_glazed_terracotta",
   "whitegterra": "white_glazed_terracotta",
+  "white_harness": {
+    "material": "WHITE_HARNESS"
+  },
+  "minecraft:white_harness": "white_harness",
+  "wharness": "white_harness",
+  "whiteharness": "white_harness",
   "white_shulker_box": {
     "material": "WHITE_SHULKER_BOX"
   },
@@ -47351,6 +47604,12 @@
   "yglazedterracotta": "yellow_glazed_terracotta",
   "ygtcotta": "yellow_glazed_terracotta",
   "ygterra": "yellow_glazed_terracotta",
+  "yellow_harness": {
+    "material": "YELLOW_HARNESS"
+  },
+  "minecraft:yellow_harness": "yellow_harness",
+  "yellowharness": "yellow_harness",
+  "yharness": "yellow_harness",
   "yellow_shulker_box": {
     "material": "YELLOW_SHULKER_BOX"
   },
