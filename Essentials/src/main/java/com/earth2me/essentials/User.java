@@ -846,7 +846,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
             // If `afk-timeout-command` in config.yml is not set to 'none', execute the command instead of kicking the player.
             else {
-                final String command = ess.getSettings().getAfkTimeoutCommand().replace("{PLAYER}", getName()).replace("{KICK_TIME}", String.valueOf(kickTime));
+                final String command = ess.getSettings().getAfkTimeoutCommand().replace("{USERNAME}", getName()).replace("{KICKTIME}", String.valueOf(kickTime));
                 ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), command);
             }
         }
