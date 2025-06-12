@@ -210,6 +210,8 @@ public interface ISettings extends IConf {
 
     long getAutoAfkKick();
 
+    String getAfkTimeoutCommand();
+
     boolean getFreezeAfkPlayers();
 
     boolean cancelAfkOnMove();

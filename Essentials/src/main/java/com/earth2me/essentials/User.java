@@ -825,19 +825,29 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
 
         final long autoafkkick = ess.getSettings().getAutoAfkKick();
+
+        // Checks if the player has been inactive for longer than the configured auto-afk-kick time.
         if (autoafkkick > 0
                 && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
                 && !isAuthorized("essentials.kick.exempt")
                 && !isAuthorized("essentials.afk.kickexempt")) {
             lastActivity = 0;
             final double kickTime = autoafkkick / 60.0;
+            
+            // If `afk-timeout-command` in config.yml is set to 'none', use default Essentials kicking behaviour instead of executing a command.
+            if (ess.getSettings().getAfkTimeoutCommand().equals("none")) {
+                this.getBase().kickPlayer(AdventureUtil.miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
 
-            this.getBase().kickPlayer(AdventureUtil.miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
-
-            for (final User user : ess.getOnlineUsers()) {
-                if (user.isAuthorized("essentials.kick.notify")) {
-                    user.sendTl("playerKicked", Console.DISPLAY_NAME, getName(), user.playerTl("autoAfkKickReason", kickTime));
+                for (final User user : ess.getOnlineUsers()) {
+                    if (user.isAuthorized("essentials.kick.notify")) {
+                        user.sendTl("playerKicked", Console.DISPLAY_NAME, getName(), user.playerTl("autoAfkKickReason", kickTime));
+                    }
                 }
+            }
+            // If `afk-timeout-command` in config.yml is not set to 'none', execute the command instead of kicking the player.
+            else {
+                final String command = ess.getSettings().getAfkTimeoutCommand().replace("{PLAYER}", getName()).replace("{KICK_TIME}", String.valueOf(kickTime));
+                ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), command);
             }
         }
         final long autoafk = ess.getSettings().getAutoAfk();

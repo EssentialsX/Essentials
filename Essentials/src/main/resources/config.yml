@@ -484,6 +484,10 @@ auto-afk: 300
 # Set to -1 for no timeout.
 auto-afk-kick: -1
 
+# Define the command that gets run by the server when the player's AFK time elapses.
+# Set to 'none' to use Essentials default afk-timeout kicking behaviour.
+afk-timeout-command: 'none'
+
 # Set this to true if you want to freeze players when they are AFK.
 # Other players or monsters won't be able to push them out of AFK mode.
 # This will also enable temporary god mode for the AFK player.
