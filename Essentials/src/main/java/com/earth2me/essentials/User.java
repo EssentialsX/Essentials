@@ -843,9 +843,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                         user.sendTl("playerKicked", Console.DISPLAY_NAME, getName(), user.playerTl("autoAfkKickReason", kickTime));
                     }
                 }
-            }
-            // If `afk-timeout-command` in config.yml is not set to 'none', execute the command instead of kicking the player.
-            else {
+            } else {
+                // If `afk-timeout-command` in config.yml is not set to 'none', execute the command instead of kicking the player.
                 final String command = ess.getSettings().getAfkTimeoutCommand().replace("{USERNAME}", getName()).replace("{KICKTIME}", String.valueOf(kickTime));
                 ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), command);
             }
