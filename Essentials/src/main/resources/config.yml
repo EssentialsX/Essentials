@@ -484,13 +484,13 @@ auto-afk: 300
 # Set to -1 for no timeout.
 auto-afk-kick: -1
 
-# Define a command the server runs when a player's AFK time elapses.
-# Set to 'none' to use Essentials' default AFK timeout kick behavior.
+# Define a set of commands the server runs when a player's AFK time elapses.
+# Set to [] to use Essentials' default AFK timeout kick behavior.
 #
 # Available placeholders:
 # {USERNAME} - The player's username.
 # {KICKTIME} - The time, in minutes, the player has been AFK for.
-afk-timeout-command: 'none'
+afk-timeout-commands: []
 
 # Set this to true if you want to freeze players when they are AFK.
 # Other players or monsters won't be able to push them out of AFK mode.
