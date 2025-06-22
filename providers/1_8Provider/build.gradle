@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(':providers:BaseProviders')) {
-        exclude group: "org.spigotmc", module: "spigot-api"
+        exclude(module: 'spigot-api')
     }
     implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
 }
