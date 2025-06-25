@@ -1268,14 +1268,16 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getLong("auto-afk-kick", -1);
     }
 
-    private List<String> _getAfkTimeoutCommands() {
-        final List<String> commands = config.getList("afk-timeout-commands", String.class);
-        // commands.replaceAll(String::toLowerCase);
-        return commands;
+    private Set<String> _getAfkTimeoutCommands() {
+        final Set<String> timeoutCommands = new HashSet<>();
+        for (final String cmd : config.getList("afk-timeout-commands", String.class)) {
+            timeoutCommands.add(cmd.toLowerCase(Locale.ENGLISH));
+        }
+        return timeoutCommands;
     }
 
     @Override
-    public List<String> getAfkTimeoutCommands() {
+    public Set<String> getAfkTimeoutCommands() {
         return afkTimeoutCommands;
     }
 
