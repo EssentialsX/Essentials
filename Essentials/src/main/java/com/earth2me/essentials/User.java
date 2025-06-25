@@ -832,15 +832,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        final long autoafkkick = ess.getSettings().getAutoAfkTimeout();
+        final long autoafktimeout = ess.getSettings().getAutoAfkTimeout();
 
         // Checks if the player has been inactive for longer than the configured auto-afk-kick time.
-        if (autoafkkick > 0
-                && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
+        if (autoafktimeout > 0
+                && lastActivity > 0 && (lastActivity + (autoafktimeout * 1000)) < System.currentTimeMillis()
                 && !isAuthorized("essentials.kick.exempt")
                 && !isAuthorized("essentials.afk.kickexempt")) {
             lastActivity = 0;
-            final double kickTime = autoafkkick / 60.0;
+            final double kickTime = autoafktimeout / 60.0;
             
             // If `afk-timeout-command` in config.yml is empty, use default Essentials kicking behaviour instead of executing a command.
             if (ess.getSettings().getAfkTimeoutCommands().isEmpty()) {
