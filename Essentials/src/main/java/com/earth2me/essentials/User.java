@@ -832,7 +832,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        final long autoafkkick = ess.getSettings().getAutoAfkKick();
+        final long autoafkkick = ess.getSettings().getAutoAfkTimeout();
 
         // Checks if the player has been inactive for longer than the configured auto-afk-kick time.
         if (autoafkkick > 0

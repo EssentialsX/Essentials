@@ -208,7 +208,7 @@ public interface ISettings extends IConf {
 
     long getAutoAfk();
 
-    long getAutoAfkKick();
+    long getAutoAfkTimeout();
 
     List<String> getAfkTimeoutCommands();
 

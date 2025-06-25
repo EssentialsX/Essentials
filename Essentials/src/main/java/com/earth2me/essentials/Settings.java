@@ -1264,8 +1264,8 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public long getAutoAfkKick() {
-        return config.getLong("auto-afk-kick", -1);
+    public long getAutoAfkTimeout() {
+        return config.getLong("auto-afk-timeout", config.getLong("auto-afk-kick", -1));
     }
 
     private Set<String> _getAfkTimeoutCommands() {
