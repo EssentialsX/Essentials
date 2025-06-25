@@ -153,7 +153,7 @@ public class Settings implements net.ess3.api.ISettings {
     private Tag secondaryColor = DEFAULT_SECONDARY_COLOR;
     private Set<String> multiplierPerms;
     private BigDecimal defaultMultiplier;
-    private List<String> afkTimeoutCommands = Collections.emptyList();
+    private Set<String> afkTimeoutCommands = new HashSet<>();
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
