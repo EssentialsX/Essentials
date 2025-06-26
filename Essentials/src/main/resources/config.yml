@@ -479,7 +479,8 @@ remove-god-on-disconnect: false
 # Set to -1 for no timeout.
 auto-afk: 300
 
-# After this timeout in seconds, the player will be kicked from the server.
+# After this timeout in seconds, the player will either be kicked from
+# the server or commands in 'afk-timeout-commands' will be executed.
 # The 'essentials.afk.kickexempt' permission overrides this feature.
 # Set to -1 for no timeout.
 auto-afk-timeout: -1
