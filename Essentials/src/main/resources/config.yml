@@ -482,7 +482,7 @@ auto-afk: 300
 # After this timeout in seconds, the player will be kicked from the server.
 # The 'essentials.afk.kickexempt' permission overrides this feature.
 # Set to -1 for no timeout.
-auto-afk-kick: -1
+auto-afk-timeout: -1
 
 # A list of commands to be executed instead of kicking the player once the
 # threshold defined above in 'afk-auto-timeout' is reached. If this list is empty 
