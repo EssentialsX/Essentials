@@ -78,7 +78,7 @@ change-tab-complete-name: false
 #add-prefix-in-playerlist: true
 
 # When this option is enabled, player suffixes will be shown in the (tab) player list.
-# This feature only works for Minecraft version 1.8 and higher. 
+# This feature only works for Minecraft version 1.8 and higher.
 # The value of 'change-playerlist' above must be true.
 #add-suffix-in-playerlist: true
 
@@ -566,7 +566,7 @@ custom-quit-message: "none"
 # Set this to "none" to use the 'custom-join-message' setting for every join.
 #
 # Available placeholders:
-# {PLAYER} - The player's display name. 
+# {PLAYER} - The player's display name.
 # {USERNAME} - The player's username.
 # {OLDUSERNAME} - The player's old username.
 # {PREFIX} - The player's prefix.
@@ -923,7 +923,7 @@ chat:
   # You can add command costs for shout/question by adding 'chat-shout' and 'chat-question' to the 'command-costs' section above.
   radius: 0
 
-  # Chat formatting can be configured in two ways: 
+  # Chat formatting can be configured in two ways:
   #  - A standard format for all chat ('format' section)
   #  - Group-specific chat formats for extra variation ('group-formats' section)
   #
@@ -1027,6 +1027,7 @@ protect:
     fireball-fire: false
     fireball-playerdamage: false
     fireball-itemdamage: false
+    windcharge-explosion: false
     witherskull-explosion: false
     witherskull-playerdamage: false
     witherskull-itemdamage: false
@@ -1256,7 +1257,7 @@ random-respawn-location: "none"
 spawn-on-join: false
 # The following value of 'guests' states that all players in the 'guests' group will be teleported to spawn when joining.
 #spawn-on-join: guests
-# The following list value states that all players in the 'guests' or 'admin' groups will be teleported to spawn when joining. 
+# The following list value states that all players in the 'guests' or 'admin' groups will be teleported to spawn when joining.
 #spawn-on-join:
 #  - guests
 #  - admin
