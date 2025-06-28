@@ -597,7 +597,7 @@ commands:
     usage: /<command> <storm/sun> [duration]
     aliases: [rain,erain,sky,esky,storm,estorm,sun,esun,eweather]
   whois:
-    description: Determine the username behind a nickname.
+    description: Determine basic information about the specified player.
     usage: /<command> <nickname>
     aliases: [ewhois]
   workbench:
