@@ -42,7 +42,7 @@ public class Commandpotion extends EssentialsCommand {
 
         boolean holdingPotion = stack.getType() == Material.POTION;
         if (!holdingPotion && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
-            holdingPotion = stack.getType() == Material.SPLASH_POTION || stack.getType() == Material.LINGERING_POTION;
+            holdingPotion = stack.getType() == Material.SPLASH_POTION || stack.getType() == Material.LINGERING_POTION || stack.getType() == Material.TIPPED_ARROW;
         }
         if (holdingPotion) {
             PotionMeta pmeta = (PotionMeta) stack.getItemMeta();
@@ -75,7 +75,7 @@ public class Commandpotion extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
-        // Note: this enforces an order of effect power duration splash, which the actual command doesn't have.  But that's fine. 
+        // Note: this enforces an order of effect power duration splash, which the actual command doesn't have.  But that's fine.
         if (args.length == 1) {
             final List<String> options = Lists.newArrayList();
             options.add("clear");
