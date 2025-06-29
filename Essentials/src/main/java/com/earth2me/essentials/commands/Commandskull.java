@@ -139,7 +139,7 @@ public class Commandskull extends EssentialsCommand {
                             skullMeta.setOwnerProfile(profile);
                         }
                         if (skullMeta.getOwnerProfile() == null) {
-                            OfflinePlayer offline = ess.getServer().getOfflinePlayer(owner);
+                            final OfflinePlayer offline = ess.getServer().getOfflinePlayer(owner);
                             skullMeta.setOwningPlayer(offline);
                         }
 
