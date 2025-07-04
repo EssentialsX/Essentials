@@ -14,7 +14,7 @@ dependencyResolutionManagement {
         maven("https://repo.codemc.org/repository/maven-public") {
             content { includeGroup("org.bstats") }
         }
-        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
+        maven("https://repo.helpch.at/releases/") {
             content { includeGroup("me.clip") }
         }
         maven("https://libraries.minecraft.net/") {
