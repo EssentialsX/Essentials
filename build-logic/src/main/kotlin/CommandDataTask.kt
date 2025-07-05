@@ -14,7 +14,7 @@ abstract class CommandDataTask : DefaultTask() {
     // i promise i will be safe
     @Suppress("UNCHECKED_CAST")
     @TaskAction
-    private fun harvest() {
+    fun harvest() {
         val pluginYml = project.file("src/main/resources/plugin.yml")
         if (!pluginYml.exists()) {
             logger.warn("No plugin.yml found to harvest")
