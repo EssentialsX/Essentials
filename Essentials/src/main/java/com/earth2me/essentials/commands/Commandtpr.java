@@ -55,12 +55,18 @@ public class Commandtpr extends EssentialsCommand {
         if (event.isCancelled()) {
             return;
         }
+
+        target.sendTl("tprSuccess");
+        if (target != user) {
+            user.sendTl("tprOtherUser", target.getDisplayName());
+        }
+
         (event.isModified() ? randomTeleport.getRandomLocation(event.getCenter(), event.getMinRange(), event.getMaxRange()) : randomTeleport.getRandomLocation(randomLocationName))
                 .thenAccept(location -> {
                     final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
                     future.thenAccept(success -> {
                         if (success) {
-                            target.sendTl("tprSuccess");
+                            target.sendTl("tprSuccessDone");
                         }
                     });
                     target.getAsyncTeleport().teleport(location, charge, PlayerTeleportEvent.TeleportCause.COMMAND, future);
@@ -87,12 +93,15 @@ public class Commandtpr extends EssentialsCommand {
         if (event.isCancelled()) {
             return;
         }
+
+        userToTeleport.sendTl("tprSuccess");
+        sender.sendTl("tprOtherUser", userToTeleport.getDisplayName());
         (event.isModified() ? randomTeleport.getRandomLocation(event.getCenter(), event.getMinRange(), event.getMaxRange()) : randomTeleport.getRandomLocation(potentialLocation))
                 .thenAccept(location -> {
                     final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                     future.thenAccept(success -> {
                         if (success) {
-                            userToTeleport.sendTl("tprSuccess");
+                            userToTeleport.sendTl("tprSuccessDone");
                         }
                     });
                     userToTeleport.getAsyncTeleport().now(location, false, PlayerTeleportEvent.TeleportCause.COMMAND, future);
