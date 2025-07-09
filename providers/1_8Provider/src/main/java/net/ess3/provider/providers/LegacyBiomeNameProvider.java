@@ -10,6 +10,8 @@ import java.util.Locale;
 public class LegacyBiomeNameProvider implements BiomeNameProvider {
     @Override
     public String getBiomeName(final Block block) {
+        // For some reason, compiling against modern versions causes this call to break, possibly related to OldEnum?
+        // Compiling this against versions that still have proper enums allow this to work
         return block.getBiome().name().toLowerCase(Locale.ENGLISH);
     }
 }
