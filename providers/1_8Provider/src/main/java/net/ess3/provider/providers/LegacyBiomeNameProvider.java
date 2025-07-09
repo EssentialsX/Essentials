@@ -6,7 +6,7 @@ import org.bukkit.block.Block;
 
 import java.util.Locale;
 
-@ProviderData(description = "Legacy Item Unbreakable Provider")
+@ProviderData(description = "Legacy Biome Name Provider")
 public class LegacyBiomeNameProvider implements BiomeNameProvider {
     @Override
     public String getBiomeName(final Block block) {
