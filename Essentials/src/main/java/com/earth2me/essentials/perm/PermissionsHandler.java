@@ -198,6 +198,9 @@ public class PermissionsHandler implements IPermissionsHandler {
             String enabledPermsPlugin = ((AbstractVaultHandler) handler).getEnabledPermsPlugin();
             if (enabledPermsPlugin == null) enabledPermsPlugin = "generic";
             ess.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
+        } else if (handler.getClass() == ConfigPermissionsHandler.class) {
+            ess.getLogger().info("Using config file enhanced permissions.");
+            ess.getLogger().info("Permissions listed in as player-commands will be given to all users.");
         } else if (handler.getClass() == SuperpermsHandler.class) {
             if (handler.tryProvider(ess)) {
                 ess.getLogger().warning("Detected supported permissions plugin " +
@@ -206,9 +209,6 @@ public class PermissionsHandler implements IPermissionsHandler {
                     "work until you install Vault.");
             }
             ess.getLogger().info("Using superperms-based permissions.");
-        } else if (handler.getClass() == ConfigPermissionsHandler.class) {
-            ess.getLogger().info("Using config file enhanced permissions.");
-            ess.getLogger().info("Permissions listed in as player-commands will be given to all users.");
         }
     }
 
