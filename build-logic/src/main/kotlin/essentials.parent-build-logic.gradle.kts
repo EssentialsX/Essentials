@@ -26,6 +26,7 @@ tasks {
     }
     named<Delete>("clean") {
         delete(file("jars"))
+        delete(file("generated"))
     }
 }
 

@@ -1,4 +1,3 @@
-# This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
 name: Essentials
 main: com.earth2me.essentials.Essentials
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
@@ -597,7 +596,7 @@ commands:
     usage: /<command> <storm/sun> [duration]
     aliases: [rain,erain,sky,esky,storm,estorm,sun,esun,eweather]
   whois:
-    description: Determine the username behind a nickname.
+    description: Determine basic information about the specified player.
     usage: /<command> <nickname>
     aliases: [ewhois]
   workbench:
@@ -619,62 +618,596 @@ permissions:
     description: Give players with op everything by default
     children:
       essentials.gamemode.*: true
-  # These permissions can't be assigned from player-commands for compatibility reasons
-  essentials.teleport.cooldown.bypass.tpa:
+  essentials.afk:
+    description: Allows access to the /afk command
+  essentials.afk.message:
+    description: Allows the player to set a custom AFK message
+  essentials.afk.others:
+    description: Allows the player to set another player's AFK status
+  essentials.afk.auto:
+    default: false
+    description: Players with this permission will be set to afk after a period of inaction as defined in the config file
+  essentials.afk.kickexempt:
+    description: Players with this permission will not be kicked for being AFK
+  essentials.antioch:
+    description: Allows access to the /antioch command
+  essentials.back:
+    description: Allows access to the /back command
+  essentials.back.others:
+    description: Allows access to the /back command for other players
+  essentials.back.ondeath:
+    default: false
+    description: Players with this permission will have back location stored during death
+  essentials.back.onteleport:
     default: true
-    description: If the player does not have this permission, /tpa will have cooldown even with the parent bypass perm
-  essentials.teleport.cooldown.bypass.back:
-    default: true
-    description: If the player does not have this permission, /back will have cooldown even with the parent bypass perm
+    description: Players with this permission will have back location stored during any teleportation
+  essentials.back.into.<world>:
+    description: Allows the player to use the /back command to travel to a specific world
+  essentials.backup:
+    description: Allows access to the /backup command
+  essentials.balance:
+    description: Allows access to the /balance command
+  essentials.balance.others:
+    description: Allows view other players balance with the /balance command
+  essentials.balancetop:
+    description: Allows access to the /balancetop command
+  essentials.balancetop.force:
+    description: Allows access to force refresh the balancetop list
+  essentials.balancetop.exclude:
+    default: false
+    description: Players with this permission are excluded from the balancetop
+  essentials.ban:
+    description: Allows access to the /ban command
+  essentials.ban.notify:
+    description: Allows the bearer to be notified when a player is banned
+  essentials.ban.exempt:
+    default: false
+    description: Prevent a specified group or player from being banned
+  essentials.ban.offline:
+    description: Allows access to the /ban command for offline players, which may in turn by used to ban exempt players who are offline
+  essentials.banip:
+    description: Allows access to the /banip command
+  essentials.banip.notify:
+    description: Allows the bearer to be notified when a player is banned
+  essentials.unban:
+    description: Allows access to the /unban command
+  essentials.unbanip:
+    description: Allows access to the /unbanip command
+  essentials.bigtree:
+    description: Allows access to the /bigtree command
+  essentials.book:
+    description: Allows access to the /book command
+  essentials.book.author:
+    description: Allows access to edit book authors with the /book command
+  essentials.book.others:
+    description: Allows access to edit other players books with the /book command
+  essentials.book.title:
+    description: Allows access to edit book titles with the /book command
+  essentials.bottom:
+    description: Allows access to the /bottom command
+  essentials.break:
+    description: Allows access to the /break command
+  essentials.break.bedrock:
+    description: Allows access to the /break command for bedrock
+  essentials.broadcast:
+    description: Allows access to the /broadcast command
+  essentials.broadcastworld:
+    description: Allows access to the /broadcastworld command
+  essentials.burn:
+    description: Allows access to the /burn command
+  essentials.chat.ignoreexempt:
+    default: false
+    description: Someone with this permission will not be ignored, even if they are on another persons ignore list
+  essentials.chat.spy:
+    description: Allows the bearers to see all local chat messages, regardless of their proximity to the sender
+  essentials.chat.spy.exempt:
+    description: Allows the bearer to be exempt from the local chat spy permission
+  essentials.clearinventory:
+    description: Allows access to the /clearinventory command
+  essentials.clearinventory.all:
+    description: Allows access to clear the inventory of all players with the /clearinventory command
+  essentials.clearinventory.others:
+    description: Allows access to clear the inventory of other players with the /clearinventory command
+  essentials.clearinventoryconfirmtoggle:
+    description: Allows access to the /clearinventoryconfirmtoggle command
+  essentials.commandcooldowns.bypass:
+    description: Allows the bypassing of all command cooldowns
+  essentials.commandcooldowns.bypass.<commandname>:
+    description: Allows the bypassing of the cooldown for a specific command
+  essentials.compass:
+    description: Allows access to the /compass command
+  essentials.condense:
+    description: Allows access to the /condense command
+  essentials.createkit:
+    description: Allows access to the /createkit command
+  essentials.delkit:
+    description: Allows access to the /delkit command
+  essentials.kitreset:
+    description: Allows access to the /kitreset command
+  essentials.kitreset.others:
+    description: Allows access to reset other players kits with the /kitreset command
+  essentials.customtext:
+    description: Allows access to the /customtext command and all aliases
+  essentials.delwarp:
+    description: Allows access to the /delwarp command
+  essentials.depth:
+    description: Allows access to the /depth command
+  essentials.disposal:
+    description: Allows access to the /disposal command
+  essentials.eco:
+    description: Allows access to the /eco command
+  essentials.eco.loan:
+    description: Allows the bearer to possess a negative balance
+  essentials.enchant:
+    description: Allows access to the /enchant command
+  essentials.enchantments.allowunsafe:
+    description: Allows the bearer to enchant items with unsafe enchantments
+  essentials.enchantments.<enchantment>:
+    description: Allows the bearer to use a specific enchantment with the /enchant command
+  essentials.enderchest:
+    description: Allows access to the /enderchest command
+  essentials.enderchest.modify:
+    description: Allows the bearer to modify other players enderchests
+  essentials.enderchest.others:
+    description: Allows access to the /enderchest command for other players
+  essentials.essentials:
+    description: Allows access to the /essentials command
+  essentials.updatecheck:
+    description: The bearer will be notified of updates to EssentialsX
+  essentials.exp:
+    description: Allows access to the /exp command
+  essentials.exp.give:
+    description: Allows the bearer to give experience to themselves
+  essentials.exp.give.others:
+    description: Allows the bearer to give experience to other players
+  essentials.exp.others:
+    description: Allows the bearer to view other players experience
+  essentials.exp.set:
+    description: Allows the bearer to set experience for themselves
+  essentials.exp.set.others:
+    description: Allows the bearer to set experience for other players
+  essentials.ext:
+    description: Allows access to the /ext command
+  essentials.ext.others:
+    description: Allows access to the /ext command for other players
+  essentials.feed:
+    description: Allows access to the /feed command
+  essentials.feed.others:
+    description: Allows access to the /feed command for other players
+  essentials.fireball:
+    description: Allows access to the /fireball command. Additional permissions are required for each type of fireball.
+  essentials.fireball.fireball:
+    description: Allows access to use the fireball in the /fireball command
+  essentials.fireball.small:
+    description: Allows access to use the small fireball in the /fireball command
+  essentials.fireball.large:
+    description: Allows access to use the large fireball in the /fireball command
+  essentials.fireball.arrow:
+    description: Allows access to use the arrows in the /fireball command
+  essentials.fireball.dragon:
+    description: Allows access to use the dragon in the /fireball command
+  essentials.fireball.splashpotion:
+    description: Allows access to use the splash potion in the /fireball command
+  essentials.fireball.lingeringpotion:
+    description: Allows access to use the lingering potion in the /fireball command
+  essentials.fireball.trident:
+    description: Allows access to use the trident in the /fireball command
+  essentials.fireball.skull:
+    description: Allows access to use the skull in the /fireball command
+  essentials.fireball.egg:
+    description: Allows access to use the egg in the /fireball command
+  essentials.fireball.snowball:
+    description: Allows access to use the snowball in the /fireball command
+  essentials.firework:
+    description: Allows access to the /firework command
+  essentials.firework.fire:
+    description: Allows the bearer to use the firework command to launch a copy of the firework in hand
+  essentials.firework.multiple:
+    description: Allows the bearer to use the firework command to launch multiple fireworks
+  essentials.fly:
+    description: Allows access to the /fly command
+  essentials.fly.safelogin:
+    description: Bearers of this permission will be put into fly mode if they log in while in the air
+  essentials.fly.others:
+    description: Allows access to the /fly command for other players
+  essentials.gamemode:
+    description: Allows access to the /gamemode command
+  essentials.gamemode.all:
+    description: Allows access to all gamemodes with the /gamemode command
+  essentials.gamemode.others:
+    description: Allows access to the /gamemode command for other players
+  essentials.gamemode.survival:
+    description: Allows access to the survival gamemode with the /gamemode command
+  essentials.gamemode.creative:
+    description: Allows access to the creative gamemode with the /gamemode command
+  essentials.gamemode.adventure:
+    description: Allows access to the adventure gamemode with the /gamemode command
+  essentials.gamemode.spectator:
+    description: Allows access to the spectator gamemode with the /gamemode command
   essentials.gamemode.*:
+    description: Allows access to all gamemodes with the /gamemode command
     default: op
     children:
       essentials.gamemode: true
       essentials.gamemode.others: true
       essentials.gamemode.all: true
+  essentials.gc:
+    description: Allows access to the /gc command
+  essentials.getpos:
+    description: Allows access to the /getpos command
+  essentials.getpos.others:
+    description: Allows access to the /getpos command for other players
+  essentials.give:
+    description: Allows access to the /give command
+  essentials.give.item-all:
+    description: Allows access to the /give command for all items when permission-based-item-spawn is enabled
+  essentials.give.item-<item-name>:
+    description: Allows access to the /give command for a specific item when permission-based-item-spawn is enabled
+  essentials.god:
+    description: Allows access to the /god command
+  essentials.god.others:
+    description: Allows access to the /god command for other players
+  essentials.god.pvp:
+    description: Allows the bearer to attack players while in god mode
+  essentials.hat:
+    description: Allows access to the /hat command
+  essentials.hat.prevent-type.<item-name>:
+    description: Prevents the player from using the /hat command with the specified item
+  essentials.hat.ignore-binding:
+    description: Allows the bearer to use the /hat command when they have equipped an item with curse of binding
+  essentials.heal:
+    description: Allows access to the /heal command
+  essentials.heal.others:
+    description: Allows access to the /heal command for other players
+  essentials.help:
+    description: Allows access to the /help command
+  essentials.help.<plugin-name>:
+    description: Allows access to the /help command for a specific plugin
+  essentials.helpop:
+    description: Allows access to the /helpop command
+  essentials.helpop.receive:
+    description: Allows the bearer to receive helpop messages
+  essentials.kill:
+    description: Allows access to the /kill command
+  essentials.kill.exempt:
+    description: Prevents the player from being killed by /kill
+  essentials.kill.force:
+    description: Allows the bearer to be killed by /kill even if their death is canceled
+  essentials.suicide:
+    description: Allows access to the /suicide command for multiple players
+  essentials.home:
+    description: Allows access to the /home command
+  essentials.home.compass:
+    default: false
+    description: Point the player's compass at their first home. compass-towards-home-perm needs to be enabled in the configuration.
+  essentials.home.others:
+    description: Allows access to teleport to other players homes with the /home command
+  essentials.home.bed:
+    description: Allows access to the /home command for beds
+  essentials.ice:
+    description: Allows access to the /ice command
+  essentials.ice.others:
+    description: Allows access to the /ice command for other players
+  essentials.ignore:
+    description: Allows access to the /ignore command
+  essentials.info:
+    description: Allows access to the /info command
+  essentials.invsee:
+    description: Allows access to the /invsee command
+  essentials.invsee.equip:
+    description: Allows access to view items in armor slots with the /invsee command
+  essentials.invsee.modify:
+    description: Allows access to modify items in other players inventories with the /invsee command
+  essentials.invsee.preventmodify:
+    default: false
+    description: Prevents other players from modifying the players inventory.
+  essentials.item:
+    description: Allows access to the /item command
+  essentials.itemspawn.exempt:
+    description: Allows the bearer to spawn items in the item blacklist
+  essentials.itemspawn.meta-chapter-<chapter>:
+    description: Allows the bearer to spawn specific books only, from book.txt. with the /give command.
+  essentials.itemspawn.meta-author:
+    description: Allows the bearer to spawn items with author metadata
+  essentials.itemspawn.meta-book:
+    description: Allows the bearer to spawn items with pre-filled content from book.txt
+  essentials.itemspawn.meta-firework:
+    description: Allows the bearer to spawn items with firework metadata
+  essentials.itemspawn.meta-head:
+    description: Allows the bearer to spawn items with head metadata
+  essentials.itemspawn.meta-lore:
+    description: Allows the bearer to spawn items with lore metadata
+  essentials.itemspawn.meta-title:
+    description: Allows the bearer to spawn items with title metadata
+  essentials.itemlore:
+    description: Allows access to the /itemlore command
+  essentials.itemdb:
+    description: Allows access to the /itemdb command
+  essentials.itemname:
+    description: Allows access to the /itemname command
+  essentials.itemname.format:
+    description: Allows access to the /itemname command with formatting text
+  essentials.itemname.magic:
+    description: Allows access to the /itemname command with magic text
+  essentials.itemname.color:
+    description: Allows access to the /itemname command with color text
+  essentials.itemname.rgb:
+    description: Allows access to the /itemname command with RGB text
+  essentials.itemname.prevent-type.<item-name>:
+    description: Prevents the player from using the /itemname command with the specified item
+  essentials.jail:
+    description: Allows access to the /jail command
+  essentials.jail.exempt:
+    description: Prevent a specified group or player from being jailed
+  essentials.jail.allow.<command>:
+    description: Allows the bearer to use the specified command while jailed
+  essentials.jail.notify:
+    description: Allows the bearer to be notified when other players are jailed
+  essentials.jail.allow-break:
+    description: Allows the bearer to break blocks while jailed
+  essentials.jail.allow-place:
+    description: Allows the bearer to place blocks while jailed
+  essentials.jail.allow-block-damage:
+    description: Allows the bearer to damage blocks while jailed
+  essentials.jail.allow-interact:
+    description: Allows the bearer to interact with blocks while jailed
+  essentials.jails:
+    description: Allows access to the /jails command
+  essentials.deljail:
+    description: Allows access to the /deljail command
+  essentials.jump:
+    description: Allows access to the /jump command
+  essentials.jump.lock:
+    description: Allows access to the /jump lock command
+  essentials.keepxp:
+    default: false
+    description: Allows the user to keep their exp on death, instead of dropping it.
+  essentials.joinfullserver:
+    description: Allows the to join the server even if it is full
+  essentials.kick:
+    description: Allows access to the /kick command
+  essentials.kick.exempt:
+    default: false
+    description: Prevents the player from being kicked.
+  essentials.kick.notify:
+    description: Allows the bearer to be notified when other players are kicked
+  essentials.kickall:
+    description: Allows access to the /kickall command
+  essentials.kickall.exempt:
+    description: Prevents the player from being kicked by /kickall
+  essentials.kit:
+    description: Allows access to the /kit command
+  essentials.kit.exemptdelay:
+    default: false
+    description: Exempts you from the kit delay feature, this affects signs as well as command.
+  essentials.kit.others:
+    description: Allows access to the /kit command for other players
+  essentials.kits.*:
+    description: Allows access to all kits
+  essentials.kits.<kit-name>:
+    description: Allows access to a specific kit
+  essentials.kittycannon:
+    description: Allows access to the /kittycannon command
+  essentials.beezooka:
+    description: Allows access to the /beezooka command
+  essentials.lightning:
+    description: Allows access to the /lightning command
+  essentials.lightning.others:
+    description: Allows access to the /lightning command for other players
+  essentials.list:
+    description: Allows access to the /list command
+  essentials.list.hidden:
+    description: Allow access to view hidden players in the /list command
+  essentials.mail:
+    description: Allows access to the /mail command
+  essentials.mail.send:
+    description: Allows access to send mail with the /mail command
+  essentials.mail.sendall:
+    description: Allows access to send mail to all players with the /mail command
+  essentials.mail.sendtemp:
+    description: Allows access to send temporary mail with the /mail command
+  essentials.mail.clear.others:
+    description: Allows access to clear other players mail with the /mail command
+  essentials.mail.clearall:
+    description: Allows access to clear all mail with the /mail command
+  essentials.me:
+    description: Allows access to the /me command
+  essentials.more:
+    description: Allows access to the /more command
+  essentials.motd:
+    description: Allows access to the /motd command
+  essentials.msg:
+    description: Allows access to the /msg command
+  essentials.msg.format:
+    description: Allows access to the /msg command with formatting text
+  essentials.msg.magic:
+    description: Allows access to the /msg command with magic text
+  essentials.msg.color:
+    description: Allows access to the /msg command with color text
+  essentials.msg.rgb:
+    description: Allows access to the /msg command with RGB text
+  essentials.msg.url:
+    description: Allows access to send URLs in the /msg command
+  essentials.msg.multiple:
+    description: Allows access to send messages to multiple players with the /msg command
+  essentials.msgtoggle:
+    description: Allows access to the /msgtoggle command
+  essentials.msgtoggle.others:
+    description: Allows access to the /msgtoggle command for other players
+  essentials.msgtoggle.bypass:
+    description: Allows the bearer to bypass the msgtoggle setting for other players
+  essentials.mute:
+    description: Allows access to the /mute command
+  essentials.mute.notify:
+    description: Allows the bearer to be notified when other players are muted
+  essentials.mute.exempt:
+    default: false
+    description: Prevent a specified group or player from being muted
+  essentials.mute.unlimited:
+    description: Allows the bearer to override the max-mute-time setting
+  essentials.mute.offline:
+    description: Allows access to mute offline players
+  essentials.near:
+    description: Allows access to the /near command
+  essentials.near.maxexempt:
+    description: Allows the bearer to bypass the radius limit for the /near command
+  essentials.near.others:
+    description: Allows access to the /near command for other players
+  essentials.near.exclude:
+    default: false
+    description: If the player should be excluded from near lookups.
+  essentials.nick:
+    description: Allows access to the /nick command
+  essentials.nick.color:
+    description: Allows access to the /nick command with color text
+  essentials.nick.format:
+    description: Allows access to the /nick command with formatting text
+  essentials.nick.magic:
+    description: Allows access to the /nick command with magic text
+  essentials.nick.rgb:
+    description: Allows access to the /nick command with RGB text
+  essentials.nick.others:
+    description: Allows access to the /nick command for other players
+  essentials.nick.blacklist.bypass:
+    description: Allows the bearer to bypass the nickname blacklist
+  essentials.nick.changecolors:
+    description: Allows the bearer to change **only** the color of their nickname
+  essentials.nick.allowunsafe:
+    default: false
+    description: If a player has this, they can set their username to any value. Use with caution, as this has the potential to break userdata files.
+  essentials.nick.hideprefix:
+    default: false
+    description: Players with this permission will not have the nickname prefix applied to them
+  essentials.nocommandcost.all:
+    description: Allows the bearer to use all commands without cost
+  essentials.nocommandcost.<command>:
+    description: Allows the bearer to use the specified command without cost
+  essentials.nuke:
+    description: Allows access to the /nuke command
+  essentials.oversizedstacks:
+    description: Allows the bearer to spawn oversized stacks
+  essentials.pay:
+    description: Allows access to the /pay command
+  essentials.pay.multiple:
+    description: Allows access to pay multiple players with the /pay command
+  essentials.pay.offline:
+    description: Allows access to pay offline players with the /pay command
+  essentials.payconfirmtoggle:
+    description: Allows access to the /payconfirmtoggle command
+  essentials.paytoggle:
+    description: Allows access to the /paytoggle command
+  essentials.ping:
+    description: Allows access to the /ping command
+  essentials.potion:
+    description: Allows access to the /potion command
+  essentials.potion.<potion-type>:
+    description: Allows access to the /potion command for a specific potion type
+  essentials.potion.apply:
+    description: Allows access to the /potion apply command
+  essentials.powertool:
+    description: Allows access to the /powertool command
+  essentials.powertool.append:
+    description: Allows access to add multiple commands to a powertool
+  essentials.powertooltoggle:
+    description: Allows access to the /powertooltoggle command
+  essentials.ptime:
+    description: Allows access to the /ptime command
+  essentials.ptime.others:
+    description: Allows access to the /ptime command for other players
+  essentials.pvpdelay.exempt:
+    description: Allows the bearer to bypass the pvp delay setting
+  essentials.pweather:
+    description: Allows access to the /pweather command
+  essentials.pweather.others:
+    description: Allows access to the /pweather command for other players
+  essentials.rtoggle:
+    description: Allows access to the /rtoggle command
+  essentials.realname:
+    description: Allows access to the /realname command
+  essentials.recipe:
+    description: Allows access to the /recipe command
+  essentials.remove:
+    description: Allows access to the /remove command
+  essentials.repair:
+    description: Allows access to the /repair command
+  essentials.repair.all:
+    description: Allows access to the /repair all command
+  essentials.repair.armor:
+    description: Allows access to the /repair armor command
+  essentials.repair.enchanted:
+    description: Allows access to use the /repair command on enchanted items
+  essentials.rest:
+    description: Allows access to the /rest command
+  essentials.rest.others:
+    description: Allows access to the /rest command for other players
+  essentials.rules:
+    description: Allows access to the /rules command
+  essentials.seen:
+    description: Allows access to the /seen command
+  essentials.seen.banreason:
+    description: Allows access to the /seen command with ban reason
+  essentials.seen.ip:
+    description: Allows access to the /seen command with IP address
+  essentials.seen.location:
+    description: Allows access to the /seen command with location
+  essentials.seen.uuid:
+    description: Allows access to the /seen command with UUID
+  essentials.seen.whitelist:
+    description: Allows access to the /seen command with whitelist status
+  essentials.seen.ipsearch:
+    description: Allows access to use IP addresses with the /seen command
+  essentials.seen.alts:
+    description: Allows access to the /seen command with alts
   essentials.seen.extra:
-    default: op
+    description: Allows access to the /seen command with extra information
     children:
       essentials.seen.ip: true
       essentials.seen.location: true
       essentials.seen.uuid: true
       essentials.seen.whitelist: true
-  essentials.keepinv:
-    default: false
-    description: Controls whether players keep their inventory on death.
-  essentials.near.exclude:
-    default: false
-    description: If the player should be excluded from near lookups.
-  essentials.keepxp:
-    default: false
-    description: Allows the user to keep their exp on death, instead of dropping it.
-  essentials.invsee.preventmodify:
-    default: false
-    description: Prevents other players from modifying the players inventory.
-  essentials.afk.auto:
-    default: false
-    description: Players with this permission will be set to afk after a period of inaction as defined in the config file.
-  essentials.home.compass:
-    default: false
-    description: Point the player's compass at their first home. compass-towards-home-perm needs to be enabled in the configuration.
-  essentials.ban.exempt:
-    default: false
-    description: Prevent a specified group or player from being banned
-  essentials.kick.exempt:
-    default: false
-    description: Prevents the player from being kicked.
-  essentials.chat.ignoreexempt:
-    default: false
-    description: Someone with this permission will not be ignored, even if they are on another persons ignore list
-  essentials.kit.exemptdelay:
-    default: false
-    description: Exempts you from the kit delay feature, this affects signs as well as command.
-  essentials.mute.exempt:
-    default: false
-    description: Prevent a specified group or player from being muted
+  essentials.sell:
+    description: Allows access to the /sell command
+  essentials.sell.bulk:
+    description: Allows access to bulk sell items with the /sell command
+  essentials.sell.hand:
+    description: Allows access to sell the item in hand with the /sell command
+  essentials.sethome:
+    description: Allows access to the /sethome command
+  essentials.renamehome:
+    description: Allows access to the /renamehome command
+  essentials.renamehome.others:
+    description: Allows access to rename other players homes with the /renamehome command
   essentials.sethome.bed:
     default: false
     description: Allows the player to right click a bed during daytime to update their 'bed' home.
+  essentials.sethome.multiple:
+    description: Allows access to set multiple homes with the /sethome command
+  essentials.sethome.multiple.<set name>:
+    description: Raises the limit of homes to a specific number defined in the config
+  essentials.sethome.multiple.unlimited:
+    description: Allows access to set unlimited homes with the /sethome command
+  essentials.sethome.others:
+    description: Allows access to set other players homes with the /sethome command
+  essentials.delhome:
+    description: Allows access to the /delhome command
+  essentials.delhome.others:
+    description: Allows access to delete other players homes with the /delhome command
+  essentials.setjail:
+    description: Allows access to the /setjail command
+  essentials.setwarp:
+    description: Allows access to the /setwarp command
+  essentials.setworth:
+    description: Allows access to the /setworth command
+  essentials.showkit:
+    description: Allows access to the /showkit command
+  essentials.signs.enchant.allowunsafe:
+    description: Allows the bearer to create and use unsafe enchantment signs
+  essentials.signs.protection.override:
+    description: Allows the bearer to break signs created by other players
+  essentials.signs.trade.override:
+    description: Allows the bearer to break trade signs created by other players
+  essentials.signs.trade.override.collect:
+    description: Allows the bearer to collect items from trade signs created by other players
   essentials.silentjoin:
     default: false
     description: Allow to join silently
@@ -684,24 +1217,336 @@ permissions:
   essentials.silentquit:
     default: false
     description: Suppress leave/quit messages for users with this permission.
+  essentials.skull:
+    description: Allows access to the /skull command
+  essentials.skull.modify:
+    description: Allows access to modify other players skulls with the /skull command
+  essentials.skull.others:
+    description: Allows access to creating other players skulls with the /skull command
+  essentials.skull.spawn:
+    description: Allows access to spawn a skull with the /skull command
+  essentials.sleepingignored:
+    description: Allows the bearer to not be required to sleep to skip the night
+  essentials.socialspy:
+    description: Allows access to the /socialspy command
+  essentials.socialspy.others:
+    description: Allows access to the /socialspy command for other players
+  essentials.spawner:
+    description: Allows access to the /spawner command
+  essentials.spawner.delay:
+    description: Allows access to set the delay of a spawner with the /spawner command
+  essentials.spawner.*:
+    description: Allows access to set the type of a spawner with the /spawner command to all types
+  essentials.spawner.<mob-type>:
+    description: Allows access to set the type of a spawner with the /spawner command to a specific type
+  essentials.spawnerconvert.*:
+    description: Allows the bearer to place spawners of any type
+  essentials.spawnerconvert.<mob-type>:
+    description: Allows the bearer to place spawners of a specific type
+  essentials.spawnmob:
+    description: Allows access to the /spawnmob command
+  essentials.spawnmob.stack:
+    description: Allows access to spawn mobs in stacks with the /spawnmob command
+  essentials.spawnmob.*:
+    description: Allows access to spawn all mobs with the /spawnmob command
+  essentials.spawnmob.<mob-type>:
+    description: Allows access to spawn a specific mob with the /spawnmob command
+  essentials.speed:
+    description: Allows access to the /speed command
+  essentials.speed.others:
+    description: Allows access to the /speed command for other players
+  essentials.speed.fly:
+    description: Allows access to the /speed command for fly speed
+  essentials.speed.walk:
+    description: Allows access to the /speed command for walk speed
+  essentials.speed.bypass:
+    description: Allows the bearer to bypass the speed limit set in the config
+  essentials.sudo:
+    description: Allows access to the /sudo command
   essentials.sudo.exempt:
     default: false
-    description: Prevents the holder from being sudo'ed by another user
+    description: Prevents the player from being sudo'ed by another user
+  essentials.sudo.multiple:
+    description: Allows access to the /sudo command for multiple players
+  essentials.teleport.timer.bypass:
+    description: Allows the bearer to bypass the teleport delay
+  essentials.teleport.timer.move:
+    description: Allows the bearer to move while waiting for a teleport
+  essentials.tempban:
+    description: Allows access to the /tempban command
   essentials.tempban.exempt:
     default: false
-    description: Prevents a specified group or player from being tempbanned
-  essentials.nick.allowunsafe:
+    description: Prevent a specified group or player from being tempbanned
+  essentials.tempban.offline:
+    description: Allows access to tempban offline players
+  essentials.tempban.unlimited:
+    description: Allows the bearer to override the max-tempban-time setting
+  essentials.tempbanip:
+    description: Allows access to the /tempbanip command
+  essentials.thunder:
+    description: Allows access to the /thunder command
+  essentials.time:
+    description: Allows access to the /time command
+  essentials.time.set:
+    description: Allows access to set the time with the /time command
+  essentials.time.world.all:
+    description: Allows access to set the time for all worlds with the /time command
+  essentials.togglejail:
+    description: Allows access to the /togglejail command
+  essentials.togglejail.offline:
+    description: Allows access to the /togglejail command for offline players
+  essentials.top:
+    description: Allows access to the /top command
+  essentials.tp:
+    description: Allows access to the /tp command
+  essentials.tpauto:
+    description: Allows access to the /tpauto command
+  essentials.tpauto.others:
+    description: Allows access to the /tpauto command for other players
+  essentials.tp.others:
+    description: Allows access to teleporting to other users with the /tp command
+  essentials.tp.position:
+    description: Allows access to teleporting to a position with the /tp command
+  essentials.tpoffline:
+    description: Allows access to the /tpoffline command
+  essentials.tpa:
+    description: Allows access to the /tpa command
+  essentials.tpaall:
+    description: Allows access to the /tpaall command
+  essentials.tpacancel:
+    description: Allows access to the /tpaccept command
+  essentials.tpaccept:
+    description: Allows access to the /tpaccept command
+  essentials.tpahere:
+    description: Allows access to the /tpahere command
+  essentials.tpall:
+    description: Allows access to the /tpall command
+  essentials.tpdeny:
+    description: Allows access to the /tpdeny command
+  essentials.tphere:
+    description: Allows access to the /tphere command
+  essentials.tpo:
+    description: Allows access to the /tpo command
+  essentials.tpohere:
+    description: Allows access to the /tpohere command
+  essentials.tppos:
+    description: Allows access to the /tppos command
+  essentials.tptoggle:
+    description: Allows access to the /tptoggle command
+  essentials.tptoggle.others:
+    description: Allows access to the /tptoggle command for other players
+  essentials.tpr:
+    description: Allows access to the /tpr command
+  essentials.settpr:
+    description: Allows access to the /settpr command
+  essentials.tree:
+    description: Allows access to the /tree command
+  essentials.unlimited:
+    description: Allows access to the /unlimited command
+  essentials.unlimited.item-all:
+    description: Allows access to the /unlimited command for all items when permission-based-item-spawn is enabled
+  essentials.unlimited.item-<item-name>:
+    description: Allows access to the /unlimited command for a specific item when permission-based-item-spawn is enabled
+  essentials.unlimited.item-bucket:
+    description: Allows access to the /unlimited command for buckets of water and lava
+  essentials.unlimited.others:
+    description: Allows access to the /unlimited command for other players
+  essentials.vanish:
+    description: Allows access to the /vanish command
+  essentials.vanish.others:
+    description: Allows access to the /vanish command for other players
+  essentials.vanish.pvp:
+    description: Allows the bearer to attack players while in vanish mode
+  essentials.vanish.see:
+    description: Allows the bearer to see other players in vanish mode
+  essentials.vanish.effect:
+    description: Applies invisibility effects to the player when they are in vanish mode
+  essentials.vanish.interact:
+    description: Allows the bearer to interact with players in vanish mode
+  essentials.version:
+    description: Allows access to the /version command
+  essentials.warp:
+    description: Allows access to the /warp command
+  essentials.warp.overwrite.*:
+    description: Allows the bearer to overwrite all warps
+  essentials.warp.overwrite.<warp-name>:
+    description: Allows the bearer to overwrite a specific warp
+  essentials.warp.list:
+    description: Allows access to the /warp list command
+  essentials.warp.others:
+    description: Allows access to the /warp command for other players
+  essentials.warpinfo:
+    description: Allows access to the /warpinfo command
+  essentials.weather:
+    description: Allows access to the /weather command
+  essentials.whois:
+    description: Allows access to the /whois command
+  essentials.whois.ip:
+    description: Allows access to the /whois command with IP address
+  essentials.workbench:
+    description: Allows access to the /workbench command
+  essentials.anvil:
+    description: Allows access to the /anvil command
+  essentials.cartographytable:
+    description: Allows access to the /cartographytable command
+  essentials.grindstone:
+    description: Allows access to the /grindstone command
+  essentials.loom:
+    description: Allows access to the /loom command
+  essentials.stonecutter:
+    description: Allows access to the /stonecutter command
+  essentials.smithingtable:
+    description: Allows access to the /smithingtable command
+  essentials.world:
+    description: Allows access to the /world command
+  essentials.worlds.<world-name>:
+    description: Allows access to the specific world with various commands
+  essentials.worth:
+    description: Allows access to the /worth command
+  essentials.signs.break.balance:
+    description: Allows the bearer to break balance signs
+  essentials.signs.break.buy:
+    description: Allows the bearer to break buy signs
+  essentials.signs.break.disposal:
+    description: Allows the bearer to break disposal signs
+  essentials.signs.break.enchant:
+    description: Allows the bearer to break enchant signs
+  essentials.signs.break.free:
+    description: Allows the bearer to break free signs
+  essentials.signs.break.gamemode:
+    description: Allows the bearer to break gamemode signs
+  essentials.signs.break.heal:
+    description: Allows the bearer to break heal signs
+  essentials.signs.break.info:
+    description: Allows the bearer to break info signs
+  essentials.signs.break.kit:
+    description: Allows the bearer to break kit signs
+  essentials.signs.break.mail:
+    description: Allows the bearer to break mail signs
+  essentials.signs.break.protection:
+    description: Allows the bearer to break protection signs
+  essentials.signs.break.repair:
+    description: Allows the bearer to break repair signs
+  essentials.signs.break.sell:
+    description: Allows the bearer to break sell signs
+  essentials.signs.break.spawnmob:
+    description: Allows the bearer to break spawnmob signs
+  essentials.signs.break.trade:
+    description: Allows the bearer to break trade signs
+  essentials.signs.break.time:
+    description: Allows the bearer to break time signs
+  essentials.signs.break.warp:
+    description: Allows the bearer to break warp signs
+  essentials.signs.break.weather:
+    description: Allows the bearer to break weather signs
+  essentials.signs.color:
+    description: Allows the bearer to create and use color signs
+  essentials.signs.format:
+    description: Allows the bearer to create and use format signs
+  essentials.signs.magic:
+    description: Allows the bearer to create and use magic signs
+  essentials.signs.rgb:
+    description: Allows the bearer to create and use RGB signs
+  essentials.signs.use.balance:
+    description: Allows the bearer to use balance signs
+  essentials.signs.use.buy:
+    description: Allows the bearer to use buy signs
+  essentials.signs.use.disposal:
+    description: Allows the bearer to use disposal signs
+  essentials.signs.use.enchant:
+    description: Allows the bearer to use enchant signs
+  essentials.signs.use.free:
+    description: Allows the bearer to use free signs
+  essentials.signs.use.gamemode:
+    description: Allows the bearer to use gamemode signs
+  essentials.signs.use.heal:
+    description: Allows the bearer to use heal signs
+  essentials.signs.use.info:
+    description: Allows the bearer to use info signs
+  essentials.signs.use.kit:
+    description: Allows the bearer to use kit signs
+  essentials.signs.use.mail:
+    description: Allows the bearer to use mail signs
+  essentials.signs.use.protection:
+    description: Allows the bearer to use protection signs
+  essentials.signs.use.repair:
+    description: Allows the bearer to use repair signs
+  essentials.signs.use.sell:
+    description: Allows the bearer to use sell signs
+  essentials.signs.use.spawnmob:
+    description: Allows the bearer to use spawnmob signs
+  essentials.signs.use.trade:
+    description: Allows the bearer to use trade signs
+  essentials.signs.use.time:
+    description: Allows the bearer to use time signs
+  essentials.signs.use.warp:
+    description: Allows the bearer to use warp signs
+  essentials.signs.use.weather:
+    description: Allows the bearer to use weather signs
+  essentials.signs.create.balance:
+    description: Allows the bearer to create balance signs
+  essentials.signs.create.buy:
+    description: Allows the bearer to create buy signs
+  essentials.signs.create.disposal:
+    description: Allows the bearer to create disposal signs
+  essentials.signs.create.enchant:
+    description: Allows the bearer to create enchant signs
+  essentials.signs.create.free:
+    description: Allows the bearer to create free signs
+  essentials.signs.create.gamemode:
+    description: Allows the bearer to create gamemode signs
+  essentials.signs.create.heal:
+    description: Allows the bearer to create heal signs
+  essentials.signs.create.info:
+    description: Allows the bearer to create info signs
+  essentials.signs.create.kit:
+    description: Allows the bearer to create kit signs
+  essentials.signs.create.mail:
+    description: Allows the bearer to create mail signs
+  essentials.signs.create.protection:
+    description: Allows the bearer to create protection signs
+  essentials.signs.create.repair:
+    description: Allows the bearer to create repair signs
+  essentials.signs.create.sell:
+    description: Allows the bearer to create sell signs
+  essentials.signs.create.spawnmob:
+    description: Allows the bearer to create spawnmob signs
+  essentials.signs.create.trade:
+    description: Allows the bearer to create trade signs
+  essentials.signs.create.time:
+    description: Allows the bearer to create time signs
+  essentials.signs.create.warp:
+    description: Allows the bearer to create warp signs
+  essentials.signs.create.weather:
+    description: Allows the bearer to create weather signs
+  essentials.editsign:
+    description: Allows access to the /editsign command
+  essentials.editsign.unlimited:
+    description: Allows the bearer to exceed the 15 character limit on signs
+  essentials.editsign.color:
+    description: Allows the bearer to use color codes on signs
+  essentials.editsign.format:
+    description: Allows the bearer to use formatting codes on signs
+  essentials.editsign.magic:
+    description: Allows the bearer to use magic codes on signs
+  essentials.editsign.rgb:
+    description: Allows the bearer to use RGB codes on signs
+  essentials.editsign.waxed.exempt:
+    description: Allows the bearer to edit waxed signs
+  essentials.keepinv:
     default: false
-    description: If a player has this, they can set their username to any value. Use with caution, as this has the potential to break userdata files.
-  essentials.balancetop.exclude:
-    default: false
-    description: Players with this permission are excluded from the balancetop
-  essentials.back.onteleport:
+    description: Controls whether players keep their inventory on death.
+  essentials.playtime:
+    description: Allows access to the /playtime command
+  essentials.playtime.others:
+    description: Allows access to the /playtime command for other players
+  # These permissions can't be assigned from player-commands for compatibility reasons
+  essentials.teleport.cooldown.bypass.tpa:
     default: true
-    description: Players with this permission will have back location stored during any teleportation
-  essentials.back.ondeath:
-    default: false
-    description: Players with this permission will have back location stored during death
+    description: If the player does not have this permission, /tpa will have cooldown even with the parent bypass perm
+  essentials.teleport.cooldown.bypass.back:
+    default: true
+    description: If the player does not have this permission, /back will have cooldown even with the parent bypass perm
   essentials.exempt:
     default: false
     description: Parent permission to be exempt from many moderator actions
@@ -715,6 +1560,3 @@ permissions:
       essentials.tempban.exempt: true
       essentials.exempt.protect: true
       essentials.editsign.waxed.exempt: true
-  essentials.nick.hideprefix:
-    default: false
-    description: Players with this permission will not have the nickname prefix applied to them

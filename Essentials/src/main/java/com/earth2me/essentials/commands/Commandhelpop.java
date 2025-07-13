@@ -43,7 +43,7 @@ public class Commandhelpop extends EssentialsCommand {
 
         final List<IUser> recipients = new ArrayList<>();
         for (IUser user : ess.getOnlineUsers()) {
-            if (user.getBase().hasPermission("essentials.helpop.receive")) {
+            if (user.isAuthorized("essentials.helpop.receive")) {
                 recipients.add(user);
             }
         }
