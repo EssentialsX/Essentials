@@ -2,7 +2,7 @@ package net.essentialsx.discord.interactions.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.PlayerNotFoundException;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgumentType;

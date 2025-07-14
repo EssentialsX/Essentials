@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.adventure.AdventureFacet;
 import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IWarps;
@@ -146,4 +147,6 @@ public interface IEssentials extends Plugin {
     default <P extends Provider> P provider(final Class<P> providerClass) {
         return getProviders().get(providerClass);
     }
+
+    AdventureFacet getAdventureFacet();
 }

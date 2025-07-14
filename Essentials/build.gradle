@@ -80,7 +80,7 @@ shadowJar {
     relocate 'io.leangen.geantyref', 'com.earth2me.essentials.libs.geantyref'
     relocate 'org.checkerframework', 'com.earth2me.essentials.libs.checkerframework'
     relocate 'net.kyori', 'com.earth2me.essentials.libs.kyori'
-    relocate 'net.essentialsx.temp.adventure', 'net.kyori.adventure'
+    relocate 'net.essentialsx.temp.adventure', 'net.kyori.adventure' // Undo temporary relocation for Paper Provider
 
     minimize {
         include(dependency('org.checkerframework:checker-qual'))

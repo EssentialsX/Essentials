@@ -1,6 +1,7 @@
 package com.earth2me.essentials.utils;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.adventure.AdventureUtil;
 
 public final class CommonPlaceholders {
     private CommonPlaceholders() {

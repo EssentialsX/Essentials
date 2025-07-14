@@ -1,12 +1,12 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.adventure.ComponentHolder;
 import com.earth2me.essentials.commands.Commandfireball;
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -24,7 +24,6 @@ import net.ess3.provider.TickCountProvider;
 import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
 import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
-import net.kyori.adventure.text.Component;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.GameMode;
@@ -192,7 +191,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 }
             }
 
-            ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("mutedUserSpeaks", user.getName(), event.getMessage())));
+            ess.getLogger().info(ess.getAdventureFacet().miniToLegacy(tlLiteral("mutedUserSpeaks", user.getName(), event.getMessage())));
         }
         try {
             final Iterator<Player> it = event.getRecipients().iterator();
@@ -277,7 +276,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             ess.getScheduler().cancelTask(pendingId);
         }
 
-        if (hideJoinQuitMessages() || (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit"))) {
+        if (hideJoinQuitMessages() || ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit")) {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
@@ -446,7 +445,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
                 if (user.isAuthorized("essentials.updatecheck")) {
                     ess.runTaskAsynchronously(() -> {
-                        for (final Component component : ess.getUpdateChecker().getVersionMessages(false, false, user.getSource())) {
+                        for (final ComponentHolder component : ess.getUpdateChecker().getVersionMessages(false, false, user.getSource())) {
                             user.sendComponent(component);
                         }
                     });
@@ -548,14 +547,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 final Date banExpiry = banEntry.getExpiration();
                 if (banExpiry != null) {
                     final String expiry = DateUtil.formatDateDiff(banExpiry.getTime());
-                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("tempbanJoin", expiry, banEntry.getReason())));
+                    event.setKickMessage(ess.getAdventureFacet().miniToLegacy(tlLiteral("tempbanJoin", expiry, banEntry.getReason())));
                 } else {
-                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("banJoin", banEntry.getReason())));
+                    event.setKickMessage(ess.getAdventureFacet().miniToLegacy(tlLiteral("banJoin", banEntry.getReason())));
                 }
             } else {
                 banEntry = ess.getServer().getBanList(BanList.Type.IP).getBanEntry(event.getAddress().getHostAddress());
                 if (banEntry != null) {
-                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("banIpJoin", banEntry.getReason())));
+                    event.setKickMessage(ess.getAdventureFacet().miniToLegacy(tlLiteral("banIpJoin", banEntry.getReason())));
                 }
             }
         }
@@ -655,16 +654,18 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
             if (pluginCommand == null
-                || (!pluginCommand.getName().equals("msg") && !pluginCommand.getName().equals("r"))) { // /msg and /r are handled in SimpleMessageRecipient
+                || !pluginCommand.getName().equals("msg") && !pluginCommand.getName().equals("r")) { // /msg and /r are handled in SimpleMessageRecipient
                 final User user = ess.getUser(player);
                 if (!user.isAuthorized("essentials.chat.spy.exempt")) {
                     final String playerName = ess.getSettings().isSocialSpyDisplayNames() ? player.getDisplayName() : player.getName();
                     for (final User spyer : ess.getOnlineUsers()) {
                         if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
-                            final Component base = (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers())
+                            final ComponentHolder base = (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers())
                                     ? spyer.tlComponent("socialSpyMutedPrefix")
                                     : spyer.tlComponent("socialSpyPrefix");
-                            spyer.sendComponent(base.append(AdventureUtil.legacyToAdventure(playerName)).append(Component.text(": " + event.getMessage())));
+                            final ComponentHolder append = ess.getAdventureFacet().legacyToAdventure(playerName + ": " + event.getMessage());
+
+                            spyer.sendComponent(ess.getAdventureFacet().append(base, append));
                         }
                     }
                 }
@@ -688,7 +689,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     user.sendTl("voiceSilencedTime", dateDiff);
                 }
             }
-            ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("mutedUserSpeaks", player.getName(), event.getMessage())));
+            ess.getLogger().info(ess.getAdventureFacet().miniToLegacy(tlLiteral("mutedUserSpeaks", player.getName(), event.getMessage())));
             return;
         }
 
@@ -1100,7 +1101,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
             return command != null
                     && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials") || command.getPlugin().getClass().getName().startsWith("net.essentialsx"))
-                    && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
+                    && (ess.getSettings().isCommandOverridden(label) || ess.getAlternativeCommandsHandler().getAlternative(label) == null);
         }
     }
 

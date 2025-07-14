@@ -1,12 +1,13 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.adventure.AdventureUtil;
+import com.earth2me.essentials.adventure.ComponentHolder;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -24,8 +25,6 @@ import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.ess3.provider.PlayerLocaleProvider;
 import net.essentialsx.api.v2.events.TransactionEvent;
 import net.essentialsx.api.v2.services.mail.MailSender;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -547,7 +546,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public String getDisplayName() {
         //noinspection ConstantConditions
-        return super.getBase().getDisplayName() == null || (ess.getSettings().hideDisplayNameInVanish() && isHidden()) ? super.getBase().getName() : super.getBase().getDisplayName();
+        return super.getBase().getDisplayName() == null || ess.getSettings().hideDisplayNameInVanish() && isHidden() ? super.getBase().getName() : super.getBase().getDisplayName();
     }
 
     @Override
@@ -648,7 +647,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || (set && ess.getSettings().sleepIgnoresAfkPlayers()));
+        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || set && ess.getSettings().sleepIgnoresAfkPlayers());
         if (set && !isAfk()) {
             afkPosition = this.getLocation();
             this.afkSince = System.currentTimeMillis();
@@ -840,7 +839,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             lastActivity = 0;
             final double kickTime = autoafkkick / 60.0;
 
-            this.getBase().kickPlayer(AdventureUtil.miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
+            this.getBase().kickPlayer(ess.getAdventureFacet().miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
 
             for (final User user : ess.getOnlineUsers()) {
                 if (user.isAuthorized("essentials.kick.notify")) {
@@ -1059,14 +1058,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public void sendComponent(ComponentLike component) {
-        ess.getBukkitAudience().player(base).sendMessage(component);
+    public void sendComponent(ComponentHolder component) {
+        ess.getAdventureFacet().send(base, component);
     }
 
     @Override
-    public Component tlComponent(String tlKey, Object... args) {
+    public ComponentHolder tlComponent(String tlKey, Object... args) {
         final String translation = playerTl(tlKey, args);
-        return AdventureUtil.miniMessage().deserialize(translation);
+        return ess.getAdventureFacet().deserializeMiniMessage(translation);
     }
 
     @Override
@@ -1076,7 +1075,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        sendComponent(AdventureUtil.miniMessage().deserialize(translation));
+        sendComponent(ess.getAdventureFacet().deserializeMiniMessage(translation));
     }
 
     @Override

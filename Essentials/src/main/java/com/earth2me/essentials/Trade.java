@@ -2,7 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
@@ -145,7 +145,7 @@ public class Trade {
             sb.append(loc.getBlockY()).append(",");
             sb.append(loc.getBlockZ()).append(",");
         }
-        
+
         if (endBalance == null) {
             sb.append(",");
         } else {

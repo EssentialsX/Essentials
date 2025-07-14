@@ -4,7 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.TranslatableException;
 import org.bukkit.BanList;
@@ -55,8 +54,8 @@ public class Commandban extends EssentialsCommand {
 
         final String banDisplay = tlLiteral("banFormat", banReason, senderDisplayName);
 
-        user.getBase().kickPlayer(AdventureUtil.miniToLegacy(banDisplay));
-        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("playerBanned", senderDisplayName, user.getName(), banDisplay)));
+        user.getBase().kickPlayer(ess.getAdventureFacet().miniToLegacy(banDisplay));
+        ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral("playerBanned", senderDisplayName, user.getName(), banDisplay)));
 
         if (nomatch) {
             sender.sendTl("userUnknown", user.getName());

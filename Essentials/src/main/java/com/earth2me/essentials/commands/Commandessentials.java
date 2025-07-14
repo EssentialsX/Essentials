@@ -3,11 +3,11 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.adventure.ComponentHolder;
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.userstorage.ModernUserMap;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommandMapUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FloatUtil;
@@ -24,8 +24,6 @@ import com.google.gson.JsonPrimitive;
 import net.ess3.api.TranslatableException;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.OnlineModeProvider;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -278,7 +276,7 @@ public class Commandessentials extends EssentialsCommand {
         environment.addProperty("java-version", System.getProperty("java.version"));
         environment.addProperty("operating-system", System.getProperty("os.name"));
         environment.addProperty("uptime", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()));
-        environment.addProperty("allocated-memory", (Runtime.getRuntime().totalMemory() / 1024 / 1024) + "MB");
+        environment.addProperty("allocated-memory", Runtime.getRuntime().totalMemory() / 1024 / 1024 + "MB");
         dump.add("environment", environment);
 
         final JsonObject essData = new JsonObject();
@@ -466,7 +464,7 @@ public class Commandessentials extends EssentialsCommand {
                     // pastes.dev doesn't support deletion keys
                     //sender.sendTl("dumpDeleteKey", result.getDeletionKey());
                     if (sender.isPlayer()) {
-                        ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpConsoleUrl", dumpUrl)));
+                        ess.getLogger().info(ess.getAdventureFacet().miniToLegacy(tlLiteral("dumpConsoleUrl", dumpUrl)));
                         // pastes.dev doesn't support deletion keys
                         //ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpDeleteKey", result.getDeletionKey())));
                     }
@@ -574,7 +572,7 @@ public class Commandessentials extends EssentialsCommand {
                 final int homeCount = user.getHomes().size();
                 final double moneyCount = user.getMoney().doubleValue();
 
-                if ((lastLog == 0) || (timeDiff < milliDays) || (homeCount > homesArg) || (moneyCount > moneyArg)) {
+                if (lastLog == 0 || timeDiff < milliDays || homeCount > homesArg || moneyCount > moneyArg) {
                     continue;
                 }
 
@@ -638,7 +636,7 @@ public class Commandessentials extends EssentialsCommand {
                         for (String homeName : user.getHomes()) {
                             try {
                                 final Location home = user.getHome(homeName);
-                                if (!filterByWorld || (home != null && home.getWorld() != null && home.getWorld().getName().equals(args[2]))) {
+                                if (!filterByWorld || home != null && home.getWorld() != null && home.getWorld().getName().equals(args[2])) {
                                     user.delHome(homeName);
                                 }
                             } catch (Exception e) {
@@ -816,31 +814,31 @@ public class Commandessentials extends EssentialsCommand {
 
         switch (supportStatus) {
             case NMS_CLEANROOM:
-                sender.sendComponent(sender.tlComponent("serverUnsupportedCleanroom").color(NamedTextColor.DARK_RED));
+                sender.sendTl("serverUnsupportedCleanroom");
                 break;
             case DANGEROUS_FORK:
-                sender.sendComponent(sender.tlComponent("serverUnsupportedDangerous").color(NamedTextColor.DARK_RED));
+                sender.sendTl("serverUnsupportedDangerous");
                 break;
             case STUPID_PLUGIN:
-                sender.sendComponent(sender.tlComponent("serverUnsupportedDumbPlugins").color(NamedTextColor.DARK_RED));
+                sender.sendTl("serverUnsupportedDumbPlugins");
                 break;
             case UNSTABLE:
-                sender.sendComponent(sender.tlComponent("serverUnsupportedMods").color(NamedTextColor.DARK_RED));
+                sender.sendTl("serverUnsupportedMods");
                 break;
             case OUTDATED:
-                sender.sendComponent(sender.tlComponent("serverUnsupported").color(NamedTextColor.RED));
+                sender.sendTl("serverUnsupported");
                 break;
             case LIMITED:
-                sender.sendComponent(sender.tlComponent("serverUnsupportedLimitedApi").color(NamedTextColor.RED));
+                sender.sendTl("serverUnsupportedLimitedApi");
                 break;
         }
         if (VersionUtil.getSupportStatusClass() != null) {
-            sender.sendComponent(sender.tlComponent("serverUnsupportedClass").color(NamedTextColor.RED));
+            sender.sendTl("serverUnsupportedClass");
         }
 
         sender.sendTl("versionFetching");
         ess.runTaskAsynchronously(() -> {
-            for (final Component component : ess.getUpdateChecker().getVersionMessages(true, true, sender)) {
+            for (final ComponentHolder component : ess.getUpdateChecker().getVersionMessages(true, true, sender)) {
                 sender.sendComponent(component);
             }
         });

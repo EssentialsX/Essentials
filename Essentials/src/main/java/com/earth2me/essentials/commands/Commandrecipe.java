@@ -2,8 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.craftbukkit.Inventories;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -62,7 +62,7 @@ public class Commandrecipe extends EssentialsCommand {
             if (!sender.isPlayer()) {
                 throw new TranslatableException("consoleCannotUseCommand");
             }
-            
+
             itemType = Inventories.getItemInHand(sender.getPlayer());
         } else {
             itemType = ess.getItemDb().get(args[0]);
@@ -95,7 +95,7 @@ public class Commandrecipe extends EssentialsCommand {
         } else if (selectedRecipe instanceof ShapedRecipe) {
             shapedRecipe(sender, (ShapedRecipe) selectedRecipe, sender.isPlayer());
         } else if (selectedRecipe instanceof ShapelessRecipe) {
-            if (recipesOfType.size() == 1 && (itemType.getType() == FIREWORK_ROCKET)) {
+            if (recipesOfType.size() == 1 && itemType.getType() == FIREWORK_ROCKET) {
                 final ShapelessRecipe shapelessRecipe = new ShapelessRecipe(itemType);
                 shapelessRecipe.addIngredient(GUNPOWDER);
                 shapelessRecipe.addIngredient(Material.PAPER);

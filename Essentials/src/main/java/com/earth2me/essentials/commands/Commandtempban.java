@@ -4,7 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.BanList;
@@ -55,9 +54,9 @@ public class Commandtempban extends EssentialsCommand {
         final String expiry = DateUtil.formatDateDiff(banTimestamp);
 
         final String banDisplay = user.playerTl("tempBanned", expiry, senderDisplayName, banReason);
-        user.getBase().kickPlayer(AdventureUtil.miniToLegacy(banDisplay));
+        user.getBase().kickPlayer(ess.getAdventureFacet().miniToLegacy(banDisplay));
 
-        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("playerTempBanned", senderDisplayName, user.getName(), expiry, banReason)));
+        ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral("playerTempBanned", senderDisplayName, user.getName(), expiry, banReason)));
         ess.broadcastTl((IUser) null, "essentials.ban.notify", "playerTempBanned", senderDisplayName, user.getName(), expiry, banReason);
     }
 

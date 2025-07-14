@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
-import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -30,7 +29,7 @@ public class Commandunlimited extends EssentialsCommand {
         }
 
         if (args[0].equalsIgnoreCase("list")) {
-            user.sendComponent(AdventureUtil.miniMessage().deserialize(getList(user, target)));
+            user.sendComponent(ess.getAdventureFacet().deserializeMiniMessage(getList(user, target)));
         } else if (args[0].equalsIgnoreCase("clear")) {
             for (final Material m : new HashSet<>(target.getUnlimited())) {
                 if (m == null) {
