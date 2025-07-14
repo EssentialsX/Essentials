@@ -1,6 +1,7 @@
 package com.earth2me.essentials.config;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.config.annotations.DeleteIfIncomplete;
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
 import com.earth2me.essentials.config.entities.CommandCooldown;
@@ -366,7 +367,7 @@ public class EssentialsConfiguration {
 
         if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
             if (!configFile.getParentFile().mkdirs()) {
-                Essentials.getWrappedLogger().log(Level.SEVERE, tlLiteral("failedToCreateConfig", configFile.toString()));
+                Essentials.getWrappedLogger().log(Level.SEVERE, AdventureUtil.getAdventureFacet().miniToLegacy(tlLiteral("failedToCreateConfig", configFile.toString())));
                 return;
             }
         }
@@ -378,10 +379,10 @@ public class EssentialsConfiguration {
                 convertAltFile();
             } else if (templateName != null) {
                 try (final InputStream is = resourceClass.getResourceAsStream(templateName)) {
-                    Essentials.getWrappedLogger().log(Level.INFO, tlLiteral("creatingConfigFromTemplate", configFile.toString()));
+                    Essentials.getWrappedLogger().log(Level.INFO, AdventureUtil.getAdventureFacet().miniToLegacy(tlLiteral("creatingConfigFromTemplate", configFile.toString())));
                     Files.copy(is, configFile.toPath());
                 } catch (IOException e) {
-                    Essentials.getWrappedLogger().log(Level.SEVERE, tlLiteral("failedToWriteConfig", configFile.toString()), e);
+                    Essentials.getWrappedLogger().log(Level.SEVERE, AdventureUtil.getAdventureFacet().miniToLegacy(tlLiteral("failedToWriteConfig", configFile.toString())), e);
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.commands.WarpNotFoundException;
 import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.StringUtil;
@@ -133,7 +134,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
                             warpPoints.put(new StringIgnoreCase(name), conf);
                         }
                     } catch (final Exception ex) {
-                        Essentials.getWrappedLogger().log(Level.WARNING, tlLiteral("loadWarpError", filename), ex);
+                        Essentials.getWrappedLogger().log(Level.WARNING, AdventureUtil.getAdventureFacet().miniToLegacy(tlLiteral("loadWarpError", filename)), ex);
                     }
                 }
             }
