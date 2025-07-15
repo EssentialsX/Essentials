@@ -1,6 +1,7 @@
 dependencyResolutionManagement {
     repositories {
         maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://maven.devs.beer/")
         maven("https://hub.spigotmc.org/nexus/content/groups/public/") {
             content {
                 includeGroup("org.spigotmc")

@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import dev.lone.itemsadder.api.CustomStack;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +30,20 @@ public class Commandgive extends EssentialsLoopCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        ItemStack stack = ess.getItemDb().get(args[1]);
+        ItemStack stack;
+
+        try {
+            stack = ess.getItemDb().get(args[1]);
+        } catch (Exception e) {
+            final CustomStack customStack = CustomStack.getInstance(args[1]);
+
+            if (customStack != null) {
+                stack = customStack.getItemStack();
+            } else {
+                throw new TranslatableException("unknownItemName", args[1]);
+            }
+        }
+
         final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
         if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).canSpawnItem(stack.getType())) {
