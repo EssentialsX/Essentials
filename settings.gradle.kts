@@ -1,12 +1,12 @@
 dependencyResolutionManagement {
     repositories {
+        maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://hub.spigotmc.org/nexus/content/groups/public/") {
             content {
                 includeGroup("org.spigotmc")
                 includeGroup("net.md_5")
             }
         }
-        maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://jitpack.io") {
             content { includeGroup("com.github.milkbowl") }
             content { includeGroup("com.github.MinnDevelopment") }
@@ -14,7 +14,7 @@ dependencyResolutionManagement {
         maven("https://repo.codemc.org/repository/maven-public") {
             content { includeGroup("org.bstats") }
         }
-        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
+        maven("https://repo.helpch.at/releases/") {
             content { includeGroup("me.clip") }
         }
         maven("https://libraries.minecraft.net/") {

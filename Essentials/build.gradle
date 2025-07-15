@@ -14,21 +14,25 @@ dependencies {
     implementation 'org.checkerframework:checker-qual:3.49.0'
     implementation 'nu.studer:java-ordered-properties:1.0.4'
 
-    implementation 'net.kyori:adventure-api:4.19.0'
-    implementation 'net.kyori:adventure-text-minimessage:4.19.0'
-    implementation 'net.kyori:adventure-platform-bukkit:4.3.4'
+    implementation 'net.kyori:adventure-api:4.23.0'
+    implementation 'net.kyori:adventure-text-minimessage:4.23.0'
+    implementation 'net.kyori:adventure-platform-bukkit:4.4.0'
 
     // Providers
-    api project(':providers:BaseProviders')
-    api project(path: ':providers:PaperProvider', configuration: 'shadow')
+    api(project(':providers:BaseProviders')) {
+        exclude(module: 'spigot-api')
+    }
+    api(project(path: ':providers:PaperProvider', configuration: 'shadow')){
+        exclude(module: 'paper-api')
+    }
     api(project(':providers:NMSReflectionProvider')) {
-        exclude group: "org.bukkit", module: "bukkit"
+        exclude(module: 'bukkit')
     }
     api(project(':providers:1_8Provider')) {
-        exclude group: "org.spigotmc", module: "spigot"
+        exclude(module: 'spigot-api')
     }
     api(project(':providers:1_12Provider')) {
-        exclude group: "org.bukkit", module: "bukkit"
+        exclude(module: 'bukkit')
     }
 }
 

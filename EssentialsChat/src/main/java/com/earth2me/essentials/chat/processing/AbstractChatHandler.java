@@ -107,7 +107,7 @@ public abstract class AbstractChatHandler {
         // Local, shout and question chat types are only enabled when there's a valid radius
         if (chat.getRadius() > 0 && !event.getMessage().isEmpty()) {
             if (event.getMessage().length() > 1 && ((chat.getType() == ChatType.SHOUT && event.getMessage().charAt(0) == ess.getSettings().getChatShout()) || (chat.getType() == ChatType.QUESTION && event.getMessage().charAt(0) == ess.getSettings().getChatQuestion()))) {
-                event.setMessage(event.getMessage().substring(1));
+                event.setMessage(event.getMessage().substring(1).trim());
             }
 
             // Prevent messages like "!&c" or "?&c" from being sent which would cause an empty message

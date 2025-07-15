@@ -17,7 +17,6 @@ import org.bukkit.block.data.type.HangingSign;
 import org.bukkit.block.data.type.WallHangingSign;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.block.sign.Side;
-import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.util.Vector;
 
@@ -49,7 +48,7 @@ public class Commandeditsign extends EssentialsCommand {
                     throw new TranslatableException("editsignCommandLimit");
                 }
                 existingLines[line] = text;
-                if (callSignEvent(sign, user.getBase(), existingLines)) {
+                if (callSignEvent(sign, user, existingLines)) {
                     return;
                 }
 
@@ -61,7 +60,7 @@ public class Commandeditsign extends EssentialsCommand {
                         existingLines[i] = "";
                     }
 
-                    if (callSignEvent(sign, user.getBase(), existingLines)) {
+                    if (callSignEvent(sign, user, existingLines)) {
                         return;
                     }
 
@@ -71,7 +70,7 @@ public class Commandeditsign extends EssentialsCommand {
                     final int line = Integer.parseInt(args[1]) - 1;
                     existingLines[line] = "";
 
-                    if (callSignEvent(sign, user.getBase(), existingLines)) {
+                    if (callSignEvent(sign, user, existingLines)) {
                         return;
                     }
 
@@ -100,13 +99,13 @@ public class Commandeditsign extends EssentialsCommand {
                     for (int i = 0; i < 4; i++) {
                         existingLines[i] = FormatUtil.formatString(user, "essentials.editsign", user.getSignCopy().get(i));
                     }
-                    if (callSignEvent(sign, user.getBase(), existingLines)) {
+                    if (callSignEvent(sign, user, existingLines)) {
                         return;
                     }
                     user.sendTl("editsignPaste", commandLabel);
                 } else {
                     existingLines[line] = FormatUtil.formatString(user, "essentials.editsign", user.getSignCopy().get(line));
-                    if (callSignEvent(sign, user.getBase(), existingLines)) {
+                    if (callSignEvent(sign, user, existingLines)) {
                         return;
                     }
                     user.sendTl("editsignPasteLine", line + 1, commandLabel);
@@ -119,22 +118,22 @@ public class Commandeditsign extends EssentialsCommand {
         }
     }
 
-    private boolean callSignEvent(final ModifiableSign sign, final Player player, final String[] lines) {
+    private boolean callSignEvent(final ModifiableSign sign, final User user, final String[] lines) {
         final SignChangeEvent event;
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_1_R01)) {
-            if (sign.isWaxed() && !player.hasPermission("essentials.editsign.waxed.exempt")) {
+            if (sign.isWaxed() && !user.isAuthorized("essentials.editsign.waxed.exempt")) {
                 return true;
             }
-            event = new SignChangeEvent(sign.getBlock(), player, lines, sign.isFront() ? Side.FRONT : Side.BACK);
+            event = new SignChangeEvent(sign.getBlock(), user.getBase(), lines, sign.isFront() ? Side.FRONT : Side.BACK);
         } else {
             //noinspection deprecation
-            event = new SignChangeEvent(sign.getBlock(), player, lines);
+            event = new SignChangeEvent(sign.getBlock(), user.getBase(), lines);
         }
 
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("SignChangeEvent canceled for /editsign execution by " + player.getName());
+                ess.getLogger().info("SignChangeEvent canceled for /editsign execution by " + user.getName());
             }
             return true;
         }

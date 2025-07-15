@@ -3,5 +3,10 @@ plugins {
 }
 
 essentials {
+    injectBukkitApi.set(false)
     injectBstats.set(false)
+}
+
+dependencies {
+    api 'org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT'
 }
