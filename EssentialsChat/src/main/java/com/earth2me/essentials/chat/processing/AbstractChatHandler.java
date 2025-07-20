@@ -213,9 +213,9 @@ public abstract class AbstractChatHandler {
         }
 
         // Strip local chat prefix to preserve API behaviour
-        final String localPrefix = ess.getAdventureFacet().miniToLegacy(tlLiteral("chatTypeLocal"));
+        final String localPrefix = tlLiteral("chatTypeLocal");
         String baseFormat = ess.getAdventureFacet().legacyToMini(event.getFormat());
-        if (event.getFormat().startsWith(localPrefix)) {
+        if (baseFormat.startsWith(localPrefix)) {
             baseFormat = baseFormat.substring(localPrefix.length());
         }
 
