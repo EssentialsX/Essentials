@@ -19,6 +19,8 @@ public final class Inventories {
     private static final int CHEST_SLOT = 38;
     private static final int LEG_SLOT = 37;
     private static final int BOOT_SLOT = 36;
+    private static final int BODY_SLOT = 41;
+    private static final int SADDLE_SLOT = 42;
     private static final boolean HAS_OFFHAND = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01);
     private static final int INVENTORY_SIZE = HAS_OFFHAND ? 41 : 40;
 
@@ -224,6 +226,10 @@ public final class Inventories {
         int removedAmount = 0;
         final ItemStack[] items = player.getInventory().getContents();
         for (int i = 0; i < items.length; i++) {
+            if (isContortedSlot(i)) {
+                continue;
+            }
+
             if (!includeArmor && isArmorSlot(i)) {
                 continue;
             }
@@ -243,10 +249,18 @@ public final class Inventories {
     }
 
     public static boolean removeItemAmount(final Player player, final ItemStack toRemove, int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative.");
+        }
+
         final List<Integer> clearSlots = new ArrayList<>();
         final ItemStack[] items = player.getInventory().getContents();
 
         for (int i = 0; i < items.length; i++) {
+            if (isContortedSlot(i)) {
+                continue;
+            }
+
             final ItemStack item = items[i];
             if (isEmpty(item)) {
                 continue;
@@ -338,6 +352,10 @@ public final class Inventories {
         final HashMap<ItemStack, List<Integer>> partialSlots = new HashMap<>();
 
         for (int i = 0; i < inventoryContents.length; i++) {
+            if (isContortedSlot(i)) {
+                continue;
+            }
+
             if (!includeArmor && isArmorSlot(i)) {
                 continue;
             }
@@ -397,6 +415,10 @@ public final class Inventories {
 
     private static boolean isEmpty(final ItemStack stack) {
         return stack == null || MaterialUtil.isAir(stack.getType());
+    }
+
+    public static boolean isContortedSlot(final int slot) {
+        return slot == BODY_SLOT || slot == SADDLE_SLOT;
     }
 
     private static boolean isArmorSlot(final int slot) {

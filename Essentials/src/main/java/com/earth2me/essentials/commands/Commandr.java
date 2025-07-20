@@ -6,9 +6,8 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandr extends EssentialsCommand {
     public Commandr() {
@@ -28,9 +27,9 @@ public class Commandr extends EssentialsCommand {
             if (user.isMuted()) {
                 final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
                 if (dateDiff == null) {
-                    throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                    throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReason" : "voiceSilenced", user.getMuteReason());
                 }
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+                throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReasonTime" : "voiceSilencedTime", dateDiff, user.getMuteReason());
             }
 
             message = FormatUtil.formatMessage(user, "essentials.msg", message);
@@ -44,7 +43,7 @@ public class Commandr extends EssentialsCommand {
         // Check to make sure the sender does have a quick-reply recipient
         if (target == null || (!ess.getSettings().isReplyToVanished() && sender.isPlayer() && target.isHiddenFrom(sender.getPlayer()))) {
             messageSender.setReplyRecipient(null);
-            throw new Exception(tl("foreverAlone"));
+            throw new TranslatableException("foreverAlone");
         }
         messageSender.sendMessage(target, message);
     }

@@ -1,11 +1,9 @@
 package net.essentialsx.discord.util;
 
 import club.minnced.discord.webhook.WebhookClient;
-import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.AllowedMentions;
 import com.earth2me.essentials.utils.DownsampleUtil;
 import com.earth2me.essentials.utils.FormatUtil;
-import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.ImmutableList;
 import net.dv8tion.jda.api.Permission;
@@ -13,8 +11,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.JDADiscordService;
@@ -22,10 +20,12 @@ import okhttp3.OkHttpClient;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Predicate;
 
 public final class DiscordUtil {
     public final static String ADVANCED_RELAY_NAME = "EssX Advanced Relay";
@@ -39,7 +39,7 @@ public final class DiscordUtil {
         final ImmutableList.Builder<Message.MentionType> types = new ImmutableList.Builder<>();
         types.add(Message.MentionType.USER);
         types.add(Message.MentionType.CHANNEL);
-        types.add(Message.MentionType.EMOTE);
+        types.add(Message.MentionType.EMOJI);
         NO_GROUP_MENTIONS = types.build();
     }
 
@@ -54,13 +54,8 @@ public final class DiscordUtil {
      * @param client The http client of the webhook.
      * @return The {@link WebhookClient}.
      */
-    public static WebhookClient getWebhookClient(long id, String token, OkHttpClient client) {
-        return new WebhookClientBuilder(id, token)
-                .setWait(false)
-                .setAllowedMentions(AllowedMentions.none())
-                .setHttpClient(client)
-                .setDaemon(true)
-                .build();
+    public static WrappedWebhookClient getWebhookClient(long id, String token, OkHttpClient client) {
+        return new WrappedWebhookClient(id, token, client);
     }
 
     /**
@@ -132,20 +127,36 @@ public final class DiscordUtil {
         return future;
     }
 
+    public static Role getHighestRole(final JDADiscordService jda, final Member member, final Predicate<Role> fail) {
+        final List<Role> roles = member == null ? Collections.emptyList() : member.getRoles();
+        final List<String> blacklist = jda.getPlugin().getSettings().getDiscordRolesBlacklist();
+        final boolean invert = jda.getPlugin().getSettings().getInvertDiscordRoleBlacklist();
+
+        for (final Role role : roles) {
+            final boolean blacklisted = blacklist.contains(role.getName()) || blacklist.contains(role.getId());
+            if ((blacklisted && !invert) || (!blacklisted && invert)) {
+                continue;
+            }
+
+            if (fail != null && fail.test(role)) {
+                continue;
+            }
+
+            return role;
+        }
+
+        return null;
+    }
+
     /**
      * Gets the highest role of a given member or an empty string if the member has no roles.
      *
      * @param member The target member.
      * @return The highest role or blank string.
      */
-    public static String getRoleFormat(Member member) {
-        final List<Role> roles = member == null ? null : member.getRoles();
-
-        if (roles == null || roles.isEmpty()) {
-            return "";
-        }
-
-        return roles.get(0).getName();
+    public static String getRoleFormat(final JDADiscordService jda, Member member) {
+        final Role role = getHighestRole(jda, member, null);
+        return role != null ? jda.getSettings().getRoleAlias(role) : "";
     }
 
     /**
@@ -154,11 +165,13 @@ public final class DiscordUtil {
      * @param member The target member.
      * @return The bukkit color code or blank string.
      */
-    public static String getRoleColorFormat(Member member) {
-        if (member == null || member.getColorRaw() == Role.DEFAULT_COLOR_RAW) {
+    public static String getRoleColorFormat(final JDADiscordService jda, Member member) {
+        final Role topRole = getHighestRole(jda, member, role -> role.getColorRaw() == Role.DEFAULT_COLOR_RAW);
+        if (topRole == null || topRole.getColorRaw() == Role.DEFAULT_COLOR_RAW) {
             return "";
         }
-        final int rawColor = 0xff000000 | member.getColorRaw();
+
+        final int rawColor = 0xff000000 | topRole.getColorRaw();
 
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
             // Essentials' FormatUtil allows us to not have to use bungee's chatcolor since bukkit's own one doesn't support rgb
@@ -182,19 +195,27 @@ public final class DiscordUtil {
         final List<Role> roles = member.getRoles();
         for (String roleDefinition : roleDefinitions) {
             roleDefinition = roleDefinition.trim();
-            final boolean id = NumberUtil.isNumeric(roleDefinition);
 
             if (roleDefinition.equals("*") || member.getId().equals(roleDefinition)) {
                 return true;
             }
 
             for (final Role role : roles) {
-                if (role.getId().equals(roleDefinition) || (!id && role.getName().equalsIgnoreCase(roleDefinition))) {
+                if (matchesRole(role, roleDefinition)) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    /**
+     * Checks if the provided role matches the provided role definition (string representation of id or the role's name)
+     *
+     * @return true if the provided definition matches the provided role.
+     */
+    public static boolean matchesRole(Role role, String roleDefinition) {
+        return role.getId().equals(roleDefinition) || role.getName().equalsIgnoreCase(roleDefinition);
     }
 
     public static String getAvatarUrl(final JDADiscordService jda, final Player player) {

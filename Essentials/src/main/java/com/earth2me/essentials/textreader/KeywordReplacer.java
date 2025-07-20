@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.ExecuteTimer;
 import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.EnumUtil;
@@ -29,8 +30,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.earth2me.essentials.I18n.tl;
 
 //When adding a keyword here, you also need to add the implementation above
 enum KeywordType {
@@ -229,7 +228,7 @@ public class KeywordReplacer implements IText {
                         break;
                     case BALANCE:
                         if (user != null) {
-                            replacer = NumberUtil.displayCurrency(user.getMoney(), ess);
+                            replacer = AdventureUtil.miniToLegacy(NumberUtil.displayCurrency(user.getMoney(), ess));
                         }
                         break;
                     case MAILS:
@@ -344,7 +343,7 @@ public class KeywordReplacer implements IText {
                     case COORDS:
                         if (user != null) {
                             final Location location = user.getLocation();
-                            replacer = tl("coordsKeyword", location.getBlockX(), location.getBlockY(), location.getBlockZ());
+                            replacer = user.playerTl("coordsKeyword", location.getBlockX(), location.getBlockY(), location.getBlockZ());
                         }
                         break;
                     case TPS:

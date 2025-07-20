@@ -4,6 +4,7 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.User;
+import net.ess3.api.events.SignTransactionEvent;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.inventory.ItemStack;
@@ -41,11 +42,19 @@ public class SignSell extends EssentialsSign {
                 //noinspection BigDecimalMethodWithoutRoundingCalled
                 BigDecimal pricePerSingleItem = chargeAmount.divide(new BigDecimal(initialItemAmount));
                 pricePerSingleItem = pricePerSingleItem.multiply(new BigDecimal(newItemAmount));
+                pricePerSingleItem = pricePerSingleItem.multiply(ess.getSettings().getMultiplier(player));
                 money = new Trade(pricePerSingleItem, ess);
             }
         }
 
         charge.isAffordableFor(player);
+
+        final SignTransactionEvent signTransactionEvent = new SignTransactionEvent(sign, this, player, charge.getItemStack(), SignTransactionEvent.TransactionType.SELL, money.getMoney());
+        ess.getServer().getPluginManager().callEvent(signTransactionEvent);
+        if (signTransactionEvent.isCancelled()) {
+            return false;
+        }
+
         money.pay(player, OverflowType.DROP);
         charge.charge(player);
         Trade.log("Sign", "Sell", "Interact", username, charge, username, money, sign.getBlock().getLocation(), player.getMoney(), ess);

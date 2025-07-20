@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.NumberUtil;
+import net.ess3.api.TranslatableException;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.io.File;
@@ -14,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.earth2me.essentials.I18n.capitalCase;
-import static com.earth2me.essentials.I18n.tl;
 
 public class Kits implements IConf {
     private final IEssentials ess;
@@ -145,7 +145,7 @@ public class Kits implements IConf {
                     String name = capitalCase(kitItem);
                     final BigDecimal costPrice = new Trade("kit-" + kitItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
                     if (costPrice.signum() > 0) {
-                        cost = tl("kitCost", NumberUtil.displayCurrency(costPrice, ess));
+                        cost = user.playerTl("kitCost", NumberUtil.displayCurrency(costPrice, ess));
                     }
 
                     final Kit kit = new Kit(kitItem, ess);
@@ -153,7 +153,7 @@ public class Kits implements IConf {
                     if (nextUse == -1 && ess.getSettings().isSkippingUsedOneTimeKitsFromKitList()) {
                         continue;
                     } else if (nextUse != 0) {
-                        name = tl("kitDelay", name);
+                        name = user.playerTl("kitDelay", name);
                     }
 
                     list.append(" ").append(name).append(cost);
@@ -161,7 +161,7 @@ public class Kits implements IConf {
             }
             return list.toString().trim();
         } catch (final Exception ex) {
-            throw new Exception(tl("kitError"), ex);
+            throw new TranslatableException(ex, "kitError");
         }
 
     }

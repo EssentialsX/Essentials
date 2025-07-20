@@ -1,6 +1,7 @@
 name: Request a feature
 description: Suggest a feature you want to see in EssentialsX!
 labels: 'type: enhancement'
+type: Feature
 body:
 - type: markdown
   attributes:

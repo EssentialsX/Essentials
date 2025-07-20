@@ -5,6 +5,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FloatUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -12,8 +13,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandtppos extends EssentialsCommand {
     public Commandtppos() {
@@ -33,7 +32,7 @@ public class Commandtppos extends EssentialsCommand {
         if (args.length == 4) {
             final World w = ess.getWorld(args[3]);
             if (user.getWorld() != w && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + w.getName())) {
-                throw new Exception(tl("noPerm", "essentials.worlds." + w.getName()));
+                throw new TranslatableException("noPerm", "essentials.worlds." + w.getName());
             }
             loc.setWorld(w);
         }
@@ -44,16 +43,16 @@ public class Commandtppos extends EssentialsCommand {
         if (args.length > 5) {
             final World w = ess.getWorld(args[5]);
             if (user.getWorld() != w && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + w.getName())) {
-                throw new Exception(tl("noPerm", "essentials.worlds." + w.getName()));
+                throw new TranslatableException("noPerm", "essentials.worlds." + w.getName());
             }
             loc.setWorld(w);
         }
         if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000) {
-            throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
+            throw new NotEnoughArgumentsException(user.playerTl("teleportInvalidLocation"));
         }
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
-        user.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        user.sendTl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
 
         throw new NoChargeException();
@@ -81,10 +80,10 @@ public class Commandtppos extends EssentialsCommand {
             loc.setWorld(ess.getWorld(args[6]));
         }
         if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000) {
-            throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
+            throw new NotEnoughArgumentsException(sender.tl("teleportInvalidLocation"));
         }
-        sender.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-        user.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        sender.sendTl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        user.sendTl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         user.getAsyncTeleport().teleport(loc, null, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
     }
 

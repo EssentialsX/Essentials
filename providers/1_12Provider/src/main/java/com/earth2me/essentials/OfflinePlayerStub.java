@@ -63,23 +63,23 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class OfflinePlayer implements Player {
+public class OfflinePlayerStub implements Player {
+    protected final transient org.bukkit.OfflinePlayer base;
     private final transient Server server;
-    private final transient org.bukkit.OfflinePlayer base;
     private transient Location location = new Location(null, 0, 0, 0, 0, 0);
     private transient World world;
     private boolean allowFlight = false;
     private boolean isFlying = false;
     private String name;
 
-    public OfflinePlayer(final UUID uuid, final Server server) {
+    public OfflinePlayerStub(final UUID uuid, final Server server) {
         this.server = server;
         this.world = server.getWorlds().get(0);
         this.base = server.getOfflinePlayer(uuid);
         this.name = base.getName();
     }
 
-    public OfflinePlayer(final String name, final Server server) {
+    public OfflinePlayerStub(final String name, final Server server) {
         this.server = server;
         this.world = server.getWorlds().get(0);
         this.base = server.getOfflinePlayer(name);

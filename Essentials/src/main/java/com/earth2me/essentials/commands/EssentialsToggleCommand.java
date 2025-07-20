@@ -51,7 +51,7 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
         final List<Player> matchedPlayers = server.matchPlayer(args[0]);
         for (final Player matchPlayer : matchedPlayers) {
             final User player = ess.getUser(matchPlayer);
-            if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(matchPlayer)) {
+            if (skipHidden && player.isHidden(sender.getPlayer()) && player.isHiddenFrom(sender.getPlayer())) {
                 continue;
             }
             foundUser = true;

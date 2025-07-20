@@ -7,8 +7,6 @@ import net.essentialsx.api.v2.services.mail.MailMessage;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class SignMail extends EssentialsSign {
     public SignMail() {
         super("Mail");
@@ -33,12 +31,12 @@ public class SignMail extends EssentialsSign {
         }
 
         if (!hadMail) {
-            player.sendMessage(tl("noNewMail"));
+            player.sendTl("noNewMail");
             return false;
         }
         player.setMailList(mail);
 
-        player.sendMessage(tl("markMailAsRead"));
+        player.sendTl("markMailAsRead");
         return true;
     }
 }

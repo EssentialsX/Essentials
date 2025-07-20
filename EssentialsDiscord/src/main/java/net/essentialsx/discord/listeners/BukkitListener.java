@@ -4,6 +4,7 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import net.ess3.api.events.PrivateMessageSentEvent;
 import net.ess3.api.IUser;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
@@ -46,6 +47,23 @@ public class BukkitListener implements Listener {
     }
 
     // Bukkit Events
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPrivateMessage(PrivateMessageSentEvent event) {
+
+        if (event.getSender() instanceof IUser && ((IUser) event.getSender()).isAuthorized("essentials.chat.spy.exempt")) {
+            return;
+        }
+
+        sendDiscordMessage(MessageType.DefaultTypes.PRIVATE_CHAT,
+                MessageUtil.formatMessage(jda.getSettings().getPmToDiscordFormat(),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getSender().getName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getSender().getDisplayName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getRecipient().getName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getRecipient().getDisplayName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getMessage())),
+                        event.getSender() instanceof IUser ? ((IUser) event.getSender()).getBase() : null);
+    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMute(MuteStatusChangeEvent event) {
@@ -119,7 +137,7 @@ public class BukkitListener implements Listener {
     }
 
     public void sendJoinQuitMessage(final Player player, final String message, MessageType type) {
-        int userCount = jda.getPlugin().getEss().getUsers().getUserCount();
+        int onlineCount = jda.getPlugin().getEss().getOnlinePlayers().size();
         final MessageFormat format;
         switch (type.getKey()) {
             case "join":
@@ -130,7 +148,7 @@ public class BukkitListener implements Listener {
                 break;
             default: // So that it will always be initialised. Other options shouldn't be possible.
                 format = jda.getSettings().getQuitFormat(player);
-                userCount = userCount - 1;
+                onlineCount = onlineCount - 1;
                 break;
 
         }
@@ -139,8 +157,8 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                         MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(message),
-                        jda.getPlugin().getEss().getOnlinePlayers().size(),
-                        userCount),
+                        onlineCount,
+                        jda.getPlugin().getEss().getUsers().getUserCount()),
                         player);
     }
 

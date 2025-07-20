@@ -4,8 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandbroadcast extends EssentialsCommand {
     public Commandbroadcast() {
         super("broadcast");
@@ -17,6 +15,6 @@ public class Commandbroadcast extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        ess.broadcastMessage(tl("broadcast", FormatUtil.replaceFormat(getFinalArg(args, 0)).replace("\\n", "\n"), sender.getDisplayName()));
+        ess.broadcastTl("broadcast", FormatUtil.replaceFormat(getFinalArg(args, 0)).replace("\\n", "\n"), sender.getDisplayName());
     }
 }

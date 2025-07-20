@@ -3,6 +3,8 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
+import net.essentialsx.api.v2.ChatType;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.bukkit.Material;
 import org.bukkit.event.EventPriority;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -36,6 +38,8 @@ public interface ISettings extends IConf {
 
     String getChatFormat(String group);
 
+    String getChatFormat(String group, ChatType chatType);
+
     String getWorldAlias(String world);
 
     int getChatRadius();
@@ -51,6 +55,8 @@ public interface ISettings extends IConf {
     boolean isPersistShout();
 
     boolean isChatQuestionEnabled();
+
+    boolean isUsePaperChatEvent();
 
     BigDecimal getCommandCost(IEssentialsCommand cmd);
 
@@ -72,6 +78,8 @@ public interface ISettings extends IConf {
 
     boolean isSocialSpyMessages();
 
+    boolean isSocialSpyDisplayNames();
+
     Set<String> getMuteCommands();
 
     @Deprecated
@@ -80,6 +88,8 @@ public interface ISettings extends IConf {
     boolean isSkippingUsedOneTimeKitsFromKitList();
 
     String getLocale();
+
+    boolean isPerPlayerLocale();
 
     String getNewbieSpawn();
 
@@ -95,11 +105,17 @@ public interface ISettings extends IConf {
 
     List<Material> getProtectList(final String configName);
 
+    List<String> getProtectListRaw(final String configName);
+
     boolean getProtectPreventSpawn(final String creatureName);
 
     String getProtectString(final String configName);
 
     boolean getRespawnAtHome();
+
+    String getRandomSpawnLocation();
+
+    String getRandomRespawnLocation();
 
     boolean isRespawnAtAnchor();
 
@@ -332,6 +348,8 @@ public interface ISettings extends IConf {
 
     boolean isWorldChangeFlyResetEnabled();
 
+    boolean isWorldChangePreserveFlying();
+
     boolean isWorldChangeSpeedResetEnabled();
 
     long getCommandCooldownMs(String label);
@@ -405,6 +423,20 @@ public interface ISettings extends IConf {
     boolean isUpdateCheckEnabled();
 
     boolean showZeroBaltop();
+
+    String getNickRegex();
+
+    BigDecimal getMultiplier(final User user);
+
+    int getMaxItemLore();
+
+    Tag getPrimaryColor();
+
+    Tag getSecondaryColor();
+
+    BigDecimal getBaltopMinBalance();
+
+    long getBaltopMinPlaytime();
 
     enum KeepInvPolicy {
         KEEP,

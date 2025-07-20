@@ -1,23 +1,27 @@
 dependencyResolutionManagement {
     repositories {
-        maven("https://hub.spigotmc.org/nexus/content/groups/public/")
-        maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://hub.spigotmc.org/nexus/content/groups/public/") {
+            content {
+                includeGroup("org.spigotmc")
+                includeGroup("net.md_5")
+            }
+        }
         maven("https://jitpack.io") {
             content { includeGroup("com.github.milkbowl") }
+            content { includeGroup("com.github.MinnDevelopment") }
         }
         maven("https://repo.codemc.org/repository/maven-public") {
             content { includeGroup("org.bstats") }
         }
-        maven("https://m2.dv8tion.net/releases/") {
-            content { includeGroup("net.dv8tion") }
-        }
-        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
+        maven("https://repo.helpch.at/releases/") {
             content { includeGroup("me.clip") }
         }
         maven("https://libraries.minecraft.net/") {
             content { includeGroup("com.mojang") }
         }
         mavenCentral {
+            content { includeGroup("net.dv8tion") }
             content { includeGroup("net.kyori") }
             content { includeGroup("org.apache.logging.log4j") }
         }

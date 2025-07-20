@@ -2,12 +2,14 @@ package net.ess3.nms.refl.providers;
 
 import net.ess3.nms.refl.ReflUtil;
 import net.ess3.provider.SpawnerBlockProvider;
+import net.essentialsx.providers.ProviderData;
 import org.bukkit.block.CreatureSpawner;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+@ProviderData(description = "Reflection Spawner Block Provider")
 public class ReflSpawnerBlockProvider implements SpawnerBlockProvider {
     @Override
     public void setMaxSpawnDelay(final CreatureSpawner spawner, final int delay) {
@@ -31,11 +33,6 @@ public class ReflSpawnerBlockProvider implements SpawnerBlockProvider {
             } catch (final IllegalAccessException ignored) {
             }
         }
-    }
-
-    @Override
-    public String getDescription() {
-        return "Reflection based provider";
     }
 
     private Object getNMSSpawner(final CreatureSpawner spawner) {

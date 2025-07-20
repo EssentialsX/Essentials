@@ -31,13 +31,17 @@ public enum ChatType {
      *
      * <p>This type used when local/global chat features are disabled
      */
-    UNKNOWN,
+    UNKNOWN("normal"),
     ;
 
     private final String key;
 
     ChatType() {
         this.key = name().toLowerCase(Locale.ENGLISH);
+    }
+
+    ChatType(final String key) {
+        this.key = key;
     }
 
     /**

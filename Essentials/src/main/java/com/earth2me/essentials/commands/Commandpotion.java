@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -20,8 +21,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandpotion extends EssentialsCommand {
     public Commandpotion() {
         super("potion");
@@ -34,11 +33,11 @@ public class Commandpotion extends EssentialsCommand {
             final Set<String> potionslist = new TreeSet<>();
             for (final Map.Entry<String, PotionEffectType> entry : Potions.entrySet()) {
                 final String potionName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
-                if (potionslist.contains(potionName) || user.isAuthorized("essentials.potion." + potionName)) {
+                if (potionslist.contains(potionName) || user.isAuthorized("essentials.potions." + potionName)) {
                     potionslist.add(entry.getKey());
                 }
             }
-            throw new NotEnoughArgumentsException(tl("potions", StringUtil.joinList(potionslist.toArray())));
+            throw new NotEnoughArgumentsException(user.playerTl("potions", StringUtil.joinList(potionslist.toArray())));
         }
 
         boolean holdingPotion = stack.getType() == Material.POTION;
@@ -65,12 +64,12 @@ public class Commandpotion extends EssentialsCommand {
                     pmeta = (PotionMeta) mStack.getItemStack().getItemMeta();
                     stack.setItemMeta(pmeta);
                 } else {
-                    user.sendMessage(tl("invalidPotion"));
+                    user.sendTl("invalidPotion");
                     throw new NotEnoughArgumentsException();
                 }
             }
         } else {
-            throw new Exception(tl("holdPotion"));
+            throw new TranslatableException("holdPotion");
         }
     }
 
@@ -85,7 +84,7 @@ public class Commandpotion extends EssentialsCommand {
             }
             for (final Map.Entry<String, PotionEffectType> entry : Potions.entrySet()) {
                 final String potionName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
-                if (user.isAuthorized("essentials.potion." + potionName)) {
+                if (user.isAuthorized("essentials.potions." + potionName)) {
                     options.add("effect:" + entry.getKey());
                 }
             }

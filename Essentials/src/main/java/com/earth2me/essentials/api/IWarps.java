@@ -22,9 +22,8 @@ public interface IWarps extends IConf {
      * @param warp - Warp name
      * @return - Location the warp is set to
      * @throws WarpNotFoundException When the warp is not found
-     * @throws net.ess3.api.InvalidWorldException When the world the warp is in is not found
      */
-    Location getWarp(String warp) throws WarpNotFoundException, net.ess3.api.InvalidWorldException;
+    Location getWarp(String warp) throws WarpNotFoundException;
 
     /**
      * Checks if the provided name is a warp.

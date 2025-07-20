@@ -1,6 +1,7 @@
 name: Report bug
 description: Report a bug in EssentialsX.
 labels: 'bug: unconfirmed'
+type: Bug
 body:
 - type: markdown
   attributes:
@@ -31,8 +32,8 @@ body:
 - type: input
   attributes:
     label: Error log (if applicable)
-    description: If you are reporting a console error, upload any relevant log excerpts to either https://paste.gg or https://gist.github.com, save and the paste the link in this box. If you included those files in the same paste as your startup log, paste the same link here.
-    placeholder: "Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210"
+    description: If you are reporting a console error, upload any relevant log excerpts to either https://pastes.dev or https://gist.github.com, save and the paste the link in this box. If you included those files in the same paste as your startup log, paste the same link here.
+    placeholder: "Example: https://pastes.dev/UYL3ASLsee"
 
 - type: textarea
   attributes:
@@ -70,10 +71,13 @@ body:
   validations:
     required: true
 
-- type: markdown
+- type: textarea
   attributes:
-    value: |
-      In the text box below, you can attach any relevant screenshots, files and links to Timings/spark profiler reports.
+    label: Additional Information
+    description: |
+      In this box, you can attach any relevant screenshots, files and links to Timings/spark profiler reports.
       You can also include a link to a heapdump if necessary, but please make sure you don't include any private player data in the heapdump.
       If you suspect this issue is related to a prior issue/PR/commit, please mention it here.
-
+  validations:
+    required: false
+    

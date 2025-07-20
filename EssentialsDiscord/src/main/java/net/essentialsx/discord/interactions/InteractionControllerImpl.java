@@ -1,12 +1,14 @@
 package net.essentialsx.discord.interactions;
 
 import com.earth2me.essentials.utils.StringUtil;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.essentialsx.api.v2.services.discord.InteractionCommand;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
@@ -26,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class InteractionControllerImpl extends ListenerAdapter implements InteractionController {
     private static final Logger logger = EssentialsDiscord.getWrappedLogger();
@@ -42,7 +44,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
     }
 
     @Override
-    public void onSlashCommand(@NotNull SlashCommandEvent event) {
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         if (event.getGuild() == null || event.getMember() == null || !commandMap.containsKey(event.getName())) {
             return;
         }
@@ -50,7 +52,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
         final InteractionCommand command = commandMap.get(event.getName());
 
         if (command.isDisabled()) {
-            event.reply(tl("discordErrorCommandDisabled")).setEphemeral(true).queue();
+            event.reply(tlLiteral("discordErrorCommandDisabled")).setEphemeral(true).queue();
             return;
         }
 
@@ -59,7 +61,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
         final InteractionEvent interactionEvent = new InteractionEventImpl(event);
         final List<String> commandSnowflakes = jda.getSettings().getCommandSnowflakes(command.getName());
         if (commandSnowflakes != null && !DiscordUtil.hasRoles(event.getMember(), commandSnowflakes)) {
-            interactionEvent.reply(tl("noAccessCommand"));
+            interactionEvent.replyTl("noAccessCommand");
             return;
         }
         jda.getPlugin().getEss().scheduleSyncDelayedTask(() -> command.onCommand(interactionEvent));
@@ -77,7 +79,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
             for (final InteractionCommand command : batchRegistrationQueue.values()) {
                 // German is quite the language
                 final String description = StringUtil.abbreviate(command.getDescription(), 100);
-                final CommandData data = new CommandData(command.getName(), description);
+                final SlashCommandData data = Commands.slash(command.getName(), description);
                 if (command.getArguments() != null) {
                     for (final InteractionCommandArgument argument : command.getArguments()) {
                         // German doesn't support spaces between words
@@ -106,7 +108,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
                 }
             }, failure -> {
                 if (failure instanceof ErrorResponseException && ((ErrorResponseException) failure).getErrorResponse() == ErrorResponse.MISSING_ACCESS) {
-                    logger.severe(tl("discordErrorCommand"));
+                    logger.severe(tlLiteral("discordErrorCommand"));
                     return;
                 }
                 logger.log(Level.SEVERE, "Error while registering command", failure);
@@ -132,7 +134,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
             return;
         }
 
-        final CommandData data = new CommandData(command.getName(), command.getDescription());
+        final SlashCommandData data = Commands.slash(command.getName(), command.getDescription());
         if (command.getArguments() != null) {
             for (final InteractionCommandArgument argument : command.getArguments()) {
                 data.addOption(OptionType.valueOf(argument.getType().name()), argument.getName(), argument.getDescription(), argument.isRequired());
@@ -146,7 +148,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
             }
         }, failure -> {
             if (failure instanceof ErrorResponseException && ((ErrorResponseException) failure).getErrorResponse() == ErrorResponse.MISSING_ACCESS) {
-                logger.severe(tl("discordErrorCommand"));
+                logger.severe(tlLiteral("discordErrorCommand"));
                 return;
             }
             logger.log(Level.SEVERE, "Error while registering command", failure);

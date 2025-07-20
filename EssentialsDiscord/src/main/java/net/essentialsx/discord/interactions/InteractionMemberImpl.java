@@ -2,8 +2,8 @@ package net.essentialsx.discord.interactions;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.essentialsx.api.v2.services.discord.InteractionMember;
 import net.essentialsx.api.v2.services.discord.InteractionRole;
 import net.essentialsx.discord.util.DiscordUtil;

@@ -1,11 +1,14 @@
 package com.earth2me.essentials;
 
+import org.bukkit.Achievement;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
+import org.bukkit.Statistic;
 import org.bukkit.UnsafeValues;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.World;
@@ -455,8 +458,8 @@ public final class FakeServer implements Server {
         pluginManager.callEvent(new PlayerJoinEvent(base1, null));
     }
 
-    OfflinePlayer createPlayer(final String name) {
-        final OfflinePlayer player = new OfflinePlayer(name, this);
+    OfflinePlayerStub createPlayer(final String name) {
+        final OfflinePlayerStub player = new OfflinePlayerStub(name, this);
         player.setLocation(new Location(worlds.get(0), 0, 0, 0, 0, 0));
         return player;
     }
@@ -823,7 +826,7 @@ public final class FakeServer implements Server {
     }
 
     @Override
-    public OfflinePlayer[] getOfflinePlayers() {
+    public OfflinePlayerStub[] getOfflinePlayers() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1005,7 +1008,52 @@ public final class FakeServer implements Server {
     @Override
     @SuppressWarnings("deprecation")
     public UnsafeValues getUnsafe() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new UnsafeValues() {
+            public int getDataVersion() {
+                // 1.21.5
+                return 4325;
+            }
+
+            @Override
+            public Material getMaterialFromInternalName(String s) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public List<String> tabCompleteInternalMaterialName(String s, List<String> list) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public ItemStack modifyItemStack(ItemStack itemStack, String s) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public Statistic getStatisticFromInternalName(String s) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public Achievement getAchievementFromInternalName(String s) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public List<String> tabCompleteInternalStatisticOrAchievementName(String s, List<String> list) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public Advancement loadAdvancement(NamespacedKey namespacedKey, String s) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public boolean removeAdvancement(NamespacedKey namespacedKey) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
     }
 
     @Override
@@ -1130,12 +1178,12 @@ public final class FakeServer implements Server {
 
         @Override
         public void registerEvent(final Class<? extends Event> event, final Listener listener, final EventPriority priority, final EventExecutor executor, final Plugin plugin) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            listeners.add(new RegisteredListener(listener, executor, priority, plugin, false));
         }
 
         @Override
         public void registerEvent(final Class<? extends Event> event, final Listener listener, final EventPriority priority, final EventExecutor executor, final Plugin plugin, final boolean ignoreCancelled) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            listeners.add(new RegisteredListener(listener, executor, priority, plugin, false));
         }
 
         @Override

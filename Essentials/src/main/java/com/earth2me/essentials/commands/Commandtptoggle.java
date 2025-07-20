@@ -4,8 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandtptoggle extends EssentialsToggleCommand {
     public Commandtptoggle() {
         super("tptoggle", "essentials.tptoggle.others");
@@ -29,9 +27,9 @@ public class Commandtptoggle extends EssentialsToggleCommand {
 
         user.setTeleportEnabled(enabled);
 
-        user.sendMessage(enabled ? tl("teleportationEnabled") : tl("teleportationDisabled"));
+        user.sendTl(enabled ? "teleportationEnabled" : "teleportationDisabled");
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendMessage(enabled ? tl("teleportationEnabledFor", user.getDisplayName()) : tl("teleportationDisabledFor", user.getDisplayName()));
+            sender.sendTl(enabled ? "teleportationEnabledFor" : "teleportationDisabledFor", user.getDisplayName());
         }
     }
 }

@@ -10,14 +10,20 @@ plugins {
 val baseExtension = extensions.create<EssentialsBaseExtension>("essentials", project)
 
 val checkstyleVersion = "8.36.2"
-val spigotVersion = "1.19.4-R0.1-SNAPSHOT"
-val junit5Version = "5.7.0"
-val mockitoVersion = "3.2.0"
+val paperVersion = "1.21.8-R0.1-SNAPSHOT"
+val paperTestVersion = "1.21.5-R0.1-SNAPSHOT"
+val junit5Version = "5.12.2"
+val junitPlatformVersion = "1.12.2"
+val mockitoVersion = "5.18.0"
 
 dependencies {
     testImplementation("org.junit.jupiter", "junit-jupiter", junit5Version)
-    testImplementation("org.junit.vintage", "junit-vintage-engine", junit5Version)
+    testImplementation("org.junit.platform", "junit-platform-launcher", junitPlatformVersion)
     testImplementation("org.mockito", "mockito-core", mockitoVersion)
+    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.50.0") {
+        exclude(module = "paper-api")
+        exclude(module = "spigot-api")
+    }
 
     constraints {
         implementation("org.yaml:snakeyaml:1.28") {
@@ -26,15 +32,46 @@ dependencies {
     }
 }
 
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("PASSED", "SKIPPED", "FAILED")
+    }
+}
+
 afterEvaluate {
     if (baseExtension.injectBukkitApi.get()) {
         dependencies {
-            api("org.spigotmc", "spigot-api", spigotVersion)
+            api("io.papermc.paper", "paper-api", paperVersion)
+            testImplementation("io.papermc.paper", "paper-api", paperTestVersion)
+        }
+
+        configurations {
+            testCompileClasspath {
+                resolutionStrategy {
+                    dependencySubstitution {
+                        substitute( module("io.papermc.paper:paper-api"))
+                            .using(module("io.papermc.paper:paper-api:$paperTestVersion"))
+                    }
+                }
+            }
+            testRuntimeClasspath {
+                resolutionStrategy {
+                    dependencySubstitution {
+                        substitute( module("io.papermc.paper:paper-api"))
+                            .using(module("io.papermc.paper:paper-api:$paperTestVersion"))
+                    }
+                }
+            }
+        }
+
+        java {
+            disableAutoTargetJvm()
         }
     }
     if (baseExtension.injectBstats.get()) {
         dependencies {
-            implementation("org.bstats", "bstats-bukkit", "1.8")
+            implementation("org.bstats", "bstats-bukkit", "2.2.1")
         }
     }
 }
@@ -69,6 +106,9 @@ tasks {
     }
     withType<Jar> {
         archiveVersion.set(rootProject.ext["FULL_VERSION"] as String)
+        manifest {
+            attributes("paperweight-mappings-namespace" to "mojang")
+        }
     }
     withType<Sign> {
         onlyIf { project.hasProperty("forceSign") }
@@ -116,7 +156,9 @@ indra {
 
     javaVersions {
         target(8)
-        minimumToolchain(17)
+        minimumToolchain(21)
+        // Don't enforce running tests on Java 8; we only care about the release for compiling, not running tests
+        strictVersions(false)
     }
 }
 

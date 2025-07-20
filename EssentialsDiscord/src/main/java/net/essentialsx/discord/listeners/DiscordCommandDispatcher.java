@@ -1,6 +1,7 @@
 package net.essentialsx.discord.listeners;
 
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordCommandSender;
@@ -18,7 +19,11 @@ public class DiscordCommandDispatcher extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        if (event.getMessage().getChannelType() != ChannelType.TEXT) {
+            return;
+        }
+
         if (jda.getConsoleWebhook() != null && event.getChannel().getId().equals(channelId)) {
             if ((event.isWebhookMessage() || event.getAuthor().isBot()) && (!jda.getSettings().isConsoleBotCommandRelay() || DiscordUtil.ACTIVE_WEBHOOKS.contains(event.getAuthor().getId()) || event.getAuthor().getId().equals(event.getGuild().getSelfMember().getId()))) {
                 return;
