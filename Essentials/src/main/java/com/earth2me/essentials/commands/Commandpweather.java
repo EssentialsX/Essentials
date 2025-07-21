@@ -107,7 +107,7 @@ public class Commandpweather extends EssentialsLoopCommand {
         if (args.length == 1) {
             return Lists.newArrayList("get", "reset", "storm", "sun");
         } else if (args.length == 2 && (getAliases.contains(args[0]) || user == null || user.isAuthorized("essentials.pweather.others"))) {
-            return getPlayers(server, user);
+            return getPlayers(user);
         } else {
             return Collections.emptyList();
         }

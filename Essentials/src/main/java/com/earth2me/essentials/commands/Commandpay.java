@@ -109,7 +109,7 @@ public class Commandpay extends EssentialsLoopCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else if (args.length == 2) {
             return Lists.newArrayList(ess.getSettings().getMinimumPayAmount().toString());
         } else {

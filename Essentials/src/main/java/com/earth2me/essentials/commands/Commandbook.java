@@ -106,7 +106,7 @@ public class Commandbook extends EssentialsCommand {
             }
             return options;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("author") && user.isAuthorized("essentials.book.author")) {
-            final List<String> options = getPlayers(server, user);
+            final List<String> options = getPlayers(user);
             options.add("Herobrine"); // #EasterEgg
             return options;
         } else {

@@ -64,7 +64,7 @@ public class Commandtempban extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             // Note: following args are both date diffs _and_ messages; ideally we'd mix with the vanilla handler
             return COMMON_DATE_DIFFS;

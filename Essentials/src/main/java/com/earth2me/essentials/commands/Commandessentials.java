@@ -872,7 +872,7 @@ public class Commandessentials extends EssentialsCommand {
                 break;
             case "reset":
                 if (args.length == 2) {
-                    return getPlayers(server, sender);
+                    return getPlayers(sender);
                 }
                 break;
             case "cleanup":

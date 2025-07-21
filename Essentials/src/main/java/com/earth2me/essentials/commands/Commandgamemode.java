@@ -105,12 +105,12 @@ public class Commandgamemode extends EssentialsLoopCommand {
             try {
                 // Direct command?  Don't ask for the mode
                 matchGameMode(commandLabel);
-                return getPlayers(server, sender);
+                return getPlayers(sender);
             } catch (final NotEnoughArgumentsException e) {
                 return STANDARD_OPTIONS;
             }
         } else if (args.length == 2) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             return Collections.emptyList();
         }
@@ -128,12 +128,12 @@ public class Commandgamemode extends EssentialsLoopCommand {
         }
         if (args.length == 1) {
             if (user.isAuthorized("essentials.gamemode.others") && isDirectGamemodeCommand) {
-                return getPlayers(server, user);
+                return getPlayers(user);
             } else {
                 return STANDARD_OPTIONS;
             }
         } else if (args.length == 2 && user.isAuthorized("essentials.gamemode.others") && !isDirectGamemodeCommand) {
-            return getPlayers(server, user);
+            return getPlayers(user);
         } else {
             return Collections.emptyList();
         }
