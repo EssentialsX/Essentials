@@ -4,10 +4,13 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.commands.EssentialsTreeNode;
 import com.earth2me.essentials.userstorage.ModernUserMap;
+import com.google.common.collect.Lists;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -92,5 +95,13 @@ public class UsermapCommand extends EssentialsTreeNode {
                 }
             }
         }
+    }
+
+    @Override
+    protected List<String> tabComplete(CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return Lists.newArrayList("full", "purge", "cache");
+        }
+        return Collections.emptyList();
     }
 }
