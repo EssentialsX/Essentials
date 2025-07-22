@@ -36,7 +36,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     /**
      * Common time durations (in seconds), for use in tab completion.
      */
-    protected static final List<String> COMMON_DURATIONS = ImmutableList.of("1", "60", "600", "3600", "86400");
+    public static final List<String> COMMON_DURATIONS = ImmutableList.of("1", "60", "600", "3600", "86400");
     /**
      * Common date diffs, for use in tab completion
      */

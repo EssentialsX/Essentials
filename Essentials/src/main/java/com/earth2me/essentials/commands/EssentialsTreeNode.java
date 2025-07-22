@@ -9,18 +9,18 @@ import net.ess3.api.TranslatableException;
 import java.util.List;
 
 public class EssentialsTreeNode {
-    private final String name;
+    private final String[] names;
     private final boolean hidden;
     protected transient IEssentials ess;
     protected transient IEssentialsModule module;
     protected transient EssentialsTreeCommand parent;
 
-    public EssentialsTreeNode(final String name) {
-        this(name, false);
+    public EssentialsTreeNode(final String... names) {
+        this(names, false);
     }
 
-    public EssentialsTreeNode(final String name, final boolean hidden) {
-        this.name = name;
+    public EssentialsTreeNode(final String[] names, final boolean hidden) {
+        this.names = names;
         this.hidden = hidden;
     }
 
@@ -36,8 +36,8 @@ public class EssentialsTreeNode {
         this.parent = parent;
     }
 
-    public String name() {
-        return name;
+    public String[] names() {
+        return names;
     }
 
     public boolean hidden() {

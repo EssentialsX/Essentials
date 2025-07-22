@@ -20,9 +20,11 @@ public class EssentialsTreeCommand extends EssentialsCommand {
     }
 
     protected void registerNode(final EssentialsTreeNode node) {
-        nodes.put(node.name(), node);
-        if (!node.hidden()) {
-            publicNodes.add(node.name());
+        for (final String name : node.names()) {
+            nodes.put(name, node);
+            if (!node.hidden()) {
+                publicNodes.add(name);
+            }
         }
 
         node.setEssentials(ess);
