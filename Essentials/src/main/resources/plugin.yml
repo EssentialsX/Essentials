@@ -964,6 +964,8 @@ permissions:
     description: Allows the user to keep their exp on death, instead of dropping it.
   essentials.joinfullserver:
     description: Allows the to join the server even if it is full
+  essentials.whitelist.bypass:
+    description: Allows a player to join the server even if they are not whitelisted.
   essentials.kick:
     description: Allows access to the /kick command
   essentials.kick.exempt:
