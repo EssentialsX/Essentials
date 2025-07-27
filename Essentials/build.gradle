@@ -40,6 +40,10 @@ test {
     testLogging.showStandardStreams = true
 }
 
+tasks.register('versionData', VersionDataTask) {
+    destination.set(rootProject.layout.projectDirectory.dir("generated").file("version-data.json"))
+}
+
 shadowJar {
     dependencies {
         include (dependency('io.papermc:paperlib'))
