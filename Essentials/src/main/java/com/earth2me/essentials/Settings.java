@@ -1939,6 +1939,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isGamemodeChangePreserveFlying() {
+        return config.getBoolean("gamemode-change-preserve-flying", false);
+    }
+
+    @Override
     public boolean isWorldChangeSpeedResetEnabled() {
         return config.getBoolean("world-change-speed-reset", true);
     }

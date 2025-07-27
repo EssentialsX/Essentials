@@ -235,6 +235,11 @@ world-change-fly-reset: true
 # This will only work if the player has the 'essentials.fly' permission.
 world-change-preserve-flying: true
 
+# Should Essentials preserve a player's flight status when they change game modes?
+# When enabled, if a player is flying when switching game modes, their flight will be maintained.
+# This will only work if the player has the 'essentials.fly' permission.
+gamemode-change-preserve-flying: false
+
 # When a player changes worlds, should Essentials reset their speed according to their permissions?
 # This resets the player's speed to the default if they don't have 'essentials.speed'.
 # If the player doesn't have 'essentials.speed.bypass', their speed will be reset to the maximum values
