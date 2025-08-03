@@ -72,6 +72,7 @@ import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
 import net.ess3.provider.providers.FixedHeightWorldInfoProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyBannerDataProvider;
+import net.ess3.provider.providers.LegacyBiomeNameProvider;
 import net.ess3.provider.providers.LegacyDamageEventProvider;
 import net.ess3.provider.providers.LegacyInventoryViewProvider;
 import net.ess3.provider.providers.LegacyItemUnbreakableProvider;
@@ -372,6 +373,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // Inventory View Provider
             providerFactory.registerProvider(LegacyInventoryViewProvider.class, BaseInventoryViewProvider.class);
+
+            // Biome Name Provider
+            providerFactory.registerProvider(LegacyBiomeNameProvider.class);
 
             // Biome Key Provider
             providerFactory.registerProvider(PaperBiomeKeyProvider.class);
