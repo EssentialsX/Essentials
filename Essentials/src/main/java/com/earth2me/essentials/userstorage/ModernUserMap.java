@@ -24,7 +24,6 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     private final transient IEssentials ess;
     private final transient ModernUUIDCache uuidCache;
     private final transient LoadingCache<UUID, User> userCache;
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection") // This exists to maintain strong references to online users.
     private final transient ConcurrentMap<UUID, User> onlineUserCache;
 
     private final boolean debugPrintStackWithWarn;
@@ -90,9 +89,12 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     public User getUser(final Player base) {
         final User user = loadUncachedUser(base);
         userCache.put(user.getUUID(), user);
-        onlineUserCache.put(user.getUUID(), user);
         debugLogCache(user);
         return user;
+    }
+
+    public ConcurrentMap<UUID, User> getOnlineUserCache() {
+        return onlineUserCache;
     }
 
     @Override
