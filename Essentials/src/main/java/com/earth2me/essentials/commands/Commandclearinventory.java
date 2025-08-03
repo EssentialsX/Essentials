@@ -196,6 +196,9 @@ public class Commandclearinventory extends EssentialsCommand {
     }
 
     private String formatCommand(final String commandLabel, final String[] args) {
+        if (args == null || args.length == 0) {
+            return "/" + commandLabel;
+        }
         return "/" + commandLabel + " " + StringUtil.joinList(" ", (Object[]) args);
     }
 

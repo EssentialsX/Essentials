@@ -1,19 +1,21 @@
 # EssentialsX kit configuration.
-# If you don't have any kits defined in this file, the plugin will try to copy them from the config.yml
+# If no kits are defined in this file, the plugin will attempt to copy them from 'config.yml'.
 
-# Note: All items MUST be followed by a quantity!
-# All kit names should be lower case, and will be treated as lower in permissions/costs.
-# Syntax: - name[:durability] amount [enchantment:level]... [itemmeta:value]...
-# For Item Meta information visit http://wiki.ess3.net/wiki/Item_Meta
-# To make the kit execute a command, add /<command> to the items list. Use {USERNAME} to specify the player receiving the kit.
-# {PLAYER} will show the player's displayname instead of username.
-# 'delay' refers to the cooldown between how often you can use each kit, measured in seconds.
-# Set delay to -1 for a one time kit.
+# All items MUST be followed by a quantity.
+# Kit names should be in lowercase and will be treated as such in permissions and costs.
+# Syntax: - item[:durability] amount [enchantment:level]... [itemmeta:value]...
+# For detailed information on item meta, visit https://wiki.ess3.net/wiki/Item_Meta
 #
-# In addition, you can also organize your kits into separate files under the `kits` subdirectory.
-# Essentials will treat all .yml files in the `kits` subdirectory as kits files, and will add any kits from those files along with the kits in `kits.yml`.
-# Any file in the `kits` subdirectory must be formatted in the same way as this file. This allows you to define multiple kits in each file.
-# For more information, visit http://wiki.ess3.net/wiki/Kits
+# To make a kit execute a command, add '/<command>' to the item list. Use {USERNAME} to reference the player receiving the kit.
+# Use {PLAYER} to display the player's display name instead of the username.
+# 'delay' refers to the cooldown between how often you can use each kit, measured in seconds. Set to -1 for a one-time kit.
+#
+# You can also organize kits into separate files within the 'kits' subdirectory.
+# Essentials will treat all '.yml' files in the subdirectory as valid kit files and add them along with those in here.
+# Each file in the 'kits' subdirectory must be formatted the same as this file.
+#
+# For more information, refer to https://wiki.ess3.net/wiki/Kits
+
 kits:
   tools:
     delay: 10

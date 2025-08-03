@@ -1,5 +1,5 @@
 # This file stores custom item aliases.
-# NOTE: If you try and alias an item to another entry in this file, the alias won't work.
+# Note: You cannot alias an item to another entry in this file.
 
 aliases:
   bluepaint: blue_dye

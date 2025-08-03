@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -108,7 +109,7 @@ public class Commandskull extends EssentialsCommand {
         ess.runTaskAsynchronously(() -> {
             // Run this stuff async because it causes an HTTP request
 
-            final String shortOwnerName;
+            String shortOwnerName;
             if (URL_VALUE_PATTERN.matcher(owner).matches()) {
                 if (!playerProfileSupported) {
                     user.sendTl("unsupportedFeature");
@@ -129,23 +130,46 @@ public class Commandskull extends EssentialsCommand {
 
                 shortOwnerName = owner.substring(0, 7);
             } else {
-                //noinspection deprecation
-                skullMeta.setOwner(owner);
-                shortOwnerName = owner;
+                if (playerProfileSupported) {
+                    try {
+                        PlayerProfile profile = ess.getServer().createPlayerProfile(null, owner);
+                        profile = profile.update().join();
+
+                        if (profile != null) {
+                            skullMeta.setOwnerProfile(profile);
+                        }
+                        if (skullMeta.getOwnerProfile() == null) {
+                            final OfflinePlayer offline = ess.getServer().getOfflinePlayer(owner);
+                            skullMeta.setOwningPlayer(offline);
+                        }
+
+                        shortOwnerName = owner;
+                    } catch (final Exception e) {
+                        //noinspection deprecation
+                        skullMeta.setOwner(owner);
+                        shortOwnerName = owner;
+                    }
+                } else {
+                    //noinspection deprecation
+                    skullMeta.setOwner(owner);
+                    shortOwnerName = owner;
+                }
             }
             skullMeta.setDisplayName("§fSkull of " + shortOwnerName);
+
+            final String shortNameFinal = shortOwnerName;
 
             ess.scheduleSyncDelayedTask(() -> {
                 stack.setItemMeta(skullMeta);
                 if (spawn) {
                     Inventories.addItem(receive.getBase(), stack);
-                    receive.sendTl("givenSkull", shortOwnerName);
+                    receive.sendTl("givenSkull", shortNameFinal);
                     if (user != receive) {
-                        user.sendTl("givenSkullOther", receive.getDisplayName(), shortOwnerName);
+                        user.sendTl("givenSkullOther", receive.getDisplayName(), shortNameFinal);
                     }
                     return;
                 }
-                user.sendTl("skullChanged", shortOwnerName);
+                user.sendTl("skullChanged", shortNameFinal);
             });
         });
     }

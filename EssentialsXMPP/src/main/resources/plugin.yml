@@ -1,4 +1,3 @@
-# This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
 name: EssentialsXMPP
 main: com.earth2me.essentials.xmpp.EssentialsXMPP
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
@@ -18,3 +17,10 @@ commands:
   xmppspy:
     description: Toggles XMPP spy for all messages.
     usage: /<command> <player>
+permissions:
+  essentials.xmpp:
+    description: Allows access to the /xmpp command
+  essentials.setxmpp:
+    description: Allows access to the /setxmpp command
+  essentials.xmppspy:
+    description: Allows access to the /xmppspy command

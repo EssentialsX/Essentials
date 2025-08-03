@@ -2,10 +2,13 @@ package com.earth2me.essentials.antibuild;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -32,7 +35,9 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Sign;
 
+import java.util.function.Predicate;
 import java.util.logging.Level;
 
 public class EssentialsAntiBuildListener implements Listener {
@@ -107,6 +112,64 @@ public class EssentialsAntiBuildListener implements Listener {
         return user.isAuthorized(blockPerm);
     }
 
+    private boolean wouldBreakProtectedSigns(final Block block, final User user) {
+        return wouldBreakAttachedSigns(block, signBlock -> isSignProtected(signBlock, user));
+    }
+
+    private boolean isSignProtected(final Block signBlock, final User user) {
+        final Material signType = signBlock.getType();
+
+        if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !metaPermCheck(user, "break", signBlock)) {
+            return true;
+        }
+
+        return prot.checkProtectionItems(AntiBuildConfig.blacklist_break, signType) && !user.isAuthorized("essentials.protect.exemptbreak");
+    }
+
+    private BlockFace getWallSignFacing(final Block signBlock) {
+        if (VersionUtil.PRE_FLATTENING) {
+            final Sign signMat = (Sign) signBlock.getState().getData();
+            return signMat.getFacing();
+        }
+
+        final Directional signData = (Directional) signBlock.getState().getBlockData();
+        return signData.getFacing();
+    }
+
+    private boolean wouldBreakAttachedSigns(final Block block, final Predicate<Block> signChecker) {
+        // Check for sign posts above the block
+        final Block signAbove = block.getRelative(BlockFace.UP);
+        if (MaterialUtil.isSignPost(signAbove.getType()) && signChecker.test(signAbove)) {
+            return true;
+        }
+
+        // Check for hanging signs below the block
+        final Block signBelow = block.getRelative(BlockFace.DOWN);
+        if (MaterialUtil.isHangingSign(signBelow.getType()) && signChecker.test(signBelow)) {
+            return true;
+        }
+
+        // Check for wall signs and wall hanging signs attached to the block faces
+        final BlockFace[] directions = new BlockFace[] {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+        for (final BlockFace blockFace : directions) {
+            final Block signBlock = block.getRelative(blockFace);
+            if (MaterialUtil.isWallSign(signBlock.getType()) || MaterialUtil.isWallHangingSign(signBlock.getType())) {
+                try {
+                    if (getWallSignFacing(signBlock) == blockFace && signChecker.test(signBlock)) {
+                        return true;
+                    }
+                } catch (final NullPointerException ignored) {
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean wouldBreakAnySign(final Block block) {
+        return wouldBreakAttachedSigns(block, signBlock -> true);
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPlace(final BlockPlaceEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -144,6 +207,15 @@ public class EssentialsAntiBuildListener implements Listener {
         final User user = ess.getUser(event.getPlayer());
         final Block block = event.getBlock();
         final Material type = block.getType();
+
+        // Check if breaking this block would cause any protected signs to break
+        if (wouldBreakProtectedSigns(block, user)) {
+            if (ess.getSettings().warnOnBuildDisallow()) {
+                user.sendTl("antiBuildBreak", EssentialsAntiBuild.getNameForType(type));
+            }
+            event.setCancelled(true);
+            return;
+        }
 
         if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !metaPermCheck(user, "break", block)) {
             if (ess.getSettings().warnOnBuildDisallow()) {
@@ -314,6 +386,11 @@ public class EssentialsAntiBuildListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
+
+            if (wouldBreakAnySign(block)) {
+                event.setCancelled(true);
+                return;
+            }
         }
     }
 
@@ -324,6 +401,11 @@ public class EssentialsAntiBuildListener implements Listener {
         }
         for (final Block block : event.getBlocks()) {
             if (prot.checkProtectionItems(AntiBuildConfig.blacklist_piston, block.getType())) {
+                event.setCancelled(true);
+                return;
+            }
+
+            if (wouldBreakAnySign(block)) {
                 event.setCancelled(true);
                 return;
             }
