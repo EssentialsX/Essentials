@@ -422,10 +422,6 @@ public interface ISettings extends IConf {
 
     boolean isUpdateCheckEnabled();
 
-    String getDateFormat();
-
-    String getTimeFormat();
-
     boolean showZeroBaltop();
 
     String getNickRegex();
