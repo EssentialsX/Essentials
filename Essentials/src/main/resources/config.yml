@@ -757,24 +757,6 @@ update-check: true
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                       Keywords                       | #
-# +------------------------------------------------------+ #
-############################################################
-
-# Format for the {DATE} keyword.
-# Set `locale` to display dates according to the regional standards of the host location.
-# For custom patterns, follow the Java SimpleDateFormat syntax conventions. https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
-# Custom pattern example: dd/MM/yyyy
-date-format: locale
-
-# Format for the {TIME} keyword.
-# Set `locale` to display time according to the regional standards of the host location.
-# For custom patterns, follow the Java SimpleDateFormat syntax conventions. https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
-# Custom pattern example: HH:mm:ss
-time-format: locale
-
-############################################################
-# +------------------------------------------------------+ #
 # |                        Homes                         | #
 # +------------------------------------------------------+ #
 ############################################################
