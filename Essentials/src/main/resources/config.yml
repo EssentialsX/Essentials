@@ -479,10 +479,27 @@ remove-god-on-disconnect: false
 # Set to -1 for no timeout.
 auto-afk: 300
 
-# After this timeout in seconds, the player will be kicked from the server.
+# After this timeout in seconds, the player will either be kicked from
+# the server or commands in 'afk-timeout-commands' will be executed.
 # The 'essentials.afk.kickexempt' permission overrides this feature.
 # Set to -1 for no timeout.
-auto-afk-kick: -1
+auto-afk-timeout: -1
+
+# A list of commands to be executed instead of kicking the player once the
+# threshold defined above in 'afk-auto-timeout' is reached. If this list is empty 
+# and 'afk-auto-timeout' is not set to -1, Essentials will default to
+# kicking the player once they reach the timeout threshold.
+#
+# WARNING: You must include a command here that either removes the player from the server
+# or stops them from being AFK. Otherwise, these commands will run every second
+# until the player is no longer AFK!
+#
+# Available placeholders:
+# {USERNAME} - The player's username.
+# {KICKTIME} - The time, in minutes, the player has been AFK for.
+afk-timeout-commands:
+  #- eco take {USERNAME} 10
+  #- kick {USERNAME} You have been kicked for being inactive for {KICKTIME} minutes! You lost $10.
 
 # Set this to true if you want to freeze players when they are AFK.
 # Other players or monsters won't be able to push them out of AFK mode.
@@ -1031,6 +1048,7 @@ protect:
     fireball-fire: false
     fireball-playerdamage: false
     fireball-itemdamage: false
+    windcharge-explosion: false
     witherskull-explosion: false
     witherskull-playerdamage: false
     witherskull-itemdamage: false

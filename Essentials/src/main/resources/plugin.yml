@@ -359,6 +359,10 @@ commands:
     description: Assigns a command to the item in hand.
     usage: /<command> [l:|a:|r:|c:|d:][command] [arguments] - {player} can be replaced by name of a clicked player.
     aliases: [epowertool,pt,ept]
+  powertoollist:
+    description: Lists all current powertools.
+    usage: /<command>
+    aliases: [epowertoollist,ptlist,eptlist]
   powertooltoggle:
     description: Enables or disables all current powertools.
     usage: /<command>

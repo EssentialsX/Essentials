@@ -832,19 +832,34 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        final long autoafkkick = ess.getSettings().getAutoAfkKick();
-        if (autoafkkick > 0
-                && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
+        final long autoafktimeout = ess.getSettings().getAutoAfkTimeout();
+
+        // Checks if the player has been inactive for longer than the configured auto-afk-timeout time.
+        if (autoafktimeout > 0
+                && lastActivity > 0 && (lastActivity + (autoafktimeout * 1000)) < System.currentTimeMillis()
                 && !isAuthorized("essentials.kick.exempt")
                 && !isAuthorized("essentials.afk.kickexempt")) {
             lastActivity = 0;
-            final double kickTime = autoafkkick / 60.0;
+            final double kickTime = autoafktimeout / 60.0;
+            
+            // If `afk-timeout-command` in config.yml is empty, use default Essentials kicking behaviour instead of executing a command.
+            if (ess.getSettings().getAfkTimeoutCommands().isEmpty()) {
+                this.getBase().kickPlayer(AdventureUtil.miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
 
-            this.getBase().kickPlayer(AdventureUtil.miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
-
-            for (final User user : ess.getOnlineUsers()) {
-                if (user.isAuthorized("essentials.kick.notify")) {
-                    user.sendTl("playerKicked", Console.DISPLAY_NAME, getName(), user.playerTl("autoAfkKickReason", kickTime));
+                for (final User user : ess.getOnlineUsers()) {
+                    if (user.isAuthorized("essentials.kick.notify")) {
+                        user.sendTl("playerKicked", Console.DISPLAY_NAME, getName(), user.playerTl("autoAfkKickReason", kickTime));
+                    }
+                }
+            } else {
+                // If `afk-timeout-commands` in config.yml is populated, execute the command(s) instead of kicking the player.
+                for (final String command : ess.getSettings().getAfkTimeoutCommands()) {
+                    if (command == null || command.isEmpty()){
+                        continue;
+                    }
+                    // Replace placeholders in the command with actual values.
+                    final String cmd = command.replace("{USERNAME}", getName()).replace("{KICKTIME}", String.valueOf(kickTime));
+                    ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), cmd);
                 }
             }
         }
