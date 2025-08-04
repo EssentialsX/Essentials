@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.util.Objects;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
@@ -86,7 +87,11 @@ public class Trade {
         sb.append(DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date()));
         sb.append("\",\"");
         if (sender != null) {
-            sb.append(sender);
+            String senderIdentifier = sender;
+            if (ess.getSettings().isEcoLogUUIDEnabled()) {
+                senderIdentifier = Objects.requireNonNull(ess.getServer().getPlayer(sender)).getUniqueId().toString();
+            }
+            sb.append(senderIdentifier);
         }
         sb.append("\",");
         if (charge == null) {
@@ -112,7 +117,11 @@ public class Trade {
         }
         sb.append(",\"");
         if (receiver != null) {
-            sb.append(receiver);
+            String receiverIdentifier = receiver;
+            if (ess.getSettings().isEcoLogUUIDEnabled()) {
+                receiverIdentifier = Objects.requireNonNull(ess.getServer().getPlayer(receiver)).getUniqueId().toString();
+            }
+            sb.append(receiverIdentifier);
         }
         sb.append("\",");
         if (pay == null) {

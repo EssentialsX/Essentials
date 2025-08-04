@@ -863,6 +863,10 @@ min-money: -10000
 # Enable this to log all interactions with buy/sell/trade signs and the sell command.
 economy-log-enabled: false
 
+# Enable this to replace usernames with UUIDs in the trade.log file.
+# If this is false, usernames will be used instead of UUIDs.
+economy-log-uuids: false
+
 # Enable this to also log all transactions from other plugins through Vault.
 # This can cause the economy log to fill up quickly so it should only be enabled for testing purposes!
 economy-log-update-enabled: false

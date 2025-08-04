@@ -92,6 +92,7 @@ public class Settings implements net.ess3.api.ISettings {
     private BigDecimal maxMoney = DEFAULT_MAX_MONEY;
     private BigDecimal minMoney = DEFAULT_MIN_MONEY;
     private boolean economyLog = false;
+    private boolean economyLogUUID = false;
     // #easteregg
     private boolean economyLogUpdate = false;
     private boolean changeDisplayName = true;
@@ -904,6 +905,7 @@ public class Settings implements net.ess3.api.ISettings {
         permissionsLagWarning = _getPermissionsLagWarning();
         economyLagWarning = _getEconomyLagWarning();
         economyLog = _isEcoLogEnabled();
+        economyLogUUID = _isEcoLogUUIDEnabled();
         economyLogUpdate = _isEcoLogUpdateEnabled();
         economyDisabled = _isEcoDisabled();
         allowSilentJoin = _allowSilentJoinQuit();
@@ -1173,6 +1175,14 @@ public class Settings implements net.ess3.api.ISettings {
 
     public boolean _isEcoLogEnabled() {
         return config.getBoolean("economy-log-enabled", false);
+    }
+
+    public boolean _isEcoLogUUIDEnabled() {
+        return config.getBoolean("economy-log-uuids", false);
+    }
+
+    public boolean isEcoLogUUIDEnabled() {
+        return economyLogUUID;
     }
 
     @Override
