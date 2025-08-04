@@ -1620,6 +1620,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isCustomWhitelistMessage() {
+        return config.getBoolean("use-custom-whitelist-message", true);
+    }
+
+    @Override
     public int getJoinQuitMessagePlayerCount() {
         return config.getInt("hide-join-quit-messages-above", -1);
     }
@@ -2124,7 +2129,7 @@ public class Settings implements net.ess3.api.ISettings {
     public String getNickRegex() {
         return config.getString("allowed-nicks-regex", "^[a-zA-Z_0-9§]+$");
     }
-  
+
     @Override
     public BigDecimal getMultiplier(final User user) {
         BigDecimal multiplier = defaultMultiplier;
