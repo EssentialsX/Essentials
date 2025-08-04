@@ -4,7 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.ExecuteTimer;
 import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.ISettings;
 import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
@@ -21,7 +20,6 @@ import org.bukkit.plugin.Plugin;
 import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumMap;
@@ -29,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -99,8 +96,6 @@ public class KeywordReplacer implements IText {
     private final transient IText input;
     private final transient List<String> replaced;
     private final transient IEssentials ess;
-
-    private final transient ISettings settings;
     private final transient boolean includePrivate;
     private final transient boolean replaceSpacesWithUnderscores;
     private final EnumMap<KeywordType, Object> keywordCache = new EnumMap<>(KeywordType.class);
@@ -109,7 +104,6 @@ public class KeywordReplacer implements IText {
         this.input = input;
         this.replaced = new ArrayList<>(this.input.getLines().size());
         this.ess = ess;
-        this.settings = ess.getSettings();
         this.includePrivate = true;
         this.replaceSpacesWithUnderscores = false;
         replaceKeywords(sender);
@@ -119,7 +113,6 @@ public class KeywordReplacer implements IText {
         this.input = input;
         this.replaced = new ArrayList<>(this.input.getLines().size());
         this.ess = ess;
-        this.settings = ess.getSettings();
         this.includePrivate = showPrivate;
         this.replaceSpacesWithUnderscores = false;
         replaceKeywords(sender);
@@ -130,7 +123,6 @@ public class KeywordReplacer implements IText {
         this.input = input;
         this.replaced = new ArrayList<>(this.input.getLines().size());
         this.ess = ess;
-        this.settings = ess.getSettings();
         this.includePrivate = showPrivate;
         this.replaceSpacesWithUnderscores = replaceSpacesWithUnderscores;
         replaceKeywords(sender);
@@ -328,20 +320,10 @@ public class KeywordReplacer implements IText {
                         keywordCache.put(validKeyword, outputList);
                         break;
                     case TIME:
-                        final String timeFormat = settings.getTimeFormat();
-
-                        if (!Objects.equals(timeFormat, "locale"))
-                            replacer = new SimpleDateFormat(timeFormat).format(new Date());
-                        else
-                            replacer = DateFormat.getTimeInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
+                        replacer = DateFormat.getTimeInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
                         break;
                     case DATE:
-                        final String dateFormat = settings.getDateFormat();
-
-                        if (!Objects.equals(dateFormat, "locale"))
-                            replacer = new SimpleDateFormat(dateFormat).format(new Date());
-                        else
-                            replacer = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
+                        replacer = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
                         break;
                     case WORLDTIME12:
                         if (user != null) {
