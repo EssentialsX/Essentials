@@ -1271,7 +1271,7 @@ public class Settings implements net.ess3.api.ISettings {
     private Set<String> _getAfkTimeoutCommands() {
         final Set<String> timeoutCommands = new HashSet<>();
         for (final String cmd : config.getList("afk-timeout-commands", String.class)) {
-            timeoutCommands.add(cmd.toLowerCase(Locale.ENGLISH));
+            timeoutCommands.add(cmd);
         }
         return timeoutCommands;
     }
