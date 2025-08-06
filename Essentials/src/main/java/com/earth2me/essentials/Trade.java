@@ -16,11 +16,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
-import java.util.Objects;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -89,7 +89,10 @@ public class Trade {
         if (sender != null) {
             String senderIdentifier = sender;
             if (ess.getSettings().isEcoLogUUIDEnabled()) {
-                senderIdentifier = Objects.requireNonNull(ess.getServer().getPlayer(sender)).getUniqueId().toString();
+                final UUID uuid = ess.getUsers().getNameCache().get(sender);
+                if (uuid != null) {
+                    senderIdentifier = uuid.toString();
+                }
             }
             sb.append(senderIdentifier);
         }
@@ -119,7 +122,10 @@ public class Trade {
         if (receiver != null) {
             String receiverIdentifier = receiver;
             if (ess.getSettings().isEcoLogUUIDEnabled()) {
-                receiverIdentifier = Objects.requireNonNull(ess.getServer().getPlayer(receiver)).getUniqueId().toString();
+                final UUID uuid = ess.getUsers().getNameCache().get(receiver);
+                if (uuid != null) {
+                    receiverIdentifier = uuid.toString();
+                }
             }
             sb.append(receiverIdentifier);
         }
@@ -154,7 +160,7 @@ public class Trade {
             sb.append(loc.getBlockY()).append(",");
             sb.append(loc.getBlockZ()).append(",");
         }
-        
+
         if (endBalance == null) {
             sb.append(",");
         } else {
