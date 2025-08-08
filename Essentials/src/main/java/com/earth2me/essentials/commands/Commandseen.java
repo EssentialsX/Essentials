@@ -113,6 +113,10 @@ public class Commandseen extends EssentialsCommand {
             sender.sendTl("whoisUuid", user.getBase().getUniqueId().toString());
         }
 
+        if (sender.isAuthorized("essentials.seen.firstlogin")) {
+            sender.sendTl("whoisFirstLogin", DateUtil.formatDate(user.getBase().getFirstPlayed(), ess));
+        }
+
         if (user.isAfk()) {
             sender.sendTl("whoisAFK", CommonPlaceholders.trueFalse(sender, true));
         }
@@ -133,6 +137,10 @@ public class Commandseen extends EssentialsCommand {
         }
         if (showIp) {
             sender.sendTl("whoisIPAddress", user.getBase().getAddress().getAddress().toString());
+        }
+
+        if (sender.isAuthorized("essentials.seen.lastlogin")) {
+            sender.sendTl("whoisLastLogin", DateUtil.formatDate(user.getLastLogin(), ess));
         }
     }
 
