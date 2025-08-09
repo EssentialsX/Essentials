@@ -1053,12 +1053,24 @@ public class Settings implements net.ess3.api.ISettings {
 
     private String currencySymbol = "$";
 
-    // A valid currency symbol value must be one non-integer character.
+    /**
+     * Gets the currency symbol from the config.
+     * Allows multi-character symbols for currencies like R$, kr, CA$, etc.
+     * Falls back to "$" if invalid.
+     */
     private String _getCurrencySymbol() {
         String value = config.getString("currency-symbol", "$").trim();
-        if (value.length() > 1 || value.matches("\\d")) {
+    
+        // Disallow empty values or values starting with a digit
+        if (value.isEmpty() || value.matches("^\\d.*$")) {
             value = "$";
         }
+    
+        // Limit to a reasonable length (max 5 characters for exotic symbols + spacing)
+        if (value.length() > 5) {
+            value = value.substring(0, 5);
+        }
+    
         return value;
     }
 
