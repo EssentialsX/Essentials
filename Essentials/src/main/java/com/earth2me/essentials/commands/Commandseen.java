@@ -138,10 +138,6 @@ public class Commandseen extends EssentialsCommand {
         if (showIp) {
             sender.sendTl("whoisIPAddress", user.getBase().getAddress().getAddress().toString());
         }
-
-        if (sender.isAuthorized("essentials.seen.lastlogin")) {
-            sender.sendTl("whoisLastLogin", DateUtil.formatDate(user.getLastLogin(), ess));
-        }
     }
 
     private void seenOffline(final CommandSource sender, final User user, final boolean showBan, final boolean showIp, final boolean showLocation, final boolean showWhitelist) {

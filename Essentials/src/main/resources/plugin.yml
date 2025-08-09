@@ -1160,8 +1160,6 @@ permissions:
     description: Allows access to the /seen command with UUID
   essentials.seen.firstlogin:
     description: Allows access to the /seen command with first login time
-  essentials.seen.lastlogin:
-    description: Allows access to the /seen command with last login time
   essentials.seen.whitelist:
     description: Allows access to the /seen command with whitelist status
   essentials.seen.ipsearch:
@@ -1175,7 +1173,6 @@ permissions:
       essentials.seen.location: true
       essentials.seen.uuid: true
       essentials.seen.firstlogin: true
-      essentials.seen.lastlogin: true
       essentials.seen.whitelist: true
   essentials.sell:
     description: Allows access to the /sell command
