@@ -574,6 +574,17 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 event.disallow(Result.KICK_FULL, tlLiteral("serverFull"));
             }
         }
+        if (event.getResult() == Result.KICK_WHITELIST) {
+            final User kfuser = ess.getUser(event.getPlayer());
+            kfuser.update(event.getPlayer());
+            if (kfuser.isAuthorized("essentials.whitelist.bypass")) {
+                event.allow();
+                return;
+            }
+            if (ess.getSettings().isCustomWhitelistMessage()) {
+                event.disallow(Result.KICK_WHITELIST, tlLiteral("whitelistKick"));
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

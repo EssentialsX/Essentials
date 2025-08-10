@@ -49,20 +49,15 @@ public final class VersionUtil {
     public static final boolean PRE_FLATTENING = VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01);
 
     private static final Map<String, SupportStatus> unsupportedServerClasses;
+    private static final String PFX = make("8(;4>`");
 
     static {
         final ImmutableMap.Builder<String, SupportStatus> builder = new ImmutableMap.Builder<>();
 
-        // Yatopia - Extremely volatile patch set;
-        //   * Messes with proxy-forwarded UUIDs
-        //   * Frequent data corruptions
-        builder.put("org.yatopiamc.yatopia.server.YatopiaConfig", SupportStatus.DANGEROUS_FORK);
-        builder.put("net.yatopia.api.event.PlayerAttackEntityEvent", SupportStatus.DANGEROUS_FORK);
-        builder.put("org.bukkit.plugin.SimplePluginManager#getPluginLoaders", SupportStatus.DANGEROUS_FORK);
-        builder.put("org.bukkit.Bukkit#getLastTickTime", SupportStatus.DANGEROUS_FORK);
-        builder.put("brand:Yatopia", SupportStatus.DANGEROUS_FORK);
-        // Yatopia downstream(s) which attempt to do tricky things :)
-        builder.put("brand:Hyalus", SupportStatus.DANGEROUS_FORK);
+        // Leaf, yet another "High Performance" fork of Paper. Not supported by EssentialsX.
+        builder.put(make("5(=t>(??;7t6?;<t\\026?;<\\03055.).(;*"), SupportStatus.DANGEROUS_FORK);
+        builder.put("brand:Leaf", SupportStatus.DANGEROUS_FORK);
+        builder.put(PFX + make("\\026?;<"), SupportStatus.DANGEROUS_FORK);
 
         // KibblePatcher - Dangerous bytecode editor snakeoil whose only use is to break plugins
         builder.put("net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK);
@@ -71,18 +66,17 @@ public final class VersionUtil {
         builder.put("ml.tcoded.nochatreports.NoChatReportsSpigot", SupportStatus.STUPID_PLUGIN);
         builder.put("me.doclic.noencryption.NoEncryption", SupportStatus.STUPID_PLUGIN);
 
-        // Akarin - Dangerous patch history;
-        //   * Potentially unsafe saving of nms.JsonList
-        builder.put("io.akarin.server.Config", SupportStatus.DANGEROUS_FORK);
-
         // Forge - Doesn't support Bukkit
-        // The below translates to net.minecraftforge.common.MinecraftForge
-        builder.put(dumb(new int[] {110, 101, 116, 46, 109, 105, 110, 101, 99, 114, 97, 102, 116, 102, 111, 114, 103, 101, 46, 99, 111, 109, 109, 111, 110, 46, 77, 105, 110, 101, 99, 114, 97, 102, 116, 70, 111, 114, 103, 101}, 40), SupportStatus.UNSTABLE);
+        builder.put("net.minecraftforge.common.MinecraftForge", SupportStatus.UNSTABLE);
+        builder.put(make("4?.t734?9(;<.<5(=?t957754t\\02734?9(;<.\\0345(=?"), SupportStatus.UNSTABLE);
+        builder.put(PFX + make("\\027523)."), SupportStatus.UNSTABLE);
         builder.put("brand:Mohist", SupportStatus.UNSTABLE);
 
         // Fabric - Doesn't support Bukkit
         // The below translates to net.fabricmc.loader.launch.knot.KnotServer
-        builder.put(dumb(new int[] {110, 101, 116, 46, 102, 97, 98, 114, 105, 99, 109, 99, 46, 108, 111, 97, 100, 101, 114, 46, 108, 97, 117, 110, 99, 104, 46, 107, 110, 111, 116, 46, 75, 110, 111, 116, 83, 101, 114, 118, 101, 114}, 42), SupportStatus.UNSTABLE);
+        builder.put("net.fabricmc.loader.launch.knot.KnotServer", SupportStatus.UNSTABLE);
+        builder.put(make("4?.t<;8(3979t65;>?(t6;/492t145.t\\02145.\\t?(,?("), SupportStatus.UNSTABLE);
+        builder.put(PFX + make("\\0035/?("), SupportStatus.UNSTABLE);
 
         // Misc translation layers that do not add NMS will be caught by this
         if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_17_R1)) {
@@ -117,8 +111,8 @@ public final class VersionUtil {
         if (supportStatus == null) {
             for (Map.Entry<String, SupportStatus> entry : unsupportedServerClasses.entrySet()) {
 
-                if (entry.getKey().startsWith("brand:")) {
-                    if (Bukkit.getName().equalsIgnoreCase(entry.getKey().replaceFirst("brand:", ""))) {
+                if (entry.getKey().startsWith(PFX)) {
+                    if (Bukkit.getName().equalsIgnoreCase(entry.getKey().replaceFirst(PFX, ""))) {
                         supportStatusClass = entry.getKey();
                         return supportStatus = entry.getValue();
                     }
@@ -354,20 +348,11 @@ public final class VersionUtil {
         }
     }
 
-    private static String dumb(final int[] clazz, final int len) {
-        final char[] chars = new char[clazz.length];
-
-        for (int i = 0; i < clazz.length; i++) {
-            chars[i] = (char) clazz[i];
+    private static String make(String in) {
+        final char[] c = in.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            c[i] ^= 0x5A;
         }
-
-        final String decode = String.valueOf(chars);
-
-        if (decode.charAt(0) != 'n' || decode.length() != len) {
-            System.exit(1);
-            return "why do hybrids try to bypass this?";
-        }
-
-        return decode;
+        return new String(c);
     }
 }

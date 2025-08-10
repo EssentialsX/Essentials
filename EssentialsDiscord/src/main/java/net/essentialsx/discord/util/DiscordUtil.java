@@ -219,7 +219,14 @@ public final class DiscordUtil {
     }
 
     public static String getAvatarUrl(final JDADiscordService jda, final Player player) {
-        return jda.getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()).replace("{name}", player.getName());
+        final String format = jda.getSettings().getAvatarURL();
+        final String filled;
+        if (jda.getPlugin().isPAPI() && format != null) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return filled.replace("{uuid}", player.getUniqueId().toString()).replace("{name}", player.getName());
     }
 
     public static void dispatchDiscordMessage(final JDADiscordService jda, final MessageType messageType, final String message, final boolean allowPing, final String avatarUrl, final String name, final UUID uuid) {
