@@ -32,8 +32,8 @@ body:
 - type: input
   attributes:
     label: Error log (if applicable)
-    description: If you are reporting a console error, upload any relevant log excerpts to either https://paste.gg or https://gist.github.com, save and the paste the link in this box. If you included those files in the same paste as your startup log, paste the same link here.
-    placeholder: "Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210"
+    description: If you are reporting a console error, upload any relevant log excerpts to either https://pastes.dev or https://gist.github.com, save and the paste the link in this box. If you included those files in the same paste as your startup log, paste the same link here.
+    placeholder: "Example: https://pastes.dev/UYL3ASLsee"
 
 - type: textarea
   attributes:

@@ -202,6 +202,16 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("show-displayname", false);
     }
 
+    protected boolean isCustomBotName() {
+        if (isShowName() || isShowDisplayName()) {
+            return true;
+        }
+
+        final String format = getFormatString("mc-to-discord-name-format");
+
+        return format != null && !format.isEmpty() && !format.equals("{botname}");
+    }
+
     public String getAvatarURL() {
         return config.getString("avatar-url", "https://crafthead.net/helm/{uuid}");
     }

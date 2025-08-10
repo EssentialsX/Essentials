@@ -1,4 +1,3 @@
-# This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
 name: EssentialsProtect
 main: com.earth2me.essentials.protect.EssentialsProtect
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
@@ -8,3 +7,38 @@ description: Provides protection for various parts of the world.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, drtshock]
 softdepend: [Essentials]
 api-version: 1.13
+permissions:
+  essentials.protect.entitytarget.bypass:
+    description: Allows the bearer to be targeted by entities
+  essentials.protect.pvp:
+    description: Allows the bearer to participate in PvP when prevent pvp is enabled
+  essentials.protect.damage.disable:
+    description: Allows the bearer to not take damage
+  essentials.protect.damage.contact:
+    description: Allows the bearer to take damage from cacti and other contact damage
+  essentials.protect.damage.lava:
+    description: Allows the bearer to take damage from lava
+  essentials.protect.damage.tnt:
+    description: Allows the bearer to take damage from TNT
+  essentials.protect.damage.creeper:
+    description: Allows the bearer to take damage from creepers
+  essentials.protect.damage.fireball:
+    description: Allows the bearer to take damage from fireballs
+  essentials.protect.damage.witherskull:
+    description: Allows the bearer to take damage from wither skulls
+  essentials.protect.damage.tnt-minecraft:
+    description: Allows the bearer to take damage from a tnt minecart
+  essentials.protect.damage.projectiles:
+    description: Allows the bearer to take damage from projectiles
+  essentials.protect.damage.fall:
+    description: Allows the bearer to take fall damage
+  essentials.protect.damage.suffocation:
+    description: Allows the bearer to take suffocation damage
+  essentials.protect.damage.fire:
+    description: Allows the bearer to take fire damage
+  essentials.protect.damage.drowning:
+    description: Allows the bearer to take drowning damage
+  essentials.protect.damage.lightning:
+    description: Allows the bearer to take lightning damage
+  essentials.protect.damage.wither:
+    description: Allows the bearer to take wither damage

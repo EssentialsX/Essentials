@@ -170,6 +170,7 @@ public class SuperpermsHandler implements IPermissionsHandler {
                 break;
             }
         }
+
         return enabledPermsPlugin;
     }
 }

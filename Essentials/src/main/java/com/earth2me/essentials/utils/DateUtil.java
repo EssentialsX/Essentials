@@ -1,7 +1,9 @@
 package com.earth2me.essentials.utils;
 
+import net.ess3.api.IEssentials;
 import net.ess3.api.TranslatableException;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
@@ -169,5 +171,12 @@ public final class DateUtil {
             return tlLiteral("now");
         }
         return sb.toString().trim();
+    }
+
+    public static String formatDate(final long date, final IEssentials ess) {
+        final GregorianCalendar gc = new GregorianCalendar();
+        gc.setTimeInMillis(date);
+        final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, ess.getI18n().getCurrentLocale());
+        return df.format(gc.getTime());
     }
 }
