@@ -5,7 +5,6 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.NickChangeEvent;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 
 import java.util.Collections;
@@ -87,7 +86,10 @@ public class Commandnick extends EssentialsLoopCommand {
     }
 
     private int getNickLength(final String nick) {
-        return ess.getSettings().ignoreColorsInMaxLength() ? ChatColor.stripColor(nick).length() : nick.length();
+        if (ess.getSettings().ignoreColorsInMaxLength()) {
+            return FormatUtil.stripFormat(nick).length();
+        }
+        return FormatUtil.unformatString(nick).length();
     }
 
     private boolean nickInUse(final User target, final String nick) {

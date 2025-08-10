@@ -107,7 +107,7 @@ public abstract class AbstractChatHandler {
         // Local, shout and question chat types are only enabled when there's a valid radius
         if (chat.getRadius() > 0 && !event.getMessage().isEmpty()) {
             if (event.getMessage().length() > 1 && ((chat.getType() == ChatType.SHOUT && event.getMessage().charAt(0) == ess.getSettings().getChatShout()) || (chat.getType() == ChatType.QUESTION && event.getMessage().charAt(0) == ess.getSettings().getChatQuestion()))) {
-                event.setMessage(event.getMessage().substring(1));
+                event.setMessage(event.getMessage().substring(1).trim());
             }
 
             // Prevent messages like "!&c" or "?&c" from being sent which would cause an empty message
@@ -141,8 +141,9 @@ public abstract class AbstractChatHandler {
 
         final ChatProcessingCache.Chat chat = cache.getProcessedChat(event.getPlayer());
 
-        // If local chat is enabled, handle the recipients here; else we have nothing to do
+        // If local chat is enabled, handle the recipients here; else we can just fire the chat event and return
         if (chat.getRadius() < 1) {
+            callChatEvent(event, chat.getType(), null);
             return;
         }
         final long radiusSquared = chat.getRadius() * chat.getRadius();
@@ -213,9 +214,9 @@ public abstract class AbstractChatHandler {
         }
 
         // Strip local chat prefix to preserve API behaviour
-        final String localPrefix = AdventureUtil.miniToLegacy(tlLiteral("chatTypeLocal"));
+        final String localPrefix = tlLiteral("chatTypeLocal");
         String baseFormat = AdventureUtil.legacyToMini(event.getFormat());
-        if (event.getFormat().startsWith(localPrefix)) {
+        if (baseFormat.startsWith(localPrefix)) {
             baseFormat = baseFormat.substring(localPrefix.length());
         }
 

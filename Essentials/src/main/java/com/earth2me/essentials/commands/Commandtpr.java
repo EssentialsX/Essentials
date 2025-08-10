@@ -25,26 +25,51 @@ public class Commandtpr extends EssentialsCommand {
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
         final RandomTeleport randomTeleport = ess.getRandomTeleport();
-        final String defaultLocation = randomTeleport.getDefaultLocation().replace("{world}", user.getLocation().getWorld().getName());
-        final String name = args.length > 0 ? args[0] : defaultLocation;
-        final User userToTeleport = args.length > 1 && user.isAuthorized("essentials.tpr.others") ? getPlayer(server, user, args, 1) : user;
-        if (randomTeleport.isPerLocationPermission() && !user.isAuthorized("essentials.tpr.location." + name)) {
-            throw new TranslatableException("warpUsePermission");
+
+        final String randomLocationName;
+        final User target;
+        if (args.length == 0) {
+            // No arguments provided, use the default random teleport location
+            randomLocationName = randomTeleport.getDefaultLocation().replace("{world}", user.getLocation().getWorld().getName());
+            target = user;
+        } else {
+            // Use the first argument as the location name
+            randomLocationName = args[0];
+            if (!randomTeleport.hasLocation(randomLocationName)) {
+                throw new TranslatableException("tprNotExist");
+            }
+
+            if (randomTeleport.isPerLocationPermission() && !user.isAuthorized("essentials.tpr.location." + randomLocationName)) {
+                throw new TranslatableException("tprNoPermission");
+            }
+
+            if (args.length > 1 && user.isAuthorized("essentials.tpr.others")) {
+                target = getPlayer(server, user, args, 1);
+            } else {
+                target = user;
+            }
         }
-        final UserRandomTeleportEvent event = new UserRandomTeleportEvent(userToTeleport, name, randomTeleport.getCenter(name), randomTeleport.getMinRange(name), randomTeleport.getMaxRange(name));
+
+        final UserRandomTeleportEvent event = new UserRandomTeleportEvent(target, randomLocationName, randomTeleport.getCenter(randomLocationName), randomTeleport.getMinRange(randomLocationName), randomTeleport.getMaxRange(randomLocationName));
         server.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
         }
-        (event.isModified() ? randomTeleport.getRandomLocation(event.getCenter(), event.getMinRange(), event.getMaxRange()) : randomTeleport.getRandomLocation(name))
+
+        target.sendTl("tprSuccess");
+        if (target != user) {
+            user.sendTl("tprOtherUser", target.getDisplayName());
+        }
+
+        (event.isModified() ? randomTeleport.getRandomLocation(event.getCenter(), event.getMinRange(), event.getMaxRange()) : randomTeleport.getRandomLocation(randomLocationName))
                 .thenAccept(location -> {
                     final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
                     future.thenAccept(success -> {
                         if (success) {
-                            userToTeleport.sendTl("tprSuccess");
+                            target.sendTl("tprSuccessDone");
                         }
                     });
-                    userToTeleport.getAsyncTeleport().teleport(location, charge, PlayerTeleportEvent.TeleportCause.COMMAND, future);
+                    target.getAsyncTeleport().teleport(location, charge, PlayerTeleportEvent.TeleportCause.COMMAND, future);
                 });
         throw new NoChargeException();
     }
@@ -56,18 +81,27 @@ public class Commandtpr extends EssentialsCommand {
         }
         final RandomTeleport randomTeleport = ess.getRandomTeleport();
         final User userToTeleport = getPlayer(server, sender, args, 1);
-        final String name = args[0];
-        final UserRandomTeleportEvent event = new UserRandomTeleportEvent(userToTeleport, name, randomTeleport.getCenter(name), randomTeleport.getMinRange(name), randomTeleport.getMaxRange(name));
+
+        // Validate the location name - only use if it exists and sender has permission
+        final String potentialLocation = args[0];
+        if (!randomTeleport.hasLocation(potentialLocation)) {
+            throw new TranslatableException("tprNotExist");
+        }
+
+        final UserRandomTeleportEvent event = new UserRandomTeleportEvent(userToTeleport, potentialLocation, randomTeleport.getCenter(potentialLocation), randomTeleport.getMinRange(potentialLocation), randomTeleport.getMaxRange(potentialLocation));
         server.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
         }
-        (event.isModified() ? randomTeleport.getRandomLocation(event.getCenter(), event.getMinRange(), event.getMaxRange()) : randomTeleport.getRandomLocation(name))
+
+        userToTeleport.sendTl("tprSuccess");
+        sender.sendTl("tprOtherUser", userToTeleport.getDisplayName());
+        (event.isModified() ? randomTeleport.getRandomLocation(event.getCenter(), event.getMinRange(), event.getMaxRange()) : randomTeleport.getRandomLocation(potentialLocation))
                 .thenAccept(location -> {
                     final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                     future.thenAccept(success -> {
                         if (success) {
-                            userToTeleport.sendTl("tprSuccess");
+                            userToTeleport.sendTl("tprSuccessDone");
                         }
                     });
                     userToTeleport.getAsyncTeleport().now(location, false, PlayerTeleportEvent.TeleportCause.COMMAND, future);

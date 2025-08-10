@@ -1,4 +1,3 @@
-# This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
 name: EssentialsChat
 main: com.earth2me.essentials.chat.EssentialsChat
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
@@ -14,11 +13,33 @@ commands:
     usage: /<command> [player] [on|off]
     aliases: [etoggleshout]
 permissions:
+  essentials.chat.color:
+    description: Allows access to sending color codes in chat
+  essentials.chat.format:
+    description: Allows access to sending format codes in chat
+  essentials.chat.magic:
+    description: Allows access to sending magic codes in chat
+  essentials.chat.rgb:
+    description: Allows access to sending RGB codes in chat
+  essentials.chat.url:
+    description: Allows access to sending URLs in chat
+  essentials.toggleshout:
+    description: Allows access to the /toggleshout command
+  essentials.toggleshout.others:
+    description: Allows access to the /toggleshout command for other players
+  essentials.chat.question:
+    description: Allows access to sending global questions in chat when chat radius is enabled
+  essentials.chat.shout:
+    description: Allows access to sending shout messages
   essentials.chat.local:
     default: true
+    description: Allows access to sending local chat messages
   essentials.chat.receive.local:
     default: true
+    description: Allows access to receiving local chat messages
   essentials.chat.receive.shout:
     default: true
+    description: Allows access to receiving shout chat messages
   essentials.chat.receive.question:
     default: true
+    description: Allows access to receiving global question chat messages

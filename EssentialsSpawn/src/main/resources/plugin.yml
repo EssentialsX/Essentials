@@ -1,4 +1,3 @@
-# This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
 name: EssentialsSpawn
 main: com.earth2me.essentials.spawn.EssentialsSpawn
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
@@ -18,6 +17,12 @@ commands:
     usage: /<command> [player]
     aliases: [espawn]
 permissions:
+  essentials.spawn:
+    description: Allows access to the /spawn command
+  essentials.spawn.others:
+    description: Allows access to the /spawn command for other players
+  essentials.setspawn:
+    description: Allows access to the /setspawn command
   essentials.spawn-on-join.exempt:
     default: false
-    description: "Bypass spawn teleportation on join when spawn-on-join is true."
+    description: Bypass spawn teleportation on join when spawn-on-join is true

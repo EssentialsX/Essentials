@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.provider.BiomeKeyProvider;
+import net.ess3.provider.BiomeNameProvider;
 import net.ess3.provider.WorldInfoProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -238,8 +239,9 @@ public class RandomTeleport implements IConf {
 
     // Exclude biome if enum or namespaced key matches
     private boolean isExcludedBiome(final Location location) {
+        final BiomeNameProvider biomeNameProvider = ess.provider(BiomeNameProvider.class);
         final Set<String> excluded = getExcludedBiomes();
-        final String enumKey = location.getBlock().getBiome().name().toLowerCase();
+        final String enumKey = biomeNameProvider.getBiomeName(location.getBlock());
         // Try with good old bukkit enum
         if (excluded.contains(enumKey)) {
             return true;

@@ -1,11 +1,14 @@
 package com.earth2me.essentials;
 
+import org.bukkit.Achievement;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
+import org.bukkit.Statistic;
 import org.bukkit.UnsafeValues;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.World;
@@ -1005,7 +1008,52 @@ public final class FakeServer implements Server {
     @Override
     @SuppressWarnings("deprecation")
     public UnsafeValues getUnsafe() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new UnsafeValues() {
+            public int getDataVersion() {
+                // 1.21.5
+                return 4325;
+            }
+
+            @Override
+            public Material getMaterialFromInternalName(String s) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public List<String> tabCompleteInternalMaterialName(String s, List<String> list) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public ItemStack modifyItemStack(ItemStack itemStack, String s) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public Statistic getStatisticFromInternalName(String s) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public Achievement getAchievementFromInternalName(String s) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public List<String> tabCompleteInternalStatisticOrAchievementName(String s, List<String> list) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public Advancement loadAdvancement(NamespacedKey namespacedKey, String s) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public boolean removeAdvancement(NamespacedKey namespacedKey) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
     }
 
     @Override

@@ -22,6 +22,7 @@ public final class AdventureUtil {
         final LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder()
                 .flattener(ComponentFlattener.basic())
                 .extractUrls(AbstractChatEvent.URL_PATTERN)
+                .hexColors()
                 .useUnusualXRepeatedCharacterHexFormat();
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
             builder.hexColors();
