@@ -165,12 +165,9 @@ public final class VersionUtil {
         return supportStatusClass;
     }
 
-    public static boolean isServerSupported() {
-        return getServerSupportStatus().isSupported();
-    }
-
     public static final class BukkitVersion implements Comparable<BukkitVersion> {
         private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)?(?:-pre(\\d))?(?:-rc(\\d+))?(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
+        private static final Pattern SNAPSHOT_PATTERN = Pattern.compile("^(\\d{2})w(\\d{2})([a-z])(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
 
         private final int major;
         private final int minor;
@@ -179,6 +176,11 @@ public final class VersionUtil {
         private final int patch;
         private final double revision;
 
+        private final boolean snapshot;
+        private final int snapshotYear;
+        private final int snapshotWeek;
+        private final char snapshotLetter;
+
         private BukkitVersion(final int major, final int minor, final int patch, final double revision, final int preRelease, final int releaseCandidate) {
             this.major = major;
             this.minor = minor;
@@ -186,19 +188,54 @@ public final class VersionUtil {
             this.revision = revision;
             this.preRelease = preRelease;
             this.releaseCandidate = releaseCandidate;
+            this.snapshot = false;
+            this.snapshotYear = -1;
+            this.snapshotWeek = -1;
+            this.snapshotLetter = '\0';
+        }
+
+        private BukkitVersion(final int major, final int minor, final int patch, final double revision, final int preRelease, final int releaseCandidate,
+                               final boolean snapshot, final int snapshotYear, final int snapshotWeek, final char snapshotLetter) {
+            this.major = major;
+            this.minor = minor;
+            this.patch = patch;
+            this.revision = revision;
+            this.preRelease = preRelease;
+            this.releaseCandidate = releaseCandidate;
+            this.snapshot = snapshot;
+            this.snapshotYear = snapshotYear;
+            this.snapshotWeek = snapshotWeek;
+            this.snapshotLetter = snapshotLetter;
         }
 
         public static BukkitVersion fromString(final String string) {
             Preconditions.checkNotNull(string, "string cannot be null.");
+
+            // Try standard release format first
             Matcher matcher = VERSION_PATTERN.matcher(string);
-            if (!matcher.matches()) {
-                if (!Bukkit.getName().equals("Essentials Fake Server")) {
-                    throw new IllegalArgumentException(string + " is not in valid version format. e.g. 1.8.8-R0.1");
-                }
-                matcher = VERSION_PATTERN.matcher(v1_16_1_R01.toString());
-                Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
+            if (matcher.matches()) {
+                return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(6), matcher.group(4), matcher.group(5));
             }
 
+            // Try snapshot format (e.g., 25w32a-R0.1-SNAPSHOT)
+            final Matcher snapshotMatcher = SNAPSHOT_PATTERN.matcher(string);
+            if (snapshotMatcher.matches()) {
+                final int year = Integer.parseInt(snapshotMatcher.group(1));
+                final int week = Integer.parseInt(snapshotMatcher.group(2));
+                final char letter = snapshotMatcher.group(3).charAt(0);
+                String revision = snapshotMatcher.group(4);
+                if (revision == null || revision.isEmpty()) {
+                    revision = "0";
+                }
+                return fromSnapshot(year, week, letter, Double.parseDouble(revision));
+            }
+
+            // Fallback for fake server environment
+            if (!Bukkit.getName().equals("Essentials Fake Server")) {
+                throw new IllegalArgumentException(string + " is not in valid version format. e.g. 1.8.8-R0.1");
+            }
+            matcher = VERSION_PATTERN.matcher(v1_16_1_R01.toString());
+            Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
             return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(6), matcher.group(4), matcher.group(5));
         }
 
@@ -213,6 +250,10 @@ public final class VersionUtil {
                 Double.parseDouble(revision),
                 Integer.parseInt(preRelease),
                 Integer.parseInt(releaseCandidate));
+        }
+
+        private static BukkitVersion fromSnapshot(final int year, final int week, final char letter, final double revision) {
+            return new BukkitVersion(-1, -1, -1, revision, -1, -1, true, year, week, letter);
         }
 
         public boolean isHigherThan(final BukkitVersion o) {
@@ -255,6 +296,10 @@ public final class VersionUtil {
             return releaseCandidate;
         }
 
+        public boolean isSnapshot() {
+            return snapshot;
+        }
+
         @Override
         public boolean equals(final Object o) {
             if (this == o) {
@@ -264,6 +309,13 @@ public final class VersionUtil {
                 return false;
             }
             final BukkitVersion that = (BukkitVersion) o;
+            if (snapshot || that.snapshot) {
+                return snapshot == that.snapshot &&
+                    snapshotYear == that.snapshotYear &&
+                    snapshotWeek == that.snapshotWeek &&
+                    snapshotLetter == that.snapshotLetter &&
+                    Double.compare(revision, that.revision) == 0;
+            }
             return major == that.major &&
                 minor == that.minor &&
                 patch == that.patch &&
@@ -273,11 +325,17 @@ public final class VersionUtil {
 
         @Override
         public int hashCode() {
+            if (snapshot) {
+                return Objects.hashCode("snapshot", snapshotYear, snapshotWeek, snapshotLetter, revision);
+            }
             return Objects.hashCode(major, minor, patch, revision, preRelease, releaseCandidate);
         }
 
         @Override
         public String toString() {
+            if (snapshot) {
+                return snapshotYear + "w" + snapshotWeek + snapshotLetter;
+            }
             final StringBuilder sb = new StringBuilder(major + "." + minor);
             if (patch != 0) {
                 sb.append(".").append(patch);
@@ -293,6 +351,24 @@ public final class VersionUtil {
 
         @Override
         public int compareTo(final BukkitVersion o) {
+            // Snapshots are always considered the most recent
+            if (snapshot && !o.snapshot) {
+                return 1;
+            } else if (!snapshot && o.snapshot) {
+                return -1;
+            } else if (snapshot /* && o.snapshot */) {
+                if (snapshotYear != o.snapshotYear) {
+                    return Integer.compare(snapshotYear, o.snapshotYear);
+                }
+                if (snapshotWeek != o.snapshotWeek) {
+                    return Integer.compare(snapshotWeek, o.snapshotWeek);
+                }
+                if (snapshotLetter != o.snapshotLetter) {
+                    return Character.compare(snapshotLetter, o.snapshotLetter);
+                }
+                return Double.compare(revision, o.revision);
+            }
+
             if (major < o.major) {
                 return -1;
             } else if (major > o.major) {
