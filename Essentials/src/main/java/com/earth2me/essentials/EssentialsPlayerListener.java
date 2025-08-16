@@ -283,12 +283,12 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
             final String msg = ess.getSettings().getCustomQuitMessage()
-                    .replace("{PLAYER}", player.getDisplayName())
-                    .replace("{USERNAME}", player.getName())
-                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size() - 1)) // Subtract 1 as the leaving player is still online during this time
-                    .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
-                    .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
-                    .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)));
+                .replace("{PLAYER}", player.getDisplayName())
+                .replace("{USERNAME}", player.getName())
+                .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size() - 1)) // Subtract 1 as the leaving player is still online during this time
+                .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
+                .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
+                .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)));
 
             event.setQuitMessage(msg.isEmpty() ? null : msg);
         }
@@ -405,13 +405,13 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     effectiveMessage = null;
                 } else if (ess.getSettings().isCustomJoinMessage()) {
                     final String msg = (newUsername ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
-                            .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
-                            .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUsers().getUserCount()))
-                            .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
-                            .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
-                            .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
-                            .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)))
-                            .replace("{OLDUSERNAME}", lastAccountName == null ? "" : lastAccountName);
+                        .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
+                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUsers().getUserCount()))
+                        .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
+                        .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
+                        .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
+                        .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)))
+                        .replace("{OLDUSERNAME}", lastAccountName == null ? "" : lastAccountName);
                     if (!msg.isEmpty()) {
                         ess.getServer().broadcastMessage(msg);
                     }
@@ -656,7 +656,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
             if (pluginCommand == null
-                    || (!pluginCommand.getName().equals("msg") && !pluginCommand.getName().equals("r"))) { // /msg and /r are handled in SimpleMessageRecipient
+                || (!pluginCommand.getName().equals("msg") && !pluginCommand.getName().equals("r"))) { // /msg and /r are handled in SimpleMessageRecipient
                 final User user = ess.getUser(player);
                 if (!user.isAuthorized("essentials.chat.spy.exempt")) {
                     final String playerName = ess.getSettings().isSocialSpyDisplayNames() ? player.getDisplayName() : player.getName();
@@ -713,11 +713,11 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
 
         if (ess.getSettings().isCommandCooldownsEnabled()
-                && !user.isAuthorized("essentials.commandcooldowns.bypass")
-                && (pluginCommand == null || !user.isAuthorized("essentials.commandcooldowns.bypass." + pluginCommand.getName()))) {
+            && !user.isAuthorized("essentials.commandcooldowns.bypass")
+            && (pluginCommand == null || !user.isAuthorized("essentials.commandcooldowns.bypass." + pluginCommand.getName()))) {
             final int argStartIndex = effectiveCommand.indexOf(" ");
             final String args = argStartIndex == -1 ? "" // No arguments present
-                    : " " + effectiveCommand.substring(argStartIndex); // arguments start at argStartIndex; substring from there.
+                : " " + effectiveCommand.substring(argStartIndex); // arguments start at argStartIndex; substring from there.
             final String fullCommand = pluginCommand == null ? effectiveCommand : pluginCommand.getName() + args;
 
             // Used to determine whether a user already has an existing cooldown
@@ -758,8 +758,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         if (ess.getSettings().isWorldChangeFlyResetEnabled()) {
             if (user.getBase().getGameMode() != GameMode.CREATIVE
-                    && user.getBase().getGameMode() != GameMode.SPECTATOR
-                    && !user.isAuthorized("essentials.fly")) {
+                && user.getBase().getGameMode() != GameMode.SPECTATOR
+                && !user.isAuthorized("essentials.fly")) {
                 user.getBase().setFallDistance(0f);
                 user.getBase().setAllowFlight(false);
             }
@@ -960,10 +960,10 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             }
         } else if (clickedInventory != null && clickedInventory.getType() == InventoryType.PLAYER) {
             if (ess.getSettings().isDirectHatAllowed() && event.getClick() == ClickType.LEFT && event.getSlot() == 39
-                    && event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0
-                    && !MaterialUtil.isSkull(event.getCursor().getType())
-                    && user.isAuthorized("essentials.hat") && !user.isAuthorized("essentials.hat.prevent-type." + event.getCursor().getType().name().toLowerCase())
-                    && !isPreventBindingHat(user, (PlayerInventory) clickedInventory)) {
+                && event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0
+                && !MaterialUtil.isSkull(event.getCursor().getType())
+                && user.isAuthorized("essentials.hat") && !user.isAuthorized("essentials.hat.prevent-type." + event.getCursor().getType().name().toLowerCase())
+                && !isPreventBindingHat(user, (PlayerInventory) clickedInventory)) {
                 event.setCancelled(true);
                 final PlayerInventory inv = (PlayerInventory) clickedInventory;
                 final ItemStack head = inv.getHelmet();
