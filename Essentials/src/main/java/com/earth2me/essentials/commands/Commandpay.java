@@ -49,7 +49,7 @@ public class Commandpay extends EssentialsLoopCommand {
             amount = NumberUtil.parseStringToBDecimal(ogStr);
         }
 
-        final boolean isRealPlayer = user.isAuthorized("essentials.pay.offline");
+        final boolean isRealPlayer = user.isAuthorized("essentials.pay." + user.getName());
 
         if (amount.compareTo(ess.getSettings().getMinimumPayAmount()) < 0) { // Check if amount is less than minimum-pay-amount
             throw new TranslatableException("minimumPayAmount", AdventureUtil.parsed(NumberUtil.displayCurrencyExactly(ess.getSettings().getMinimumPayAmount(), ess)));
