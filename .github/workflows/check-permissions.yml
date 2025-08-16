@@ -1,0 +1,190 @@
+name: Check Permissions
+
+on:
+  pull_request:
+    branches:
+    - 2.x
+    - mc/*
+    - dev/*
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check-permissions:
+    name: Check isAuthorized permissions
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Git repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Check for new isAuthorized calls
+      id: check-permissions
+      shell: bash
+      run: |
+        echo "=== Checking for newly added isAuthorized calls ==="
+        
+        # Get the list of changed files (only Java files)
+        changed_files=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..HEAD -- '*.java')
+        
+        if [ -z "$changed_files" ]; then
+          echo "No Java files changed."
+          exit 0
+        fi
+        
+        echo "Changed Java files:"
+        echo "$changed_files"
+        
+        # Check for newly added lines containing isAuthorized
+        missing_permissions=""
+        dynamic_permissions=""
+        
+        for file in $changed_files; do
+          echo
+          echo "=== Checking $file ==="
+          
+          # Get newly added lines containing isAuthorized
+          added_lines=$(git diff ${{ github.event.pull_request.base.sha }}..HEAD "$file" | grep "^+" | grep -v "^+++" | grep "\.isAuthorized(" || true)
+          
+          if [ -n "$added_lines" ]; then
+            echo "Found new isAuthorized calls in $file:"
+            echo "$added_lines"
+            
+            # Process each line
+            echo "$added_lines" | while IFS= read -r line; do
+              if [ -n "$line" ]; then
+                # Remove the leading "+" from the diff
+                clean_line=$(echo "$line" | sed 's/^+//')
+                
+                # Extract permission string using regex
+                permission=$(echo "$clean_line" | sed -n 's/.*\.isAuthorized("\([^"]*\)").*/\1/p')
+                if [ -z "$permission" ]; then
+                  permission=$(echo "$clean_line" | sed -n "s/.*\.isAuthorized('\([^']*\)').*/\1/p")
+                fi
+                
+                if [ -n "$permission" ]; then
+                  # Check if it's a pure string (no variables or concatenation)
+                  if echo "$permission" | grep -q '[+${}]'; then
+                    echo "  → Dynamic permission detected: $permission"
+                    echo "$file: $permission" >> /tmp/dynamic_perms.txt
+                  else
+                    echo "  → Pure string permission: $permission"
+                    
+                    # Check if permission exists in plugin.yml files
+                    permission_found=false
+                    
+                    for plugin_yml in $(find . -name "plugin.yml" -path "*/src/main/resources/*"); do
+                      if grep -q "essentials\.$permission:" "$plugin_yml" || grep -q "$permission:" "$plugin_yml"; then
+                        permission_found=true
+                        echo "  ✓ Found in $plugin_yml"
+                        break
+                      fi
+                    done
+                    
+                    if [ "$permission_found" = false ]; then
+                      echo "  ✗ Permission '$permission' not found in any plugin.yml"
+                      echo "$file: $permission" >> /tmp/missing_perms.txt
+                    fi
+                  fi
+                else
+                  echo "  → Could not extract permission from: $clean_line"
+                  echo "$file: [complex expression]" >> /tmp/dynamic_perms.txt
+                fi
+              fi
+            done
+          else
+            echo "No new isAuthorized calls found."
+          fi
+        done
+        
+        # Save results for next step
+        if [ -f /tmp/missing_perms.txt ]; then
+          echo "MISSING_PERMISSIONS<<EOF" >> $GITHUB_OUTPUT
+          cat /tmp/missing_perms.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        fi
+        
+        if [ -f /tmp/dynamic_perms.txt ]; then
+          echo "DYNAMIC_PERMISSIONS<<EOF" >> $GITHUB_OUTPUT  
+          cat /tmp/dynamic_perms.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Comment on PR if issues found
+      if: steps.check-permissions.outputs.MISSING_PERMISSIONS || steps.check-permissions.outputs.DYNAMIC_PERMISSIONS
+      shell: bash
+      run: |
+        # Check if we already commented
+        comment_marker="<!-- ESSENTIALS_PERMISSION_CHECK -->"
+        existing_comment=$(gh pr view ${{ github.event.pull_request.number }} --json comments --jq '.comments[].body' | grep -c "$comment_marker" || echo "0")
+        
+        if [ "$existing_comment" -gt "0" ]; then
+          echo "Permission check comment already exists, skipping..."
+          exit 0
+        fi
+        
+        # Build the comment body
+        cat > comment.md << EOF
+        $comment_marker
+        ## 🔐 Permission Check Results
+        
+        This PR contains new `isAuthorized` calls that need attention:
+        EOF
+        
+        if [ -n "${{ steps.check-permissions.outputs.MISSING_PERMISSIONS }}" ]; then
+          cat >> comment.md << 'EOF'
+        
+        ### ❌ Missing Permissions
+        The following permissions are used but not defined in any `plugin.yml` file:
+        
+        ```
+        EOF
+          echo "${{ steps.check-permissions.outputs.MISSING_PERMISSIONS }}" >> comment.md
+          cat >> comment.md << 'EOF'
+        ```
+        
+        **Action Required:** Add these permissions to the appropriate `plugin.yml` file(s).
+        EOF
+        fi
+        
+        if [ -n "${{ steps.check-permissions.outputs.DYNAMIC_PERMISSIONS }}" ]; then
+          cat >> comment.md << 'EOF'
+        
+        ### ⚠️ Dynamic Permissions
+        The following `isAuthorized` calls use dynamic permission strings:
+        
+        ```
+        EOF
+          echo "${{ steps.check-permissions.outputs.DYNAMIC_PERMISSIONS }}" >> comment.md
+          cat >> comment.md << 'EOF'
+        ```
+        
+        **Action Required:** Please ensure these dynamic permissions are documented and added to `plugin.yml` as needed.
+        EOF
+        fi
+        
+        cat >> comment.md << 'EOF'
+        
+        ---
+        *This check helps ensure all permissions are properly documented in the plugin configuration.*
+        EOF
+        
+        # Create the comment
+        gh pr comment ${{ github.event.pull_request.number }} --body-file comment.md
+        
+      env:
+        GH_TOKEN: ${{ github.token }}
+
+    - name: Fail if missing permissions found
+      if: steps.check-permissions.outputs.MISSING_PERMISSIONS
+      run: |
+        echo "❌ WORKFLOW FAILED: Missing permissions detected!"
+        echo "The following permissions are used but not defined in plugin.yml:"
+        echo "${{ steps.check-permissions.outputs.MISSING_PERMISSIONS }}"
+        echo ""
+        echo "Please add these permissions to the appropriate plugin.yml file(s) before merging."
+        exit 1
