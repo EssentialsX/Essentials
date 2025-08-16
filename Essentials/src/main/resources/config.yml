@@ -78,7 +78,7 @@ change-tab-complete-name: false
 #add-prefix-in-playerlist: true
 
 # When this option is enabled, player suffixes will be shown in the (tab) player list.
-# This feature only works for Minecraft version 1.8 and higher. 
+# This feature only works for Minecraft version 1.8 and higher.
 # The value of 'change-playerlist' above must be true.
 #add-suffix-in-playerlist: true
 
@@ -484,10 +484,27 @@ remove-god-on-disconnect: false
 # Set to -1 for no timeout.
 auto-afk: 300
 
-# After this timeout in seconds, the player will be kicked from the server.
+# After this timeout in seconds, the player will either be kicked from
+# the server or commands in 'afk-timeout-commands' will be executed.
 # The 'essentials.afk.kickexempt' permission overrides this feature.
 # Set to -1 for no timeout.
-auto-afk-kick: -1
+auto-afk-timeout: -1
+
+# A list of commands to be executed instead of kicking the player once the
+# threshold defined above in 'afk-auto-timeout' is reached. If this list is empty 
+# and 'afk-auto-timeout' is not set to -1, Essentials will default to
+# kicking the player once they reach the timeout threshold.
+#
+# WARNING: You must include a command here that either removes the player from the server
+# or stops them from being AFK. Otherwise, these commands will run every second
+# until the player is no longer AFK!
+#
+# Available placeholders:
+# {USERNAME} - The player's username.
+# {KICKTIME} - The time, in minutes, the player has been AFK for.
+afk-timeout-commands:
+  #- eco take {USERNAME} 10
+  #- kick {USERNAME} You have been kicked for being inactive for {KICKTIME} minutes! You lost $10.
 
 # Set this to true if you want to freeze players when they are AFK.
 # Other players or monsters won't be able to push them out of AFK mode.
@@ -571,7 +588,7 @@ custom-quit-message: "none"
 # Set this to "none" to use the 'custom-join-message' setting for every join.
 #
 # Available placeholders:
-# {PLAYER} - The player's display name. 
+# {PLAYER} - The player's display name.
 # {USERNAME} - The player's username.
 # {OLDUSERNAME} - The player's old username.
 # {PREFIX} - The player's prefix.
@@ -584,6 +601,10 @@ custom-new-username-message: "none"
 # Should Essentials override the vanilla "Server Full" message with its own from the language file?
 # Set to false to keep the vanilla message.
 use-custom-server-full-message: true
+
+# Should Essentials override the vanilla "You are not whitelisted on this server" message with its own from the language file?
+# Set to false to keep the vanilla message.
+use-custom-whitelist-message: true
 
 # You can disable join and quit messages when the player count reaches a certain limit.
 # When the player count is below this number, join/quit messages will always be shown.
@@ -847,6 +868,10 @@ min-money: -10000
 # Enable this to log all interactions with buy/sell/trade signs and the sell command.
 economy-log-enabled: false
 
+# Enable this to replace usernames with UUIDs in the trade.log file.
+# If this is false, usernames will be used instead of UUIDs.
+economy-log-uuids: false
+
 # Enable this to also log all transactions from other plugins through Vault.
 # This can cause the economy log to fill up quickly so it should only be enabled for testing purposes!
 economy-log-update-enabled: false
@@ -928,7 +953,7 @@ chat:
   # You can add command costs for shout/question by adding 'chat-shout' and 'chat-question' to the 'command-costs' section above.
   radius: 0
 
-  # Chat formatting can be configured in two ways: 
+  # Chat formatting can be configured in two ways:
   #  - A standard format for all chat ('format' section)
   #  - Group-specific chat formats for extra variation ('group-formats' section)
   #
@@ -1032,6 +1057,7 @@ protect:
     fireball-fire: false
     fireball-playerdamage: false
     fireball-itemdamage: false
+    windcharge-explosion: false
     witherskull-explosion: false
     witherskull-playerdamage: false
     witherskull-itemdamage: false
@@ -1261,7 +1287,7 @@ random-respawn-location: "none"
 spawn-on-join: false
 # The following value of 'guests' states that all players in the 'guests' group will be teleported to spawn when joining.
 #spawn-on-join: guests
-# The following list value states that all players in the 'guests' or 'admin' groups will be teleported to spawn when joining. 
+# The following list value states that all players in the 'guests' or 'admin' groups will be teleported to spawn when joining.
 #spawn-on-join:
 #  - guests
 #  - admin
