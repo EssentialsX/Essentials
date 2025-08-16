@@ -10,7 +10,6 @@ on:
 permissions:
   contents: read
   pull-requests: write
-  issues: write
 
 jobs:
   check-permissions:
@@ -117,68 +116,81 @@ jobs:
 
     - name: Comment on PR if issues found
       if: steps.check-permissions.outputs.MISSING_PERMISSIONS || steps.check-permissions.outputs.DYNAMIC_PERMISSIONS
-      shell: bash
-      run: |
-        # Check if we already commented
-        comment_marker="<!-- ESSENTIALS_PERMISSION_CHECK -->"
-        existing_comment=$(gh pr view ${{ github.event.pull_request.number }} --json comments --jq -r '.comments[].body' | grep -c "$comment_marker" 2>/dev/null || echo "0")
-        
-        if [ "$existing_comment" -gt "0" ]; then
-          echo "Permission check comment already exists, skipping..."
-          exit 0
-        fi
-        
-        # Build the comment body
-        cat > comment.md << 'EOF'
-<!-- ESSENTIALS_PERMISSION_CHECK -->
-## 🔐 Permission Check Results
-
-This PR contains new `isAuthorized` calls that need attention:
-EOF
-        
-        if [ -n "${{ steps.check-permissions.outputs.MISSING_PERMISSIONS }}" ]; then
-          cat >> comment.md << 'EOF'
-        
-        ### ❌ Missing Permissions
-        The following permissions are used but not defined in any `plugin.yml` file:
-        
-        ```
-        EOF
-          echo "${{ steps.check-permissions.outputs.MISSING_PERMISSIONS }}" >> comment.md
-          cat >> comment.md << 'EOF'
-        ```
-        
-        **Action Required:** Add these permissions to the appropriate `plugin.yml` file(s).
-        EOF
-        fi
-        
-        if [ -n "${{ steps.check-permissions.outputs.DYNAMIC_PERMISSIONS }}" ]; then
-          cat >> comment.md << 'EOF'
-        
-        ### ⚠️ Dynamic Permissions
-        The following `isAuthorized` calls use dynamic permission strings:
-        
-        ```
-        EOF
-          echo "${{ steps.check-permissions.outputs.DYNAMIC_PERMISSIONS }}" >> comment.md
-          cat >> comment.md << 'EOF'
-        ```
-        
-        **Action Required:** Please ensure these dynamic permissions are documented and added to `plugin.yml` as needed.
-        EOF
-        fi
-        
-        cat >> comment.md << 'EOF'
-        
-        ---
-        *This check helps ensure all permissions are properly documented in the plugin configuration.*
-        EOF
-        
-        # Create the comment
-        gh pr comment ${{ github.event.pull_request.number }} --body-file comment.md
-        
-      env:
-        GH_TOKEN: ${{ github.token }}
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { repo, owner } = context.repo;
+          const issue_number = context.issue.number;
+          
+          // Check if we already commented
+          const comments = await github.rest.issues.listComments({
+            owner,
+            repo,
+            issue_number,
+          });
+          
+          const botComment = comments.data.find(comment => 
+            comment.user.login === 'github-actions[bot]' && 
+            comment.body.includes('<!-- ESSENTIALS_PERMISSION_CHECK -->')
+          );
+          
+          if (botComment) {
+            console.log('Permission check comment already exists, skipping...');
+            return;
+          }
+          
+          // Build the comment body
+          let commentBody = [
+            '<!-- ESSENTIALS_PERMISSION_CHECK -->',
+            '## 🔐 Permission Check Results',
+            '',
+            'This PR contains new `isAuthorized` calls that need attention:'
+          ];
+          
+          const missingPermissions = `${{ steps.check-permissions.outputs.MISSING_PERMISSIONS }}`;
+          if (missingPermissions) {
+            commentBody.push(
+              '',
+              '### ❌ Missing Permissions',
+              'The following permissions are used but not defined in any `plugin.yml` file:',
+              '',
+              '```',
+              missingPermissions,
+              '```',
+              '',
+              '**Action Required:** Add these permissions to the appropriate `plugin.yml` file(s).'
+            );
+          }
+          
+          const dynamicPermissions = `${{ steps.check-permissions.outputs.DYNAMIC_PERMISSIONS }}`;
+          if (dynamicPermissions) {
+            commentBody.push(
+              '',
+              '### ⚠️ Dynamic Permissions', 
+              'The following `isAuthorized` calls use dynamic permission strings:',
+              '',
+              '```',
+              dynamicPermissions,
+              '```',
+              '',
+              '**Action Required:** Please ensure these dynamic permissions are documented and added to `plugin.yml` as needed.'
+            );
+          }
+          
+          commentBody.push(
+            '',
+            '---',
+            '*This check helps ensure all permissions are properly documented in the plugin configuration.*'
+          );
+          
+          // Create the comment
+          await github.rest.issues.createComment({
+            owner,
+            repo,
+            issue_number,
+            body: commentBody.join('\n')
+          });
 
     - name: Fail if missing permissions found
       if: steps.check-permissions.outputs.MISSING_PERMISSIONS
