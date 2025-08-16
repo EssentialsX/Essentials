@@ -6,6 +6,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
@@ -43,6 +44,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -345,6 +347,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         ess.getBackup().onPlayerJoin();
         final User dUser = ess.getUser(player);
+        ((ModernUserMap) ess.getUsers()).getOnlineUserCache().put(player.getUniqueId(), dUser);
         dUser.update(player);
 
         dUser.startTransaction();
@@ -572,6 +575,17 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             }
             if (ess.getSettings().isCustomServerFullMessage()) {
                 event.disallow(Result.KICK_FULL, tlLiteral("serverFull"));
+            }
+        }
+        if (event.getResult() == Result.KICK_WHITELIST) {
+            final User kfuser = ess.getUser(event.getPlayer());
+            kfuser.update(event.getPlayer());
+            if (kfuser.isAuthorized("essentials.whitelist.bypass")) {
+                event.allow();
+                return;
+            }
+            if (ess.getSettings().isCustomWhitelistMessage()) {
+                event.disallow(Result.KICK_WHITELIST, tlLiteral("whitelistKick"));
             }
         }
     }
@@ -982,6 +996,26 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             return head != null && head.getEnchantments().containsKey(Enchantment.BINDING_CURSE) && !user.isAuthorized("essentials.hat.ignore-binding");
         }
         return false;
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onInventoryDragEvent(final InventoryDragEvent event) {
+        final InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
+        final Inventory top = provider.getTopInventory(event.getView());
+        if (top.getType() != InventoryType.PLAYER) {
+            return;
+        }
+        final User user = ess.getUser((Player) event.getWhoClicked());
+        if (!user.isInvSee()) {
+            return;
+        }
+
+        for (int slot : event.getNewItems().keySet()) {
+            if (Inventories.isBottomInventorySlot(slot)) {
+                event.setCancelled(true);
+                break;
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

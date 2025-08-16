@@ -156,7 +156,7 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerDeathEvent(final PlayerDeathEvent event) {
         final Entity entity = event.getEntity();
         if (entity.hasMetadata("NPC")) {

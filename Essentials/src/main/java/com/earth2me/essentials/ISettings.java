@@ -184,6 +184,8 @@ public interface ISettings extends IConf {
 
     boolean isEcoLogEnabled();
 
+    boolean isEcoLogUUIDEnabled();
+
     boolean isEcoLogUpdateEnabled();
 
     boolean realNamesOnList();
@@ -208,7 +210,9 @@ public interface ISettings extends IConf {
 
     long getAutoAfk();
 
-    long getAutoAfkKick();
+    long getAutoAfkTimeout();
+
+    List<String> getAfkTimeoutCommands();
 
     boolean getFreezeAfkPlayers();
 
@@ -315,6 +319,8 @@ public interface ISettings extends IConf {
     boolean isCustomNewUsernameMessage();
 
     boolean isCustomServerFullMessage();
+
+    boolean isCustomWhitelistMessage();
 
     boolean isNotifyNoNewMail();
 

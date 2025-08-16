@@ -24,6 +24,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     private final transient IEssentials ess;
     private final transient ModernUUIDCache uuidCache;
     private final transient LoadingCache<UUID, User> userCache;
+    private final transient ConcurrentMap<UUID, User> onlineUserCache;
 
     private final boolean debugPrintStackWithWarn;
     private final long debugMaxWarnsPerType;
@@ -50,6 +51,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         this.debugPrintStackWithWarn = Boolean.parseBoolean(printStackProperty);
         this.debugLogCache = Boolean.parseBoolean(logCacheProperty);
         this.debugNonPlayerWarnCounts = new ConcurrentHashMap<>();
+        this.onlineUserCache = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -89,6 +91,10 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         userCache.put(user.getUUID(), user);
         debugLogCache(user);
         return user;
+    }
+
+    public ConcurrentMap<UUID, User> getOnlineUserCache() {
+        return onlineUserCache;
     }
 
     @Override
@@ -207,6 +213,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     public void invalidate(final UUID uuid) {
         userCache.invalidate(uuid);
         uuidCache.removeCache(uuid);
+        onlineUserCache.remove(uuid);
     }
 
     private File getUserFile(final UUID uuid) {
@@ -215,6 +222,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
     public void shutdown() {
         uuidCache.shutdown();
+        onlineUserCache.clear();
     }
 
     private void debugLogCache(final User user) {
