@@ -10,6 +10,7 @@ on:
 permissions:
   contents: read
   pull-requests: write
+  issues: write
 
 jobs:
   check-permissions:
@@ -55,7 +56,7 @@ jobs:
             echo "$added_lines"
             
             # Process each line
-            echo "$added_lines" | while IFS= read -r line; do
+            while IFS= read -r line; do
               if [ -n "$line" ]; then
                 # Remove the leading "+" from the diff
                 clean_line=$(echo "$line" | sed 's/^+//')
@@ -95,7 +96,7 @@ jobs:
                   echo "$file: [complex expression]" >> /tmp/dynamic_perms.txt
                 fi
               fi
-            done
+            done <<< "$added_lines"
           else
             echo "No new isAuthorized calls found."
           fi
@@ -120,7 +121,7 @@ jobs:
       run: |
         # Check if we already commented
         comment_marker="<!-- ESSENTIALS_PERMISSION_CHECK -->"
-        existing_comment=$(gh pr view ${{ github.event.pull_request.number }} --json comments --jq '.comments[].body' | grep -c "$comment_marker" || echo "0")
+        existing_comment=$(gh pr view ${{ github.event.pull_request.number }} --json comments --jq -r '.comments[].body' | grep -c "$comment_marker" 2>/dev/null || echo "0")
         
         if [ "$existing_comment" -gt "0" ]; then
           echo "Permission check comment already exists, skipping..."
@@ -128,12 +129,12 @@ jobs:
         fi
         
         # Build the comment body
-        cat > comment.md << EOF
-        $comment_marker
-        ## 🔐 Permission Check Results
-        
-        This PR contains new `isAuthorized` calls that need attention:
-        EOF
+        cat > comment.md << 'EOF'
+<!-- ESSENTIALS_PERMISSION_CHECK -->
+## 🔐 Permission Check Results
+
+This PR contains new `isAuthorized` calls that need attention:
+EOF
         
         if [ -n "${{ steps.check-permissions.outputs.MISSING_PERMISSIONS }}" ]; then
           cat >> comment.md << 'EOF'
