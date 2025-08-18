@@ -171,8 +171,10 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         }
 
         final WebSocketFactory wsFactory = new WebSocketFactory();
-        final ProxySettings proxySettings = wsFactory.getProxySettings();
-        proxySettings.setServer(plugin.getSettings().getHttpProxyServer());
+        if (plugin.getSettings().getHttpProxyServer()) {
+            final ProxySettings proxySettings = wsFactory.getProxySettings();
+            proxySettings.setServer(plugin.getSettings().getHttpProxyServer());
+        }
 
         jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
                 .setWebsocketFactory(wsFactory)
