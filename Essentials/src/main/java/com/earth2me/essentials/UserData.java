@@ -74,7 +74,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public final void cleanup() {
         config.blockingSave();
-        ess.getUsers().invalidate(getConfigUUID());
+        ess.getUsers().removeCache(getConfigUUID());
     }
 
     @Override
