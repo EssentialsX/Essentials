@@ -359,6 +359,10 @@ commands:
     description: Assigns a command to the item in hand.
     usage: /<command> [l:|a:|r:|c:|d:][command] [arguments] - {player} can be replaced by name of a clicked player.
     aliases: [epowertool,pt,ept]
+  powertoollist:
+    description: Lists all current powertools.
+    usage: /<command>
+    aliases: [epowertoollist,ptlist,eptlist]
   powertooltoggle:
     description: Enables or disables all current powertools.
     usage: /<command>
@@ -964,6 +968,8 @@ permissions:
     description: Allows the user to keep their exp on death, instead of dropping it.
   essentials.joinfullserver:
     description: Allows the to join the server even if it is full
+  essentials.whitelist.bypass:
+    description: Allows a player to join the server even if they are not whitelisted.
   essentials.kick:
     description: Allows access to the /kick command
   essentials.kick.exempt:
@@ -1108,6 +1114,8 @@ permissions:
     description: Allows access to the /powertool command
   essentials.powertool.append:
     description: Allows access to add multiple commands to a powertool
+  essentials.powertoollist:
+    description: Allows access to the /powertoollist command
   essentials.powertooltoggle:
     description: Allows access to the /powertooltoggle command
   essentials.ptime:
@@ -1152,6 +1160,8 @@ permissions:
     description: Allows access to the /seen command with location
   essentials.seen.uuid:
     description: Allows access to the /seen command with UUID
+  essentials.seen.firstlogin:
+    description: Allows access to the /seen command with first login time
   essentials.seen.whitelist:
     description: Allows access to the /seen command with whitelist status
   essentials.seen.ipsearch:
@@ -1164,6 +1174,7 @@ permissions:
       essentials.seen.ip: true
       essentials.seen.location: true
       essentials.seen.uuid: true
+      essentials.seen.firstlogin: true
       essentials.seen.whitelist: true
   essentials.sell:
     description: Allows access to the /sell command

@@ -61,6 +61,11 @@ public class DiscordSettings implements IConf {
         return config.getString("token", "");
     }
 
+    // #easteregg
+    public String getHttpProxyServer() {
+        return config.getString("http-proxy-server", "");
+    }
+
     public long getGuildId() {
         return config.getLong("guild", 0);
     }
@@ -199,6 +204,16 @@ public class DiscordSettings implements IConf {
 
     public boolean isShowDisplayName() {
         return config.getBoolean("show-displayname", false);
+    }
+
+    protected boolean isCustomBotName() {
+        if (isShowName() || isShowDisplayName()) {
+            return true;
+        }
+
+        final String format = getFormatString("mc-to-discord-name-format");
+
+        return format != null && !format.isEmpty() && !format.equals("{botname}");
     }
 
     public String getAvatarURL() {

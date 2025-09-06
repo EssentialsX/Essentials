@@ -91,6 +91,7 @@ public class Settings implements net.ess3.api.ISettings {
     private BigDecimal maxMoney = DEFAULT_MAX_MONEY;
     private BigDecimal minMoney = DEFAULT_MIN_MONEY;
     private boolean economyLog = false;
+    private boolean economyLogUUID = false;
     // #easteregg
     private boolean economyLogUpdate = false;
     private boolean changeDisplayName = true;
@@ -152,6 +153,7 @@ public class Settings implements net.ess3.api.ISettings {
     private String secondaryColor = DEFAULT_SECONDARY_COLOR;
     private Set<String> multiplierPerms;
     private BigDecimal defaultMultiplier;
+    private List<String> afkTimeoutCommands = Collections.emptyList();
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -902,6 +904,7 @@ public class Settings implements net.ess3.api.ISettings {
         permissionsLagWarning = _getPermissionsLagWarning();
         economyLagWarning = _getEconomyLagWarning();
         economyLog = _isEcoLogEnabled();
+        economyLogUUID = _isEcoLogUUIDEnabled();
         economyLogUpdate = _isEcoLogUpdateEnabled();
         economyDisabled = _isEcoDisabled();
         allowSilentJoin = _allowSilentJoinQuit();
@@ -937,6 +940,7 @@ public class Settings implements net.ess3.api.ISettings {
         secondaryColor = _getSecondaryColor();
         multiplierPerms = _getMultiplierPerms();
         defaultMultiplier = _getDefaultMultiplier();
+        afkTimeoutCommands = _getAfkTimeoutCommands();
 
         reloadCount.incrementAndGet();
     }
@@ -1172,6 +1176,14 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("economy-log-enabled", false);
     }
 
+    public boolean _isEcoLogUUIDEnabled() {
+        return config.getBoolean("economy-log-uuids", false);
+    }
+
+    public boolean isEcoLogUUIDEnabled() {
+        return economyLogUUID;
+    }
+
     @Override
     public boolean isEcoLogUpdateEnabled() {
         return economyLogUpdate;
@@ -1261,8 +1273,17 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public long getAutoAfkKick() {
-        return config.getLong("auto-afk-kick", -1);
+    public long getAutoAfkTimeout() {
+        return config.getLong("auto-afk-timeout", config.getLong("auto-afk-kick", -1));
+    }
+
+    private List<String> _getAfkTimeoutCommands() {
+        return new ArrayList<>(config.getList("afk-timeout-commands", String.class));
+    }
+
+    @Override
+    public List<String> getAfkTimeoutCommands() {
+        return afkTimeoutCommands;
     }
 
     @Override
@@ -1619,6 +1640,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isCustomWhitelistMessage() {
+        return config.getBoolean("use-custom-whitelist-message", true);
+    }
+
+    @Override
     public int getJoinQuitMessagePlayerCount() {
         return config.getInt("hide-join-quit-messages-above", -1);
     }
@@ -1935,6 +1961,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isWorldChangePreserveFlying() {
         return config.getBoolean("world-change-preserve-flying", true);
+    }
+
+    @Override
+    public boolean isGamemodeChangePreserveFlying() {
+        return config.getBoolean("gamemode-change-preserve-flying", false);
     }
 
     @Override

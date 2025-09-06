@@ -74,6 +74,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public final void cleanup() {
         config.blockingSave();
+        ess.getUsers().removeCache(getConfigUUID());
     }
 
     @Override
@@ -269,6 +270,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public boolean hasPowerTools() {
         return !holder.powertools().isEmpty();
+    }
+
+    public Map<String, List<String>> getAllPowertools() {
+        return holder.powertools();
     }
 
     public Location getLastLocation() {
