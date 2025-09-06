@@ -28,6 +28,11 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
             throw new PlayerNotFoundException();
         }
 
+        if (sender.isPlayer() && (searchTerm.equals("@s") || searchTerm.equals("@p"))) {
+            userConsumer.accept((User) sender.getUser());
+            return;
+        }
+
         final UUID uuid = StringUtil.toUUID(searchTerm);
         if (uuid != null) {
             final User matchedUser = ess.getUser(uuid);
@@ -76,6 +81,11 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
     protected void loopOnlinePlayersConsumer(final Server server, final CommandSource sender, final boolean multipleStringMatches, final boolean matchWildcards, final String searchTerm, final UserConsumer userConsumer) throws NotEnoughArgumentsException, TranslatableException {
         if (searchTerm.isEmpty()) {
             throw new PlayerNotFoundException();
+        }
+
+        if (sender.isPlayer() && (searchTerm.equals("@s") || searchTerm.equals("@p"))) {
+            userConsumer.accept((User) sender.getUser());
+            return;
         }
 
         final boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();

@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -86,7 +87,14 @@ public class Trade {
         sb.append(DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date()));
         sb.append("\",\"");
         if (sender != null) {
-            sb.append(sender);
+            String senderIdentifier = sender;
+            if (ess.getSettings().isEcoLogUUIDEnabled()) {
+                final UUID uuid = ess.getUsers().getNameCache().get(sender);
+                if (uuid != null) {
+                    senderIdentifier = uuid.toString();
+                }
+            }
+            sb.append(senderIdentifier);
         }
         sb.append("\",");
         if (charge == null) {
@@ -112,7 +120,14 @@ public class Trade {
         }
         sb.append(",\"");
         if (receiver != null) {
-            sb.append(receiver);
+            String receiverIdentifier = receiver;
+            if (ess.getSettings().isEcoLogUUIDEnabled()) {
+                final UUID uuid = ess.getUsers().getNameCache().get(receiver);
+                if (uuid != null) {
+                    receiverIdentifier = uuid.toString();
+                }
+            }
+            sb.append(receiverIdentifier);
         }
         sb.append("\",");
         if (pay == null) {
@@ -145,7 +160,7 @@ public class Trade {
             sb.append(loc.getBlockY()).append(",");
             sb.append(loc.getBlockZ()).append(",");
         }
-        
+
         if (endBalance == null) {
             sb.append(",");
         } else {
