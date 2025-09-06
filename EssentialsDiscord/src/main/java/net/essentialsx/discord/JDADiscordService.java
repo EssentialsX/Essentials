@@ -9,6 +9,8 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.ImmutableList;
+import com.neovisionaries.ws.client.ProxySettings;
+import com.neovisionaries.ws.client.WebSocketFactory;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
@@ -170,7 +172,14 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             throw new IllegalArgumentException(tlLiteral("discordErrorNoToken"));
         }
 
+        final WebSocketFactory wsFactory = new WebSocketFactory();
+        if (!plugin.getSettings().getHttpProxyServer().trim().isEmpty()) {
+            final ProxySettings proxySettings = wsFactory.getProxySettings();
+            proxySettings.setServer(plugin.getSettings().getHttpProxyServer());
+        }
+
         jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
+                .setWebsocketFactory(wsFactory)
                 .addEventListeners(new DiscordListener(this))
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .enableCache(CacheFlag.EMOJI)
@@ -380,7 +389,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     }
 
     public void updateTypesRelay() {
-        if (!getSettings().isShowAvatar() && !getSettings().isShowName() && !getSettings().isShowDisplayName()) {
+        if (!getSettings().isShowAvatar() && !getSettings().isCustomBotName()) {
             for (WrappedWebhookClient webhook : channelIdToWebhook.values()) {
                 webhook.close();
             }

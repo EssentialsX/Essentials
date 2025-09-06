@@ -549,7 +549,8 @@ public class MetaItemStack {
             } else if (split[0].equalsIgnoreCase("duration") || (allowShortName && split[0].equalsIgnoreCase("d"))) {
                 if (NumberUtil.isInt(split[1])) {
                     validPotionDuration = true;
-                    duration = Integer.parseInt(split[1]) * 20; //Duration is in ticks by default, converted to seconds
+                    final int parsed = Integer.parseInt(split[1]);
+                    duration = parsed == -1 ? -1 : parsed * 20; //Duration is in ticks by default, converted to seconds
                 } else {
                     throw new TranslatableException("invalidPotionMeta", split[1]);
                 }
