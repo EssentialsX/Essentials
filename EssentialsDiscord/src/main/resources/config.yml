@@ -22,7 +22,7 @@ discord-url: "https://discord.gg/invite-code"
 
 # Defined text channels
 # =====================
-# 
+#
 # Channels defined here can be used for two different purposes:
 #
 # Firstly, channels defined here can be used to give players permission to see messages from said channel.
@@ -163,6 +163,7 @@ show-avatar: false
 # Any URL in here should only return a proper JPEG/PNG image and nothing else.
 # To include the UUID of the player in this URL, use "{uuid}".
 # To include the name of the player in this URL, use "{name}".
+# ... PlaceholderAPI placeholders are also supported here too!
 avatar-url: "https://crafthead.net/helm/{uuid}"
 
 # Whether or not fake join and leave messages should be sent to Discord when a player toggles vanish in Minecraft.

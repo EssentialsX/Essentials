@@ -2,17 +2,19 @@ package com.earth2me.essentials.perm.impl;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.context.ContextCalculator;
 import net.luckperms.api.context.ContextConsumer;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
+import net.luckperms.api.model.group.Group;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -40,6 +42,23 @@ public class LuckPermsHandler extends ModernVaultHandler {
     }
 
     @Override
+    public List<String> getGroups() {
+        final List<String> groups = new ArrayList<>();
+        for (final Group group : luckPerms.getGroupManager().getLoadedGroups()) {
+            groups.add(group.getName());
+        }
+
+        // Also add the vault group names for backwards compatibility
+        for (final String group : super.getGroups()) {
+            if (!groups.contains(group)) {
+                groups.add(group);
+            }
+        }
+
+        return groups;
+    }
+
+    @Override
     public boolean tryProvider(Essentials ess) {
         final RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
@@ -62,7 +81,7 @@ public class LuckPermsHandler extends ModernVaultHandler {
     }
 
     // By combining all calculators into one, we only need to make one call to ess.getUser().
-    private class CombinedCalculator implements ContextCalculator<Player> {
+    private final class CombinedCalculator implements ContextCalculator<Player> {
         private final Set<Calculator> calculators = new HashSet<>();
 
         @Override

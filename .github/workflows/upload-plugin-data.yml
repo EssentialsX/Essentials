@@ -28,6 +28,7 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew commandData
+          ./gradlew versionData
 
       - name: Upload Data
         uses: ryand56/r2-upload-action@v1

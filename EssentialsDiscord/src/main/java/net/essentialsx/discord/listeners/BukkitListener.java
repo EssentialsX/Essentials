@@ -217,6 +217,11 @@ public class BukkitListener implements Listener {
             return;
         }
 
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)
+                && Boolean.FALSE.equals(event.getPlayer().getWorld().getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS))) {
+            return;
+        }
+
         sendDiscordMessage(MessageType.DefaultTypes.ADVANCEMENT,
                 MessageUtil.formatMessage(jda.getSettings().getAdvancementFormat(event.getPlayer()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getName()),
