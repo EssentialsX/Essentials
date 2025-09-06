@@ -184,6 +184,8 @@ public interface ISettings extends IConf {
 
     boolean isEcoLogEnabled();
 
+    boolean isEcoLogUUIDEnabled();
+
     boolean isEcoLogUpdateEnabled();
 
     boolean realNamesOnList();
@@ -210,7 +212,7 @@ public interface ISettings extends IConf {
 
     long getAutoAfkTimeout();
 
-    Set<String> getAfkTimeoutCommands();
+    List<String> getAfkTimeoutCommands();
 
     boolean getFreezeAfkPlayers();
 
@@ -353,6 +355,8 @@ public interface ISettings extends IConf {
     boolean isWorldChangeFlyResetEnabled();
 
     boolean isWorldChangePreserveFlying();
+
+    boolean isGamemodeChangePreserveFlying();
 
     boolean isWorldChangeSpeedResetEnabled();
 

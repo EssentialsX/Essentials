@@ -235,6 +235,11 @@ world-change-fly-reset: true
 # This will only work if the player has the 'essentials.fly' permission.
 world-change-preserve-flying: true
 
+# Should Essentials preserve a player's flight status when they change game modes?
+# When enabled, if a player is flying when switching game modes, their flight will be maintained.
+# This will only work if the player has the 'essentials.fly' permission.
+gamemode-change-preserve-flying: false
+
 # When a player changes worlds, should Essentials reset their speed according to their permissions?
 # This resets the player's speed to the default if they don't have 'essentials.speed'.
 # If the player doesn't have 'essentials.speed.bypass', their speed will be reset to the maximum values
@@ -862,6 +867,10 @@ min-money: -10000
 
 # Enable this to log all interactions with buy/sell/trade signs and the sell command.
 economy-log-enabled: false
+
+# Enable this to replace usernames with UUIDs in the trade.log file.
+# If this is false, usernames will be used instead of UUIDs.
+economy-log-uuids: false
 
 # Enable this to also log all transactions from other plugins through Vault.
 # This can cause the economy log to fill up quickly so it should only be enabled for testing purposes!

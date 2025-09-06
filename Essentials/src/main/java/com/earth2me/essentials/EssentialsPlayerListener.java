@@ -7,6 +7,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
@@ -48,6 +49,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -56,6 +58,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -544,6 +547,7 @@ public class EssentialsPlayerListener implements Listener {
 
         ess.getBackup().onPlayerJoin();
         final User dUser = ess.getUser(player);
+        ((ModernUserMap) ess.getUsers()).getOnlineUserCache().put(player.getUniqueId(), dUser);
         dUser.update(player);
 
         dUser.startTransaction();
@@ -1078,6 +1082,26 @@ public class EssentialsPlayerListener implements Listener {
         return false;
     }
 
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onInventoryDragEvent(final InventoryDragEvent event) {
+        final InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
+        final Inventory top = provider.getTopInventory(event.getView());
+        if (top.getType() != InventoryType.PLAYER) {
+            return;
+        }
+        final User user = ess.getUser((Player) event.getWhoClicked());
+        if (!user.isInvSee()) {
+            return;
+        }
+
+        for (int slot : event.getNewItems().keySet()) {
+            if (Inventories.isBottomInventorySlot(slot)) {
+                event.setCancelled(true);
+                break;
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryCloseEvent(final InventoryCloseEvent event) {
         Player refreshPlayer = null;
@@ -1117,6 +1141,27 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerFishEvent(final PlayerFishEvent event) {
         final User user = ess.getUser(event.getPlayer());
         user.updateActivityOnInteract(true);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerGameModeChange(final PlayerGameModeChangeEvent event) {
+        if (!ess.getSettings().isGamemodeChangePreserveFlying()) {
+            return;
+        }
+
+        final User user = ess.getUser(event.getPlayer());
+        if (!user.isAuthorized("essentials.fly")) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        if (player.isFlying() && player.getAllowFlight() && user.isAuthorized("essentials.fly")) {
+            // The gamemode change happens after the event, so we need to delay the flight enable
+            ess.scheduleSyncDelayedTask(() -> {
+                player.setAllowFlight(true);
+                player.setFlying(true);
+            }, 1);
+        }
     }
 
     private static final class ArrowPickupListener implements Listener {

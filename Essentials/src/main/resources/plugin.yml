@@ -1114,6 +1114,8 @@ permissions:
     description: Allows access to the /powertool command
   essentials.powertool.append:
     description: Allows access to add multiple commands to a powertool
+  essentials.powertoollist:
+    description: Allows access to the /powertoollist command
   essentials.powertooltoggle:
     description: Allows access to the /powertooltoggle command
   essentials.ptime:
@@ -1158,6 +1160,8 @@ permissions:
     description: Allows access to the /seen command with location
   essentials.seen.uuid:
     description: Allows access to the /seen command with UUID
+  essentials.seen.firstlogin:
+    description: Allows access to the /seen command with first login time
   essentials.seen.whitelist:
     description: Allows access to the /seen command with whitelist status
   essentials.seen.ipsearch:
@@ -1170,6 +1174,7 @@ permissions:
       essentials.seen.ip: true
       essentials.seen.location: true
       essentials.seen.uuid: true
+      essentials.seen.firstlogin: true
       essentials.seen.whitelist: true
   essentials.sell:
     description: Allows access to the /sell command
