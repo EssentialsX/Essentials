@@ -62,6 +62,11 @@ public class DiscordSettings implements IConf {
         return config.getString("token", "");
     }
 
+    // #easteregg
+    public String getHttpProxyServer() {
+        return config.getString("http-proxy-server", "");
+    }
+
     public long getGuildId() {
         return config.getLong("guild", 0);
     }

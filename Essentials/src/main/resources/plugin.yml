@@ -1114,6 +1114,8 @@ permissions:
     description: Allows access to the /powertool command
   essentials.powertool.append:
     description: Allows access to add multiple commands to a powertool
+  essentials.powertoollist:
+    description: Allows access to the /powertoollist command
   essentials.powertooltoggle:
     description: Allows access to the /powertooltoggle command
   essentials.ptime:
