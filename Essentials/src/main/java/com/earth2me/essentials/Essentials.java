@@ -250,7 +250,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
 
             if (VersionUtil.getServerBukkitVersion().isSnapshot()) {
-                getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverSnapshot")));
+                getLogger().severe(getAdventureFacet().miniToLegacy(tlLiteral("serverSnapshot")));
             }
 
             final PluginManager pm = getServer().getPluginManager();
