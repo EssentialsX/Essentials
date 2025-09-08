@@ -216,7 +216,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     }
 
     public void removeCache(final UUID uuid) {
-        uuidCache.removeCache(uuid);
+        onlineUserCache.remove(uuid);
     }
 
     private File getUserFile(final UUID uuid) {
