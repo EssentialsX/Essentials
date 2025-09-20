@@ -10,7 +10,7 @@ plugins {
 val baseExtension = extensions.create<EssentialsBaseExtension>("essentials", project)
 
 val checkstyleVersion = "8.36.2"
-val paperVersion = "1.21.8-R0.1-SNAPSHOT"
+val paperVersion = "1.21.9-pre2-R0.1-SNAPSHOT"
 val paperTestVersion = "1.21.8-R0.1-SNAPSHOT"
 val junit5Version = "5.12.2"
 val junitPlatformVersion = "1.12.2"
@@ -124,6 +124,19 @@ tasks {
 // Dependency caching
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor(5, "minutes")
+}
+
+// Select Paper in-dev adventure versions (for snapshot/pre-releases) when available
+configurations.configureEach {
+    resolutionStrategy.capabilitiesResolution.all {
+        if (candidates.size >= 2) {
+            val unstable = candidates.find { c -> c.id.displayName.startsWith("io.papermc") }
+            val stable = candidates.find { c -> c.id.displayName.startsWith("net.kyori") }
+            if (unstable != null && stable != null) {
+                select(unstable)
+            }
+        }
+    }
 }
 
 indra {
