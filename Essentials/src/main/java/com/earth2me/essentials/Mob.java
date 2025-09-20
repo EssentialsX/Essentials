@@ -125,7 +125,8 @@ public enum Mob {
     BREEZE("Breeze", Enemies.ENEMY, "BREEZE"),
     BOGGED("Bogged", Enemies.ENEMY, "BOGGED"),
     CREAKING("Creaking", Enemies.ENEMY, "CREAKING"),
-    HAPPY_GHAST("HappyGhast", Enemies.FRIENDLY, "HAPPY_GHAST")
+    HAPPY_GHAST("HappyGhast", Enemies.FRIENDLY, "HAPPY_GHAST"),
+    COPPER_GOLEM("CopperGolem", Enemies.FRIENDLY, "COPPER_GOLEM"),
     ;
 
     private static final Map<String, Mob> hashMap = new HashMap<>();
