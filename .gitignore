@@ -28,6 +28,7 @@ target/
 *.class
 build-logic/.kotlin/
 build-logic/bin/
+*/bin/*
 
 # Run directory
 /run/

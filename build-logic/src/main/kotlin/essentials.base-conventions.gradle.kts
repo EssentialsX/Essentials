@@ -17,9 +17,9 @@ val junitPlatformVersion = "1.12.2"
 val mockitoVersion = "5.18.0"
 
 dependencies {
-    testImplementation("org.junit.jupiter", "junit-jupiter", junit5Version)
-    testImplementation("org.junit.platform", "junit-platform-launcher", junitPlatformVersion)
-    testImplementation("org.mockito", "mockito-core", mockitoVersion)
+    testImplementation("org.junit.jupiter:junit-jupiter:${junit5Version}")
+    testImplementation("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
+    testImplementation("org.mockito:mockito-core:${mockitoVersion}")
     testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.50.0") {
         exclude(module = "paper-api")
         exclude(module = "spigot-api")
@@ -42,8 +42,8 @@ tasks.test {
 afterEvaluate {
     if (baseExtension.injectBukkitApi.get()) {
         dependencies {
-            api("io.papermc.paper", "paper-api", paperVersion)
-            testImplementation("io.papermc.paper", "paper-api", paperTestVersion)
+            api("io.papermc.paper:paper-api:${paperVersion}")
+            testImplementation("io.papermc.paper:paper-api:${paperTestVersion}")
         }
 
         configurations {
@@ -71,7 +71,7 @@ afterEvaluate {
     }
     if (baseExtension.injectBstats.get()) {
         dependencies {
-            implementation("org.bstats", "bstats-bukkit", "2.2.1")
+            implementation("org.bstats:bstats-bukkit:2.2.1")
         }
     }
 }
