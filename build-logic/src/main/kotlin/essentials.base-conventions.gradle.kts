@@ -37,6 +37,12 @@ tasks.test {
     testLogging {
         events("PASSED", "SKIPPED", "FAILED")
     }
+
+    val testTmp = rootProject.layout.projectDirectory.dir("test-tmp").asFile
+    doFirst {
+        testTmp.mkdirs()
+    }
+    systemProperty("java.io.tmpdir", testTmp.absolutePath)
 }
 
 afterEvaluate {
