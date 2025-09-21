@@ -639,7 +639,7 @@ public class EssentialsPlayerListener implements Listener {
             }
 
             if (ess.getSettings().isCustomServerFullMessage()) {
-                PaperAdventureSmuggler.smugglePlayerServerFullCheckEvent(event, AdventureUtil.miniToLegacy(tlLiteral("serverFull")));
+                PaperAdventureSmuggler.smugglePlayerServerFullCheckEvent(event, ess.getAdventureFacet().miniToLegacy(tlLiteral("serverFull")));
             }
         }
 
@@ -651,14 +651,14 @@ public class EssentialsPlayerListener implements Listener {
                     final Date banExpiry = banEntry.getExpiration();
                     if (banExpiry != null) {
                         final String expiry = DateUtil.formatDateDiff(banExpiry.getTime());
-                        event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("tempbanJoin", expiry, banEntry.getReason())));
+                        event.setKickMessage(ess.getAdventureFacet().miniToLegacy(tlLiteral("tempbanJoin", expiry, banEntry.getReason())));
                     } else {
-                        event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("banJoin", banEntry.getReason())));
+                        event.setKickMessage(ess.getAdventureFacet().miniToLegacy(tlLiteral("banJoin", banEntry.getReason())));
                     }
                 } else {
                     banEntry = ess.getServer().getBanList(BanListType.IP).getBanEntry(event.getAddress());
                     if (banEntry != null) {
-                        event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("banIpJoin", banEntry.getReason())));
+                        event.setKickMessage(ess.getAdventureFacet().miniToLegacy(tlLiteral("banIpJoin", banEntry.getReason())));
                     }
                 }
             } else if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST) {
@@ -667,7 +667,7 @@ public class EssentialsPlayerListener implements Listener {
                     return;
                 }
                 if (ess.getSettings().isCustomWhitelistMessage()) {
-                    event.setKickMessage(AdventureUtil.miniToLegacy(tlLiteral("whitelistKick")));
+                    event.setKickMessage(ess.getAdventureFacet().miniToLegacy(tlLiteral("whitelistKick")));
                 }
             }
         }
