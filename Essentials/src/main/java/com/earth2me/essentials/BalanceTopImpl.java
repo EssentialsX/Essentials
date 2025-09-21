@@ -53,7 +53,7 @@ public class BalanceTopImpl implements BalanceTop {
         }
         final LinkedHashMap<UUID, Entry> sortedMap = new LinkedHashMap<>();
         entries.sort((entry1, entry2) -> entry2.getBalance().compareTo(entry1.getBalance()));
-        int entryLimit = ess.getSettings().getBaltopEntryLimit();
+        final int entryLimit = ess.getSettings().getBaltopEntryLimit();
         int i = 0;
         for (Entry entry : entries) {
             if (entryLimit != -1 && ++i > entryLimit) break;
