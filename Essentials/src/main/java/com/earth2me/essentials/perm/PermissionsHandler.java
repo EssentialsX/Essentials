@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -104,6 +105,11 @@ public class PermissionsHandler implements IPermissionsHandler {
     @Override
     public boolean isPermissionSet(final Player base, final String node) {
         return handler.isPermissionSet(base, node);
+    }
+
+    @Override
+    public boolean isOfflinePermissionSet(UUID uuid, String node) {
+        return handler.isOfflinePermissionSet(uuid, node);
     }
 
     @Override

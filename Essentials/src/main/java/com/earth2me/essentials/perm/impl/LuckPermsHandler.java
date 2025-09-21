@@ -8,6 +8,7 @@ import net.luckperms.api.context.ContextConsumer;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
 import net.luckperms.api.model.group.Group;
+import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -56,6 +58,17 @@ public class LuckPermsHandler extends ModernVaultHandler {
         }
 
         return groups;
+    }
+
+    @Override
+    public boolean isOfflinePermissionSet(UUID uuid, String node) {
+        final net.luckperms.api.model.user.User user = this.luckPerms.getUserManager().loadUser(uuid).join();
+        if (user == null) {
+            return false;
+        }
+
+        final QueryOptions options = luckPerms.getContextManager().getStaticQueryOptions();
+        return user.getCachedData().getPermissionData(options).checkPermission(node).asBoolean();
     }
 
     @Override

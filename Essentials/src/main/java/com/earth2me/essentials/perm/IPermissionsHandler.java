@@ -7,6 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -29,6 +30,8 @@ public interface IPermissionsHandler {
 
     // Does not check for * permissions
     boolean isPermissionSet(Player base, String node);
+
+    boolean isOfflinePermissionSet(UUID uuid, String node);
 
     TriState isPermissionSetExact(Player base, String node);
 

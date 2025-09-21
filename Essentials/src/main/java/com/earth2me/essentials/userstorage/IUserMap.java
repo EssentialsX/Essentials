@@ -21,6 +21,13 @@ public interface IUserMap {
     long getCachedCount();
 
     /**
+     * Checks if a user is cached.
+     * @param uuid the UUID of the user to check.
+     * @return true if the user is cached, false otherwise.
+     */
+    boolean isCached(final UUID uuid);
+
+    /**
      * Gets the amount of users stored by Essentials.
      * @return the amount of users stored by Essentials.
      */
