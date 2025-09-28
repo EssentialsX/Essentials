@@ -11,6 +11,13 @@ public interface InteractionEvent {
     void reply(String message);
 
     /**
+     * Appends the given string to the initial response message and creates one if it doesn't exist.
+     * @param tlKey The tlKey of the message to append.
+     * @param args  The args for the message to append.
+     */
+    void replyTl(String tlKey, Object... args);
+
+    /**
      * Gets the member which caused this event.
      * @return the member which caused the event.
      */

@@ -3,7 +3,9 @@ plugins {
 }
 
 dependencies {
-    implementation project(':providers:BaseProviders')
+    implementation(project(':providers:BaseProviders')) {
+        exclude(module: 'spigot-api')
+    }
     api 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
 }
 

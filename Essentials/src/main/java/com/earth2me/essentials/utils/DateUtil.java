@@ -1,11 +1,15 @@
 package com.earth2me.essentials.utils;
 
+import net.ess3.api.IEssentials;
+import net.ess3.api.TranslatableException;
+
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public final class DateUtil {
     private static final Pattern timePattern = Pattern.compile("(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE);
@@ -68,7 +72,7 @@ public final class DateUtil {
             }
         }
         if (!found) {
-            throw new Exception(tl("illegalDate"));
+            throw new TranslatableException("illegalDate");
         }
         final Calendar c = new GregorianCalendar();
 
@@ -140,7 +144,7 @@ public final class DateUtil {
     public static String formatDateDiff(final Calendar fromDate, final Calendar toDate) {
         boolean future = false;
         if (toDate.equals(fromDate)) {
-            return tl("now");
+            return tlLiteral("now");
         }
         if (toDate.after(fromDate)) {
             future = true;
@@ -149,7 +153,7 @@ public final class DateUtil {
         toDate.add(Calendar.MILLISECOND, future ? 50 : -50);
         final StringBuilder sb = new StringBuilder();
         final int[] types = new int[] {Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND};
-        final String[] names = new String[] {tl("year"), tl("years"), tl("month"), tl("months"), tl("day"), tl("days"), tl("hour"), tl("hours"), tl("minute"), tl("minutes"), tl("second"), tl("seconds")};
+        final String[] names = new String[] {tlLiteral("year"), tlLiteral("years"), tlLiteral("month"), tlLiteral("months"), tlLiteral("day"), tlLiteral("days"), tlLiteral("hour"), tlLiteral("hours"), tlLiteral("minute"), tlLiteral("minutes"), tlLiteral("second"), tlLiteral("seconds")};
         int accuracy = 0;
         for (int i = 0; i < types.length; i++) {
             if (accuracy > 2) {
@@ -164,8 +168,15 @@ public final class DateUtil {
         // Preserve correctness in the original date object by removing the extra buffer time
         toDate.add(Calendar.MILLISECOND, future ? -50 : 50);
         if (sb.length() == 0) {
-            return tl("now");
+            return tlLiteral("now");
         }
         return sb.toString().trim();
+    }
+
+    public static String formatDate(final long date, final IEssentials ess) {
+        final GregorianCalendar gc = new GregorianCalendar();
+        gc.setTimeInMillis(date);
+        final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, ess.getI18n().getCurrentLocale());
+        return df.format(gc.getTime());
     }
 }

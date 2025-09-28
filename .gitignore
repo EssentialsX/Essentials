@@ -21,10 +21,13 @@
 # Build files
 .gradle/
 /jars/
+generated/
 out/
 build/
 target/
 *.class
+build-logic/.kotlin/
+build-logic/bin/
 
 # Run directory
 /run/

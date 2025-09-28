@@ -32,8 +32,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class EssentialsEntityListener implements Listener {
     private static final transient Pattern powertoolPlayer = Pattern.compile("\\{player\\}");
     private final IEssentials ess;
@@ -158,7 +156,7 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerDeathEvent(final PlayerDeathEvent event) {
         final Entity entity = event.getEntity();
         if (entity.hasMetadata("NPC")) {
@@ -167,11 +165,11 @@ public class EssentialsEntityListener implements Listener {
         final User user = ess.getUser(event.getEntity());
         if (ess.getSettings().infoAfterDeath()) {
             final Location loc = user.getLocation();
-            user.sendMessage(tl("infoAfterDeath", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+            user.sendTl("infoAfterDeath", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         }
         if (user.isAuthorized("essentials.back.ondeath") && !ess.getSettings().isCommandDisabled("back")) {
             user.setLastLocation();
-            user.sendMessage(tl("backAfterDeath"));
+            user.sendTl("backAfterDeath");
         }
         if (!ess.getSettings().areDeathMessagesEnabled()) {
             event.setDeathMessage("");
@@ -192,7 +190,15 @@ public class EssentialsEntityListener implements Listener {
         final User user = ess.getUser(event.getEntity());
         if (user.isAuthorized("essentials.keepinv")) {
             event.setKeepInventory(true);
-            event.getDrops().clear();
+            // We don't do getDrops().clear() here because it would remove any loot tables that were added by other plugins/datapacks.
+            // Instead, we remove the items from the drops that are in the player's inventory. This way, the loot tables can still drop items.
+            // This is the same behavior as the vanilla /gamerule keepInventory.
+            final ItemStack[] inventory = Inventories.getInventory(event.getEntity(), true);
+            for (final ItemStack item : inventory) {
+                if (item != null) {
+                    event.getDrops().remove(item);
+                }
+            }
             final ISettings.KeepInvPolicy vanish = ess.getSettings().getVanishingItemsPolicy();
             final ISettings.KeepInvPolicy bind = ess.getSettings().getBindingItemsPolicy();
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01) && (vanish != ISettings.KeepInvPolicy.KEEP || bind != ISettings.KeepInvPolicy.KEEP)) {

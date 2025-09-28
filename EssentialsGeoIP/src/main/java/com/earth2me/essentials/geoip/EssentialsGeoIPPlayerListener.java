@@ -3,6 +3,7 @@ package com.earth2me.essentials.geoip;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.ice.tar.TarEntry;
 import com.ice.tar.TarInputStream;
 import com.maxmind.geoip2.DatabaseReader;
@@ -33,7 +34,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.zip.GZIPInputStream;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsGeoIPPlayerListener implements Listener, IConf {
     private final File dataFolder;
@@ -66,7 +67,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         final StringBuilder sb = new StringBuilder();
 
         if (mmreader == null) {
-            essGeo.getLogger().log(Level.WARNING, tl("geoIpErrorOnJoin", u.getName()));
+            essGeo.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("geoIpErrorOnJoin", u.getName())));
             return;
         }
 
@@ -99,17 +100,17 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 for (final Player online : player.getServer().getOnlinePlayers()) {
                     final User user = ess.getUser(online);
                     if (user.isAuthorized("essentials.geoip.show")) {
-                        user.sendMessage(tl("geoipCantFind", u.getDisplayName()));
+                        user.sendTl("geoipCantFind", u.getDisplayName());
                     }
                 }
                 return;
             }
             // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
             // TODO: Maybe, we can set a new custom msg about addr-not-found in messages.properties.
-            essGeo.getLogger().log(Level.INFO, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
+            essGeo.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("cantReadGeoIpDB")) + " " + ex.getLocalizedMessage());
         } catch (final IOException | GeoIp2Exception ex) {
             // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
-            essGeo.getLogger().log(Level.SEVERE, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
+            essGeo.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("cantReadGeoIpDB")) + " " + ex.getLocalizedMessage());
         }
         if (config.getBoolean("show-on-whois", true)) {
             u.setGeoLocation(sb.toString());
@@ -118,7 +119,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             for (final Player onlinePlayer : player.getServer().getOnlinePlayers()) {
                 final User user = ess.getUser(onlinePlayer);
                 if (user.isAuthorized("essentials.geoip.show")) {
-                    user.sendMessage(tl("geoipJoinFormat", u.getDisplayName(), sb.toString()));
+                    user.sendTl("geoipJoinFormat", u.getDisplayName(), sb.toString());
                 }
             }
         }
@@ -153,7 +154,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             if (config.getBoolean("database.download-if-missing", true)) {
                 downloadDatabase();
             } else {
-                essGeo.getLogger().log(Level.SEVERE, tl("cantFindGeoIpDB"));
+                essGeo.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("cantFindGeoIpDB")));
                 return;
             }
         } else if (config.getBoolean("database.update.enable", true)) {
@@ -177,7 +178,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 mmreader = new DatabaseReader.Builder(databaseFile).build();
             }
         } catch (final IOException ex) {
-            essGeo.getLogger().log(Level.SEVERE, tl("cantReadGeoIpDB"), ex);
+            essGeo.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("cantReadGeoIpDB")), ex);
         }
     }
 
@@ -190,16 +191,16 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 url = config.getString("database.download-url", null);
             }
             if (url == null || url.isEmpty()) {
-                essGeo.getLogger().log(Level.SEVERE, tl("geoIpUrlEmpty"));
+                essGeo.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("geoIpUrlEmpty")));
                 return;
             }
             final String licenseKey = config.getString("database.license-key", "");
             if (licenseKey == null || licenseKey.isEmpty()) {
-                essGeo.getLogger().log(Level.SEVERE, tl("geoIpLicenseMissing"));
+                essGeo.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("geoIpLicenseMissing")));
                 return;
             }
             url = url.replace("{LICENSEKEY}", licenseKey);
-            essGeo.getLogger().log(Level.INFO, tl("downloadingGeoIp"));
+            essGeo.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("downloadingGeoIp")));
             final URL downloadUrl = new URL(url);
             final URLConnection conn = downloadUrl.openConnection();
             conn.setConnectTimeout(10000);
@@ -233,9 +234,9 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             output.close();
             input.close();
         } catch (final MalformedURLException ex) {
-            essGeo.getLogger().log(Level.SEVERE, tl("geoIpUrlInvalid"), ex);
+            essGeo.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("geoIpUrlInvalid")), ex);
         } catch (final IOException ex) {
-            essGeo.getLogger().log(Level.SEVERE, tl("connectionFailed"), ex);
+            essGeo.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("connectionFailed")), ex);
         }
     }
 

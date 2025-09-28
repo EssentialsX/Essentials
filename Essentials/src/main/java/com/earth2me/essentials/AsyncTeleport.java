@@ -7,7 +7,7 @@ import com.earth2me.essentials.utils.LocationUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
-import net.ess3.api.InvalidWorldException;
+import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserWarpEvent;
 import net.ess3.api.events.teleport.PreTeleportEvent;
 import net.ess3.api.events.teleport.TeleportWarmupEvent;
@@ -22,8 +22,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class AsyncTeleport implements IAsyncTeleport {
     private final IUser teleportOwner;
@@ -73,7 +71,7 @@ public class AsyncTeleport implements IAsyncTeleport {
                 time.setTimeInMillis(lastTime);
                 time.add(Calendar.SECOND, (int) cooldown);
                 time.add(Calendar.MILLISECOND, (int) ((cooldown * 1000.0) % 1000.0));
-                future.completeExceptionally(new Exception(tl("timeBeforeTeleport", DateUtil.formatDateDiff(time.getTimeInMillis()))));
+                future.completeExceptionally(new TranslatableException("timeBeforeTeleport", DateUtil.formatDateDiff(time.getTimeInMillis())));
                 return true;
             }
         }
@@ -107,7 +105,7 @@ public class AsyncTeleport implements IAsyncTeleport {
         final Calendar c = new GregorianCalendar();
         c.add(Calendar.SECOND, (int) delay);
         c.add(Calendar.MILLISECOND, (int) ((delay * 1000.0) % 1000.0));
-        user.sendMessage(tl("dontMoveMessage", DateUtil.formatDateDiff(c.getTimeInMillis())));
+        user.sendTl("dontMoveMessage", DateUtil.formatDateDiff(c.getTimeInMillis()));
     }
 
     @Override
@@ -129,7 +127,7 @@ public class AsyncTeleport implements IAsyncTeleport {
         nowAsync(teleportOwner, target, cause, future);
         future.thenAccept(success -> {
             if (success) {
-                teleportOwner.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
+                teleportOwner.sendTl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ());
             }
         });
     }
@@ -166,7 +164,7 @@ public class AsyncTeleport implements IAsyncTeleport {
 
         if (!ess.getSettings().isForcePassengerTeleport() && !teleportee.getBase().isEmpty()) {
             if (!ess.getSettings().isTeleportPassengerDismount()) {
-                future.completeExceptionally(new Exception(tl("passengerTeleportFail")));
+                future.completeExceptionally(new TranslatableException("passengerTeleportFail"));
                 return;
             }
 
@@ -204,7 +202,7 @@ public class AsyncTeleport implements IAsyncTeleport {
                         }
                     }
                 } else {
-                    future.completeExceptionally(new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
+                    future.completeExceptionally(new TranslatableException("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
                     return;
                 }
             } else {
@@ -233,7 +231,7 @@ public class AsyncTeleport implements IAsyncTeleport {
 
     @Override
     public void teleport(final Player entity, final Trade chargeFor, final TeleportCause cause, final CompletableFuture<Boolean> future) {
-        teleportOwner.sendMessage(tl("teleportToPlayer", entity.getDisplayName()));
+        teleportOwner.sendTl("teleportToPlayer", entity.getDisplayName());
         teleport(teleportOwner, new PlayerTarget(entity), chargeFor, cause, future);
     }
 
@@ -248,8 +246,8 @@ public class AsyncTeleport implements IAsyncTeleport {
         teleport(otherUser, target, chargeFor, cause, future);
         future.thenAccept(success -> {
             if (success) {
-                otherUser.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
-                teleportOwner.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
+                otherUser.sendTl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ());
+                teleportOwner.sendTl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ());
             }
         });
     }
@@ -425,16 +423,16 @@ public class AsyncTeleport implements IAsyncTeleport {
         final Location loc;
         try {
             loc = ess.getWarps().getWarp(warp);
-        } catch (final WarpNotFoundException | InvalidWorldException e) {
+        } catch (final WarpNotFoundException e) {
             future.completeExceptionally(e);
             return;
         }
         final String finalWarp = warp;
         future.thenAccept(success -> {
             if (success) {
-                otherUser.sendMessage(tl("warpingTo", finalWarp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                otherUser.sendTl("warpingTo", finalWarp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
                 if (!otherUser.equals(teleportOwner)) {
-                    teleportOwner.sendMessage(tl("warpingTo", finalWarp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                    teleportOwner.sendTl("warpingTo", finalWarp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
                 }
             }
         });
@@ -450,7 +448,7 @@ public class AsyncTeleport implements IAsyncTeleport {
     public void back(final IUser teleporter, final Trade chargeFor, final CompletableFuture<Boolean> future) {
         tpType = TeleportType.BACK;
         final Location loc = teleportOwner.getLastLocation();
-        teleportOwner.sendMessage(tl("backUsageMsg", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        teleportOwner.sendTl("backUsageMsg", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         teleportOther(teleporter, teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND, future);
     }
 

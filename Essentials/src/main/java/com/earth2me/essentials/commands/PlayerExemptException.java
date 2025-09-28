@@ -1,7 +1,9 @@
 package com.earth2me.essentials.commands;
 
-public class PlayerExemptException extends NoSuchFieldException {
-    public PlayerExemptException(final String message) {
-        super(message);
+import net.ess3.api.TranslatableException;
+
+public class PlayerExemptException extends TranslatableException {
+    public PlayerExemptException(String tlKey, Object... args) {
+        super(tlKey, args);
     }
 }

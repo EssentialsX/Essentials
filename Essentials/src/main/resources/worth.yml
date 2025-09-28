@@ -1,23 +1,22 @@
-# Determines how much items are worth on the server.
-# This can be set in this file, or by running the /setworth command.
+# Determines the value of items on the server.
+# Items not listed here cannot be sold.
+# Setting the value to 0 sells items for free; set to -1 or remove the item to disable selling.
+# Prices can be set in this file or via the '/setworth' command in-game.
+
 worth:
-
-  # Items not listed in this file will not be sellable on the server
-  # Setting the worth to 0 will sell items for free, delete the item or set to -1 to disable.
-
-  # This will set the worth of all logs to '2'
+  # This will set the worth of all logs to '2'.
   log: 2.0  
 
-  # This will work similar to the above syntax
+  # This will work similar to the above syntax.
   wool:
     '0': 20
-    
-  # This will only allow selling leaves with datavalue '0' and '1'
+
+  # This will only allow selling leaves with datavalue '0' and '1'.
   leaves: 
     '0': 1.0
     '1': 1.0
-    
-  # This will allow the selling of all, but sells '0' slightly cheaper  
+
+  # This will allow the selling of all, but sells '0' slightly cheaper.
   sapling:
     '0': 2.0  
     '*': 2.5

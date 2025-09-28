@@ -52,7 +52,8 @@ public class MetricsWrapper {
             final Map<String, Map<String, Integer>> result = new HashMap<>();
             final String handler = ess.getPermissionsHandler().getName();
             final Map<String, Integer> backend = new HashMap<>();
-            backend.put(ess.getPermissionsHandler().getBackendName(), 1);
+            final String backendName = ess.getPermissionsHandler().getBackendName();
+            backend.put(backendName != null ? backendName : "Other", 1);
             result.put(handler, backend);
             return result;
         }));

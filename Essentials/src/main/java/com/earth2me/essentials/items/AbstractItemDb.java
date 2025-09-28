@@ -1,5 +1,6 @@
 package com.earth2me.essentials.items;
 
+import com.earth2me.essentials.Enchantments;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
@@ -8,6 +9,8 @@ import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.PluginKey;
+import net.ess3.provider.BannerDataProvider;
+import net.ess3.provider.PotionMetaProvider;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -24,10 +27,10 @@ import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.ArmorMeta;
+import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
@@ -38,8 +41,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
@@ -175,7 +176,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         }
 
         if (is.isEmpty() || is.get(0).getType() == Material.AIR) {
-            throw new Exception(tl("itemSellAir"));
+            throw new Exception(user.playerTl("itemSellAir"));
         }
 
         return is;
@@ -222,7 +223,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
             if (meta.hasEnchants()) {
                 for (final Enchantment e : meta.getEnchants().keySet()) {
-                    sb.append(e.getName().toLowerCase()).append(":").append(meta.getEnchantLevel(e)).append(" ");
+                    sb.append(Enchantments.getRealName(e)).append(":").append(meta.getEnchantLevel(e)).append(" ");
                 }
             }
 
@@ -267,7 +268,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             case ENCHANTED_BOOK:
                 final EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) is.getItemMeta();
                 for (final Enchantment e : enchantmentStorageMeta.getStoredEnchants().keySet()) {
-                    sb.append(e.getName().toLowerCase()).append(":").append(enchantmentStorageMeta.getStoredEnchantLevel(e)).append(" ");
+                    sb.append(Enchantments.getRealName(e)).append(":").append(enchantmentStorageMeta.getStoredEnchantLevel(e)).append(" ");
                 }
                 break;
         }
@@ -287,16 +288,9 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 serializeEffectMeta(sb, fireworkEffectMeta.getEffect());
             }
         } else if (MaterialUtil.isPotion(material)) {
-            final boolean splash;
-            final Collection<PotionEffect> effects;
-            if (VersionUtil.PRE_FLATTENING) {
-                final Potion potion = Potion.fromDamage(is.getDurability());
-                splash = potion.isSplash();
-                effects = potion.getEffects();
-            } else {
-                splash = is.getType() == Material.SPLASH_POTION;
-                effects = ((PotionMeta) is.getItemMeta()).getCustomEffects();
-            }
+            final PotionMetaProvider provider = ess.provider(PotionMetaProvider.class);
+            final boolean splash = provider.isSplashPotion(is);
+            final Collection<PotionEffect> effects = provider.getCustomEffects(is);
 
             for (final PotionEffect e : effects) {
                 // long but needs to be effect:speed power:2 duration:120 in that order.
@@ -319,6 +313,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                     sb.append("basecolor:").append(basecolor).append(" ");
                 }
                 for (final org.bukkit.block.banner.Pattern p : shieldBannerMeta.getPatterns()) {
+                    //noinspection removal
                     final String type = p.getPattern().getIdentifier();
                     final int color = p.getColor().getColor().asRGB();
                     sb.append(type).append(",").append(color).append(" ");
@@ -326,7 +321,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             } else {
                 final BannerMeta bannerMeta = (BannerMeta) is.getItemMeta();
                 if (bannerMeta != null) {
-                    DyeColor baseDyeColor = bannerMeta.getBaseColor();
+                    DyeColor baseDyeColor = ess.provider(BannerDataProvider.class).getBaseColor(is);
                     if (baseDyeColor == null) {
                         baseDyeColor = MaterialUtil.getColorOf(material);
                     }
@@ -337,16 +332,28 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                         sb.append("basecolor:").append(basecolor).append(" ");
                     }
                     for (final org.bukkit.block.banner.Pattern p : bannerMeta.getPatterns()) {
+                        //noinspection removal
                         final String type = p.getPattern().getIdentifier();
                         final int color = p.getColor().getColor().asRGB();
                         sb.append(type).append(",").append(color).append(" ");
                     }
                 }
             }
-        } else if (MaterialUtil.isLeatherArmor(material)) {
-            final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) is.getItemMeta();
-            final int rgb = leatherArmorMeta.getColor().asRGB();
-            sb.append("color:").append(rgb).append(" ");
+        } else if (MaterialUtil.isArmor(material)) {
+            final ArmorTrim armorTrim = ((ArmorMeta) is.getItemMeta()).getTrim();
+
+            if (armorTrim != null) {
+                final String trimPattern = armorTrim.getPattern().getKey().getKey();
+                final String trimMaterial = armorTrim.getMaterial().getKey().getKey();
+
+                sb.append("trim:").append(trimPattern).append("|").append(trimMaterial).append(" ");
+            }
+
+            if (MaterialUtil.isLeatherArmor(material)) {
+                final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) is.getItemMeta();
+                final int rgb = leatherArmorMeta.getColor().asRGB();
+                sb.append("color:").append(rgb).append(" ");
+            }
         }
 
         return sb.toString().trim().replaceAll("§", "&");

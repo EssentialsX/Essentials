@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -19,8 +20,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandpotion extends EssentialsCommand {
     public Commandpotion() {
@@ -38,12 +37,12 @@ public class Commandpotion extends EssentialsCommand {
                     potionslist.add(entry.getKey());
                 }
             }
-            throw new NotEnoughArgumentsException(tl("potions", StringUtil.joinList(potionslist.toArray())));
+            throw new NotEnoughArgumentsException(user.playerTl("potions", StringUtil.joinList(potionslist.toArray())));
         }
 
         boolean holdingPotion = stack.getType() == Material.POTION;
         if (!holdingPotion && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
-            holdingPotion = stack.getType() == Material.SPLASH_POTION || stack.getType() == Material.LINGERING_POTION;
+            holdingPotion = stack.getType() == Material.SPLASH_POTION || stack.getType() == Material.LINGERING_POTION || stack.getType() == Material.TIPPED_ARROW;
         }
         if (holdingPotion) {
             PotionMeta pmeta = (PotionMeta) stack.getItemMeta();
@@ -65,18 +64,18 @@ public class Commandpotion extends EssentialsCommand {
                     pmeta = (PotionMeta) mStack.getItemStack().getItemMeta();
                     stack.setItemMeta(pmeta);
                 } else {
-                    user.sendMessage(tl("invalidPotion"));
+                    user.sendTl("invalidPotion");
                     throw new NotEnoughArgumentsException();
                 }
             }
         } else {
-            throw new Exception(tl("holdPotion"));
+            throw new TranslatableException("holdPotion");
         }
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
-        // Note: this enforces an order of effect power duration splash, which the actual command doesn't have.  But that's fine. 
+        // Note: this enforces an order of effect power duration splash, which the actual command doesn't have.  But that's fine.
         if (args.length == 1) {
             final List<String> options = Lists.newArrayList();
             options.add("clear");

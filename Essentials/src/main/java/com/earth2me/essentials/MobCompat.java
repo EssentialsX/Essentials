@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.RegistryUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Material;
@@ -8,6 +9,8 @@ import org.bukkit.TreeSpecies;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Camel;
+import org.bukkit.entity.Chicken;
+import org.bukkit.entity.Cow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
@@ -17,11 +20,17 @@ import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Panda;
 import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Salmon;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 
 import static com.earth2me.essentials.utils.EnumUtil.getEntityType;
@@ -29,8 +38,21 @@ import static com.earth2me.essentials.utils.EnumUtil.getEntityType;
 public final class MobCompat {
 
     // Constants for mob interfaces added in later versions
-    @SuppressWarnings("rawtypes")
-    public static final Class RAIDER = ReflUtil.getClassCached("org.bukkit.entity.Raider");
+    public static final Class<?> RAIDER = ReflUtil.getClassCached("org.bukkit.entity.Raider");
+
+    // Stupid hacks to avoid Commodore rewrites.
+    private static final Class<?> COW = ReflUtil.getClassCached("org.bukkit.entity.Cow");
+    private static final Class<?> COW_VARIANT = ReflUtil.getClassCached("org.bukkit.entity.Cow$Variant");
+    private static final MethodHandle COW_VARIANT_HANDLE;
+
+    static {
+        MethodHandle handle = null;
+        try {
+            handle = MethodHandles.lookup().findVirtual(COW, "setVariant", MethodType.methodType(void.class, COW_VARIANT));
+        } catch (final Throwable ignored) {
+        }
+        COW_VARIANT_HANDLE = handle;
+    }
 
     // Constants for mobs added in later versions
     public static final EntityType LLAMA = getEntityType("LLAMA");
@@ -46,10 +68,21 @@ public final class MobCompat {
     public static final EntityType GOAT = getEntityType("GOAT");
     public static final EntityType FROG = getEntityType("FROG");
     public static final EntityType CAMEL = getEntityType("CAMEL");
+    public static final EntityType SALMON = getEntityType("SALMON");
 
     // Constants for mobs that have changed since earlier versions
     public static final EntityType CAT = getEntityType("CAT", "OCELOT");
     public static final EntityType ZOMBIFIED_PIGLIN = getEntityType("ZOMBIFIED_PIGLIN", "PIG_ZOMBIE");
+    public static final EntityType MOOSHROOM = getEntityType("MOOSHROOM", "MUSHROOM_COW");
+    public static final EntityType SNOW_GOLEM = getEntityType("SNOW_GOLEM", "SNOWMAN");
+    public static final EntityType CHEST_MINECART = getEntityType("CHEST_MINECART", "MINECART_CHEST");
+    public static final EntityType FURNACE_MINECART = getEntityType("FURNACE_MINECART", "MINECART_FURNACE");
+    public static final EntityType TNT_MINECART = getEntityType("TNT_MINECART", "MINECART_TNT");
+    public static final EntityType HOPPER_MINECART = getEntityType("HOPPER_MINECART", "MINECART_HOPPER");
+    public static final EntityType SPAWNER_MINECART = getEntityType("SPAWNER_MINECART", "MINECART_MOB_SPAWNER");
+    public static final EntityType END_CRYSTAL = getEntityType("END_CRYSTAL", "ENDER_CRYSTAL");
+    public static final EntityType FIREWORK_ROCKET = getEntityType("FIREWORK_ROCKET", "FIREWORK");
+    public static final EntityType OAK_BOAT = getEntityType("BOAT", "OAK_BOAT");
 
     private MobCompat() {
     }
@@ -183,7 +216,7 @@ public final class MobCompat {
     }
 
     public static void setBoatVariant(final Entity entity, final BoatVariant variant) {
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_21_3_R01) || VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
             return;
         }
         final Boat boat;
@@ -196,6 +229,7 @@ public final class MobCompat {
             //noinspection deprecation
             boat.setWoodType(TreeSpecies.valueOf(variant.getTreeSpecies()));
         } else {
+            //noinspection deprecation
             boat.setBoatType(Boat.Type.valueOf(variant.getBoatType()));
         }
     }
@@ -210,6 +244,63 @@ public final class MobCompat {
             camel.setTamed(true);
             camel.setOwner(target);
             camel.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+        }
+    }
+
+    public static void setWolfVariant(final Entity entity, final String variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_20_6_R01)) {
+            return;
+        }
+
+        if (entity instanceof Wolf) {
+            final Wolf wolf = (Wolf) entity;
+            //noinspection DataFlowIssue
+            wolf.setVariant(RegistryUtil.valueOf(Wolf.Variant.class, variant));
+        }
+    }
+
+    public static void setSalmonSize(Entity spawned, String s) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_21_3_R01)) {
+            return;
+        }
+
+        if (spawned instanceof org.bukkit.entity.Salmon) {
+            ((Salmon) spawned).setVariant(Salmon.Variant.valueOf(s));
+        }
+    }
+
+    public static void setCowVariant(final Entity spawned, final String variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_21_5_R01) || COW_VARIANT_HANDLE == null) {
+            return;
+        }
+
+        if (spawned instanceof Cow) {
+            try {
+                COW_VARIANT_HANDLE.invoke(spawned, RegistryUtil.valueOf(COW_VARIANT, variant));
+            } catch (Throwable ignored) {
+            }
+        }
+    }
+
+    public static void setChickenVariant(final Entity spawned, final String variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_21_5_R01)) {
+            return;
+        }
+
+        if (spawned instanceof Chicken) {
+            //noinspection DataFlowIssue
+            ((Chicken) spawned).setVariant(RegistryUtil.valueOf(Chicken.Variant.class, variant));
+        }
+    }
+
+    public static void setPigVariant(final Entity spawned, final String variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_21_5_R01)) {
+            return;
+        }
+
+        if (spawned instanceof Pig) {
+            //noinspection DataFlowIssue
+            ((Pig) spawned).setVariant(RegistryUtil.valueOf(Pig.Variant.class, variant));
         }
     }
 
@@ -273,7 +364,7 @@ public final class MobCompat {
         }
 
         private Villager.Profession asEnum() {
-            return EnumUtil.valueOf(Villager.Profession.class, newProfession, oldProfession);
+            return RegistryUtil.valueOf(Villager.Profession.class, newProfession, oldProfession);
         }
     }
 

@@ -4,6 +4,7 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import net.ess3.api.events.PrivateMessageSentEvent;
 import net.ess3.api.IUser;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
@@ -46,6 +47,23 @@ public class BukkitListener implements Listener {
     }
 
     // Bukkit Events
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPrivateMessage(PrivateMessageSentEvent event) {
+
+        if (event.getSender() instanceof IUser && ((IUser) event.getSender()).isAuthorized("essentials.chat.spy.exempt")) {
+            return;
+        }
+
+        sendDiscordMessage(MessageType.DefaultTypes.PRIVATE_CHAT,
+                MessageUtil.formatMessage(jda.getSettings().getPmToDiscordFormat(),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getSender().getName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getSender().getDisplayName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getRecipient().getName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getRecipient().getDisplayName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getMessage())),
+                        event.getSender() instanceof IUser ? ((IUser) event.getSender()).getBase() : null);
+    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMute(MuteStatusChangeEvent event) {
@@ -196,6 +214,11 @@ public class BukkitListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onAdvancement(AbstractAchievementEvent event) {
         if (isVanishHide(event.getPlayer())) {
+            return;
+        }
+
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)
+                && Boolean.FALSE.equals(event.getPlayer().getWorld().getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS))) {
             return;
         }
 

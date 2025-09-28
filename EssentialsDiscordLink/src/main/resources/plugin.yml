@@ -16,3 +16,8 @@ commands:
     description: Unlinks your Minecraft account from any associated Discord account.
     usage: /<command>
     aliases: [eunlink, discordunlink, ediscordunlink]
+permissions:
+    essentials.link:
+      description: Allows access to the /link command
+    essentials.unlink:
+      description: Allows access to the /unlink command

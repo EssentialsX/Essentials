@@ -22,7 +22,7 @@ discord-url: "https://discord.gg/invite-code"
 
 # Defined text channels
 # =====================
-# 
+#
 # Channels defined here can be used for two different purposes:
 #
 # Firstly, channels defined here can be used to give players permission to see messages from said channel.
@@ -144,6 +144,8 @@ message-types:
   kick: staff
   # Message sent when a player's mute state is changed on the Minecraft server.
   mute: staff
+  # Message sent when a private message (/msg, /whisper, etc.) is sent on the Minecraft Server.
+  private-chat: none
   # Message sent when a player talks in local chat.
   # use-essentials-events must be set to "true" for this to work.
   local: none
@@ -161,6 +163,7 @@ show-avatar: false
 # Any URL in here should only return a proper JPEG/PNG image and nothing else.
 # To include the UUID of the player in this URL, use "{uuid}".
 # To include the name of the player in this URL, use "{name}".
+# ... PlaceholderAPI placeholders are also supported here too!
 avatar-url: "https://crafthead.net/helm/{uuid}"
 
 # Whether or not fake join and leave messages should be sent to Discord when a player toggles vanish in Minecraft.
@@ -423,7 +426,8 @@ messages:
   # ... PlaceholderAPI placeholders are also supported here too!
   action: ":person_biking: {displayname} *{action}*"
   # This is the message sent to Discord when the server starts.
-  server-start: ":white_check_mark: The server has started!"
+  # - {starttimeseconds}: The amount of seconds it took to start the server (measured from JVM start time).
+  server-start: ":white_check_mark: The server has started in {starttimeseconds} seconds!"
   # This is the message sent to Discord when the server stops.
   server-stop: ":octagonal_sign: The server has stopped!"
   # This is the message sent to Discord when a player is kicked from the server.
@@ -432,3 +436,11 @@ messages:
   # - {displayname}: The display name of the user who got kicked
   # - {reason}: The reason the player was kicked
   kick: "{displayname} was kicked with reason: {reason}"
+  # This is the message that is used to relay minecraft private messages in Discord.
+  # The following placeholders can be used here:
+  # - {sender-username}: The username of the player sending the message
+  # - {sender-displayname}: The display name of the player sending the message (This would be their nickname)
+  # - {receiver-username}: The username of the player receiving the message
+  # - {receiver-displayname}: The display name of the player receiving the message (This would be their nickname)
+  # - {message}: The content of the message being sent
+  pms-to-discord: "[SocialSpy] {sender-username} -> {receiver-username}: {message}"

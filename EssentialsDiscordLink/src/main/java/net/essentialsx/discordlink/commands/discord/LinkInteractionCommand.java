@@ -11,32 +11,32 @@ import net.essentialsx.discordlink.AccountLinkManager;
 import java.util.List;
 import java.util.UUID;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class LinkInteractionCommand implements InteractionCommand {
     private final List<InteractionCommandArgument> arguments;
     private final AccountLinkManager accounts;
 
     public LinkInteractionCommand(final AccountLinkManager accounts) {
-        this.arguments = ImmutableList.of(new InteractionCommandArgument("code", tl("discordCommandLinkArgumentCode"), InteractionCommandArgumentType.STRING, true));
+        this.arguments = ImmutableList.of(new InteractionCommandArgument("code", tlLiteral("discordCommandLinkArgumentCode"), InteractionCommandArgumentType.STRING, true));
         this.accounts = accounts;
     }
 
     @Override
     public void onCommand(InteractionEvent event) {
         if (accounts.isLinked(event.getMember().getId())) {
-            event.reply(tl("discordCommandLinkHasAccount"));
+            event.replyTl("discordCommandLinkHasAccount");
             return;
         }
 
         final UUID uuid = accounts.getPendingUUID(event.getStringArgument("code"));
         if (uuid == null) {
-            event.reply(tl("discordCommandLinkInvalidCode"));
+            event.replyTl("discordCommandLinkInvalidCode");
             return;
         }
 
         accounts.registerAccount(uuid, event.getMember(), DiscordLinkStatusChangeEvent.Cause.SYNC_PLAYER);
-        event.reply(tl("discordCommandLinkLinked"));
+        event.replyTl("discordCommandLinkLinked");
     }
 
     @Override
@@ -56,7 +56,7 @@ public class LinkInteractionCommand implements InteractionCommand {
 
     @Override
     public String getDescription() {
-        return tl("discordCommandLinkDescription");
+        return tlLiteral("discordCommandLinkDescription");
     }
 
     @Override

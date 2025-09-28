@@ -8,8 +8,12 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import com.google.common.collect.ImmutableList;
+import com.neovisionaries.ws.client.ProxySettings;
+import com.neovisionaries.ws.client.WebSocketFactory;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.Webhook;
@@ -37,11 +41,12 @@ import net.essentialsx.discord.interactions.InteractionRoleImpl;
 import net.essentialsx.discord.interactions.commands.ExecuteCommand;
 import net.essentialsx.discord.interactions.commands.ListCommand;
 import net.essentialsx.discord.interactions.commands.MessageCommand;
+import net.essentialsx.discord.listeners.BukkitChatListener;
 import net.essentialsx.discord.listeners.BukkitListener;
 import net.essentialsx.discord.listeners.DiscordCommandDispatcher;
 import net.essentialsx.discord.listeners.DiscordListener;
 import net.essentialsx.discord.listeners.EssentialsChatListener;
-import net.essentialsx.discord.listeners.BukkitChatListener;
+import net.essentialsx.discord.listeners.PaperChatListener;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
@@ -69,7 +74,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class JDADiscordService implements DiscordService, IEssentialsModule {
     private final static Logger logger = EssentialsDiscord.getWrappedLogger();
@@ -150,7 +155,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         }
 
         if (!channel.canTalk()) {
-            logger.warning(tl("discordNoSendPermission", channel.getName()));
+            logger.warning(tlLiteral("discordNoSendPermission", channel.getName()));
             return;
         }
         channel.sendMessage(strippedContent)
@@ -162,12 +167,19 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         shutdown();
 
         invalidStartup = true;
-        logger.log(Level.INFO, tl("discordLoggingIn"));
+        logger.log(Level.INFO, tlLiteral("discordLoggingIn"));
         if (plugin.getSettings().getBotToken().replace("INSERT-TOKEN-HERE", "").trim().isEmpty()) {
-            throw new IllegalArgumentException(tl("discordErrorNoToken"));
+            throw new IllegalArgumentException(tlLiteral("discordErrorNoToken"));
+        }
+
+        final WebSocketFactory wsFactory = new WebSocketFactory();
+        if (!plugin.getSettings().getHttpProxyServer().trim().isEmpty()) {
+            final ProxySettings proxySettings = wsFactory.getProxySettings();
+            proxySettings.setServer(plugin.getSettings().getHttpProxyServer());
         }
 
         jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
+                .setWebsocketFactory(wsFactory)
                 .addEventListeners(new DiscordListener(this))
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .enableCache(CacheFlag.EMOJI)
@@ -177,17 +189,28 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
                 .awaitReady();
         invalidStartup = false;
         updatePresence();
-        logger.log(Level.INFO, tl("discordLoggingInDone", jda.getSelfUser().getAsTag()));
+        logger.log(Level.INFO, tlLiteral("discordLoggingInDone", jda.getSelfUser().getAsTag()));
 
         if (jda.getGuilds().isEmpty()) {
             invalidStartup = true;
-            throw new IllegalArgumentException(tl("discordErrorNoGuildSize"));
+            throw new IllegalArgumentException(tlLiteral("discordErrorNoGuildSize"));
         }
 
         guild = jda.getGuildById(plugin.getSettings().getGuildId());
         if (guild == null) {
             invalidStartup = true;
-            throw new IllegalArgumentException(tl("discordErrorNoGuild"));
+            throw new IllegalArgumentException(tlLiteral("discordErrorNoGuild"));
+        }
+
+        final Collection<Permission> requiredPermissions = ImmutableList.of(Permission.MANAGE_WEBHOOKS, Permission.MANAGE_ROLES, Permission.NICKNAME_MANAGE, Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND, Permission.MESSAGE_EMBED_LINKS);
+        final String[] missingPermissions = requiredPermissions.stream()
+                .filter(permission -> !guild.getSelfMember().hasPermission(permission))
+                .map(Permission::getName)
+                .toArray(String[]::new);
+
+        if (missingPermissions.length > 0) {
+            invalidStartup = true;
+            throw new IllegalArgumentException(tlLiteral("discordErrorInvalidPerms", String.join(", ", missingPermissions)));
         }
 
         interactionController = new InteractionControllerImpl(this);
@@ -325,14 +348,14 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         TextChannel channel = guild.getTextChannelById(plugin.getSettings().getPrimaryChannelId());
         if (channel == null) {
             if (!(guild.getDefaultChannel() instanceof TextChannel)) {
-                throw new RuntimeException(tl("discordErrorNoPerms"));
+                throw new RuntimeException(tlLiteral("discordErrorNoPerms"));
             }
             channel = (TextChannel) guild.getDefaultChannel();
-            logger.warning(tl("discordErrorNoPrimary", channel.getName()));
+            logger.warning(tlLiteral("discordErrorNoPrimary", channel.getName()));
         }
 
         if (!channel.canTalk()) {
-            throw new RuntimeException(tl("discordErrorNoPrimaryPerms", channel.getName()));
+            throw new RuntimeException(tlLiteral("discordErrorNoPrimaryPerms", channel.getName()));
         }
         primaryChannel = channel;
     }
@@ -350,9 +373,13 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             chatListener = null;
         }
 
-        chatListener = getSettings().isUseEssentialsEvents() && plugin.isEssentialsChat()
-            ? new EssentialsChatListener(this)
-            : new BukkitChatListener(this);
+        if (getSettings().isUseEssentialsEvents() && plugin.isEssentialsChat()) {
+            chatListener = new EssentialsChatListener(this);
+        } else if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01) && VersionUtil.isPaper() && plugin.getEss().getSettings().isUsePaperChatEvent()) {
+            chatListener = new PaperChatListener(this);
+        } else {
+            chatListener = new BukkitChatListener(this);
+        }
 
         Bukkit.getPluginManager().registerEvents(chatListener, plugin);
     }
@@ -362,7 +389,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     }
 
     public void updateTypesRelay() {
-        if (!getSettings().isShowAvatar() && !getSettings().isShowName() && !getSettings().isShowDisplayName()) {
+        if (!getSettings().isShowAvatar() && !getSettings().isCustomBotName()) {
             for (WrappedWebhookClient webhook : channelIdToWebhook.values()) {
                 webhook.close();
             }
@@ -383,11 +410,10 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
             final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.ADVANCED_RELAY_NAME).join();
             if (webhook == null) {
-                final WrappedWebhookClient current = channelIdToWebhook.get(channel.getId());
+                final WrappedWebhookClient current = channelIdToWebhook.remove(channel.getId());
                 if (current != null) {
                     current.close();
                 }
-                channelIdToWebhook.remove(channel.getId()).close();
                 continue;
             }
             typeToChannelId.put(type, channel.getId());
@@ -427,14 +453,14 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
                 final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.CONSOLE_RELAY_NAME).join();
                 if (webhook == null) {
-                    logger.info(tl("discordErrorLoggerNoPerms"));
+                    logger.info(tlLiteral("discordErrorLoggerNoPerms"));
                     return;
                 }
                 webhookId = webhook.getIdLong();
                 webhookToken = webhook.getToken();
                 lastConsoleId = channel.getId();
             } else if (!getSettings().getConsoleChannelDef().equals("none") && !getSettings().getConsoleChannelDef().startsWith("0")) {
-                logger.info(tl("discordErrorLoggerInvalidChannel"));
+                logger.info(tlLiteral("discordErrorLoggerInvalidChannel"));
                 shutdownConsoleRelay(true);
                 return;
             } else {

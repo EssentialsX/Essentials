@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
@@ -19,11 +20,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Trade {
     private static FileWriter fw = null;
@@ -87,7 +87,14 @@ public class Trade {
         sb.append(DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date()));
         sb.append("\",\"");
         if (sender != null) {
-            sb.append(sender);
+            String senderIdentifier = sender;
+            if (ess.getSettings().isEcoLogUUIDEnabled()) {
+                final UUID uuid = ess.getUsers().getNameCache().get(sender);
+                if (uuid != null) {
+                    senderIdentifier = uuid.toString();
+                }
+            }
+            sb.append(senderIdentifier);
         }
         sb.append("\",");
         if (charge == null) {
@@ -113,7 +120,14 @@ public class Trade {
         }
         sb.append(",\"");
         if (receiver != null) {
-            sb.append(receiver);
+            String receiverIdentifier = receiver;
+            if (ess.getSettings().isEcoLogUUIDEnabled()) {
+                final UUID uuid = ess.getUsers().getNameCache().get(receiver);
+                if (uuid != null) {
+                    receiverIdentifier = uuid.toString();
+                }
+            }
+            sb.append(receiverIdentifier);
         }
         sb.append("\",");
         if (pay == null) {
@@ -146,7 +160,7 @@ public class Trade {
             sb.append(loc.getBlockY()).append(",");
             sb.append(loc.getBlockZ()).append(",");
         }
-        
+
         if (endBalance == null) {
             sb.append(",");
         } else {
@@ -193,23 +207,23 @@ public class Trade {
         }
 
         if (getMoney() != null && getMoney().signum() > 0 && !user.canAfford(getMoney())) {
-            future.completeExceptionally(new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess))));
+            future.completeExceptionally(new ChargeException("notEnoughMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(getMoney(), ess))));
             return;
         }
 
         if (getItemStack() != null && !Inventories.containsAtLeast(user.getBase(), itemStack, itemStack.getAmount())) {
-            future.completeExceptionally(new ChargeException(tl("missingItems", getItemStack().getAmount(), ess.getItemDb().name(getItemStack()))));
+            future.completeExceptionally(new ChargeException("missingItems", getItemStack().getAmount(), ess.getItemDb().name(getItemStack())));
             return;
         }
 
         final BigDecimal money;
         if (command != null && !command.isEmpty() && (money = getCommandCost(user)).signum() > 0 && !user.canAfford(money)) {
-            future.completeExceptionally(new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(money, ess))));
+            future.completeExceptionally(new ChargeException("notEnoughMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(money, ess))));
             return;
         }
 
         if (exp != null && exp > 0 && SetExpFix.getTotalExperience(user.getBase()) < exp) {
-            future.completeExceptionally(new ChargeException(tl("notEnoughExperience")));
+            future.completeExceptionally(new ChargeException("notEnoughExperience"));
         }
     }
 
@@ -243,8 +257,8 @@ public class Trade {
                 } else {
                     for (final ItemStack itemStack : leftover.values()) {
                         int spillAmount = itemStack.getAmount();
-                        itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
                         while (spillAmount > 0) {
+                            itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
                             user.getBase().getWorld().dropItemNaturally(user.getBase().getLocation(), itemStack);
                             spillAmount -= itemStack.getAmount();
                         }
@@ -287,7 +301,7 @@ public class Trade {
                 ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " money " + getMoney().toPlainString());
             }
             if (!user.canAfford(getMoney()) && getMoney().signum() > 0) {
-                future.completeExceptionally(new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess))));
+                future.completeExceptionally(new ChargeException("notEnoughMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(getMoney(), ess))));
                 return;
             }
             user.takeMoney(getMoney());
@@ -297,7 +311,7 @@ public class Trade {
                 ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " itemstack " + getItemStack().toString());
             }
             if (!Inventories.containsAtLeast(user.getBase(), getItemStack(), getItemStack().getAmount())) {
-                future.completeExceptionally(new ChargeException(tl("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " "))));
+                future.completeExceptionally(new ChargeException("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
                 return;
             }
             Inventories.removeItemAmount(user.getBase(), getItemStack(), getItemStack().getAmount());
@@ -306,7 +320,7 @@ public class Trade {
         if (command != null) {
             final BigDecimal cost = getCommandCost(user);
             if (!user.canAfford(cost) && cost.signum() > 0) {
-                future.completeExceptionally(new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(cost, ess))));
+                future.completeExceptionally(new ChargeException("notEnoughMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(cost, ess))));
                 return;
             }
             user.takeMoney(cost);
@@ -317,7 +331,7 @@ public class Trade {
             }
             final int experience = SetExpFix.getTotalExperience(user.getBase());
             if (experience < getExperience() && getExperience() > 0) {
-                future.completeExceptionally(new ChargeException(tl("notEnoughExperience")));
+                future.completeExceptionally(new ChargeException("notEnoughExperience"));
                 return;
             }
             SetExpFix.setTotalExperience(user.getBase(), experience - getExperience());

@@ -3,6 +3,9 @@ plugins {
 }
 
 dependencies {
+    implementation(project(':providers:BaseProviders')) {
+        exclude(module: 'spigot-api')
+    }
     api project(':providers:NMSReflectionProvider')
 }
 
