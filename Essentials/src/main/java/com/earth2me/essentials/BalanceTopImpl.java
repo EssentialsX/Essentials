@@ -54,9 +54,9 @@ public class BalanceTopImpl implements BalanceTop {
         final LinkedHashMap<UUID, Entry> sortedMap = new LinkedHashMap<>();
         entries.sort((entry1, entry2) -> entry2.getBalance().compareTo(entry1.getBalance()));
         final int entryLimit = ess.getSettings().getBaltopEntryLimit();
-        int i = 0;
-        for (Entry entry : entries) {
-            if (entryLimit != -1 && ++i > entryLimit) break;
+        final int limit = entryLimit == -1 ? entries.size() : Math.min(entryLimit, entries.size());
+        for (int i = 0; i < limit; i++) {
+            Entry entry = entries.get(i);
             sortedMap.put(entry.getUuid(), entry);
         }
         topCache = sortedMap;
