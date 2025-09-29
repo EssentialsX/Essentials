@@ -893,9 +893,9 @@ baltop-requirements:
   minimum-balance: 0
   minimum-playtime: 0
 
-# Allows to limit cached balance top (/baltop) entries. This is especially recommended if
-# you have a large number of players, then only a certain number of entries will be stored
-# in the server's memory. Set to -1 to disable the limit
+# Limit the number of cached balance top entries. 
+# Recommended for servers with a large number of players, as it reduces memory usage. 
+# Set to -1 to disable the limit.
 baltop-entry-limit: -1
 
 # The format of currency, excluding symbols. For symbol configuration, see 'currency-symbol-format-locale' below.
