@@ -10,7 +10,7 @@ plugins {
 val baseExtension = extensions.create<EssentialsBaseExtension>("essentials", project)
 
 val checkstyleVersion = "8.36.2"
-val paperVersion = "1.21.9-pre4-R0.1-SNAPSHOT"
+val paperVersion = "1.21.9-rc1-R0.1-SNAPSHOT"
 val paperTestVersion = "1.21.8-R0.1-SNAPSHOT"
 val junit5Version = "5.12.2"
 val junitPlatformVersion = "1.12.2"
