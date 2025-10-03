@@ -28,6 +28,8 @@ target/
 *.class
 build-logic/.kotlin/
 build-logic/bin/
+bin/
+test-tmp/
 
 # Run directory
 /run/
