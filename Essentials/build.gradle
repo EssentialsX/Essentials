@@ -76,6 +76,17 @@ shadowJar {
         include (project(':providers:NMSReflectionProvider'))
         include (project(':providers:1_8Provider'))
         include (project(':providers:1_12Provider'))
+
+        // Paper in-dev adventure versions (for snapshot/pre-releases)
+        include (dependency('io.papermc.adventure:adventure-api'))
+        include (dependency('io.papermc.adventure:adventure-key'))
+        include (dependency('io.papermc.adventure:adventure-nbt'))
+        include (dependency('io.papermc.adventure:adventure-text-serializer-gson'))
+        include (dependency('io.papermc.adventure:adventure-text-serializer-gson-legacy-impl'))
+        include (dependency('io.papermc.adventure:adventure-text-serializer-json'))
+        include (dependency('io.papermc.adventure:adventure-text-serializer-json-legacy-impl'))
+        include (dependency('io.papermc.adventure:adventure-text-serializer-legacy'))
+        include (dependency('io.papermc.adventure:adventure-text-minimessage'))
     }
     relocate 'io.papermc.lib', 'com.earth2me.essentials.paperlib'
     relocate 'org.bstats', 'com.earth2me.essentials.libs.bstats'

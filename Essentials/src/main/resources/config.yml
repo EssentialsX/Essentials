@@ -893,6 +893,11 @@ baltop-requirements:
   minimum-balance: 0
   minimum-playtime: 0
 
+# Limit the number of cached balance top entries. 
+# Recommended for servers with a large number of players, as it reduces memory usage. 
+# Set to -1 to disable the limit.
+baltop-entry-limit: -1
+
 # The format of currency, excluding symbols. For symbol configuration, see 'currency-symbol-format-locale' below.
 #
 # "#,##0.00" is how the majority of countries display currency.

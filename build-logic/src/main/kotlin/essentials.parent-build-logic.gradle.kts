@@ -25,7 +25,9 @@ tasks {
         minecraftVersion(RUN_PAPER_MINECRAFT_VERSION)
     }
     named<Delete>("clean") {
+        delete(file("bin"))
         delete(file("jars"))
+        delete(file("test-tmp"))
         delete(file("generated"))
     }
 }

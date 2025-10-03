@@ -2232,6 +2232,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public int getBaltopEntryLimit() {
+        return config.getInt("baltop-entry-limit", -1);
+    }
+
+    @Override
     public long getBaltopMinPlaytime() {
         return config.getLong("baltop-requirements.minimum-playtime", 0);
     }
