@@ -22,14 +22,6 @@ dependencyResolutionManagement {
         maven("https://libraries.minecraft.net/") {
             content { includeGroup("com.mojang") }
         }
-        mavenCentral {
-            content {
-                includeGroup("net.kyori")
-                includeGroup("net.dv8tion")
-                includeGroup("org.apache.logging.log4j")
-                includeGroup("org.mockbukkit.mockbukkit")
-            }
-        }
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 }
