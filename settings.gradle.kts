@@ -8,8 +8,10 @@ dependencyResolutionManagement {
             }
         }
         maven("https://jitpack.io") {
-            content { includeGroup("com.github.milkbowl") }
-            content { includeGroup("com.github.MinnDevelopment") }
+            content {
+                includeGroup("com.github.milkbowl")
+                includeGroup("com.github.MinnDevelopment")
+            }
         }
         maven("https://repo.codemc.org/repository/maven-public") {
             content { includeGroup("org.bstats") }
@@ -19,11 +21,6 @@ dependencyResolutionManagement {
         }
         maven("https://libraries.minecraft.net/") {
             content { includeGroup("com.mojang") }
-        }
-        mavenCentral {
-            content { includeGroup("net.dv8tion") }
-            content { includeGroup("net.kyori") }
-            content { includeGroup("org.apache.logging.log4j") }
         }
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
