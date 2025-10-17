@@ -81,6 +81,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
@@ -343,36 +344,54 @@ public class EssentialsPlayerListener implements Listener {
 
     @SuppressWarnings("UnstableApiUsage")
     private final class JoinListener1_21 implements Listener {
+        private final Map<UUID, String> newUserLocales = new ConcurrentHashMap<>();
+
         @EventHandler
         public void onPlayerConfigure(final AsyncPlayerConnectionConfigureEvent event) {
             ess.getBackup().onPlayerJoin();
             final User dUser = ess.getUser(event.getConnection().getProfile().getId());
 
-            dUser.startTransaction();
-            if (dUser.isNPC()) {
-                dUser.setNPC(false);
+            // Force loading of the locale bundle while we are async to ensure it's ready when the player joins.
+            final String locale = event.getConnection().getClientOption(ClientOption.LOCALE);
+            ess.getI18n().blockingLoadBundle(I18n.getLocale(locale));
+
+            // This is a first time join, we have to wait until the bukkit Player object is created to create the User object.
+            // So we store the locale here and apply it when the PlayerJoinEvent is fired.
+            if (dUser == null) {
+                newUserLocales.put(event.getConnection().getProfile().getId(), locale);
+                return;
             }
 
-            final long currentTime = System.currentTimeMillis();
-            dUser.checkMuteTimeout(currentTime);
-            dUser.updateActivity(false, AfkStatusChangeEvent.Cause.JOIN);
-            dUser.stopTransaction();
-
             // Set the locale for player to preload the language bundle.
-            final String locale = event.getConnection().getClientOption(ClientOption.LOCALE);
             dUser.getPlayerLocale(locale);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
         public void onPlayerJoin(final PlayerJoinEvent event) {
-            if (!ess.getUsers().isCached(event.getPlayer().getUniqueId())) {
+            final User user = ess.getUser(event.getPlayer());
+            if (user == null) {
                 legacyJoinFlow(event);
                 return;
             }
 
-            final User user = ess.getUser(event.getPlayer());
             user.update(event.getPlayer());
+
+            // If this is a new user, we set their locale that we stored earlier.
+            final String locale = newUserLocales.remove(user.getUUID());
+            if (locale != null) {
+                user.getPlayerLocale(locale);
+            }
+
             final long currentTime = System.currentTimeMillis();
+            user.startTransaction();
+            if (user.isNPC()) {
+                user.setNPC(false);
+            }
+
+            user.checkMuteTimeout(currentTime);
+            user.updateActivity(false, AfkStatusChangeEvent.Cause.JOIN);
+            user.stopTransaction();
+
             joinFlow(user, currentTime, event.getJoinMessage(), event::setJoinMessage);
         }
     }
@@ -636,8 +655,7 @@ public class EssentialsPlayerListener implements Listener {
     private final class LoginListener1_21 implements Listener {
         @EventHandler(priority = EventPriority.HIGH)
         public void onPlayerListFull(final PlayerServerFullCheckEvent event) {
-            final User user = ess.getUser(event.getPlayerProfile().getId());
-            if (user.isAuthorized("essentials.joinfullserver")) {
+            if (ess.getPermissionsHandler().isOfflinePermissionSet(event.getPlayerProfile().getId(), "essentials.joinfullserver")) {
                 event.allow(true);
                 return;
             }
