@@ -134,6 +134,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean isCustomNewUsernameMessage;
     private List<String> spawnOnJoinGroups;
     private Map<Pattern, Long> commandCooldowns;
+    private Map<Pattern, Long> commandWarmups;
     private boolean npcsInBalanceRanking = false;
     private NumberFormat currencyFormat;
     private List<EssentialsSign> unprotectedSigns = Collections.emptyList();
@@ -918,6 +919,7 @@ public class Settings implements net.ess3.api.ISettings {
         muteCommands = _getMuteCommands();
         spawnOnJoinGroups = _getSpawnOnJoinGroups();
         commandCooldowns = _getCommandCooldowns();
+        commandWarmups = _getCommandWarmups();
         npcsInBalanceRanking = _isNpcsInBalanceRanking();
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
@@ -1846,6 +1848,93 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isCommandCooldownPersistent(final String label) {
         // TODO: enable per command cooldown specification for persistence.
         return config.getBoolean("command-cooldown-persistence", true);
+    }
+
+    private Map<Pattern, Long> _getCommandWarmups() {
+        final CommentedConfigurationNode section = config.getSection("command-warmups");
+        if (section == null) {
+            return null;
+        }
+        final Map<Pattern, Long> result = new LinkedHashMap<>();
+        for (Map.Entry<String, Object> entry : ConfigurateUtil.getRawMap(section).entrySet()) {
+            String cmdEntry = entry.getKey();
+            Object value = entry.getValue();
+            Pattern pattern = null;
+
+            /* ================================
+             * >> Regex
+             * ================================ */
+            if (cmdEntry.startsWith("^")) {
+                try {
+                    pattern = Pattern.compile(cmdEntry.substring(1));
+                } catch (final PatternSyntaxException e) {
+                    ess.getLogger().warning("Command warmup error: " + e.getMessage());
+                }
+            } else {
+                // Escape above Regex
+                if (cmdEntry.startsWith("\\^")) {
+                    cmdEntry = cmdEntry.substring(1);
+                }
+                final String cmd = cmdEntry
+                        .replaceAll("\\*", ".*"); // Wildcards are accepted as asterisk * as known universally.
+                pattern = Pattern.compile(cmd + "( .*)?"); // This matches arguments, if present, to "ignore" them from the feature.
+            }
+
+            /* ================================
+             * >> Process warmup value
+             * ================================ */
+            if (value instanceof String) {
+                try {
+                    value = Double.parseDouble(value.toString());
+                } catch (final NumberFormatException ignored) {
+                }
+            }
+            if (!(value instanceof Number)) {
+                ess.getLogger().warning("Command warmup error: '" + value + "' is not a valid warmup");
+                continue;
+            }
+            final double warmup = ((Number) value).doubleValue();
+            if (warmup < 1) {
+                ess.getLogger().warning("Command warmup with very short " + warmup + " warmup.");
+            }
+
+            result.put(pattern, (long) warmup * 1000); // convert to milliseconds
+        }
+        return result;
+    }
+
+    @Override
+    public boolean isCommandWarmupsEnabled() {
+        return commandWarmups != null;
+    }
+
+    @Override
+    public long getCommandWarmupMs(final String label) {
+        final Entry<Pattern, Long> result = getCommandWarmupEntry(label);
+        return result != null ? result.getValue() : -1;
+    }
+
+    @Override
+    public Entry<Pattern, Long> getCommandWarmupEntry(final String label) {
+        if (isCommandWarmupsEnabled()) {
+            for (final Entry<Pattern, Long> entry : this.commandWarmups.entrySet()) {
+                final boolean matches = entry.getKey().matcher(label).matches();
+                if (isDebug()) {
+                    ess.getLogger().info(String.format("Checking command '%s' against warmup '%s': %s", label, entry.getKey(), matches));
+                }
+
+                if (matches) {
+                    return entry;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isCommandWarmupPersistent(final String label) {
+        // TODO: enable per command warmup specification for persistence.
+        return config.getBoolean("command-warmup-persistence", true);
     }
 
     private boolean _isNpcsInBalanceRanking() {

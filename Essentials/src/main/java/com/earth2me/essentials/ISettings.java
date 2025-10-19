@@ -366,6 +366,14 @@ public interface ISettings extends IConf {
 
     boolean isCommandCooldownPersistent(String label);
 
+    boolean isCommandWarmupsEnabled();
+
+    long getCommandWarmupMs(String label);
+
+    Entry<Pattern, Long> getCommandWarmupEntry(String label);
+
+    boolean isCommandWarmupPersistent(String label);
+
     boolean isNpcsInBalanceRanking();
 
     NumberFormat getCurrencyFormat();

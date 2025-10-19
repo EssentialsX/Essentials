@@ -868,6 +868,66 @@ public class EssentialsPlayerListener implements Listener {
                 }
             }
         }
+
+        // Command warmups
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().info("Warmup check - enabled: " + ess.getSettings().isCommandWarmupsEnabled() 
+                + ", bypass: " + user.isAuthorized("essentials.commandwarmups.bypass")
+                + ", command: " + effectiveCommand);
+        }
+        
+        if (ess.getSettings().isCommandWarmupsEnabled()
+            && !user.isAuthorized("essentials.commandwarmups.bypass")
+            && (pluginCommand == null || !user.isAuthorized("essentials.commandwarmups.bypass." + pluginCommand.getName()))) {
+            final int argStartIndex = effectiveCommand.indexOf(" ");
+            final String args = argStartIndex == -1 ? ""
+                : " " + effectiveCommand.substring(argStartIndex);
+            final String fullCommand = pluginCommand == null ? effectiveCommand : pluginCommand.getName() + args;
+
+            // Check if user already has an active warmup for this command
+            boolean warmupFound = false;
+
+            for (final Entry<Pattern, Long> entry : user.getCommandWarmups().entrySet()) {
+                // Remove any expired warmups
+                if (entry.getValue() <= System.currentTimeMillis()) {
+                    user.clearCommandWarmup(entry.getKey());
+                } else if (entry.getKey().matcher(fullCommand).matches()) {
+                    // User's current warmup hasn't expired, inform them
+                    final String commandWarmupTime = DateUtil.formatDateDiff(entry.getValue());
+                    user.sendTl("commandWarmup", commandWarmupTime);
+                    warmupFound = true;
+                    event.setCancelled(true);
+                }
+            }
+
+            if (!warmupFound) {
+                final Entry<Pattern, Long> warmupEntry = ess.getSettings().getCommandWarmupEntry(fullCommand);
+
+                if (warmupEntry != null) {
+                    // Check if the player has permission to use this command before starting warmup
+                    if (pluginCommand != null && !pluginCommand.testPermissionSilent(user.getBase())) {
+                        // Player doesn't have permission, let the command fail naturally
+                        return;
+                    }
+                    
+                    if (ess.getSettings().isDebug()) {
+                        ess.getLogger().info("Applying " + warmupEntry.getValue() + "ms warmup on /" + fullCommand + " for " + user.getName() + ".");
+                    }
+                    event.setCancelled(true);
+
+                    // Store the warmup expiry
+                    final Date expiry = new Date(System.currentTimeMillis() + warmupEntry.getValue());
+                    user.addCommandWarmup(warmupEntry.getKey(), expiry, ess.getSettings().isCommandWarmupPersistent(fullCommand));
+
+                    // Notify user about warmup
+                    final String warmupTime = DateUtil.formatDateDiff(expiry.getTime());
+                    user.sendTl("commandWarmup", warmupTime);
+
+                    // Start the async timed command
+                    new AsyncTimedCommand(user, ess, warmupEntry.getValue(), event.getMessage(), warmupEntry.getKey());
+                }
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
