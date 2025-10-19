@@ -729,7 +729,8 @@ command-cooldown-persistence: true
 # Note: If you have a command that starts with ^, escape it using a backslash (\).
 command-warmups:
   #home: 5 # 5-second warmup on /home command
-  #back: 3 # 3-second warmup on /tpa command
+  #back: 3 # 3-second warmup on /back command
+  #afk: 3 # 3-second warmup on /afk command
 
 # Whether command warmups should persist across server shutdowns.
 command-warmup-persistence: true
