@@ -457,6 +457,10 @@ public class AsyncTeleport implements IAsyncTeleport {
         nowAsync(teleportOwner, new LocationTarget(teleportOwner.getLastLocation()), TeleportCause.COMMAND, future);
     }
 
+    public TeleportType getTpType() {
+        return this.tpType;
+    }
+
     public void setTpType(final TeleportType tpType) {
         this.tpType = tpType;
     }
