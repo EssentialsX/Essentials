@@ -1,12 +1,14 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.IEssentials;
-import net.ess3.api.IUser;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
 import org.bukkit.Location;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
+import net.ess3.api.IEssentials;
+import net.ess3.api.IUser;
+import net.ess3.api.events.teleport.TeleportWarmupCancelledEvent;
 
 public class AsyncTimedTeleport implements Runnable {
     private static final double MOVE_CONSTANT = 0.3;
@@ -149,6 +151,13 @@ public class AsyncTimedTeleport implements Runnable {
         }
         try {
             ess.getServer().getScheduler().cancelTask(timer_task);
+
+            final IUser teleportUser = ess.getUser(this.timer_teleportee);
+            if (teleportUser != null && teleportUser.getBase().isOnline()) {
+                final TeleportWarmupCancelledEvent event = new TeleportWarmupCancelledEvent(teleportUser.getBase(), this.teleport.getTpType(), notifyUser);
+                ess.getServer().getPluginManager().callEvent(event);
+            }
+
             if (notifyUser) {
                 teleportOwner.sendTl("pendingTeleportCancelled");
                 if (timer_teleportee != null && !timer_teleportee.equals(teleportOwner.getBase().getUniqueId())) {
