@@ -2087,7 +2087,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private boolean _logConsoleRconCommands() {
-        return config.getBoolean("log-console-rcon-commands", true);
+        return config.getBoolean("log-console-commands", true);
     }
 
     @Override
