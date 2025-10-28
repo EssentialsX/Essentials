@@ -2086,13 +2086,13 @@ public class Settings implements net.ess3.api.ISettings {
         return logCommandBlockCommands;
     }
 
-    private boolean _logConsoleRconCommands() {
+    private boolean _logConsoleCommands() {
         return config.getBoolean("log-console-commands", true);
     }
 
     @Override
-    public boolean logConsoleRconCommands() {
-        return logConsoleRconCommands;
+    public boolean logConsoleCommands() {
+        return logConsoleCommands;
     }
 
     private Set<Predicate<String>> _getNickBlacklist() {
