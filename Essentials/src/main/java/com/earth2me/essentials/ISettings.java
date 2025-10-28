@@ -414,7 +414,7 @@ public interface ISettings extends IConf {
 
     boolean logCommandBlockCommands();
 
-    boolean logConsoleRconCommands();
+    boolean logConsoleCommands();
 
     Set<Predicate<String>> getNickBlacklist();
 
