@@ -146,7 +146,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean isWaterSafe;
     private boolean isSafeUsermap;
     private boolean logCommandBlockCommands;
-    private boolean logConsoleRconCommands;
+    private boolean logConsoleCommands;
     private Set<Predicate<String>> nickBlacklist;
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
