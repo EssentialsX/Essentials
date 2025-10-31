@@ -769,7 +769,7 @@ safe-usermap-names: true
 # Example: CommandBlock at <x>,<y>,<z> issued server command: /<command>
 log-command-block-commands: true
 
-# Should Essentials output logs when a console executes a command?
+# Should Essentials output logs when console executes a command?
 # Example: CONSOLE issued server command: /<command>
 log-console-commands: true
 
