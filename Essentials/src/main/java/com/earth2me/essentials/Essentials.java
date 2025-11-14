@@ -1002,6 +1002,18 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
             throw new PlayerNotFoundException();
         }
+        
+        // Check for exact nickname match before falling back to partial username matching
+        final String searchLower = searchTerm.toLowerCase(Locale.ENGLISH);
+        for (final User userMatch : getOnlineUsers()) {
+            if (getHidden || canInteractWith(sourceUser, userMatch)) {
+                final String displayName = FormatUtil.stripFormat(userMatch.getDisplayName()).toLowerCase(Locale.ENGLISH);
+                if (displayName.equals(searchLower)) {
+                    return userMatch;
+                }
+            }
+        }
+        
         final List<Player> matches = server.matchPlayer(searchTerm);
 
         if (matches.isEmpty()) {
