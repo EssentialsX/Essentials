@@ -836,7 +836,8 @@ public class EssentialsPlayerListener implements Listener {
             final int argStartIndex = effectiveCommand.indexOf(" ");
             final String args = argStartIndex == -1 ? "" // No arguments present
                 : " " + effectiveCommand.substring(argStartIndex); // arguments start at argStartIndex; substring from there.
-            final String fullCommand = pluginCommand == null ? effectiveCommand : pluginCommand.getName() + args;
+            // Normalize to lowercase to ensure case-insensitive cooldown matching (fixes #5915)
+            final String fullCommand = (pluginCommand == null ? effectiveCommand : pluginCommand.getName() + args).toLowerCase(Locale.ENGLISH);
 
             // Used to determine whether a user already has an existing cooldown
             // If so, no need to check for (and write) new ones.
