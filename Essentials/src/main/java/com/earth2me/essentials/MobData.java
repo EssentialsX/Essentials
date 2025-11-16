@@ -82,6 +82,7 @@ public enum MobData {
     SADDLE_HORSE("saddle", EntityType.HORSE, Data.HORSESADDLE, true),
     GOLD_ARMOR_HORSE("goldarmor", EntityType.HORSE, EnumUtil.getMaterial("GOLDEN_HORSE_ARMOR", "GOLD_BARDING"), true),
     DIAMOND_ARMOR_HORSE("diamondarmor", EntityType.HORSE, EnumUtil.getMaterial("DIAMOND_HORSE_ARMOR", "DIAMOND_BARDING"), true),
+    NETHERITE_HORSE_ARMOR("netheritearmor", EntityType.HORSE, EnumUtil.getMaterial("NETHERITE_HORSE_ARMOR"), true),
     ARMOR_HORSE("armor", EntityType.HORSE, EnumUtil.getMaterial("IRON_HORSE_ARMOR", "IRON_BARDING"), true),
     SIAMESE_CAT("siamese", MobCompat.CAT, MobCompat.CatType.SIAMESE, true),
     WHITE_CAT("white", MobCompat.CAT, MobCompat.CatType.WHITE, false),
