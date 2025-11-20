@@ -3,8 +3,11 @@ package net.ess3.api.events.teleport;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import com.earth2me.essentials.AsyncTeleport.TeleportType;
+
+import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
 
 /**
  * Called when a player's teleport warmup is cancelled.
@@ -15,11 +18,13 @@ public class TeleportWarmupCancelledEvent extends Event {
 
     private final Player player;
     private final TeleportType teleportType;
+    private final CancelReason cancelReason;
     private final boolean notifyUser;
 
-    public TeleportWarmupCancelledEvent(final Player player, final TeleportType teleportType, final boolean notifyUser) {
+    public TeleportWarmupCancelledEvent(final Player player, final TeleportType teleportType, CancelReason cancelReason, final boolean notifyUser) {
         this.player = player;
         this.teleportType = teleportType;
+        this.cancelReason = cancelReason;
         this.notifyUser = notifyUser;
     }
 
@@ -33,23 +38,41 @@ public class TeleportWarmupCancelledEvent extends Event {
     }
 
     /**
-     * @return The player object
+     * @return the player whose teleport was canceled.
      */
     public Player getPlayer() {
         return this.player;
     }
 
     /**
-     * @return The teleport type
+     * @return the type of teleport that was canceled.
      */
     public TeleportType getTeleportType() {
         return this.teleportType;
     }
 
     /**
-     * @return Is the player notified?
+     * @return the reason the teleport was cancelled.
+     */
+    public CancelReason getCancelReason() {
+        return this.cancelReason;
+    }
+
+    /**
+     * @return true if the player was notified that the teleport was canceled, otherwise false.
      */
     public boolean isPlayerNotified() {
         return this.notifyUser;
+    }
+
+    public enum CancelReason {
+        /**
+         * Indicates that the cancellation occurred because the player disconnected
+         */
+        LEAVE,
+        /**
+         * Indicates that the cancellation occurred because the player moved
+         */
+        MOVE,
     }
 }

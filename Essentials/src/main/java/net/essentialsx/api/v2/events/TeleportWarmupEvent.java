@@ -1,7 +1,8 @@
-package net.ess3.api.events.teleport;
+package net.essentialsx.api.v2.events;
 
 import com.earth2me.essentials.ITarget;
 import net.ess3.api.IUser;
+import net.ess3.api.events.teleport.TeleportEvent;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerTeleportEvent;
 

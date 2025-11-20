@@ -10,7 +10,7 @@ import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserWarpEvent;
 import net.ess3.api.events.teleport.PreTeleportEvent;
-import net.ess3.api.events.teleport.TeleportWarmupEvent;
+import net.essentialsx.api.v2.events.TeleportWarmupEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
 import net.ess3.api.events.teleport.TeleportWarmupCancelledEvent;
+import net.ess3.api.events.teleport.TeleportWarmupCancelledEvent.CancelReason;
 
 public class AsyncTimedTeleport implements Runnable {
     private static final double MOVE_CONSTANT = 0.3;
@@ -153,8 +154,9 @@ public class AsyncTimedTeleport implements Runnable {
             ess.getServer().getScheduler().cancelTask(timer_task);
 
             final IUser teleportUser = ess.getUser(this.timer_teleportee);
-            if (teleportUser != null && teleportUser.getBase().isOnline()) {
-                final TeleportWarmupCancelledEvent event = new TeleportWarmupCancelledEvent(teleportUser.getBase(), this.teleport.getTpType(), notifyUser);
+            if (teleportUser != null) {
+            	final TeleportWarmupCancelledEvent.CancelReason cancelReason = teleportUser.getBase().isOnline() ? CancelReason.MOVE : CancelReason.LEAVE;
+                final TeleportWarmupCancelledEvent event = new TeleportWarmupCancelledEvent(teleportUser.getBase(), this.teleport.getTpType(), cancelReason, notifyUser);
                 ess.getServer().getPluginManager().callEvent(event);
             }
 
