@@ -3,11 +3,7 @@ package net.essentialsx.api.v2.events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
 import com.earth2me.essentials.AsyncTeleport.TeleportType;
-
-import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
 
 /**
  * Called when a player's teleport warmup is cancelled.
@@ -65,6 +61,9 @@ public class TeleportWarmupCancelledEvent extends Event {
         return this.notifyUser;
     }
 
+    /**
+     * Indicates the reason why the teleportation was cancelled.
+     */
     public enum CancelReason {
         /**
          * Indicates that the cancellation occurred because the player disconnected
