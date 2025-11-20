@@ -1,4 +1,4 @@
-package net.ess3.api.events.teleport;
+package net.essentialsx.api.v2.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

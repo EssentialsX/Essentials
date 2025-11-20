@@ -8,8 +8,8 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
-import net.ess3.api.events.teleport.TeleportWarmupCancelledEvent;
-import net.ess3.api.events.teleport.TeleportWarmupCancelledEvent.CancelReason;
+import net.essentialsx.api.v2.events.TeleportWarmupCancelledEvent;
+import net.essentialsx.api.v2.events.TeleportWarmupCancelledEvent.CancelReason;
 
 public class AsyncTimedTeleport implements Runnable {
     private static final double MOVE_CONSTANT = 0.3;
