@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.I18n;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.AdventureUtil;
@@ -73,13 +74,25 @@ public class Commandrecipe extends EssentialsCommand {
         }
 
         int recipeNo = 0;
+        User targetUser = null;
 
         if (args.length > 1) {
-            if (NumberUtil.isInt(args[1])) {
+            try {
                 recipeNo = Integer.parseInt(args[1]) - 1;
-            } else {
+            } catch (NumberFormatException e) {
                 throw new TranslatableException("invalidNumber");
             }
+        }
+
+        if (args.length > 2) {
+            targetUser = getPlayer(server, sender, args[2]);
+        }
+
+        if (targetUser == null) {
+            if (!sender.isPlayer()) {
+                throw new TranslatableException("consoleCannotUseCommand");
+            }
+            targetUser = ess.getUser(sender.getPlayer());
         }
 
         final List<Recipe> bukkitRecipes = ess.getServer().getRecipesFor(itemType);
@@ -110,26 +123,31 @@ public class Commandrecipe extends EssentialsCommand {
         }
 
         final Recipe selectedRecipe = recipes.get(recipeNo);
-        sender.sendTl("recipe", getMaterialName(sender, itemType), recipeNo + 1, recipes.size());
+
+        targetUser.sendTl("recipe", getMaterialName(sender, itemType), recipeNo + 1, recipes.size());
+
+        if (!sender.isPlayer() || !sender.getPlayer().equals(targetUser.getBase())) {
+            sender.sendTl("recipeShown", getMaterialName(sender, itemType), targetUser.getDisplayName());
+        }
 
         if (selectedRecipe instanceof FurnaceRecipe) {
-            furnaceRecipe(sender, (FurnaceRecipe) selectedRecipe);
+            furnaceRecipe(targetUser, (FurnaceRecipe) selectedRecipe);
         } else if (selectedRecipe instanceof ShapedRecipe) {
-            shapedRecipe(sender, (ShapedRecipe) selectedRecipe, sender.isPlayer());
+            shapedRecipe(targetUser, (ShapedRecipe) selectedRecipe, true);
         } else if (selectedRecipe instanceof ShapelessRecipe) {
             if (recipes.size() == 1 && itemType.getType() == FIREWORK_ROCKET) {
                 final ShapelessRecipe shapelessRecipe = new ShapelessRecipe(itemType);
                 shapelessRecipe.addIngredient(GUNPOWDER);
                 shapelessRecipe.addIngredient(Material.PAPER);
                 shapelessRecipe.addIngredient(FIREWORK_STAR);
-                shapelessRecipe(sender, shapelessRecipe, sender.isPlayer());
+                shapelessRecipe(targetUser, shapelessRecipe, true);
             } else {
-                shapelessRecipe(sender, (ShapelessRecipe) selectedRecipe, sender.isPlayer());
+                shapelessRecipe(targetUser, (ShapelessRecipe) selectedRecipe, true);
             }
         }
 
         if (recipes.size() > 1 && args.length == 1) {
-            sender.sendTl("recipeMore", commandLabel, args[0], getMaterialName(sender, itemType));
+            targetUser.sendTl("recipeMore", commandLabel, args[0], getMaterialName(sender, itemType));
         }
     }
 
@@ -147,15 +165,14 @@ public class Commandrecipe extends EssentialsCommand {
         }
     }
 
-    public void furnaceRecipe(final CommandSource sender, final FurnaceRecipe recipe) {
-        sender.sendTl("recipeFurnace", getMaterialName(sender, recipe.getInput()));
+    public void furnaceRecipe(final User user, final FurnaceRecipe recipe) {
+        user.sendTl("recipeFurnace", getMaterialName(user, recipe.getInput()));
     }
 
-    public void shapedRecipe(final CommandSource sender, final ShapedRecipe recipe, final boolean showWindow) {
+    public void shapedRecipe(final User user, final ShapedRecipe recipe, final boolean showWindow) {
         final Map<Character, ItemStack> recipeMap = recipe.getIngredientMap();
 
         if (showWindow) {
-            final User user = ess.getUser(sender.getPlayer());
             user.getBase().closeInventory();
             user.setRecipeSee(true);
             final InventoryView view = user.getBase().openWorkbench(null, true);
@@ -189,15 +206,15 @@ public class Commandrecipe extends EssentialsCommand {
                     materials[j][k] = item == null ? null : item.getType();
                 }
             }
-            sender.sendTl("recipeGrid", colorTag(colorMap, materials, 0, 0), colorTag(colorMap, materials, 0, 1), colorTag(colorMap, materials, 0, 2));
-            sender.sendTl("recipeGrid", colorTag(colorMap, materials, 1, 0), colorTag(colorMap, materials, 1, 1), colorTag(colorMap, materials, 1, 2));
-            sender.sendTl("recipeGrid", colorTag(colorMap, materials, 2, 0), colorTag(colorMap, materials, 2, 1), colorTag(colorMap, materials, 2, 2));
+            user.sendTl("recipeGrid", colorTag(colorMap, materials, 0, 0), colorTag(colorMap, materials, 0, 1), colorTag(colorMap, materials, 0, 2));
+            user.sendTl("recipeGrid", colorTag(colorMap, materials, 1, 0), colorTag(colorMap, materials, 1, 1), colorTag(colorMap, materials, 1, 2));
+            user.sendTl("recipeGrid", colorTag(colorMap, materials, 2, 0), colorTag(colorMap, materials, 2, 1), colorTag(colorMap, materials, 2, 2));
 
             final StringBuilder s = new StringBuilder();
             for (final Material items : colorMap.keySet().toArray(new Material[0])) {
-                s.append(sender.tl("recipeGridItem", colorMap.get(items), getMaterialName(sender, items))).append(" ");
+                s.append(I18n.tlLiteral("recipeGridItem", colorMap.get(items), getMaterialName(user, items))).append(" ");
             }
-            sender.sendTl("recipeWhere", AdventureUtil.parsed(s.toString()));
+            user.sendTl("recipeWhere", AdventureUtil.parsed(s.toString()));
         }
     }
 
@@ -211,10 +228,9 @@ public class Commandrecipe extends EssentialsCommand {
         return AdventureUtil.parsed("<" + namedTextColor + ">" + colorChar);
     }
 
-    public void shapelessRecipe(final CommandSource sender, final ShapelessRecipe recipe, final boolean showWindow) {
+    public void shapelessRecipe(final User user, final ShapelessRecipe recipe, final boolean showWindow) {
         final List<ItemStack> ingredients = recipe.getIngredientList();
         if (showWindow) {
-            final User user = ess.getUser(sender.getPlayer());
             user.getBase().closeInventory();
             user.setRecipeSee(true);
             final InventoryView view = user.getBase().openWorkbench(null, true);
@@ -229,13 +245,13 @@ public class Commandrecipe extends EssentialsCommand {
         } else {
             final StringBuilder s = new StringBuilder();
             for (int i = 0; i < ingredients.size(); i++) {
-                s.append(getMaterialName(sender, ingredients.get(i)));
+                s.append(getMaterialName(user, ingredients.get(i)));
                 if (i != ingredients.size() - 1) {
                     s.append(",");
                 }
                 s.append(" ");
             }
-            sender.sendTl("recipeShapeless", s.toString());
+            user.sendTl("recipeShapeless", s.toString());
         }
     }
 
@@ -253,10 +269,26 @@ public class Commandrecipe extends EssentialsCommand {
         return type.toString().replace("_", " ").toLowerCase(Locale.ENGLISH);
     }
 
+    public String getMaterialName(final User user, final ItemStack stack) {
+        if (stack == null) {
+            return I18n.tlLiteral("recipeNothing");
+        }
+        return getMaterialName(user, stack.getType());
+    }
+
+    public String getMaterialName(final User user, final Material type) {
+        if (type == null) {
+            return I18n.tlLiteral("recipeNothing");
+        }
+        return type.toString().replace("_", " ").toLowerCase(Locale.ENGLISH);
+    }
+
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getItems();
+        } else if (args.length == 3) {
+            return getPlayers(server, sender);
         } else {
             return Collections.emptyList();
         }
