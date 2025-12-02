@@ -22,6 +22,7 @@ import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.ess3.provider.PlayerLocaleProvider;
+import net.essentialsx.api.v2.events.PreTransactionEvent;
 import net.essentialsx.api.v2.events.TransactionEvent;
 import net.essentialsx.api.v2.services.mail.MailSender;
 import net.kyori.adventure.text.Component;
@@ -270,6 +271,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
 
         if (canAfford(value)) {
+            // Call an event for pre-transaction
+            final PreTransactionEvent preTransactionEvent = new PreTransactionEvent(this.getSource(), reciever, value);
+            ess.getServer().getPluginManager().callEvent(preTransactionEvent);
+            if (preTransactionEvent.isCancelled()) {
+                return;
+            }
+
             setMoney(getMoney().subtract(value), cause);
             reciever.setMoney(reciever.getMoney().add(value), cause);
             sendTl("moneySentTo", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)), reciever.getDisplayName());
