@@ -1,5 +1,6 @@
 package net.essentialsx.api.v2.events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -17,7 +18,8 @@ public class TeleportWarmupCancelledEvent extends Event {
     private final CancelReason cancelReason;
     private final boolean notifyUser;
 
-    public TeleportWarmupCancelledEvent(final Player player, final TeleportType teleportType, CancelReason cancelReason, final boolean notifyUser) {
+    public TeleportWarmupCancelledEvent(final Player player, final TeleportType teleportType, final CancelReason cancelReason, final boolean notifyUser) {
+        super(!Bukkit.isPrimaryThread());
         this.player = player;
         this.teleportType = teleportType;
         this.cancelReason = cancelReason;
