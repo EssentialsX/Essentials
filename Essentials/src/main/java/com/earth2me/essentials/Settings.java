@@ -115,6 +115,7 @@ public class Settings implements net.ess3.api.ISettings {
     private KeepInvPolicy bindingItemPolicy;
     private Set<String> noGodWorlds = new HashSet<>();
     private boolean registerBackInListener;
+    private List<List<String>> backInListenerIgnoreList = new ArrayList<>();
     private boolean disableItemPickupWhileAfk;
     private long teleportInvulnerabilityTime;
     private boolean teleportInvulnerability;
@@ -805,6 +806,7 @@ public class Settings implements net.ess3.api.ISettings {
         teleportInvulnerability = _isTeleportInvulnerability();
         disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();
         registerBackInListener = _registerBackInListener();
+        backInListenerIgnoreList = _getBackInListenerIgnoreList();
         cancelAfkOnInteract = _cancelAfkOnInteract();
         cancelAfkOnMove = _cancelAfkOnMove();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
@@ -1419,6 +1421,31 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean registerBackInListener() {
         return registerBackInListener;
+    }
+
+    @Override
+    public List<List<String>> getBackInListenerIgnoreList() {
+        return backInListenerIgnoreList;
+    }
+
+    private List<List<String>> _getBackInListenerIgnoreList() {
+        List<List<String>> ignoreList = new ArrayList<>();
+
+        for (String entry : config.getList("back-in-listener-ignore-list", String.class)) {
+            List<String> ignoreEntry = new ArrayList<>();
+
+            for (String keyword : entry.split(",")) {
+                keyword = keyword.trim();
+
+                if (!keyword.isEmpty())
+                    ignoreEntry.add(keyword.toLowerCase());
+            }
+
+            if (!ignoreEntry.isEmpty())
+                ignoreList.add(ignoreEntry);
+        }
+
+        return ignoreList;
     }
 
     @Override

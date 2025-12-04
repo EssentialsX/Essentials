@@ -647,6 +647,12 @@ tree-command-range-limit: 300
 # If you set this to true, any plugin that uses teleport will have the previous location registered.
 register-back-in-listener: false
 
+# If some events of a teleportation are to be ignored selectively, they can be described as an entry of this list.
+# For example, the elevators of CraftBook would be "com.sk89q.craftbook.mechanics.Elevator#teleportPlayer".
+# Each entry down below can be made up of comma-separated and case-insensitive keywords, for abbreviation and generality.
+# Thus, "craftbook,elevator" would suffice to match the fully-qualified name mentioned above.
+back-in-listener-ignore-list: []
+
 # The delay, in seconds, before people can cause attack damage after logging in.
 # This prevents players from exploiting the temporary invulnerability they receive upon joining.
 login-attack-delay: 5

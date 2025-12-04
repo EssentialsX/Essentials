@@ -258,6 +258,8 @@ public interface ISettings extends IConf {
 
     boolean registerBackInListener();
 
+    List<List<String>> getBackInListenerIgnoreList();
+
     boolean getDisableItemPickupWhileAfk();
 
     EventPriority getRespawnPriority();
