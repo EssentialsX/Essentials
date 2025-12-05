@@ -695,13 +695,13 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
-    private boolean isTeleportListenerIgnored(StackTraceElement[] stackTrace) {
+    private boolean isTeleportListenerIgnored() {
         List<List<String>> ignoreList = ess.getSettings().getBackInListenerIgnoreList();
 
         if (ignoreList.isEmpty())
             return false;
 
-        for (StackTraceElement stackElement : stackTrace) {
+        for (StackTraceElement stackElement : Thread.currentThread().getStackTrace()) {
             String representation = (stackElement.getClassName() + "#" + stackElement.getMethodName()).toLowerCase();
 
             if (ignoreList.stream().anyMatch(keywords -> keywords.stream().allMatch(representation::contains)))
@@ -719,7 +719,7 @@ public class EssentialsPlayerListener implements Listener {
         }
         final User user = ess.getUser(player);
         if (ess.getSettings().registerBackInListener() && user.isAuthorized("essentials.back.onteleport")) {
-            if (!isTeleportListenerIgnored(Thread.currentThread().getStackTrace()))
+            if (!isTeleportListenerIgnored())
                 user.setLastLocation();
         }
         if (ess.getSettings().isTeleportInvulnerability()) {
