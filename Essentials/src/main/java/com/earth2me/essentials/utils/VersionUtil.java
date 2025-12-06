@@ -67,6 +67,9 @@ public final class VersionUtil {
         builder.put("ml.tcoded.nochatreports.NoChatReportsSpigot", SupportStatus.STUPID_PLUGIN);
         builder.put("me.doclic.noencryption.NoEncryption", SupportStatus.STUPID_PLUGIN);
 
+        // Dangerous hacky "optimization" plugin that breaks EssentialsProtect
+        builder.put("org.virgil.akiasync.AkiAsyncPlugin", SupportStatus.STUPID_PLUGIN);
+
         // Forge - Doesn't support Bukkit
         builder.put("net.minecraftforge.common.MinecraftForge", SupportStatus.UNSTABLE);
         builder.put(make("4?.t734?9(;<.<5(=?t957754t\\02734?9(;<.\\0345(=?"), SupportStatus.UNSTABLE);
