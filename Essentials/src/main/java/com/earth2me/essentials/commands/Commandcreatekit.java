@@ -51,13 +51,14 @@ public class Commandcreatekit extends EssentialsCommand {
             useSerializationProvider = false;
         }
 
-        for (ItemStack is : items) {
+        for (int i = 0; i < items.length; i++) {
+            final ItemStack is = items[i];
             if (is != null && is.getType() != null && is.getType() != Material.AIR) {
                 final String serialized;
                 if (useSerializationProvider) {
-                    serialized = "@" + Base64Coder.encodeLines(serializationProvider.serializeItem(is));
+                    serialized = "slot:" + i + " @" + Base64Coder.encodeLines(serializationProvider.serializeItem(is));
                 } else {
-                    serialized = ess.getItemDb().serialize(is);
+                    serialized = "slot:" + i + " " + ess.getItemDb().serialize(is);
                 }
                 list.add(serialized);
             }
