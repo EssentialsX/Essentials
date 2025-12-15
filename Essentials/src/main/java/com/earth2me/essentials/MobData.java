@@ -82,6 +82,7 @@ public enum MobData {
     SADDLE_HORSE("saddle", EntityType.HORSE, Data.HORSESADDLE, true),
     GOLD_ARMOR_HORSE("goldarmor", EntityType.HORSE, EnumUtil.getMaterial("GOLDEN_HORSE_ARMOR", "GOLD_BARDING"), true),
     DIAMOND_ARMOR_HORSE("diamondarmor", EntityType.HORSE, EnumUtil.getMaterial("DIAMOND_HORSE_ARMOR", "DIAMOND_BARDING"), true),
+    NETHERITE_HORSE_ARMOR("netheritearmor", EntityType.HORSE, EnumUtil.getMaterial("NETHERITE_HORSE_ARMOR"), true),
     ARMOR_HORSE("armor", EntityType.HORSE, EnumUtil.getMaterial("IRON_HORSE_ARMOR", "IRON_BARDING"), true),
     SIAMESE_CAT("siamese", MobCompat.CAT, MobCompat.CatType.SIAMESE, true),
     WHITE_CAT("white", MobCompat.CAT, MobCompat.CatType.WHITE, false),
@@ -231,6 +232,11 @@ public enum MobData {
     TEMPERATE_PIG("temperate", Pig.class, "pig:TEMPERATE", true),
     WARM_PIG("warm", Pig.class, "pig:WARM", true),
     COLD_PIG("cold", Pig.class, "pig:COLD", true),
+    SADDLE_CAMEL_HUSK("saddle", MobCompat.CAMEL_HUSK, Data.CAMELHUSKSADDLE, true),
+    TEMPERATE_ZOMBIE_NAUTILUS("temperate", MobCompat.ZOMBIE_NAUTILUS, "zombienautilus:TEMPERATE", true),
+    WARM_ZOMBIE_NAUTILUS("warm", MobCompat.ZOMBIE_NAUTILUS, "zombienautilus:WARM", true),
+    SADDLE_NAUTILUS("saddle", MobCompat.NAUTILUS, Data.NAUTILUSSADDLE, true),
+    SADDLE_ZOMBIE_NAUTILUS("saddle", MobCompat.ZOMBIE_NAUTILUS, Data.NAUTILUSSADDLE, true)
     ;
 
     final private String nickname;
@@ -411,6 +417,12 @@ public enum MobData {
             ((Goat) spawned).setScreaming(true);
         } else if (this.value.equals(Data.CAMELSADDLE)) {
             MobCompat.setCamelSaddle(spawned, target);
+        } else if (this.value.equals(Data.CAMELHUSKSADDLE)) {
+            MobCompat.setCamelSaddle(spawned, target);
+        } else if (this.value.equals(Data.NAUTILUSSADDLE)) {
+            MobCompat.setNautilusSaddle(spawned, target);
+        } else if (this.value.equals(Data.ZOMBIENAUTILUSSADDLE)) {
+            MobCompat.setNautilusSaddle(spawned, target);
         } else if (this.value instanceof MobCompat.BoatVariant) {
             MobCompat.setBoatVariant(spawned, (MobCompat.BoatVariant) this.value);
         } else if (this.value instanceof String) {
@@ -461,6 +473,9 @@ public enum MobData {
                 case "pig":
                     MobCompat.setPigVariant(spawned, split[1]);
                     break;
+                case "zombienautilus":
+                    MobCompat.setZombieNautilusVariant(spawned, split[1]);
+                    break;
             }
         } else {
             Essentials.getWrappedLogger().warning("Unknown mob data type: " + this.toString());
@@ -486,5 +501,8 @@ public enum MobData {
         FISH_PATTERN_COLOR,
         GOAT_SCREAMING,
         CAMELSADDLE,
+        CAMELHUSKSADDLE,
+        NAUTILUSSADDLE,
+        ZOMBIENAUTILUSSADDLE,
     }
 }
