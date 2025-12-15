@@ -1,10 +1,10 @@
 package net.essentialsx.api.v2.events;
 
 import com.earth2me.essentials.CommandSource;
+import com.google.common.base.Preconditions;
 import net.ess3.api.IUser;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
@@ -12,40 +12,25 @@ import java.math.BigDecimal;
 /**
  * Fired when a transaction (e.g. /pay) is about to be handled.
  */
-public class PreTransactionEvent extends Event implements Cancellable {
+public class PreTransactionEvent extends TransactionEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
-    private final CommandSource requester;
-    private final IUser target;
-    private final BigDecimal amount;
     private boolean cancelled;
 
     public PreTransactionEvent(final CommandSource requester, final IUser target, final BigDecimal amount) {
-        super(!Bukkit.isPrimaryThread());
-        this.requester = requester;
-        this.target = target;
-        this.amount = amount;
+        super(!Bukkit.isPrimaryThread(), requester, target, amount);
     }
 
     /**
-     * @return the user who initiated the transaction
+     * Sets the new amount of this transaction event.
+     * Note that the new amount will still be subtracted from the requester's bank.
+     * @param decimal the new amount
      */
-    public CommandSource getRequester() {
-        return requester;
-    }
+    public void setAmount(final BigDecimal decimal) {
+        Preconditions.checkNotNull(decimal, "decimal cannot be null");
+        Preconditions.checkArgument(decimal.compareTo(BigDecimal.ZERO) >= 0, "decimal cannot be negative");
 
-    /**
-     * @return the user who received the money
-     */
-    public IUser getTarget() {
-        return target;
-    }
-
-    /**
-     * @return the amount of money transacted
-     */
-    public BigDecimal getAmount() {
-        return amount;
+        this.amount = decimal;
     }
 
     @Override
