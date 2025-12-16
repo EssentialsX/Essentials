@@ -22,8 +22,9 @@ public class PreTransactionEvent extends TransactionEvent implements Cancellable
     }
 
     /**
-     * Sets the new amount of this transaction event.
-     * Note that the new amount will still be subtracted from the requester's bank.
+     * Sets the amount to be subtracted from the requester's balance.
+     * <p>
+     * Note: Changing this amount will not verify the requester actually has enough balance to complete the transaction.
      * @param decimal the new amount
      */
     public void setAmount(final BigDecimal decimal) {

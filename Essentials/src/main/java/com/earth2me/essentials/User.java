@@ -277,12 +277,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (preTransactionEvent.isCancelled()) {
                 return;
             }
+            final BigDecimal transactionAmount = preTransactionEvent.getAmount();
 
-            setMoney(getMoney().subtract(value), cause);
-            reciever.setMoney(reciever.getMoney().add(value), cause);
-            sendTl("moneySentTo", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)), reciever.getDisplayName());
-            reciever.sendTl("moneyRecievedFrom", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)), getDisplayName());
-            final TransactionEvent transactionEvent = new TransactionEvent(this.getSource(), reciever, value);
+            setMoney(getMoney().subtract(transactionAmount), cause);
+            reciever.setMoney(reciever.getMoney().add(transactionAmount), cause);
+            sendTl("moneySentTo", AdventureUtil.parsed(NumberUtil.displayCurrency(transactionAmount, ess)), reciever.getDisplayName());
+            reciever.sendTl("moneyRecievedFrom", AdventureUtil.parsed(NumberUtil.displayCurrency(transactionAmount, ess)), getDisplayName());
+            final TransactionEvent transactionEvent = new TransactionEvent(this.getSource(), reciever, transactionAmount);
             ess.getServer().getPluginManager().callEvent(transactionEvent);
         } else {
             throw new ChargeException("notEnoughMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)));
