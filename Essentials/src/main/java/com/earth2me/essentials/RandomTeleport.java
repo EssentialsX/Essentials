@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.provider.BiomeKeyProvider;
+import net.ess3.provider.BiomeNameProvider;
 import net.ess3.provider.WorldInfoProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -68,6 +69,8 @@ public class RandomTeleport implements IConf {
     public void setCenter(final String name, final Location center) {
         config.setProperty(locationKey(name, "center"), center);
         config.save();
+        // Clear cached locations since center changed
+        this.getCachedLocations(name).clear();
     }
 
     public double getMinRange(final String name) {
@@ -77,6 +80,8 @@ public class RandomTeleport implements IConf {
     public void setMinRange(final String name, final double minRange) {
         config.setProperty(locationKey(name, "min-range"), minRange);
         config.save();
+        // Clear cached locations since min range changed
+        this.getCachedLocations(name).clear();
     }
 
     public double getMaxRange(final String name) {
@@ -86,6 +91,8 @@ public class RandomTeleport implements IConf {
     public void setMaxRange(final String name, final double maxRange) {
         config.setProperty(locationKey(name, "max-range"), maxRange);
         config.save();
+        // Clear cached locations since max range changed
+        this.getCachedLocations(name).clear();
     }
 
     public String getDefaultLocation() {
@@ -238,8 +245,9 @@ public class RandomTeleport implements IConf {
 
     // Exclude biome if enum or namespaced key matches
     private boolean isExcludedBiome(final Location location) {
+        final BiomeNameProvider biomeNameProvider = ess.provider(BiomeNameProvider.class);
         final Set<String> excluded = getExcludedBiomes();
-        final String enumKey = location.getBlock().getBiome().name().toLowerCase();
+        final String enumKey = biomeNameProvider.getBiomeName(location.getBlock());
         // Try with good old bukkit enum
         if (excluded.contains(enumKey)) {
             return true;

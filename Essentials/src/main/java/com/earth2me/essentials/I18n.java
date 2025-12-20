@@ -92,7 +92,7 @@ public class I18n implements net.ess3.api.II18n {
         if (objects.length == 0) {
             return NODOUBLEMARK.matcher(instance.translate(locale, tlKey)).replaceAll("'");
         } else {
-            return instance.format(tlKey, objects);
+            return instance.format(locale, tlKey, objects);
         }
     }
 
@@ -125,18 +125,7 @@ public class I18n implements net.ess3.api.II18n {
                 if (!loadingBundles.contains(locale)) {
                     loadingBundles.add(locale);
                     BUNDLE_LOADER_EXECUTOR.submit(() -> {
-                        ResourceBundle bundle;
-                        try {
-                            bundle = ResourceBundle.getBundle(MESSAGES, locale, new FileResClassLoader(I18n.class.getClassLoader(), ess), new UTF8PropertiesControl());
-                        } catch (MissingResourceException ex) {
-                            try {
-                                bundle = ResourceBundle.getBundle(MESSAGES, locale, new UTF8PropertiesControl());
-                            } catch (MissingResourceException ex2) {
-                                bundle = NULL_BUNDLE;
-                            }
-                        }
-
-                        loadedBundles.put(locale, bundle);
+                        blockingLoadBundle(locale);
                         synchronized (loadingBundles) {
                             loadingBundles.remove(locale);
                         }
@@ -144,6 +133,23 @@ public class I18n implements net.ess3.api.II18n {
                 }
             }
             return defaultBundle;
+        }
+    }
+
+    public void blockingLoadBundle(final Locale locale) {
+        if (!loadedBundles.containsKey(locale)) {
+            ResourceBundle bundle;
+            try {
+                bundle = ResourceBundle.getBundle(MESSAGES, locale, new FileResClassLoader(I18n.class.getClassLoader(), ess), new UTF8PropertiesControl());
+            } catch (MissingResourceException ex) {
+                try {
+                    bundle = ResourceBundle.getBundle(MESSAGES, locale, new UTF8PropertiesControl());
+                } catch (MissingResourceException ex2) {
+                    bundle = NULL_BUNDLE;
+                }
+            }
+
+            loadedBundles.put(locale, bundle);
         }
     }
 
@@ -160,10 +166,6 @@ public class I18n implements net.ess3.api.II18n {
             }
             return defaultBundle.getString(string);
         }
-    }
-
-    private String format(final String string, final Object... objects) {
-        return format(currentLocale, string, objects);
     }
 
     private String format(final Locale locale, final String string, final Object... objects) {
@@ -281,7 +283,7 @@ public class I18n implements net.ess3.api.II18n {
      * Reads .properties files as UTF-8 instead of ISO-8859-1, which is the default on Java 8/below.
      * Java 9 fixes this by defaulting to UTF-8 for .properties files.
      */
-    private static class UTF8PropertiesControl extends ResourceBundle.Control {
+    private static final class UTF8PropertiesControl extends ResourceBundle.Control {
         public ResourceBundle newBundle(final String baseName, final Locale locale, final String format, final ClassLoader loader, final boolean reload) throws IOException {
             final String resourceName = toResourceName(toBundleName(baseName, locale), "properties");
             ResourceBundle bundle = null;

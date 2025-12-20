@@ -34,6 +34,7 @@ public enum ProtectConfig {
     prevent_fireball_fire("protect.prevent.fireball-fire", false),
     prevent_fireball_playerdmg("protect.prevent.fireball-playerdamage", false),
     prevent_fireball_itemdmg("protect.prevent.fireball-itemdamage", false),
+    prevent_windcharge_explosion("protect.prevent.windcharge-explosion", false),
     prevent_witherskull_explosion("protect.prevent.witherskull-explosion", false),
     prevent_witherskull_playerdmg("protect.prevent.witherskull-playerdamage", false),
     prevent_witherskull_itemdmg("protect.prevent.witherskull-itemdamage", false),

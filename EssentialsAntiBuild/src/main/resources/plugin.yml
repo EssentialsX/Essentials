@@ -1,4 +1,3 @@
-# This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
 name: EssentialsAntiBuild
 main: com.earth2me.essentials.antibuild.EssentialsAntiBuild
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
@@ -10,6 +9,30 @@ depend: [Essentials]
 api-version: "1.13"
 
 permissions:
+  essentials.build:
+    description: Allows the bearer to build
+  essentials.build.place.<material>:
+    description: Allows the bearer to place the specified material
+  essentials.build.break.<material>:
+    description: Allows the bearer to break the specified material
+  essentials.build.interact.<material>:
+    description: Allows the bearer to interact with the specified material
+  essentials.build.craft.<material>:
+    description: Allows the bearer to craft the specified material
+  essentials.build.drop.<material>:
+    description: Allows the bearer to drop the specified material
+  essentials.build.pickup.<material>:
+    description: Allows the bearer to pick up the specified material
+  essentials.protect.alerts:
+    description: Allows the bearer to receive protect alerts
+  essentials.protect.alerts.notrigger:
+    description: Allows the bearer to be exempt from triggering protect alerts
+  essentials.protect.exemptbreak:
+    description: Allows the bearer to be exempt from the break blacklist
+  essentials.protect.exemptplacement:
+    description: Allows the bearer to be exempt from the place blacklist
+  essentials.protect.exemptusage:
+    description: Allows the bearer to be exempt from the usage blacklist
   essentials.exempt.protect:
     default: false
     description: Exempt from EssentialsProtect/EssentialsAntiBuild protections

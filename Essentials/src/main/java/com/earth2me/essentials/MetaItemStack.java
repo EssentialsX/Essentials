@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.items.transform.PluginItemTransformer;
 import com.earth2me.essentials.textreader.BookInput;
 import com.earth2me.essentials.textreader.BookPager;
 import com.earth2me.essentials.textreader.IText;
@@ -20,6 +21,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.Registry;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
@@ -32,6 +35,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.ArmorMeta;
+import org.bukkit.inventory.meta.trim.ArmorTrim;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
+import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -47,6 +54,7 @@ import java.util.regex.Pattern;
 public class MetaItemStack {
     private static final Map<String, DyeColor> colorMap = new HashMap<>();
     private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<>();
+    private static final transient Map<String, PluginItemTransformer> itemTransformers = new HashMap<>();
     private static boolean useNewSkullMethod = true;
 
     static {
@@ -76,6 +84,32 @@ public class MetaItemStack {
 
     public MetaItemStack(final ItemStack stack) {
         this.stack = stack.clone();
+    }
+
+    /**
+     * Registers an item transformer, belonging to a plugin, that can manipulate certain item metadata.
+     * @param key the key for the transformer.
+     * @param itemTransformer the actual transformer.
+     */
+    public static void registerItemTransformer(final String key, final PluginItemTransformer itemTransformer) {
+        //Warn people if they're trying to register over top of someone else.
+        if (itemTransformers.containsKey(key)) {
+            Essentials.getWrappedLogger().log(Level.WARNING, String.format("Plugin transformer registered to \"%s\" attempted to register already existing item transformer \"%s\" belonging to \"%s\"!",
+                    itemTransformer.getPlugin().getName(),
+                    key,
+                    itemTransformers.get(key).getPlugin().getName()));
+            return;
+        }
+
+        itemTransformers.put(key, itemTransformer);
+    }
+
+    /**
+     * Unregisters a certain item transformer under key "key".
+     * @param key the transformer key.
+     */
+    public static void unregisterItemTransformer(final String key) {
+        itemTransformers.remove(key);
     }
 
     private static void setSkullOwner(final IEssentials ess, final ItemStack stack, final String owner) {
@@ -343,8 +377,34 @@ public class MetaItemStack {
             } else {
                 throw new TranslatableException("leatherSyntax");
             }
+        } else if (MaterialUtil.isArmor(stack.getType()) && split.length > 1 && split[0].equalsIgnoreCase("trim")) {
+            final ArmorMeta armorMeta = (ArmorMeta) stack.getItemMeta();
+            final String[] trimData = split[1].split("\\|");
+            final TrimPattern pattern = Registry.TRIM_PATTERN.getOrThrow(NamespacedKey.minecraft(trimData[0].toLowerCase()));
+            final TrimMaterial material = Registry.TRIM_MATERIAL.getOrThrow(NamespacedKey.minecraft(trimData[1].toLowerCase()));
+
+            armorMeta.setTrim(new ArmorTrim(material, pattern));
+
+            stack.setItemMeta(armorMeta);
+        } else if (split.length > 1 && itemTransformers.containsKey(split[0])) {
+            transformItem(split[0], split[1]);
         } else {
             parseEnchantmentStrings(sender, allowUnsafe, split, ess);
+        }
+    }
+
+    private void transformItem(final String key, final String data){
+        final PluginItemTransformer transformer = itemTransformers.get(key);
+
+        //Ignore, the plugin is disabled.
+        if (!transformer.getPlugin().isEnabled()) {
+            return;
+        }
+
+        try {
+            stack = transformer.apply(data, stack);
+        } catch(final Throwable thr) {
+            Essentials.getWrappedLogger().log(Level.SEVERE, String.format("Error applying data \"%s\" to itemstack! Plugin: %s, Key: %s", data, transformer.getPlugin().getName(), key), thr);
         }
     }
 
@@ -549,7 +609,8 @@ public class MetaItemStack {
             } else if (split[0].equalsIgnoreCase("duration") || (allowShortName && split[0].equalsIgnoreCase("d"))) {
                 if (NumberUtil.isInt(split[1])) {
                     validPotionDuration = true;
-                    duration = Integer.parseInt(split[1]) * 20; //Duration is in ticks by default, converted to seconds
+                    final int parsed = Integer.parseInt(split[1]);
+                    duration = parsed == -1 ? -1 : parsed * 20; //Duration is in ticks by default, converted to seconds
                 } else {
                     throw new TranslatableException("invalidPotionMeta", split[1]);
                 }

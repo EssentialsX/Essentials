@@ -35,7 +35,7 @@ jobs:
         ./gradlew build --stacktrace
 
     - name: Publish JUnit report
-      uses: mikepenz/action-junit-report@v4
+      uses: mikepenz/action-junit-report@v5
       if: success() || failure() # Run even if the previous step fails
       with:
         report_paths: '**/build/test-results/test*/TEST-*.xml'
