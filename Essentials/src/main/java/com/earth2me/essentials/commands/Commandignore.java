@@ -29,7 +29,7 @@ public class Commandignore extends EssentialsCommand {
 
         User player;
         try {
-            player = getPlayer(server, args, 0, true, true);
+            player = getPlayer(server, args, 0, false, true);
         } catch (final PlayerNotFoundException ex) {
             player = ess.getOfflineUser(args[0]);
         }
