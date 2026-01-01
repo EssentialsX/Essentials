@@ -27,15 +27,8 @@ public class Commandbalance extends EssentialsCommand {
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 1 && user.isAuthorized("essentials.balance.others")) {
-            final User target = getPlayer(server, args, 0, true, true);
-            if(!target.isVanished() || target.getName().equalsIgnoreCase(args[0])) {
-                user.sendTl("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), AdventureUtil.parsed(NumberUtil.displayCurrency(target.getMoney(), ess)));
-            } else {
-                final String[] targetListFake = new String[1];
-                targetListFake[0] = "-";
-                final User targetFake = getPlayer(server, targetListFake, 0, true, true);
-                user.sendTl("balanceOther", targetFake.isHidden() ? targetFake.getName() : targetFake.getDisplayName(), AdventureUtil.parsed(NumberUtil.displayCurrency(targetFake.getMoney(), ess)));
-            }
+            final User target = getPlayer(server, args, 0, false, true);
+            user.sendTl("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), AdventureUtil.parsed(NumberUtil.displayCurrency(target.getMoney(), ess)));
         } else if (args.length < 2) {
             user.sendTl("balance", AdventureUtil.parsed(NumberUtil.displayCurrency(user.getMoney(), ess)));
         } else {
