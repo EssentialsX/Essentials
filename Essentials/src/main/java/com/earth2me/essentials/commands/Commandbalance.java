@@ -20,7 +20,7 @@ public class Commandbalance extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        final User target = getPlayer(server, args, 0, false, true);
+        final User target = getPlayer(server, args, 0, true, true);
         sender.sendTl("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), AdventureUtil.parsed(NumberUtil.displayCurrency(target.getMoney(), ess)));
     }
 
