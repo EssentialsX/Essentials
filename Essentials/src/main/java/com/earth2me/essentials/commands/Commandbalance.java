@@ -34,8 +34,11 @@ public class Commandbalance extends EssentialsCommand {
                 target = getPlayer(server, args, 0, false, true);
             }
             user.sendTl("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), AdventureUtil.parsed(NumberUtil.displayCurrency(target.getMoney(), ess)));
-        } else if (args.length < 2) {
+        } else if (args.length == 0) {
             user.sendTl("balance", AdventureUtil.parsed(NumberUtil.displayCurrency(user.getMoney(), ess)));
+        } else if (args.length == 1 && !user.isAuthorized("essentials.balance.others")) {
+            Essentials.getWrappedLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("deniedAccessCommand", user.getName())));
+            user.sendTl("noAccessCommand");
         } else {
             throw new NotEnoughArgumentsException();
         }
