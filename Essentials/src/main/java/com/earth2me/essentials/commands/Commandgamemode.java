@@ -85,13 +85,13 @@ public class Commandgamemode extends EssentialsLoopCommand {
     private GameMode matchGameMode(String modeString) throws NotEnoughArgumentsException {
         GameMode mode = null;
         modeString = modeString.toLowerCase();
-        if (modeString.equalsIgnoreCase("gmc") || modeString.equalsIgnoreCase("egmc") || modeString.contains("creat") || modeString.equalsIgnoreCase("1") || modeString.equalsIgnoreCase("c")) {
+        if (modeString.equalsIgnoreCase("gmc") || modeString.equalsIgnoreCase("egmc") || modeString.equalsIgnoreCase("gm1") || modeString.equalsIgnoreCase("egm1") || modeString.contains("creat") || modeString.equalsIgnoreCase("1") || modeString.equalsIgnoreCase("c")) {
             mode = GameMode.CREATIVE;
-        } else if (modeString.equalsIgnoreCase("gms") || modeString.equalsIgnoreCase("egms") || modeString.contains("survi") || modeString.equalsIgnoreCase("0") || modeString.equalsIgnoreCase("s")) {
+        } else if (modeString.equalsIgnoreCase("gms") || modeString.equalsIgnoreCase("egms") || modeString.equalsIgnoreCase("gm0") || modeString.equalsIgnoreCase("egm0") || modeString.contains("survi") || modeString.equalsIgnoreCase("0") || modeString.equalsIgnoreCase("s")) {
             mode = GameMode.SURVIVAL;
-        } else if (modeString.equalsIgnoreCase("gma") || modeString.equalsIgnoreCase("egma") || modeString.contains("advent") || modeString.equalsIgnoreCase("2") || modeString.equalsIgnoreCase("a")) {
+        } else if (modeString.equalsIgnoreCase("gma") || modeString.equalsIgnoreCase("egma") || modeString.equalsIgnoreCase("gm2") || modeString.equalsIgnoreCase("egm2") || modeString.contains("advent") || modeString.equalsIgnoreCase("2") || modeString.equalsIgnoreCase("a")) {
             mode = GameMode.ADVENTURE;
-        } else if (modeString.equalsIgnoreCase("gmsp") || modeString.equalsIgnoreCase("egmsp") || modeString.contains("spec") || modeString.equalsIgnoreCase("3") || modeString.equalsIgnoreCase("sp")) {
+        } else if (modeString.equalsIgnoreCase("gmsp") || modeString.equalsIgnoreCase("egmsp") || modeString.equalsIgnoreCase("gm3") || modeString.equalsIgnoreCase("egm3") || modeString.contains("spec") || modeString.equalsIgnoreCase("3") || modeString.equalsIgnoreCase("sp")) {
             mode = GameMode.SPECTATOR;
         } else if (!modeString.equalsIgnoreCase("gmt") && !modeString.equalsIgnoreCase("egmt") && !modeString.contains("toggle") && !modeString.contains("cycle") && !modeString.equalsIgnoreCase("t")) {
             throw new NotEnoughArgumentsException();
