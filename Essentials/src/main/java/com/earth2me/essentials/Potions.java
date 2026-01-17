@@ -161,6 +161,14 @@ public final class Potions {
             ALIASPOTIONS.put("wind", PotionEffectType.WIND_CHARGED);
         } catch (final Throwable ignored) {
         }
+
+        // 1.21.11
+        try {
+            POTIONS.put("breathofthenautilus", PotionEffectType.BREATH_OF_THE_NAUTILUS);
+            ALIASPOTIONS.put("nautilusbreath", PotionEffectType.BREATH_OF_THE_NAUTILUS);
+            ALIASPOTIONS.put("nautilus", PotionEffectType.BREATH_OF_THE_NAUTILUS);
+        } catch (final Throwable ignored) {
+        }
     }
 
     private Potions() {

@@ -262,12 +262,23 @@ public class EssentialsAntiBuildListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onItemFrameInteract(final PlayerInteractEntityEvent event) {
+    public void onPlayerInteractEntity(final PlayerInteractEntityEvent event) {
         if (event.getPlayer().hasMetadata("NPC")) {
             return;
         }
 
         final User user = ess.getUser(event.getPlayer());
+
+        final ItemStack hand = event.getPlayer().getInventory().getItem(event.getHand());
+        if (hand != null && hand.getType() == Material.SHEARS) {
+            if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !metaPermCheck(user, "interact", hand)) {
+                if (ess.getSettings().warnOnBuildDisallow()) {
+                    user.sendTl("antiBuildUse", hand.getType().toString());
+                }
+                event.setCancelled(true);
+                return;
+            }
+        }
 
         if (!(event.getRightClicked() instanceof ItemFrame)) {
             return;
@@ -295,12 +306,23 @@ public class EssentialsAntiBuildListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onArmorStandInteract(final PlayerInteractAtEntityEvent event) {
+    public void onPlayerInteractAtEntity(final PlayerInteractAtEntityEvent event) {
         if (event.getPlayer().hasMetadata("NPC")) {
             return;
         }
 
         final User user = ess.getUser(event.getPlayer());
+
+        final ItemStack hand = event.getPlayer().getInventory().getItem(event.getHand());
+        if (hand != null && hand.getType() == Material.SHEARS) {
+            if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !metaPermCheck(user, "interact", hand)) {
+                if (ess.getSettings().warnOnBuildDisallow()) {
+                    user.sendTl("antiBuildUse", hand.getType().toString());
+                }
+                event.setCancelled(true);
+                return;
+            }
+        }
 
         if (!(event.getRightClicked() instanceof ArmorStand)) {
             return;

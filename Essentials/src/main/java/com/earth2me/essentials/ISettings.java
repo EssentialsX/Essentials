@@ -414,6 +414,8 @@ public interface ISettings extends IConf {
 
     boolean logCommandBlockCommands();
 
+    boolean logConsoleCommands();
+
     Set<Predicate<String>> getNickBlacklist();
 
     double getMaxProjectileSpeed();
@@ -445,6 +447,8 @@ public interface ISettings extends IConf {
     BigDecimal getBaltopMinBalance();
 
     long getBaltopMinPlaytime();
+
+    int getBaltopEntryLimit();
 
     enum KeepInvPolicy {
         KEEP,

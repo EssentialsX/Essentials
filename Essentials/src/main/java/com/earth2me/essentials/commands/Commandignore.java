@@ -27,15 +27,7 @@ public class Commandignore extends EssentialsCommand {
             return;
         }
 
-        User player;
-        try {
-            player = getPlayer(server, args, 0, true, true);
-        } catch (final PlayerNotFoundException ex) {
-            player = ess.getOfflineUser(args[0]);
-        }
-        if (player == null) {
-            throw new PlayerNotFoundException();
-        }
+        final User player = getPlayer(server, args, 0, false, true);
 
         if (player.isIgnoreExempt()) {
             user.sendTl("ignoreExempt");

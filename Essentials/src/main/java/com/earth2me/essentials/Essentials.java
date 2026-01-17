@@ -45,6 +45,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
@@ -570,6 +571,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         Trade.closeLog();
         getUsers().shutdown();
 
+        EssentialsConfiguration.shutdownExecutor();
+
         HandlerList.unregisterAll(this);
     }
 
@@ -744,7 +747,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     LOGGER.log(Level.INFO, "CommandBlock at " + bSenderBlock.getX() + "," + bSenderBlock.getY() + "," + bSenderBlock.getZ() + " issued server command: /" + commandLabel + " " + EssentialsCommand.getFinalArg(args, 0));
                 }
             } else if (user == null) {
-                LOGGER.log(Level.INFO, cSender.getName()+ " issued server command: /" + commandLabel + " " + EssentialsCommand.getFinalArg(args, 0));
+                if (getSettings().logConsoleCommands()) {
+                    LOGGER.log(Level.INFO, cSender.getName()+ " issued server command: /" + commandLabel + " " + EssentialsCommand.getFinalArg(args, 0));
+                }
             }
 
             final CommandSource sender = new CommandSource(this, cSender);
@@ -957,13 +962,23 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         final User user;
         Player exPlayer;
 
+        if (sourceUser != null && (searchTerm.equals("@p") || searchTerm.equals("@s"))) {
+            return sourceUser;
+        }
+
         try {
             exPlayer = server.getPlayer(UUID.fromString(searchTerm));
         } catch (final IllegalArgumentException ex) {
+            // Prefer exact online name match first always
             if (getOffline) {
+                // When offline lookups are allowed, do not pick partial online matches here; allow exact offline match later
                 exPlayer = server.getPlayerExact(searchTerm);
             } else {
-                exPlayer = server.getPlayer(searchTerm);
+                exPlayer = server.getPlayerExact(searchTerm);
+                if (exPlayer == null) {
+                    // Only consider partial/prefix online match when not explicitly doing an offline-capable lookup
+                    exPlayer = server.getPlayer(searchTerm);
+                }
             }
         }
 
@@ -1000,6 +1015,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
             }
         } else {
+            // Prefer exact username match among the matched players
+            for (final Player player : matches) {
+                if (player.getName().equalsIgnoreCase(searchTerm)) {
+                    final User userMatch = getUser(player);
+                    if (getHidden || canInteractWith(sourceUser, userMatch)) {
+                        return userMatch;
+                    }
+                }
+            }
+            // Then prefer display name/prefix match as before
             for (final Player player : matches) {
                 final User userMatch = getUser(player);
                 if (userMatch.getDisplayName().startsWith(searchTerm) && (getHidden || canInteractWith(sourceUser, userMatch))) {

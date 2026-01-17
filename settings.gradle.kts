@@ -1,5 +1,11 @@
 dependencyResolutionManagement {
     repositories {
+        maven("https://maven-prs.papermc.io/Paper/pr13194") {
+            name = "Maven for PR #13194" // https://github.com/PaperMC/Paper/pull/13194
+            mavenContent {
+                includeModule("io.papermc.paper", "paper-api")
+            }
+        }
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://hub.spigotmc.org/nexus/content/groups/public/") {
             content {
@@ -8,8 +14,10 @@ dependencyResolutionManagement {
             }
         }
         maven("https://jitpack.io") {
-            content { includeGroup("com.github.milkbowl") }
-            content { includeGroup("com.github.MinnDevelopment") }
+            content {
+                includeGroup("com.github.milkbowl")
+                includeGroup("com.github.MinnDevelopment")
+            }
         }
         maven("https://repo.codemc.org/repository/maven-public") {
             content { includeGroup("org.bstats") }
@@ -19,11 +27,6 @@ dependencyResolutionManagement {
         }
         maven("https://libraries.minecraft.net/") {
             content { includeGroup("com.mojang") }
-        }
-        mavenCentral {
-            content { includeGroup("net.dv8tion") }
-            content { includeGroup("net.kyori") }
-            content { includeGroup("org.apache.logging.log4j") }
         }
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
