@@ -16,7 +16,7 @@ public class MooCommand extends EssentialsTreeNode {
     private static final String[] PLAYER_MOO = new String[] {"            (__)", "            (oo)", "   /------\\/", "  /  |      | |", " *  /\\---/\\", "    ~~    ~~", "....\"Have you mooed today?\"..."};
 
     public MooCommand() {
-        super("moo");
+        super(new String[]{"moo"}, true);
     }
 
     @Override
