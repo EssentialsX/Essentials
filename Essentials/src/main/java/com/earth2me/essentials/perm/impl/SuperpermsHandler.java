@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -119,6 +120,11 @@ public class SuperpermsHandler implements IPermissionsHandler {
     @Override
     public boolean isPermissionSet(final Player base, final String node) {
         return base.isPermissionSet(node);
+    }
+
+    @Override
+    public boolean isOfflinePermissionSet(UUID uuid, String node) {
+        return false;
     }
 
     @Override

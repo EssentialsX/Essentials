@@ -1098,7 +1098,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public String playerTl(String tlKey, Object... args) {
         if (ess.getSettings().isPerPlayerLocale()) {
             final PlayerLocaleProvider provider = ess.provider(PlayerLocaleProvider.class);
-            return tlLocale(getPlayerLocale(provider.getLocale(base)), tlKey, args);
+            final Locale locale = base != null ? getPlayerLocale(provider.getLocale(base)) : playerLocale;
+            if (locale != null) {
+                return tlLocale(locale, tlKey, args);
+            }
         }
         return tlLiteral(tlKey, args);
     }

@@ -125,18 +125,7 @@ public class I18n implements net.ess3.api.II18n {
                 if (!loadingBundles.contains(locale)) {
                     loadingBundles.add(locale);
                     BUNDLE_LOADER_EXECUTOR.submit(() -> {
-                        ResourceBundle bundle;
-                        try {
-                            bundle = ResourceBundle.getBundle(MESSAGES, locale, new FileResClassLoader(I18n.class.getClassLoader(), ess), new UTF8PropertiesControl());
-                        } catch (MissingResourceException ex) {
-                            try {
-                                bundle = ResourceBundle.getBundle(MESSAGES, locale, new UTF8PropertiesControl());
-                            } catch (MissingResourceException ex2) {
-                                bundle = NULL_BUNDLE;
-                            }
-                        }
-
-                        loadedBundles.put(locale, bundle);
+                        blockingLoadBundle(locale);
                         synchronized (loadingBundles) {
                             loadingBundles.remove(locale);
                         }
@@ -144,6 +133,23 @@ public class I18n implements net.ess3.api.II18n {
                 }
             }
             return defaultBundle;
+        }
+    }
+
+    public void blockingLoadBundle(final Locale locale) {
+        if (!loadedBundles.containsKey(locale)) {
+            ResourceBundle bundle;
+            try {
+                bundle = ResourceBundle.getBundle(MESSAGES, locale, new FileResClassLoader(I18n.class.getClassLoader(), ess), new UTF8PropertiesControl());
+            } catch (MissingResourceException ex) {
+                try {
+                    bundle = ResourceBundle.getBundle(MESSAGES, locale, new UTF8PropertiesControl());
+                } catch (MissingResourceException ex2) {
+                    bundle = NULL_BUNDLE;
+                }
+            }
+
+            loadedBundles.put(locale, bundle);
         }
     }
 

@@ -13,7 +13,9 @@ shadowJar {
         include (dependency('com.maxmind.geoip2:geoip2'))
         include (dependency('com.maxmind.db:maxmind-db'))
         include (dependency('javatar:javatar'))
-        include (dependency('com.fasterxml.jackson.core:'))
+        include (dependency('com.fasterxml.jackson.core:jackson-core'))
+        include (dependency('com.fasterxml.jackson.core:jackson-annotations'))
+        include (dependency('com.fasterxml.jackson.core:jackson-databind'))
     }
 
     relocate 'com.maxmind', 'com.earth2me.essentials.geoip.libs.maxmind'

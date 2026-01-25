@@ -14,8 +14,8 @@ dependencies {
     implementation 'org.checkerframework:checker-qual:3.49.0'
     implementation 'nu.studer:java-ordered-properties:1.0.4'
 
-    implementation 'net.kyori:adventure-api:4.24.0'
-    implementation 'net.kyori:adventure-text-minimessage:4.24.0'
+    implementation 'net.kyori:adventure-api:4.25.0'
+    implementation 'net.kyori:adventure-text-minimessage:4.25.0'
     implementation 'net.kyori:adventure-platform-bukkit:4.4.1'
 
     // Providers
@@ -76,6 +76,17 @@ shadowJar {
         include (project(':providers:NMSReflectionProvider'))
         include (project(':providers:1_8Provider'))
         include (project(':providers:1_12Provider'))
+
+        // Paper in-dev adventure versions (for snapshot/pre-releases)
+        include (dependency('io.papermc.adventure:adventure-api'))
+        include (dependency('io.papermc.adventure:adventure-key'))
+        include (dependency('io.papermc.adventure:adventure-nbt'))
+        include (dependency('io.papermc.adventure:adventure-text-serializer-gson'))
+        include (dependency('io.papermc.adventure:adventure-text-serializer-gson-legacy-impl'))
+        include (dependency('io.papermc.adventure:adventure-text-serializer-json'))
+        include (dependency('io.papermc.adventure:adventure-text-serializer-json-legacy-impl'))
+        include (dependency('io.papermc.adventure:adventure-text-serializer-legacy'))
+        include (dependency('io.papermc.adventure:adventure-text-minimessage'))
     }
     relocate 'io.papermc.lib', 'com.earth2me.essentials.paperlib'
     relocate 'org.bstats', 'com.earth2me.essentials.libs.bstats'
