@@ -7,9 +7,11 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.ess3.api.IUser;
+import net.essentialsx.api.v2.events.discord.DiscordMemberUpdateEvent;
 import net.essentialsx.api.v2.events.discord.DiscordRelayEvent;
 import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.JDADiscordService;
@@ -137,5 +139,17 @@ public class DiscordListener extends ListenerAdapter {
         for (final IUser essUser : viewers) {
             essUser.sendMessage(formattedMessage);
         }
+    }
+
+    @Override
+    public void onGuildMemberUpdateNickname(@NotNull GuildMemberUpdateNicknameEvent event) {
+        if (DiscordMemberUpdateEvent.getHandlerList().getRegisteredListeners().length == 0) {
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new DiscordMemberUpdateEvent(
+                new InteractionMemberImpl(event.getMember()),
+                event.getOldNickname(),
+                event.getNewNickname()));
     }
 }

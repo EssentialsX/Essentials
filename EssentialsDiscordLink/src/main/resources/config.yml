@@ -14,6 +14,11 @@
 # - none: Places no restrictions on players for unlinked accounts.
 link-policy: none
 
+# Whether to sync Discord nicknames to Minecraft nicknames.
+# When enabled, linked players will have their Minecraft nickname set to their Discord nickname (or username if no nickname).
+# This syncs on link, unlink, and whenever their Discord nickname changes.
+link-nicknames: false
+
 # Whether to ignore Discord messages from unlinked members and hide them from Minecraft chat.
 block-unlinked-chat: false
 
