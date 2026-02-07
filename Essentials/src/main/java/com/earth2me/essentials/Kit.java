@@ -195,9 +195,12 @@ public class Kit {
 
                 int itemSlot = -1;
                 if (kitItem.startsWith("slot:")) {
-                    final String slotStr = kitItem.substring("slot:".length(), kitItem.indexOf(" "));
-                    itemSlot = NumberUtil.isInt(slotStr) ? Integer.parseInt(slotStr) : -1;
-                    kitItem = kitItem.substring(kitItem.indexOf(" ") + 1);
+                    final int spaceIndex = kitItem.indexOf(" ");
+                    if (spaceIndex != -1) {
+                        final String slotStr = kitItem.substring("slot:".length(), spaceIndex);
+                        itemSlot = NumberUtil.isInt(slotStr) ? Integer.parseInt(slotStr) : -1;
+                        kitItem = kitItem.substring(spaceIndex + 1);
+                    }
                 }
 
                 final ItemStack stack;
@@ -237,11 +240,11 @@ public class Kit {
             final int maxStackSize = user.isAuthorized("essentials.oversizedstacks") ? ess.getSettings().getOversizedStackSize() : 0;
             final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
 
-            final KitPreExpandItemsEvent itemsEvent = new KitPreExpandItemsEvent(user, kitName, itemList);
-            Bukkit.getPluginManager().callEvent(itemsEvent);
-
             final List<ItemStack> totalItems = new ArrayList<>(itemList);
             totalItems.addAll(itemsWithSlot.values());
+
+            final KitPreExpandItemsEvent itemsEvent = new KitPreExpandItemsEvent(user, kitName, totalItems);
+            Bukkit.getPluginManager().callEvent(itemsEvent);
             final ItemStack[] totalItemsArray = totalItems.toArray(new ItemStack[0]);
             if (!isDropItemsIfFull && !Inventories.hasSpace(user.getBase(), maxStackSize, autoEquip, totalItemsArray)) {
                 user.sendTl("kitInvFullNoDrop");
