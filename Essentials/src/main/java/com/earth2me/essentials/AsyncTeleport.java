@@ -190,8 +190,8 @@ public class AsyncTeleport implements IAsyncTeleport {
             if (LocationUtil.isBlockUnsafeForUser(ess, teleportee, chunk.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
                 if (ess.getSettings().isTeleportSafetyEnabled()) {
                     if (ess.getSettings().isForceDisableTeleportSafety()) {
-                        //The chunk we're teleporting to is 100% going to be loaded here, no need to teleport async.
-                        teleportee.getBase().teleport(loc, cause);
+                        //Use async teleport to avoid thread-affinity issues (e.g. parallel world ticking).
+                        PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
                     } else {
                         try {
                             //There's a chance the safer location is outside the loaded chunk so still teleport async here.
@@ -207,8 +207,8 @@ public class AsyncTeleport implements IAsyncTeleport {
                 }
             } else {
                 if (ess.getSettings().isForceDisableTeleportSafety()) {
-                    //The chunk we're teleporting to is 100% going to be loaded here, no need to teleport async.
-                    teleportee.getBase().teleport(loc, cause);
+                    //Use async teleport to avoid thread-affinity issues (e.g. parallel world ticking).
+                    PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
                 } else {
                     if (ess.getSettings().isTeleportToCenterLocation()) {
                         loc = LocationUtil.getRoundedDestination(loc);
