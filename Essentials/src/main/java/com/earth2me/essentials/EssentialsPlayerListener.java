@@ -651,7 +651,7 @@ public class EssentialsPlayerListener implements Listener {
                     event.allow();
                     return;
                 }
-                if (!event.isAllowed() && ess.getSettings().isCustomServerFullMessage()) {
+                if ((event.getResult() != PlayerLoginEvent.Result.ALLOWED) && ess.getSettings().isCustomServerFullMessage()) {
                     event.disallow(PlayerLoginEvent.Result.KICK_FULL, tlLiteral("serverFull"));
                 }
             }
