@@ -841,7 +841,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 && !isAuthorized("essentials.afk.kickexempt")) {
             lastActivity = 0;
             final double kickTime = autoafktimeout / 60.0;
-            
+
             // If `afk-timeout-command` in config.yml is empty, use default Essentials kicking behaviour instead of executing a command.
             if (ess.getSettings().getAfkTimeoutCommands().isEmpty()) {
                 this.getBase().kickPlayer(AdventureUtil.miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
@@ -1112,7 +1112,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public Locale getPlayerLocale(final String locale) {
-        if (locale.equals(lastLocaleString)) {
+        if (locale == null || locale.equals(lastLocaleString)) {
             return playerLocale;
         }
         lastLocaleString = locale;
