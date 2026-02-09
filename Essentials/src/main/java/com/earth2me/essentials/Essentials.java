@@ -428,6 +428,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             PermissionsDefaults.registerAllBackDefaults();
             PermissionsDefaults.registerAllHatDefaults();
 
+            // Load and set the correct Console.DISPLAY_NAME
+            // Do not remove this line although it's already set in
+            // Essentials/src/main/java/com/earth2me/essentials/Console.java,
+            // this is required to be set again after the correct initialization process.
+            Console.DISPLAY_NAME = tlLiteral("consoleName");
+
             if (!TESTING) {
                 updateChecker = new UpdateChecker(this);
                 runTaskAsynchronously(() -> {
