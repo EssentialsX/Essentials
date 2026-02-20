@@ -142,6 +142,35 @@ public final class Inventories {
         return addItem(player, maxStack, false, items);
     }
 
+    public static ItemStack addItem(final Player player, final int maxStack, ItemStack item, int slot) {
+        final int itemMax = Math.max(maxStack, item.getMaxStackSize());
+
+        ItemStack existing = player.getInventory().getItem(slot);
+        final int existingAmount;
+        if (isEmpty(existing)) {
+            existing = item.clone();
+            existingAmount = 0;
+        } else {
+            existingAmount = existing.getAmount();
+        }
+
+        if (!item.isSimilar(existing)) {
+            return item;
+        }
+
+        final int amount = item.getAmount();
+        if (amount + existingAmount <= itemMax) {
+            existing.setAmount(amount + existingAmount);
+            player.getInventory().setItem(slot, existing);
+            return null;
+        }
+
+        existing.setAmount(itemMax);
+        player.getInventory().setItem(slot, existing);
+        item.setAmount(amount + existingAmount - itemMax);
+        return item;
+    }
+
     public static Map<Integer, ItemStack> addItem(final Player player, final int maxStack, final boolean allowArmor, ItemStack... items) {
         items = normalizeItems(cloneItems(items));
         final Map<Integer, ItemStack> leftover = new HashMap<>();
