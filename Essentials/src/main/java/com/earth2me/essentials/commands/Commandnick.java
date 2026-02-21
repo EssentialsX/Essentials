@@ -48,7 +48,8 @@ public class Commandnick extends EssentialsLoopCommand {
             target.sendTl("nickNoMore");
         } else if (target.getName().equalsIgnoreCase(nick)) {
             setNickname(server, sender, target, nick);
-            if (!target.getDisplayName().equalsIgnoreCase(target.getDisplayName())) {
+            final String strippedDisplay = FormatUtil.stripFormat(target.getDisplayName());
+            if (strippedDisplay != null && !strippedDisplay.equalsIgnoreCase(target.getName())) {
                 target.sendTl("nickNoMore");
             }
             target.sendTl("nickSet", ess.getSettings().changeDisplayName() ? target.getDisplayName() : nick);
