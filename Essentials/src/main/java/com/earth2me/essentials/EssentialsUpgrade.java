@@ -1028,10 +1028,6 @@ public class EssentialsUpgrade {
     }
 
     public void upgradeLang() {
-        if (Essentials.TESTING) {
-            return;
-        }
-
         if (doneFile.getBoolean("updateLegacyToAdventure", false)) {
             return;
         }
