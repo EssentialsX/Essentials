@@ -2,7 +2,6 @@ package net.essentialsx.discordlink;
 
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.config.EssentialsConfiguration;
-
 import java.io.File;
 import java.util.Map;
 
@@ -22,6 +21,10 @@ public class DiscordLinkSettings implements IConf {
 
     public LinkPolicy getLinkPolicy() {
         return linkPolicy;
+    }
+
+    public boolean isNicknameLinked() {
+        return config.getBoolean("link-nicknames", false);
     }
 
     public boolean isBlockUnlinkedChat() {
@@ -68,6 +71,17 @@ public class DiscordLinkSettings implements IConf {
         return config.getStringMap("role-sync.roles");
     }
 
+    @Override
+    public void reloadConfig() {
+        config.load();
+
+        linkPolicy = LinkPolicy.fromName(config.getString("link-policy", "none"));
+        roleSyncGroups = _getRoleSyncGroups();
+        roleSyncRoles = _getRoleSyncRoles();
+
+        plugin.onReload();
+    }
+
     public enum LinkPolicy {
         KICK,
         FREEZE,
@@ -81,16 +95,5 @@ public class DiscordLinkSettings implements IConf {
             }
             return LinkPolicy.NONE;
         }
-    }
-
-    @Override
-    public void reloadConfig() {
-        config.load();
-
-        linkPolicy = LinkPolicy.fromName(config.getString("link-policy", "none"));
-        roleSyncGroups = _getRoleSyncGroups();
-        roleSyncRoles = _getRoleSyncRoles();
-
-        plugin.onReload();
     }
 }

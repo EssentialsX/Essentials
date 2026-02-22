@@ -1,11 +1,16 @@
 package net.essentialsx.discordlink.listeners;
 
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.IUser;
+import net.ess3.api.events.NickChangeEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import net.essentialsx.api.v2.events.UserMailEvent;
+import net.essentialsx.api.v2.events.discord.DiscordMemberUpdateEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.events.discordlink.DiscordLinkStatusChangeEvent;
+import net.essentialsx.api.v2.services.discord.InteractionMember;
 import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.util.MessageUtil;
 import net.essentialsx.discordlink.DiscordLinkSettings;
@@ -19,6 +24,8 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.UUID;
+
 import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class LinkBukkitListener implements Listener {
@@ -26,6 +33,31 @@ public class LinkBukkitListener implements Listener {
 
     public LinkBukkitListener(EssentialsDiscordLink ess) {
         this.ess = ess;
+    }
+
+    /**
+     * Sets the Minecraft nickname for a user based on their Discord member info.
+     * Must be called from the main thread.
+     *
+     * @param user     the Essentials user
+     * @param nickname the nickname to set, or null to clear
+     */
+    private void syncNickname(final IUser user, final String nickname) {
+        final NickChangeEvent nickEvent = new NickChangeEvent(user, user, nickname);
+        ess.getServer().getPluginManager().callEvent(nickEvent);
+        if (!nickEvent.isCancelled()) {
+            final User essUser = ess.getEss().getUser(user.getUUID());
+            essUser.setNickname(nickname);
+            essUser.setDisplayNick();
+        }
+    }
+
+    /**
+     * Gets the effective nickname from a Discord member (nickname or username).
+     */
+    private String getEffectiveNickname(final InteractionMember member) {
+        final String nickname = member.getNickname();
+        return nickname != null ? nickname : member.getName();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -43,7 +75,9 @@ public class LinkBukkitListener implements Listener {
         final String sanitizedMessage = MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripFormat(event.getMessage().getMessage()));
 
         ess.getApi().getMemberById(discordId).thenAccept(member -> {
-            member.sendPrivateMessage(tlLiteral("discordMailLine", sanitizedName, sanitizedMessage));
+            if (member != null) {
+                member.sendPrivateMessage(tlLiteral("discordMailLine", sanitizedName, sanitizedMessage));
+            }
         });
     }
 
@@ -114,15 +148,28 @@ public class LinkBukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onUserDataLoad(final AsyncUserDataLoadEvent event) {
-        if (ess.getSettings().getLinkPolicy() != DiscordLinkSettings.LinkPolicy.FREEZE) {
-            return;
+        final UUID uuid = event.getUser().getBase().getUniqueId();
+        final String discordId = ess.getLinkManager().getDiscordId(uuid);
+        final boolean isLinked = discordId != null;
+
+        // Sync nickname on join for linked players
+        if (ess.getSettings().isNicknameLinked() && isLinked) {
+            ess.getApi().getMemberById(discordId).thenAccept(member -> {
+                if (member == null) {
+                    return;
+                }
+
+                final String nickname = getEffectiveNickname(member);
+                ess.getEss().scheduleSyncDelayedTask(() -> syncNickname(event.getUser(), nickname));
+            });
         }
 
-        if (!ess.getLinkManager().isLinked(event.getUser().getBase().getUniqueId())) {
+        // Handle freeze policy for unlinked players
+        if (ess.getSettings().getLinkPolicy() == DiscordLinkSettings.LinkPolicy.FREEZE && !isLinked) {
             event.getUser().setFreeze(true);
             String code;
             try {
-                code = ess.getLinkManager().createCode(event.getUser().getBase().getUniqueId());
+                code = ess.getLinkManager().createCode(uuid);
             } catch (IllegalArgumentException e) {
                 code = e.getMessage();
             }
@@ -138,7 +185,45 @@ public class LinkBukkitListener implements Listener {
     }
 
     @EventHandler
+    public void onDiscordMemberUpdate(final DiscordMemberUpdateEvent event) {
+        if (!ess.getSettings().isNicknameLinked()) {
+            return;
+        }
+
+        final UUID uuid = ess.getLinkManager().getUUID(event.getMember().getId());
+        if (uuid == null) {
+            return;
+        }
+
+        // Only sync for online players - offline players will sync on join via onUserDataLoad
+        final User user = ess.getEss().getUser(uuid);
+        if (user == null || !user.getBase().isOnline()) {
+            return;
+        }
+
+        final String nickname = getEffectiveNickname(event.getMember());
+        ess.getEss().scheduleSyncDelayedTask(() -> syncNickname(user, nickname));
+    }
+
+    @EventHandler
     public void onUserLinkStatusChange(final DiscordLinkStatusChangeEvent event) {
+        // Handle nickname sync on link/unlink
+        if (ess.getSettings().isNicknameLinked() && event.getUser() != null) {
+            final String nickname;
+            if (event.isLinked() && event.getMember() != null) {
+                nickname = getEffectiveNickname(event.getMember());
+            } else {
+                nickname = null;
+            }
+
+            if (Bukkit.isPrimaryThread()) {
+                syncNickname(event.getUser(), nickname);
+            } else {
+                ess.getEss().scheduleSyncDelayedTask(() -> syncNickname(event.getUser(), nickname));
+            }
+        }
+
+        // Handle freeze/unfreeze based on link status
         if (event.isLinked() || ess.getSettings().getLinkPolicy() == DiscordLinkSettings.LinkPolicy.NONE) {
             if (event.getUser() != null) {
                 event.getUser().setFreeze(false);
