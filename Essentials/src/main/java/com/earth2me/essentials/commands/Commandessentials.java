@@ -8,6 +8,7 @@ import com.earth2me.essentials.commands.essentials.HomesCommand;
 import com.earth2me.essentials.commands.essentials.ItemTestCommand;
 import com.earth2me.essentials.commands.essentials.MooCommand;
 import com.earth2me.essentials.commands.essentials.NyanCommand;
+import com.earth2me.essentials.commands.essentials.ReloadCommand;
 import com.earth2me.essentials.commands.essentials.UsermapCommand;
 import com.earth2me.essentials.commands.essentials.VersionCommand;
 
@@ -19,6 +20,7 @@ public class Commandessentials extends EssentialsTreeCommand {
         registerNode(new DebugCommand());
         registerNode(new CommandMapCommand());
         registerNode(new DumpCommand());
+        registerNode(new ReloadCommand());
         registerNode(new CleanupCommand());
         registerNode(new HomesCommand());
         registerNode(new UsermapCommand());
