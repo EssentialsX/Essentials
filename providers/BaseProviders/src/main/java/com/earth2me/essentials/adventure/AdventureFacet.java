@@ -54,5 +54,5 @@ public interface AdventureFacet {
      */
     String adventureToLegacy(ComponentHolder component);
 
-    ComponentHolder append(ComponentHolder base, ComponentHolder addition);
+    ComponentHolder append(ComponentHolder base, ComponentHolder... addition);
 }

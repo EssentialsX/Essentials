@@ -133,10 +133,13 @@ public class SpigotAdventureFacet implements AdventureFacet {
     }
 
     @Override
-    public ComponentHolder append(ComponentHolder base, ComponentHolder addition) {
-        final Component baseComponent = (Component) base.getComponent();
-        final Component additionComponent = (Component) addition.getComponent();
-        return new ComponentHolder(baseComponent.append(additionComponent));
+    public ComponentHolder append(ComponentHolder base, ComponentHolder... addition) {
+        Component baseComponent = (Component) base.getComponent();
+        for (ComponentHolder holder : addition) {
+            final Component additionComponent = (Component) holder.getComponent();
+            baseComponent = baseComponent.append(additionComponent);
+        }
+        return new ComponentHolder(baseComponent);
     }
 
     @Override

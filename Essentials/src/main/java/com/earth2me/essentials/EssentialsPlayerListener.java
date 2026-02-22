@@ -797,7 +797,7 @@ public class EssentialsPlayerListener implements Listener {
                             final ComponentHolder nameComponent = ess.getAdventureFacet().legacyToAdventure(playerName);
                             final ComponentHolder messageComponent = ess.getAdventureFacet().text(": " + event.getMessage());
 
-                            spyer.sendComponent(ess.getAdventureFacet().append(ess.getAdventureFacet().append(base, nameComponent), messageComponent));
+                            spyer.sendComponent(ess.getAdventureFacet().append(base, nameComponent, messageComponent));
                         }
                     }
                 }
