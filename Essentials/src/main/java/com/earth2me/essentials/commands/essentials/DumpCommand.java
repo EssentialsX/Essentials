@@ -4,7 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.commands.EssentialsTreeNode;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.CommandMapUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.PasteUtil;
@@ -260,7 +259,7 @@ public class DumpCommand extends EssentialsTreeNode {
                     // pastes.dev doesn't support deletion keys
                     //sender.sendTl("dumpDeleteKey", result.getDeletionKey());
                     if (sender.isPlayer()) {
-                        ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpConsoleUrl", dumpUrl)));
+                        ess.getLogger().info(ess.getAdventureFacet().miniToLegacy(tlLiteral("dumpConsoleUrl", dumpUrl)));
                         // pastes.dev doesn't support deletion keys
                         //ess.getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("dumpDeleteKey", result.getDeletionKey())));
                     }

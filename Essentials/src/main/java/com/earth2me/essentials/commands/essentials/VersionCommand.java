@@ -1,12 +1,11 @@
 package com.earth2me.essentials.commands.essentials;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.adventure.ComponentHolder;
 import com.earth2me.essentials.commands.EssentialsTreeNode;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.utils.VersionUtil;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -123,31 +122,31 @@ public class VersionCommand extends EssentialsTreeNode {
 
         switch (supportStatus) {
             case NMS_CLEANROOM:
-                sender.sendComponent(sender.tlComponent("serverUnsupportedCleanroom").color(NamedTextColor.DARK_RED));
+                sender.sendTl("serverUnsupportedCleanroom");
                 break;
             case DANGEROUS_FORK:
-                sender.sendComponent(sender.tlComponent("serverUnsupportedDangerous").color(NamedTextColor.DARK_RED));
+                sender.sendTl("serverUnsupportedDangerous");
                 break;
             case STUPID_PLUGIN:
-                sender.sendComponent(sender.tlComponent("serverUnsupportedDumbPlugins").color(NamedTextColor.DARK_RED));
+                sender.sendTl("serverUnsupportedDumbPlugins");
                 break;
             case UNSTABLE:
-                sender.sendComponent(sender.tlComponent("serverUnsupportedMods").color(NamedTextColor.DARK_RED));
+                sender.sendTl("serverUnsupportedMods");
                 break;
             case OUTDATED:
-                sender.sendComponent(sender.tlComponent("serverUnsupported").color(NamedTextColor.RED));
+                sender.sendTl("serverUnsupported");
                 break;
             case LIMITED:
-                sender.sendComponent(sender.tlComponent("serverUnsupportedLimitedApi").color(NamedTextColor.RED));
+                sender.sendTl("serverUnsupportedLimitedApi");
                 break;
         }
         if (VersionUtil.getSupportStatusClass() != null) {
-            sender.sendComponent(sender.tlComponent("serverUnsupportedClass").color(NamedTextColor.RED));
+            sender.sendTl("serverUnsupportedClass");
         }
 
         sender.sendTl("versionFetching");
         ess.runTaskAsynchronously(() -> {
-            for (final Component component : ess.getUpdateChecker().getVersionMessages(true, true, sender)) {
+            for (final ComponentHolder component : ess.getUpdateChecker().getVersionMessages(true, true, sender)) {
                 sender.sendComponent(component);
             }
         });
