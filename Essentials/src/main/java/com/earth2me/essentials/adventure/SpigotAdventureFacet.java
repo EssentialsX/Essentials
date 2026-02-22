@@ -103,6 +103,11 @@ public class SpigotAdventureFacet implements AdventureFacet {
     }
 
     @Override
+    public ComponentHolder text(String message) {
+        return new ComponentHolder(Component.text(message));
+    }
+
+    @Override
     public String legacyToMini(String message, boolean useCustomTags) {
         final Component deserializedText = LEGACY_SERIALIZER.deserialize(message);
         if (useCustomTags) {

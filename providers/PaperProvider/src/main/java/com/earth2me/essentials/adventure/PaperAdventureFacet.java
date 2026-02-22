@@ -104,6 +104,11 @@ public class PaperAdventureFacet implements AdventureFacet {
     }
 
     @Override
+    public ComponentHolder text(String message) {
+        return new ComponentHolder(Component.text(message));
+    }
+
+    @Override
     public String miniToLegacy(String message) {
         return adventureToLegacy(miniMessageInstance.deserialize(message));
     }

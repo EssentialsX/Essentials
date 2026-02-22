@@ -40,6 +40,11 @@ public interface AdventureFacet {
     ComponentHolder legacyToAdventure(String message);
 
     /**
+     * Converts a plain text string to an adventure component.
+     */
+    ComponentHolder text(String message);
+
+    /**
      * Converts a MiniMessage string to a section sign legacy string.
      */
     String miniToLegacy(String message);
