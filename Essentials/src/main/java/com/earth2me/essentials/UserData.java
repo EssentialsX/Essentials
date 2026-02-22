@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public abstract class UserData extends PlayerExtension implements IConf {
     protected final transient Essentials ess;
@@ -176,6 +177,12 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public List<String> getHomes() {
         return new ArrayList<>(holder.homes().keySet());
+    }
+
+    public List<String> getHomesPerWorld(String worldName) {
+        return holder.homes().entrySet().stream()
+                .filter(homeLocation -> homeLocation.getValue().worldName().equalsIgnoreCase(worldName))
+                .map(Map.Entry::getKey).collect(Collectors.toList());
     }
 
     public void setHome(String name, final Location loc) {
