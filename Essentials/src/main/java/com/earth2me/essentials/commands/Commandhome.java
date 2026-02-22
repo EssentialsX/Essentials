@@ -155,7 +155,7 @@ public class Commandhome extends EssentialsCommand {
             if (canVisitOthers) {
                 final int sepIndex = args[0].indexOf(':');
                 if (sepIndex < 0) {
-                    getPlayers(server, user).forEach(player -> homes.add(player + ":"));
+                    getPlayers(user).forEach(player -> homes.add(player + ":"));
                 } else {
                     final String namePart = args[0].substring(0, sepIndex);
                     final User otherUser;

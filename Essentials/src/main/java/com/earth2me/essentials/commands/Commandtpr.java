@@ -118,7 +118,7 @@ public class Commandtpr extends EssentialsCommand {
                 return randomTeleport.listLocations();
             }
         } else if (args.length == 2 && sender.isAuthorized("essentials.tpr.others")) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         }
         return Collections.emptyList();
     }

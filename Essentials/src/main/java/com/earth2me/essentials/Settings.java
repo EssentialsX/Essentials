@@ -145,6 +145,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean isWaterSafe;
     private boolean isSafeUsermap;
     private boolean logCommandBlockCommands;
+    private boolean logConsoleCommands;
     private Set<Predicate<String>> nickBlacklist;
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
@@ -929,6 +930,7 @@ public class Settings implements net.ess3.api.ISettings {
         isWaterSafe = _isWaterSafe();
         isSafeUsermap = _isSafeUsermap();
         logCommandBlockCommands = _logCommandBlockCommands();
+        logConsoleCommands = _logConsoleCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
         removeEffectsOnHeal = _isRemovingEffectsOnHeal();
@@ -2081,6 +2083,15 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean logCommandBlockCommands() {
         return logCommandBlockCommands;
+    }
+
+    private boolean _logConsoleCommands() {
+        return config.getBoolean("log-console-commands", true);
+    }
+
+    @Override
+    public boolean logConsoleCommands() {
+        return logConsoleCommands;
     }
 
     private Set<Predicate<String>> _getNickBlacklist() {

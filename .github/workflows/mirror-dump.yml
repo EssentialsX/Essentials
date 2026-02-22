@@ -1,0 +1,105 @@
+name: Mirror EssentialsX dumps to Gist
+
+on:
+  issues:
+    types: [opened, edited, closed]
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  contents: read
+
+env:
+  DUMP_REGEX: 'https?://essentialsx\.net/dump\?bytebin=([A-Za-z0-9_-]+)'
+  GIST_LINK_FMT: 'https://essentialsx.net/dump?gist='
+
+jobs:
+  handle-dump:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Mirror dump to a private Gist
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GIST_TOKEN }}
+          script: |
+            const issue   = context.payload.issue ?? context.payload.comment.issue;
+            const bodySrc = context.payload.comment ? context.payload.comment.body : issue.body || '';
+
+            const regex = new RegExp(process.env.DUMP_REGEX);
+            const m = bodySrc.match(regex);
+            if (!m) {
+              core.info('No EssentialsX dump link found – abort.');
+              return;
+            }
+
+            const key = m[1];
+            const dump = await fetch(`https://api.pastes.dev/${key}`);
+            if (!dump.ok) throw new Error(`pastes.dev fetch failed (${dump.status})`);
+            const text = await dump.text();
+
+            const { data: gist } = await github.rest.gists.create({
+              files: { [`${key}.txt`]: { content: text } },
+              description: `EssentialsX dump for issue #${issue.number}`,
+              public: false
+            });
+
+            const link = `${process.env.GIST_LINK_FMT}${gist.id}`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              issue_number: issue.number,
+              body: `📋 Essentials Dump Backup → ${link}`
+            });
+
+  cleanup-gist:
+    if: github.event_name == 'issues' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Delete gist and hide bot comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GIST_TOKEN }}
+          script: |
+            const issue = context.payload.issue;
+
+            const comments = await github.paginate(
+              github.rest.issues.listComments,
+              { owner: context.repo.owner, repo: context.repo.repo, issue_number: issue.number, per_page: 100 }
+            );
+            
+            const re = /https?:\/\/essentialsx\.net\/dump\?gist=([A-Za-z0-9]+)/;
+            const hit = comments.reverse().find(c => re.test(c.body || ''));
+            
+            if (!hit) {
+              core.info('No gist link comment found – nothing to clean up.');
+              return;
+            }
+            
+            const gistId   = (hit.body.match(re))[1];
+            const commentNodeId = hit.node_id;
+
+            try {
+              await github.request('DELETE /gists/{gist_id}', { gist_id: gistId });
+              core.info(`Deleted Gist ${gistId}`);
+            } catch (err) {
+              core.warning(`Could not delete Gist ${gistId}: ${err.message}`);
+            }
+
+            try {
+              await github.graphql(
+                `mutation($id:ID!){
+                   minimizeComment(input:{subjectId:$id, classifier:OUTDATED}) {
+                     minimizedComment { id }
+                   }
+                 }`,
+                { id: commentNodeId }
+              );
+              core.info(`Minimised comment ${hit.id} as OUTDATED`);
+            } catch (err) {
+              core.warning(`Could not minimise comment: ${err.message}`);
+            }

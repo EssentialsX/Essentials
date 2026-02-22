@@ -49,6 +49,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
@@ -573,6 +574,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         Trade.closeLog();
         getUsers().shutdown();
 
+        EssentialsConfiguration.shutdownExecutor();
+
         HandlerList.unregisterAll(this);
     }
 
@@ -756,7 +759,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     LOGGER.log(Level.INFO, "CommandBlock at " + bSenderBlock.getX() + "," + bSenderBlock.getY() + "," + bSenderBlock.getZ() + " issued server command: /" + commandLabel + " " + EssentialsCommand.getFinalArg(args, 0));
                 }
             } else if (user == null) {
-                LOGGER.log(Level.INFO, cSender.getName()+ " issued server command: /" + commandLabel + " " + EssentialsCommand.getFinalArg(args, 0));
+                if (getSettings().logConsoleCommands()) {
+                    LOGGER.log(Level.INFO, cSender.getName()+ " issued server command: /" + commandLabel + " " + EssentialsCommand.getFinalArg(args, 0));
+                }
             }
 
             final CommandSource sender = new CommandSource(this, cSender);

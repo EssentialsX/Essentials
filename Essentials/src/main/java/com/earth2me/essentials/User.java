@@ -1111,7 +1111,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public Locale getPlayerLocale(final String locale) {
-        if (locale.equals(lastLocaleString)) {
+        if (locale == null || locale.equals(lastLocaleString)) {
             return playerLocale;
         }
         lastLocaleString = locale;

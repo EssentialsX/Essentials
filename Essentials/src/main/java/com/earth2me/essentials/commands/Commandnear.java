@@ -117,7 +117,7 @@ public class Commandnear extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (user.isAuthorized("essentials.near.others")) {
             if (args.length == 1) {
-                return getPlayers(server, user);
+                return getPlayers(user);
             } else if (args.length == 2) {
                 return Lists.newArrayList(Integer.toString(ess.getSettings().getNearRadius()));
             } else {
@@ -135,7 +135,7 @@ public class Commandnear extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else if (args.length == 2) {
             return Lists.newArrayList(Integer.toString(ess.getSettings().getNearRadius()));
         } else {

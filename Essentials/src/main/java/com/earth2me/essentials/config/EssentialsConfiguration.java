@@ -43,7 +43,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
@@ -51,7 +51,7 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsConfiguration {
-    private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+    private static volatile ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private static final ObjectMapper.Factory MAPPER_FACTORY = ObjectMapper.factoryBuilder()
             .addProcessor(DeleteOnEmpty.class, (data, value) -> new DeleteOnEmptyProcessor())
             .addProcessor(DeleteIfIncomplete.class, (data, value) -> new DeleteIfIncompleteProcessor())
@@ -462,21 +462,50 @@ public class EssentialsConfiguration {
 
     public synchronized void blockingSave() {
         try {
-            delaySave().get();
+            delaySave();
+            getExecutor().submit(() -> {}).get();
         } catch (final InterruptedException | ExecutionException e) {
             Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
-    private Future<?> delaySave() {
+    private void delaySave() {
         if (saveHook != null) {
             saveHook.run();
         }
 
-        final CommentedConfigurationNode node = configurationNode.copy();
-
         pendingWrites.incrementAndGet();
+        try {
+            getExecutor().submit(new ConfigurationSaveTask(loader, () -> configurationNode.copy(), pendingWrites));
+        } catch (RejectedExecutionException rex) {
+            try {
+                synchronized (loader) {
+                    loader.save(configurationNode.copy());
+                }
+            } catch (ConfigurateException e) {
+                Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
+            } finally {
+                pendingWrites.decrementAndGet();
+            }
+        }
+    }
 
-        return EXECUTOR_SERVICE.submit(new ConfigurationSaveTask(loader, node, pendingWrites));
+    public static void shutdownExecutor() {
+        final ExecutorService exec = EXECUTOR_SERVICE;
+        exec.shutdown();
+        try {
+            if (!exec.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)) {
+                exec.shutdownNow();
+            }
+        } catch (InterruptedException ignored) {
+            exec.shutdownNow();
+        }
+    }
+
+    private static synchronized ExecutorService getExecutor() {
+        if (EXECUTOR_SERVICE == null || EXECUTOR_SERVICE.isShutdown() || EXECUTOR_SERVICE.isTerminated()) {
+            EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+        }
+        return EXECUTOR_SERVICE;
     }
 }
