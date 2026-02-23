@@ -1,7 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.User;
+import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashSet;
 
 public class EssentialsTreeCommand extends EssentialsCommand {
     private final Map<String, EssentialsTreeNode> nodes = new HashMap<>();
@@ -30,6 +33,22 @@ public class EssentialsTreeCommand extends EssentialsCommand {
         node.setEssentials(ess);
         node.setEssentialsModule(module);
         node.setParent(this);
+    }
+
+    @Override
+    public void setEssentials(final IEssentials ess) {
+        super.setEssentials(ess);
+        for (final EssentialsTreeNode node : new HashSet<>(nodes.values())) {
+            node.setEssentials(ess);
+        }
+    }
+
+    @Override
+    public void setEssentialsModule(final IEssentialsModule module) {
+        super.setEssentialsModule(module);
+        for (final EssentialsTreeNode node : new HashSet<>(nodes.values())) {
+            node.setEssentialsModule(module);
+        }
     }
 
     public void runDefault(final User user, final String commandLabel) throws Exception {
