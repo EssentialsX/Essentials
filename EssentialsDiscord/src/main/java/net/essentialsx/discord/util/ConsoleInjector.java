@@ -124,8 +124,6 @@ public class ConsoleInjector extends AbstractAppender {
             return;
         }
 
-        // Rearrange the addition of the logger so that you can filter by logger
-        
         final String[] loggerNameSplit = event.getLoggerName().split("\\.");
         final String loggerName = loggerNameSplit[loggerNameSplit.length - 1].trim();
 
