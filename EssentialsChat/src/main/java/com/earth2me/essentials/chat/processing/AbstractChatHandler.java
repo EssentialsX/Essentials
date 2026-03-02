@@ -92,16 +92,16 @@ public abstract class AbstractChatHandler {
 
         final ChatType chatType = chat.getType();
         String format = ess.getSettings().getChatFormat(group, chat.getRadius() > 0 && chatType == ChatType.UNKNOWN ? ChatType.LOCAL : chatType);
-        format = format.replace("{0}", group);
-        format = format.replace("{1}", ess.getSettings().getWorldAlias(world));
-        format = format.replace("{2}", world.substring(0, 1).toUpperCase(Locale.ENGLISH));
-        format = format.replace("{3}", team == null ? "" : team.getPrefix());
-        format = format.replace("{4}", team == null ? "" : team.getSuffix());
-        format = format.replace("{5}", team == null ? "" : team.getDisplayName());
-        format = format.replace("{6}", prefix);
-        format = format.replace("{7}", suffix);
-        format = format.replace("{8}", username);
-        format = format.replace("{9}", nickname == null ? username : nickname);
+        format = format.replace("{0}", group.replace("%", "%%"));
+        format = format.replace("{1}", ess.getSettings().getWorldAlias(world).replace("%", "%%"));
+        format = format.replace("{2}", world.substring(0, 1).toUpperCase(Locale.ENGLISH).replace("%", "%%"));
+        format = format.replace("{3}", team == null ? "" : team.getPrefix().replace("%", "%%"));
+        format = format.replace("{4}", team == null ? "" : team.getSuffix().replace("%", "%%"));
+        format = format.replace("{5}", team == null ? "" : team.getDisplayName().replace("%", "%%"));
+        format = format.replace("{6}", prefix.replace("%", "%%"));
+        format = format.replace("{7}", suffix.replace("%", "%%"));
+        format = format.replace("{8}", username.replace("%", "%%"));
+        format = format.replace("{9}", (nickname == null ? username : nickname).replace("%", "%%"));
 
         // Local, shout and question chat types are only enabled when there's a valid radius
         if (chat.getRadius() > 0 && !event.getMessage().isEmpty()) {
