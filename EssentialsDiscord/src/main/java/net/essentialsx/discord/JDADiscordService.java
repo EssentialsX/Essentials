@@ -50,7 +50,7 @@ import net.essentialsx.discord.listeners.PaperChatListener;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
-import net.essentialsx.discord.util.WrappedWebhookClient;
+import net.essentialsx.discord.util.WebhookDispatcher;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -84,11 +84,11 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     private JDA jda;
     private Guild guild;
     private TextChannel primaryChannel;
-    private WrappedWebhookClient consoleWebhook;
+    private WebhookDispatcher consoleWebhook;
     private String lastConsoleId;
     private final Map<String, MessageType> registeredTypes = new HashMap<>();
     private final Map<MessageType, String> typeToChannelId = new HashMap<>();
-    private final Map<String, WrappedWebhookClient> channelIdToWebhook = new HashMap<>();
+    private final Map<String, WebhookDispatcher> channelIdToWebhook = new HashMap<>();
     private ConsoleInjector injector;
     private DiscordCommandDispatcher commandDispatcher;
     private InteractionControllerImpl interactionController;
@@ -130,12 +130,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     }
 
     public WebhookMessage getWebhookMessage(String message, String avatarUrl, String name, boolean groupMentions) {
-        return new WebhookMessageBuilder()
-                .setAvatarUrl(avatarUrl)
-                .setAllowedMentions(groupMentions ? DiscordUtil.ALL_MENTIONS_WEBHOOK : DiscordUtil.NO_GROUP_MENTIONS_WEBHOOK)
-                .setUsername(name)
-                .setContent(message)
-                .build();
+        return new WebhookMessageBuilder().setAvatarUrl(avatarUrl).setAllowedMentions(groupMentions ? DiscordUtil.ALL_MENTIONS_WEBHOOK : DiscordUtil.NO_GROUP_MENTIONS_WEBHOOK).setUsername(name).setContent(message).build();
     }
 
     public void sendMessage(DiscordMessageEvent event, String message, boolean groupMentions) {
@@ -145,11 +140,11 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
         final String webhookChannelId = typeToChannelId.get(event.getType());
         if (webhookChannelId != null) {
-            final WrappedWebhookClient client = channelIdToWebhook.get(webhookChannelId);
-            if (client != null) {
+            final WebhookDispatcher dispatcher = channelIdToWebhook.get(webhookChannelId);
+            if (dispatcher != null) {
                 final String avatarUrl = event.getAvatarUrl() != null ? event.getAvatarUrl() : jda.getSelfUser().getAvatarUrl();
                 final String name = event.getName() != null ? event.getName() : guild.getSelfMember().getEffectiveName();
-                client.send(getWebhookMessage(strippedContent, avatarUrl, name, groupMentions));
+                dispatcher.send(getWebhookMessage(strippedContent, avatarUrl, name, groupMentions));
                 return;
             }
         }
@@ -158,9 +153,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             logger.warning(tlLiteral("discordNoSendPermission", channel.getName()));
             return;
         }
-        channel.sendMessage(strippedContent)
-                .setAllowedMentions(groupMentions ? null : DiscordUtil.NO_GROUP_MENTIONS)
-                .queue();
+        channel.sendMessage(strippedContent).setAllowedMentions(groupMentions ? null : DiscordUtil.NO_GROUP_MENTIONS).queue(null, error -> logger.log(Level.WARNING, "Failed to send message to channel " + channel.getName(), error));
     }
 
     public void startup() throws LoginException, InterruptedException {
@@ -178,15 +171,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             proxySettings.setServer(plugin.getSettings().getHttpProxyServer());
         }
 
-        jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
-                .setWebsocketFactory(wsFactory)
-                .addEventListeners(new DiscordListener(this))
-                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
-                .enableCache(CacheFlag.EMOJI)
-                .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
-                .setContextEnabled(false)
-                .build()
-                .awaitReady();
+        jda = JDABuilder.createDefault(plugin.getSettings().getBotToken()).setWebsocketFactory(wsFactory).addEventListeners(new DiscordListener(this)).enableIntents(GatewayIntent.MESSAGE_CONTENT).enableCache(CacheFlag.EMOJI).disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE).setContextEnabled(false).build().awaitReady();
         invalidStartup = false;
         updatePresence();
         logger.log(Level.INFO, tlLiteral("discordLoggingInDone", jda.getSelfUser().getAsTag()));
@@ -203,10 +188,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         }
 
         final Collection<Permission> requiredPermissions = ImmutableList.of(Permission.MANAGE_WEBHOOKS, Permission.MANAGE_ROLES, Permission.NICKNAME_MANAGE, Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND, Permission.MESSAGE_EMBED_LINKS);
-        final String[] missingPermissions = requiredPermissions.stream()
-                .filter(permission -> !guild.getSelfMember().hasPermission(permission))
-                .map(Permission::getName)
-                .toArray(String[]::new);
+        final String[] missingPermissions = requiredPermissions.stream().filter(permission -> !guild.getSelfMember().hasPermission(permission)).map(Permission::getName).toArray(String[]::new);
 
         if (missingPermissions.length > 0) {
             invalidStartup = true;
@@ -229,7 +211,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         }
 
         // Load emotes into cache, JDA will handle updates from here on out.
-        guild.retrieveEmojis().queue();
+        guild.retrieveEmojis().queue(null, error -> logger.log(Level.WARNING, "Failed to retrieve emojis from guild", error));
 
         updatePrimaryChannel();
 
@@ -305,23 +287,11 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     public void sendChatMessage(ChatType chatType, Player player, String chatMessage) {
         final User user = getPlugin().getEss().getUser(player);
 
-        final String formattedMessage = MessageUtil.formatMessage(getSettings().getMcToDiscordFormat(player, chatType),
-                MessageUtil.sanitizeDiscordMarkdown(player.getName()),
-                MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
-                user.isAuthorized("essentials.discord.markdown") ? chatMessage : MessageUtil.sanitizeDiscordMarkdown(chatMessage),
-                MessageUtil.sanitizeDiscordMarkdown(getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName())),
-                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
-                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player))));
+        final String formattedMessage = MessageUtil.formatMessage(getSettings().getMcToDiscordFormat(player, chatType), MessageUtil.sanitizeDiscordMarkdown(player.getName()), MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()), user.isAuthorized("essentials.discord.markdown") ? chatMessage : MessageUtil.sanitizeDiscordMarkdown(chatMessage), MessageUtil.sanitizeDiscordMarkdown(getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName())), MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player))), MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player))));
 
         final String avatarUrl = DiscordUtil.getAvatarUrl(this, player);
 
-        final String formattedName = MessageUtil.formatMessage(getSettings().getMcToDiscordNameFormat(player),
-                player.getName(),
-                player.getDisplayName(),
-                getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName()),
-                FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player)),
-                FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player)),
-                guild.getMember(jda.getSelfUser()).getEffectiveName());
+        final String formattedName = MessageUtil.formatMessage(getSettings().getMcToDiscordNameFormat(player), player.getName(), player.getDisplayName(), getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName()), FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player)), FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player)), guild.getMember(jda.getSelfUser()).getEffectiveName());
 
         DiscordUtil.dispatchDiscordMessage(this, chatTypeToMessageType(chatType), formattedMessage, user.isAuthorized("essentials.discord.ping"), avatarUrl, formattedName, player.getUniqueId());
     }
@@ -390,8 +360,8 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
     public void updateTypesRelay() {
         if (!getSettings().isShowAvatar() && !getSettings().isCustomBotName()) {
-            for (WrappedWebhookClient webhook : channelIdToWebhook.values()) {
-                webhook.close();
+            for (WebhookDispatcher dispatcher : channelIdToWebhook.values()) {
+                dispatcher.close();
             }
             typeToChannelId.clear();
             channelIdToWebhook.clear();
@@ -410,14 +380,14 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
             final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.ADVANCED_RELAY_NAME).join();
             if (webhook == null) {
-                final WrappedWebhookClient current = channelIdToWebhook.remove(channel.getId());
+                final WebhookDispatcher current = channelIdToWebhook.remove(channel.getId());
                 if (current != null) {
                     current.close();
                 }
                 continue;
             }
             typeToChannelId.put(type, channel.getId());
-            channelIdToWebhook.put(channel.getId(), DiscordUtil.getWebhookClient(webhook.getIdLong(), webhook.getToken(), jda.getHttpClient()));
+            channelIdToWebhook.put(channel.getId(), new WebhookDispatcher(DiscordUtil.getWebhookClient(webhook.getIdLong(), webhook.getToken(), jda.getHttpClient())));
         }
     }
 
@@ -471,7 +441,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         }
 
         shutdownConsoleRelay(false);
-        consoleWebhook = DiscordUtil.getWebhookClient(webhookId, webhookToken, jda.getHttpClient());
+        consoleWebhook = new WebhookDispatcher(DiscordUtil.getWebhookClient(webhookId, webhookToken, jda.getHttpClient()), 100);
         if (injector == null || injector.isRemoved()) {
             injector = new ConsoleInjector(this);
             injector.start();
@@ -510,8 +480,8 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
             shutdownConsoleRelay(true);
 
-            for (WrappedWebhookClient webhook : channelIdToWebhook.values()) {
-                webhook.close();
+            for (WebhookDispatcher dispatcher : channelIdToWebhook.values()) {
+                dispatcher.close();
             }
 
             // Unregister leftover jda listeners
@@ -583,7 +553,10 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         }
 
         final CompletableFuture<Void> future = new CompletableFuture<>();
-        guild.modifyMemberRoles(((InteractionMemberImpl) member).getJdaObject(), add, remove).queue(future::complete);
+        guild.modifyMemberRoles(((InteractionMemberImpl) member).getJdaObject(), add, remove).queue(future::complete, error -> {
+            logger.log(Level.WARNING, "Failed to modify member roles", error);
+            future.complete(null);
+        });
         return future;
     }
 
@@ -613,7 +586,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         return plugin.getSettings();
     }
 
-    public WrappedWebhookClient getConsoleWebhook() {
+    public WebhookDispatcher getConsoleWebhook() {
         return consoleWebhook;
     }
 
