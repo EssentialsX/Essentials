@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
@@ -77,7 +77,7 @@ public class Commandwhois extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             return Collections.emptyList();
         }

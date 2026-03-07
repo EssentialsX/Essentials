@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -28,7 +28,7 @@ public class Commandplaytime extends EssentialsCommand {
         String displayName;
         long playtime;
         final String key;
-        
+
         if (args.length > 0 && sender.isAuthorized("essentials.playtime.others")) {
             try {
                 final IUser user = getPlayer(server, sender, args, 0);
@@ -57,16 +57,16 @@ public class Commandplaytime extends EssentialsCommand {
         }
 
         final long playtimeMs = System.currentTimeMillis() - (playtime * 50L);
-        sender.sendTl(key, DateUtil.formatDateDiff(playtimeMs), AdventureUtil.parsed(AdventureUtil.legacyToMini(displayName)));
+        sender.sendTl(key, DateUtil.formatDateDiff(playtimeMs), AdventureUtil.parsed(ess.getAdventureFacet().legacyToMini(displayName)));
     }
-    
+
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1 && sender.isAuthorized("essentials.playtime.others")) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             return Collections.emptyList();
         }
     }
-    
+
 }

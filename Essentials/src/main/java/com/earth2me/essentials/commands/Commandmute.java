@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.MuteStatusChangeEvent;
@@ -117,7 +116,7 @@ public class Commandmute extends EssentialsCommand {
                     objects = new Object[]{sender.getSender().getName(), user.getName(), muteTime};
                 }
 
-                ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral(tlKey, objects)));
+                ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral(tlKey, objects)));
                 ess.broadcastTl(null, "essentials.mute.notify", tlKey, objects);
             } else {
                 sender.sendTl("unmutedPlayer", user.getDisplayName());
@@ -129,7 +128,7 @@ public class Commandmute extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             return COMMON_DATE_DIFFS; // Date diff can span multiple words
         }

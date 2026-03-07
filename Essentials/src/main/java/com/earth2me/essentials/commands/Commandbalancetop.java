@@ -4,7 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.textreader.TextPager;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -115,7 +115,7 @@ public class Commandbalancetop extends EssentialsCommand {
             future.thenRun(() -> {
                 if (fresh) {
                     final SimpleTextInput newCache = new SimpleTextInput();
-                    newCache.getLines().add(AdventureUtil.miniToLegacy(tlLiteral("serverTotal", AdventureUtil.parsed(NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)))));
+                    newCache.getLines().add(ess.getAdventureFacet().miniToLegacy(tlLiteral("serverTotal", AdventureUtil.parsed(NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)))));
                     int pos = 1;
                     for (final Map.Entry<UUID, BalanceTop.Entry> entry : ess.getBalanceTop().getBalanceTopCache().entrySet()) {
                         final BigDecimal balance = entry.getValue().getBalance();
@@ -141,7 +141,7 @@ public class Commandbalancetop extends EssentialsCommand {
                                 && balance.compareTo(ess.getSettings().getBaltopMinBalance()) >= 0 &&
                                 // Skip playtime check for offline players on versions below 1.15.2
                                 (playtime == -1 || playTimeSecs >= ess.getSettings().getBaltopMinPlaytime())) {
-                            newCache.getLines().add(AdventureUtil.miniToLegacy(tlLiteral("balanceTopLine", pos, entry.getValue().getDisplayName(), AdventureUtil.parsed(NumberUtil.displayCurrency(balance, ess)))));
+                            newCache.getLines().add(ess.getAdventureFacet().miniToLegacy(tlLiteral("balanceTopLine", pos, entry.getValue().getDisplayName(), AdventureUtil.parsed(NumberUtil.displayCurrency(balance, ess)))));
                         }
                         pos++;
                     }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.config.ConfigurateUtil;
@@ -8,7 +9,6 @@ import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
@@ -18,8 +18,6 @@ import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.SyncCommandsProvider;
 import net.essentialsx.api.v2.ChatType;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -46,6 +44,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -59,8 +58,8 @@ import static com.earth2me.essentials.I18n.tlLiteral;
 public class Settings implements net.ess3.api.ISettings {
     private static final BigDecimal DEFAULT_MAX_MONEY = new BigDecimal("10000000000000");
     private static final BigDecimal DEFAULT_MIN_MONEY = new BigDecimal("-10000000000000");
-    private static final Tag DEFAULT_PRIMARY_COLOR = Tag.styling(NamedTextColor.GOLD);
-    private static final Tag DEFAULT_SECONDARY_COLOR = Tag.styling(NamedTextColor.RED);
+    private static final String DEFAULT_PRIMARY_COLOR = NamedTextColor.GOLD.toString();
+    private static final String DEFAULT_SECONDARY_COLOR = NamedTextColor.RED.toString();
     private final transient EssentialsConfiguration config;
     private final transient IEssentials ess;
     private final transient AtomicInteger reloadCount = new AtomicInteger(0);
@@ -92,6 +91,7 @@ public class Settings implements net.ess3.api.ISettings {
     private BigDecimal maxMoney = DEFAULT_MAX_MONEY;
     private BigDecimal minMoney = DEFAULT_MIN_MONEY;
     private boolean economyLog = false;
+    private boolean economyLogUUID = false;
     // #easteregg
     private boolean economyLogUpdate = false;
     private boolean changeDisplayName = true;
@@ -145,14 +145,16 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean isWaterSafe;
     private boolean isSafeUsermap;
     private boolean logCommandBlockCommands;
+    private boolean logConsoleCommands;
     private Set<Predicate<String>> nickBlacklist;
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
     private Map<String, String> worldAliases;
-    private Tag primaryColor = DEFAULT_PRIMARY_COLOR;
-    private Tag secondaryColor = DEFAULT_SECONDARY_COLOR;
+    private String primaryColor = DEFAULT_PRIMARY_COLOR;
+    private String secondaryColor = DEFAULT_SECONDARY_COLOR;
     private Set<String> multiplierPerms;
     private BigDecimal defaultMultiplier;
+    private List<String> afkTimeoutCommands = Collections.emptyList();
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -903,6 +905,7 @@ public class Settings implements net.ess3.api.ISettings {
         permissionsLagWarning = _getPermissionsLagWarning();
         economyLagWarning = _getEconomyLagWarning();
         economyLog = _isEcoLogEnabled();
+        economyLogUUID = _isEcoLogUUIDEnabled();
         economyLogUpdate = _isEcoLogUpdateEnabled();
         economyDisabled = _isEcoDisabled();
         allowSilentJoin = _allowSilentJoinQuit();
@@ -927,6 +930,7 @@ public class Settings implements net.ess3.api.ISettings {
         isWaterSafe = _isWaterSafe();
         isSafeUsermap = _isSafeUsermap();
         logCommandBlockCommands = _logCommandBlockCommands();
+        logConsoleCommands = _logConsoleCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
         removeEffectsOnHeal = _isRemovingEffectsOnHeal();
@@ -938,6 +942,7 @@ public class Settings implements net.ess3.api.ISettings {
         secondaryColor = _getSecondaryColor();
         multiplierPerms = _getMultiplierPerms();
         defaultMultiplier = _getDefaultMultiplier();
+        afkTimeoutCommands = _getAfkTimeoutCommands();
 
         reloadCount.incrementAndGet();
     }
@@ -968,7 +973,7 @@ public class Settings implements net.ess3.api.ISettings {
                 final ItemStack iStack = itemDb.get(itemName);
                 epItemSpwn.add(iStack.getType());
             } catch (final Exception ex) {
-                ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("unknownItemInList", itemName, "item-spawn-blacklist")), ex);
+                ess.getLogger().log(Level.SEVERE, ess.getAdventureFacet().miniToLegacy(tlLiteral("unknownItemInList", itemName, "item-spawn-blacklist")), ex);
             }
         }
         return epItemSpwn;
@@ -996,7 +1001,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (final Exception ex) {
-                ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("unknownItemInList", signName, "enabledSigns")));
+                ess.getLogger().log(Level.SEVERE, ess.getAdventureFacet().miniToLegacy(tlLiteral("unknownItemInList", signName, "enabledSigns")));
                 continue;
             }
             signsEnabled = true;
@@ -1124,7 +1129,7 @@ public class Settings implements net.ess3.api.ISettings {
             }
 
             if (mat == null) {
-                ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("unknownItemInList", itemName, configName)));
+                ess.getLogger().log(Level.SEVERE, ess.getAdventureFacet().miniToLegacy(tlLiteral("unknownItemInList", itemName, configName)));
             } else {
                 list.add(mat);
             }
@@ -1171,6 +1176,14 @@ public class Settings implements net.ess3.api.ISettings {
 
     public boolean _isEcoLogEnabled() {
         return config.getBoolean("economy-log-enabled", false);
+    }
+
+    public boolean _isEcoLogUUIDEnabled() {
+        return config.getBoolean("economy-log-uuids", false);
+    }
+
+    public boolean isEcoLogUUIDEnabled() {
+        return economyLogUUID;
     }
 
     @Override
@@ -1262,8 +1275,17 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public long getAutoAfkKick() {
-        return config.getLong("auto-afk-kick", -1);
+    public long getAutoAfkTimeout() {
+        return config.getLong("auto-afk-timeout", config.getLong("auto-afk-kick", -1));
+    }
+
+    private List<String> _getAfkTimeoutCommands() {
+        return new ArrayList<>(config.getList("afk-timeout-commands", String.class));
+    }
+
+    @Override
+    public List<String> getAfkTimeoutCommands() {
+        return afkTimeoutCommands;
     }
 
     @Override
@@ -1620,6 +1642,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isCustomWhitelistMessage() {
+        return config.getBoolean("use-custom-whitelist-message", true);
+    }
+
+    @Override
     public int getJoinQuitMessagePlayerCount() {
         return config.getInt("hide-join-quit-messages-above", -1);
     }
@@ -1872,7 +1899,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (final Exception ex) {
-                ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("unknownItemInList", signName, "unprotected-sign-names")));
+                ess.getLogger().log(Level.SEVERE, ess.getAdventureFacet().miniToLegacy(tlLiteral("unknownItemInList", signName, "unprotected-sign-names")));
             }
         }
         return newSigns;
@@ -1936,6 +1963,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isWorldChangePreserveFlying() {
         return config.getBoolean("world-change-preserve-flying", true);
+    }
+
+    @Override
+    public boolean isGamemodeChangePreserveFlying() {
+        return config.getBoolean("gamemode-change-preserve-flying", false);
     }
 
     @Override
@@ -2053,6 +2085,15 @@ public class Settings implements net.ess3.api.ISettings {
         return logCommandBlockCommands;
     }
 
+    private boolean _logConsoleCommands() {
+        return config.getBoolean("log-console-commands", true);
+    }
+
+    @Override
+    public boolean logConsoleCommands() {
+        return logConsoleCommands;
+    }
+
     private Set<Predicate<String>> _getNickBlacklist() {
         final Set<Predicate<String>> blacklist = new HashSet<>();
 
@@ -2124,7 +2165,7 @@ public class Settings implements net.ess3.api.ISettings {
     public String getNickRegex() {
         return config.getString("allowed-nicks-regex", "^[a-zA-Z_0-9§]+$");
     }
-  
+
     @Override
     public BigDecimal getMultiplier(final User user) {
         BigDecimal multiplier = defaultMultiplier;
@@ -2158,39 +2199,40 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public Tag getPrimaryColor() {
+    public String getPrimaryColor() {
         return primaryColor;
     }
 
-    private Tag _getPrimaryColor() {
+    private String _getPrimaryColor() {
         final String color = config.getString("message-colors.primary", "#ffaa00");
-        final TextColor textColor = _getTagColor(color);
-        return textColor != null ? Tag.styling(textColor) : DEFAULT_PRIMARY_COLOR;
+        final String textColor = _getTagColor(color);
+        return textColor != null ? textColor : DEFAULT_PRIMARY_COLOR;
     }
 
     @Override
-    public Tag getSecondaryColor() {
+    public String getSecondaryColor() {
         return secondaryColor;
     }
 
-    private Tag _getSecondaryColor() {
+    private String _getSecondaryColor() {
         final String color = config.getString("message-colors.secondary", "#ff5555");
-        final TextColor textColor = _getTagColor(color);
-        return textColor != null ? Tag.styling(textColor) : DEFAULT_SECONDARY_COLOR;
+        final String textColor = _getTagColor(color);
+        return textColor != null ? textColor : DEFAULT_SECONDARY_COLOR;
     }
 
-    private TextColor _getTagColor(final String color) {
+    private String _getTagColor(final String color) {
         try {
             if (color.startsWith("#") && color.length() == 7 && NumberUtil.isHexadecimal(color.substring(1))) {
-                return TextColor.color(Color.fromRGB(Integer.decode(color)).asRGB());
+                Color.fromRGB(Integer.decode(color));
+                return color;
             }
 
             if (color.length() == 1) {
-                return AdventureUtil.fromChar(color.charAt(0));
+                return Objects.requireNonNull(AdventureUtil.fromChar(color.charAt(0))).toString();
             }
 
-            return NamedTextColor.NAMES.value(color.toLowerCase(Locale.ENGLISH));
-        } catch (IllegalArgumentException ignored) {
+            return Objects.requireNonNull(NamedTextColor.NAMES.value(color.toLowerCase(Locale.ENGLISH))).toString();
+        } catch (NullPointerException | IllegalArgumentException ignored) {
         }
         return null;
     }
@@ -2198,6 +2240,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public BigDecimal getBaltopMinBalance() {
         return config.getBigDecimal("baltop-requirements.minimum-balance", BigDecimal.ZERO);
+    }
+
+    @Override
+    public int getBaltopEntryLimit() {
+        return config.getInt("baltop-entry-limit", -1);
     }
 
     @Override

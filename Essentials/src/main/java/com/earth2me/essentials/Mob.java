@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -125,7 +125,12 @@ public enum Mob {
     BREEZE("Breeze", Enemies.ENEMY, "BREEZE"),
     BOGGED("Bogged", Enemies.ENEMY, "BOGGED"),
     CREAKING("Creaking", Enemies.ENEMY, "CREAKING"),
-    HAPPY_GHAST("HappyGhast", Enemies.FRIENDLY, "HAPPY_GHAST")
+    HAPPY_GHAST("HappyGhast", Enemies.FRIENDLY, "HAPPY_GHAST"),
+    COPPER_GOLEM("CopperGolem", Enemies.FRIENDLY, "COPPER_GOLEM"),
+    CAMEL_HUSK("CamelHusk", Enemies.NEUTRAL, "CAMEL_HUSK"),
+    NAUTILUS("Nautilus", Enemies.NEUTRAL, "NAUTILUS"),
+    ZOMBIE_NAUTILUS("ZombieNautilus", Enemies.NEUTRAL, "ZOMBIE_NAUTILUS"),
+    PARCHED("Parched", Enemies.ENEMY, "PARCHED"),
     ;
 
     private static final Map<String, Mob> hashMap = new HashMap<>();
@@ -186,7 +191,7 @@ public enum Mob {
     public Entity spawn(final World world, final Server server, final Location loc) throws MobException {
         final Entity entity = world.spawn(loc, this.bukkitType.getEntityClass());
         if (entity == null) {
-            Essentials.getWrappedLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("unableToSpawnMob")));
+            Essentials.getWrappedLogger().log(Level.WARNING, AdventureUtil.getAdventureFacet().miniToLegacy(tlLiteral("unableToSpawnMob")));
             throw new MobException();
         }
         return entity;

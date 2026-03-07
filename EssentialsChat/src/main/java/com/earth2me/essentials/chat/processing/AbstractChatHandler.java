@@ -5,7 +5,6 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.chat.EssentialsChat;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.LocalChatSpyEvent;
 import net.ess3.provider.AbstractChatEvent;
@@ -117,9 +116,9 @@ public abstract class AbstractChatHandler {
             }
 
             if (chat.getType() == ChatType.UNKNOWN) {
-                format = AdventureUtil.miniToLegacy(tlLiteral("chatTypeLocal")).concat(format);
+                format = ess.getAdventureFacet().miniToLegacy(tlLiteral("chatTypeLocal")).concat(format);
             } else {
-                format = AdventureUtil.miniToLegacy(tlLiteral(chat.getType().key() + "Format", format));
+                format = ess.getAdventureFacet().miniToLegacy(tlLiteral(chat.getType().key() + "Format", format));
             }
         }
 
@@ -215,7 +214,7 @@ public abstract class AbstractChatHandler {
 
         // Strip local chat prefix to preserve API behaviour
         final String localPrefix = tlLiteral("chatTypeLocal");
-        String baseFormat = AdventureUtil.legacyToMini(event.getFormat());
+        String baseFormat = ess.getAdventureFacet().legacyToMini(event.getFormat());
         if (baseFormat.startsWith(localPrefix)) {
             baseFormat = baseFormat.substring(localPrefix.length());
         }
@@ -224,7 +223,7 @@ public abstract class AbstractChatHandler {
         server.getPluginManager().callEvent(spyEvent);
 
         if (!spyEvent.isCancelled()) {
-            final String legacyString = AdventureUtil.miniToLegacy(String.format(spyEvent.getFormat(), AdventureUtil.legacyToMini(user.getDisplayName()), AdventureUtil.legacyToMini(AdventureUtil.escapeTags(spyEvent.getMessage()))));
+            final String legacyString = ess.getAdventureFacet().miniToLegacy(String.format(spyEvent.getFormat(), ess.getAdventureFacet().legacyToMini(user.getDisplayName()), ess.getAdventureFacet().legacyToMini(ess.getAdventureFacet().escapeTags(spyEvent.getMessage()))));
 
             for (final Player onlinePlayer : spyEvent.getRecipients()) {
                 onlinePlayer.sendMessage(legacyString);

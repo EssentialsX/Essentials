@@ -1,12 +1,13 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.adventure.AdventureUtil;
+import com.earth2me.essentials.adventure.ComponentHolder;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -24,8 +25,6 @@ import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.ess3.provider.PlayerLocaleProvider;
 import net.essentialsx.api.v2.events.TransactionEvent;
 import net.essentialsx.api.v2.services.mail.MailSender;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -648,7 +647,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || (set && ess.getSettings().sleepIgnoresAfkPlayers()));
+        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || set && ess.getSettings().sleepIgnoresAfkPlayers());
         if (set && !isAfk()) {
             afkPosition = this.getLocation();
             this.afkSince = System.currentTimeMillis();
@@ -832,19 +831,34 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        final long autoafkkick = ess.getSettings().getAutoAfkKick();
-        if (autoafkkick > 0
-                && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
+        final long autoafktimeout = ess.getSettings().getAutoAfkTimeout();
+
+        // Checks if the player has been inactive for longer than the configured auto-afk-timeout time.
+        if (autoafktimeout > 0
+                && lastActivity > 0 && (lastActivity + (autoafktimeout * 1000)) < System.currentTimeMillis()
                 && !isAuthorized("essentials.kick.exempt")
                 && !isAuthorized("essentials.afk.kickexempt")) {
             lastActivity = 0;
-            final double kickTime = autoafkkick / 60.0;
+            final double kickTime = autoafktimeout / 60.0;
 
-            this.getBase().kickPlayer(AdventureUtil.miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
+            // If `afk-timeout-command` in config.yml is empty, use default Essentials kicking behaviour instead of executing a command.
+            if (ess.getSettings().getAfkTimeoutCommands().isEmpty()) {
+                this.getBase().kickPlayer(ess.getAdventureFacet().miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
 
-            for (final User user : ess.getOnlineUsers()) {
-                if (user.isAuthorized("essentials.kick.notify")) {
-                    user.sendTl("playerKicked", Console.DISPLAY_NAME, getName(), user.playerTl("autoAfkKickReason", kickTime));
+                for (final User user : ess.getOnlineUsers()) {
+                    if (user.isAuthorized("essentials.kick.notify")) {
+                        user.sendTl("playerKicked", Console.DISPLAY_NAME, getName(), user.playerTl("autoAfkKickReason", kickTime));
+                    }
+                }
+            } else {
+                // If `afk-timeout-commands` in config.yml is populated, execute the command(s) instead of kicking the player.
+                for (final String command : ess.getSettings().getAfkTimeoutCommands()) {
+                    if (command == null || command.isEmpty()){
+                        continue;
+                    }
+                    // Replace placeholders in the command with actual values.
+                    final String cmd = command.replace("{USERNAME}", getName()).replace("{KICKTIME}", String.valueOf(kickTime));
+                    ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), cmd);
                 }
             }
         }
@@ -1059,14 +1073,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public void sendComponent(ComponentLike component) {
-        ess.getBukkitAudience().player(base).sendMessage(component);
+    public void sendComponent(ComponentHolder component) {
+        ess.getAdventureFacet().send(base, component);
     }
 
     @Override
-    public Component tlComponent(String tlKey, Object... args) {
+    public ComponentHolder tlComponent(String tlKey, Object... args) {
         final String translation = playerTl(tlKey, args);
-        return AdventureUtil.miniMessage().deserialize(translation);
+        return ess.getAdventureFacet().deserializeMiniMessage(translation);
     }
 
     @Override
@@ -1076,14 +1090,17 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        sendComponent(AdventureUtil.miniMessage().deserialize(translation));
+        sendComponent(ess.getAdventureFacet().deserializeMiniMessage(translation));
     }
 
     @Override
     public String playerTl(String tlKey, Object... args) {
         if (ess.getSettings().isPerPlayerLocale()) {
             final PlayerLocaleProvider provider = ess.provider(PlayerLocaleProvider.class);
-            return tlLocale(getPlayerLocale(provider.getLocale(base)), tlKey, args);
+            final Locale locale = base != null ? getPlayerLocale(provider.getLocale(base)) : playerLocale;
+            if (locale != null) {
+                return tlLocale(locale, tlKey, args);
+            }
         }
         return tlLiteral(tlKey, args);
     }
@@ -1094,7 +1111,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public Locale getPlayerLocale(final String locale) {
-        if (locale.equals(lastLocaleString)) {
+        if (locale == null || locale.equals(lastLocaleString)) {
             return playerLocale;
         }
         lastLocaleString = locale;

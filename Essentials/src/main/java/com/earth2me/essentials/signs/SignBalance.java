@@ -1,7 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 

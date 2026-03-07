@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.Inventories;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.TranslatableException;
@@ -123,7 +123,7 @@ public class Commandsell extends EssentialsCommand {
         final String typeName = is.getType().toString().toLowerCase(Locale.ENGLISH);
         final AdventureUtil.ParsedPlaceholder worthDisplay = AdventureUtil.parsed(NumberUtil.displayCurrency(worth, ess));
         user.sendTl("itemSold", AdventureUtil.parsed(NumberUtil.displayCurrency(result, ess)), amount, typeName, worthDisplay);
-        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("itemSoldConsole", user.getName(), typeName, AdventureUtil.miniToLegacy(NumberUtil.displayCurrency(result, ess)), amount, AdventureUtil.miniToLegacy(worthDisplay.toString()), user.getDisplayName())));
+        ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral("itemSoldConsole", user.getName(), typeName, ess.getAdventureFacet().miniToLegacy(NumberUtil.displayCurrency(result, ess)), amount, ess.getAdventureFacet().miniToLegacy(worthDisplay.toString()), user.getDisplayName())));
         return result;
     }
 

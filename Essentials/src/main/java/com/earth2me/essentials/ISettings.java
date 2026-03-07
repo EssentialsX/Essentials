@@ -4,7 +4,6 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
 import net.essentialsx.api.v2.ChatType;
-import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.bukkit.Material;
 import org.bukkit.event.EventPriority;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -184,6 +183,8 @@ public interface ISettings extends IConf {
 
     boolean isEcoLogEnabled();
 
+    boolean isEcoLogUUIDEnabled();
+
     boolean isEcoLogUpdateEnabled();
 
     boolean realNamesOnList();
@@ -208,7 +209,9 @@ public interface ISettings extends IConf {
 
     long getAutoAfk();
 
-    long getAutoAfkKick();
+    long getAutoAfkTimeout();
+
+    List<String> getAfkTimeoutCommands();
 
     boolean getFreezeAfkPlayers();
 
@@ -316,6 +319,8 @@ public interface ISettings extends IConf {
 
     boolean isCustomServerFullMessage();
 
+    boolean isCustomWhitelistMessage();
+
     boolean isNotifyNoNewMail();
 
     boolean isDropItemsIfFull();
@@ -349,6 +354,8 @@ public interface ISettings extends IConf {
     boolean isWorldChangeFlyResetEnabled();
 
     boolean isWorldChangePreserveFlying();
+
+    boolean isGamemodeChangePreserveFlying();
 
     boolean isWorldChangeSpeedResetEnabled();
 
@@ -406,6 +413,8 @@ public interface ISettings extends IConf {
 
     boolean logCommandBlockCommands();
 
+    boolean logConsoleCommands();
+
     Set<Predicate<String>> getNickBlacklist();
 
     double getMaxProjectileSpeed();
@@ -430,13 +439,15 @@ public interface ISettings extends IConf {
 
     int getMaxItemLore();
 
-    Tag getPrimaryColor();
+    String getPrimaryColor();
 
-    Tag getSecondaryColor();
+    String getSecondaryColor();
 
     BigDecimal getBaltopMinBalance();
 
     long getBaltopMinPlaytime();
+
+    int getBaltopEntryLimit();
 
     enum KeepInvPolicy {
         KEEP,

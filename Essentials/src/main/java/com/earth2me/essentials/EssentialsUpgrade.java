@@ -6,7 +6,6 @@ import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.userstorage.ModernUUIDCache;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -72,7 +71,7 @@ public class EssentialsUpgrade {
         doneFile.load();
     }
 
-    public static void uuidFileConvert(final IEssentials ess, final Boolean ignoreUFCache) {
+    private static void uuidFileConvert(final IEssentials ess, final Boolean ignoreUFCache) {
         ess.getLogger().info("Starting Essentials UUID userdata conversion");
 
         final File userdir = new File(ess.getDataFolder(), "userdata");
@@ -157,7 +156,7 @@ public class EssentialsUpgrade {
         ess.getLogger().info("To rerun the conversion type /essentials uuidconvert");
     }
 
-    public void updateRandomTeleport() {
+    private void updateRandomTeleport() {
         if (doneFile.getBoolean("updateRandomTeleport", false)) {
             return;
         }
@@ -192,7 +191,7 @@ public class EssentialsUpgrade {
         ess.getLogger().info("Done converting random teleport config.");
     }
 
-    public void convertMailList() {
+    private void convertMailList() {
         if (doneFile.getBoolean("updateUsersMailList", false)) {
             return;
         }
@@ -232,7 +231,7 @@ public class EssentialsUpgrade {
         ess.getLogger().info("Done converting mail list.");
     }
 
-    public void convertStupidCamelCaseUserdataKeys() {
+    private void convertStupidCamelCaseUserdataKeys() {
         if (doneFile.getBoolean("updateUsersStupidLegacyPathNames", false)) {
             return;
         }
@@ -312,7 +311,7 @@ public class EssentialsUpgrade {
      * horrible economy code, as any operation which loads all user data into memory will load all these NPC accounts
      * and spam the console with warnings."
      */
-    public void purgeBrokenNpcAccounts() {
+    private void purgeBrokenNpcAccounts() {
         if (doneFile.getBoolean("updatePurgeBrokenNpcAccounts", false)) {
             return;
         }
@@ -423,7 +422,7 @@ public class EssentialsUpgrade {
         ess.getLogger().info("#===========================================================================#");
     }
 
-    public void convertIgnoreList() {
+    private void convertIgnoreList() {
         final Pattern pattern = Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
         if (doneFile.getBoolean("updateUsersIgnoreListUUID", false)) {
             return;
@@ -474,6 +473,10 @@ public class EssentialsUpgrade {
     }
 
     public void convertKits() {
+        if (Essentials.TESTING) {
+            return;
+        }
+
         final Kits kits = ess.getKits();
         final EssentialsConfiguration config = kits.getRootConfig();
         if (doneFile.getBoolean("kitsyml", false)) {
@@ -531,7 +534,7 @@ public class EssentialsUpgrade {
             doneFile.setProperty("move" + name + "ToFile", true);
             doneFile.save();
         } catch (final IOException e) {
-            ess.getLogger().log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("upgradingFilesError")), e);
+            ess.getLogger().log(Level.SEVERE, ess.getAdventureFacet().miniToLegacy(tlLiteral("upgradingFilesError")), e);
         }
     }
 
@@ -694,15 +697,15 @@ public class EssentialsUpgrade {
             final File tmpFile = new File(listOfFile.getParentFile(), sanitizedFilename + ".tmp");
             final File newFile = new File(listOfFile.getParentFile(), sanitizedFilename);
             if (!listOfFile.renameTo(tmpFile)) {
-                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("userdataMoveError", filename, sanitizedFilename)));
+                ess.getLogger().log(Level.WARNING, ess.getAdventureFacet().miniToLegacy(tlLiteral("userdataMoveError", filename, sanitizedFilename)));
                 continue;
             }
             if (newFile.exists()) {
-                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("duplicatedUserdata", filename, sanitizedFilename)));
+                ess.getLogger().log(Level.WARNING, ess.getAdventureFacet().miniToLegacy(tlLiteral("duplicatedUserdata", filename, sanitizedFilename)));
                 continue;
             }
             if (!tmpFile.renameTo(newFile)) {
-                ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("userdataMoveBackError", sanitizedFilename, sanitizedFilename)));
+                ess.getLogger().log(Level.WARNING, ess.getAdventureFacet().miniToLegacy(tlLiteral("userdataMoveBackError", sanitizedFilename, sanitizedFilename)));
             }
         }
         doneFile.setProperty("sanitizeAllUserFilenames", true);
@@ -718,7 +721,7 @@ public class EssentialsUpgrade {
         return null;
     }
 
-    public Location getFakeLocation(final CommentedConfigurationNode config, final String path) {
+    private Location getFakeLocation(final CommentedConfigurationNode config, final String path) {
         final String worldName = config.getString((path != null ? path + "." : "") + "world");
         if (worldName == null || worldName.isEmpty()) {
             return null;
@@ -882,7 +885,7 @@ public class EssentialsUpgrade {
         doneFile.save();
     }
 
-    public void banFormatChange() {
+    private void banFormatChange() {
         if (doneFile.getBoolean("banFormatChange", false)) {
             return;
         }
@@ -952,7 +955,7 @@ public class EssentialsUpgrade {
         Bukkit.getBanList(BanList.Type.NAME).addBan(playerName, banReason, banTimeout == 0 ? null : new Date(banTimeout), Console.NAME);
     }
 
-    public void generateUidCache() {
+    private void generateUidCache() {
         if (doneFile.getBoolean("newUidCacheBuilt", false)) {
             return;
         }
@@ -992,7 +995,7 @@ public class EssentialsUpgrade {
                         if (name != null) {
                             if (nameToUuidMap.containsKey(name)) {
                                 final UUID oldUuid = nameToUuidMap.get(name);
-                                if (oldUuid.version() < uuid.version() || (oldUuid.version() == uuid.version() && uuids.get(oldUuid) < time)) {
+                                if (oldUuid.version() < uuid.version() || oldUuid.version() == uuid.version() && uuids.get(oldUuid) < time) {
                                     ess.getLogger().warning("New UUID found for " + name + ": " + uuid + " (old: " + oldUuid + "). Replacing.");
                                     uuids.remove(oldUuid);
                                 } else {
@@ -1060,7 +1063,7 @@ public class EssentialsUpgrade {
                         properties.load(Files.newReader(backup, Charsets.UTF_8));
                         for (final String key : properties.stringPropertyNames()) {
                             final String value = properties.getProperty(key);
-                            properties.setProperty(key, AdventureUtil.legacyToMini(AdventureUtil.miniMessage().escapeTags(value), true));
+                            properties.setProperty(key, ess.getAdventureFacet().legacyToMini(ess.getAdventureFacet().escapeTags(value), true));
                         }
                         properties.store(Files.newWriter(newFile, Charsets.UTF_8), null);
                     }
@@ -1079,6 +1082,10 @@ public class EssentialsUpgrade {
     }
 
     public void beforeSettings() {
+        if (Essentials.TESTING) {
+            return;
+        }
+
         if (!ess.getDataFolder().exists()) {
             ess.getDataFolder().mkdirs();
         }
@@ -1087,10 +1094,17 @@ public class EssentialsUpgrade {
     }
 
     public void preModules() {
+        if (Essentials.TESTING) {
+            return;
+        }
         generateUidCache();
     }
 
     public void afterSettings() {
+        if (Essentials.TESTING) {
+            return;
+        }
+
         sanitizeAllUserFilenames();
         updateUsersPowerToolsFormat();
         updateUsersHomesFormat();

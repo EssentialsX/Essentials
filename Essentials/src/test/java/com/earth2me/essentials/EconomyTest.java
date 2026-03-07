@@ -4,7 +4,6 @@ import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
-import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.Economy;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.command.CommandSender;
@@ -149,7 +148,7 @@ public class EconomyTest {
         try {
             runCommand("pay", user1, PLAYERNAME2 + " -123");
         } catch (final Exception e) {
-            Assertions.assertEquals(AdventureUtil.miniToLegacy(I18n.tlLiteral("payMustBePositive")), e.getMessage());
+            Assertions.assertEquals(ess.getAdventureFacet().miniToLegacy(I18n.tlLiteral("payMustBePositive")), e.getMessage());
         }
     }
 }
