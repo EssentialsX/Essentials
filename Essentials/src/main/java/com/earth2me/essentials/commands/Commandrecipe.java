@@ -13,8 +13,10 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
@@ -159,6 +161,14 @@ public class Commandrecipe extends EssentialsCommand {
             user.getBase().closeInventory();
             user.setRecipeSee(true);
             final InventoryView view = user.getBase().openWorkbench(null, true);
+            // If InventoryOpenEvent is canceled, the items can end up in the player's own crafting grid
+            // which allows players to extract counterfeit items.
+            InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
+            Inventory topInventory = provider.getTopInventory(view);
+            if (topInventory.getType() != InventoryType.WORKBENCH) {
+                return;
+            }
+
             final String[] recipeShape = recipe.getShape();
             final Map<Character, ItemStack> ingredientMap = recipe.getIngredientMap();
             for (int j = 0; j < recipeShape.length; j++) {
@@ -170,7 +180,7 @@ public class Commandrecipe extends EssentialsCommand {
                     if (VersionUtil.PRE_FLATTENING && item.getDurability() == Short.MAX_VALUE) {
                         item.setDurability((short) 0);
                     }
-                    ess.provider(InventoryViewProvider.class).getTopInventory(view).setItem(j * 3 + k + 1, item);
+                    topInventory.setItem(j * 3 + k + 1, item);
                 }
             }
         } else {
