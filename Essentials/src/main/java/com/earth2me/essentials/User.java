@@ -265,7 +265,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         payUser(reciever, value, UserBalanceUpdateEvent.Cause.UNKNOWN);
     }
 
-    public void payUser(final User reciever, final BigDecimal value, final UserBalanceUpdateEvent.Cause cause) throws Exception {
+    public void payUser(final User reciever, BigDecimal value, final UserBalanceUpdateEvent.Cause cause) throws Exception {
         if (value.compareTo(BigDecimal.ZERO) < 1) {
             throw new Exception(tlLocale(playerLocale, "payMustBePositive"));
         }
@@ -277,13 +277,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (preTransactionEvent.isCancelled()) {
                 return;
             }
-            final BigDecimal transactionAmount = preTransactionEvent.getAmount();
+            value = preTransactionEvent.getAmount();
 
-            setMoney(getMoney().subtract(transactionAmount), cause);
-            reciever.setMoney(reciever.getMoney().add(transactionAmount), cause);
-            sendTl("moneySentTo", AdventureUtil.parsed(NumberUtil.displayCurrency(transactionAmount, ess)), reciever.getDisplayName());
-            reciever.sendTl("moneyRecievedFrom", AdventureUtil.parsed(NumberUtil.displayCurrency(transactionAmount, ess)), getDisplayName());
-            final TransactionEvent transactionEvent = new TransactionEvent(this.getSource(), reciever, transactionAmount);
+            setMoney(getMoney().subtract(value), cause);
+            reciever.setMoney(reciever.getMoney().add(value), cause);
+            sendTl("moneySentTo", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)), reciever.getDisplayName());
+            reciever.sendTl("moneyRecievedFrom", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)), getDisplayName());
+            final TransactionEvent transactionEvent = new TransactionEvent(this.getSource(), reciever, value);
             ess.getServer().getPluginManager().callEvent(transactionEvent);
         } else {
             throw new ChargeException("notEnoughMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)));
