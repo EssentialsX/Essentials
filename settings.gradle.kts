@@ -1,11 +1,5 @@
 dependencyResolutionManagement {
     repositories {
-        maven("https://maven-prs.papermc.io/Paper/pr13194") {
-            name = "Maven for PR #13194" // https://github.com/PaperMC/Paper/pull/13194
-            mavenContent {
-                includeModule("io.papermc.paper", "paper-api")
-            }
-        }
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://hub.spigotmc.org/nexus/content/groups/public/") {
             content {
@@ -13,10 +7,9 @@ dependencyResolutionManagement {
                 includeGroup("net.md_5")
             }
         }
-        maven("https://jitpack.io") {
+        maven("https://repo.essentialsx.net/releases") {
             content {
-                includeGroup("com.github.milkbowl")
-                includeGroup("com.github.MinnDevelopment")
+                includeGroup("net.essentialsx.deps")
             }
         }
         maven("https://repo.codemc.org/repository/maven-public") {
