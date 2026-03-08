@@ -308,8 +308,14 @@ public class MetaItemStack {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].startsWith("page") && split[0].length() > 4 && MaterialUtil.isEditableBook(stack.getType()) && hasMetaPermission(sender, "page", false, true, ess)) {
-            final int page = NumberUtil.isInt(split[0].substring(4)) ? (Integer.parseInt(split[0].substring(4)) - 1) : 0;
+        } else if (split.length > 1 && split[0].startsWith("page") && split[0].length() > 4
+                && MaterialUtil.isEditableBook(stack.getType())
+                && hasMetaPermission(sender, "page", false, true, ess)) {
+            final int page = NumberUtil.isInt(split[0].substring(4)) ? (Integer.parseInt(split[0].substring(4)) - 1)
+                    : 0;
+            if (page > 100) {
+                throw new TranslatableException("pageLimitExceeded");
+            }
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             final List<String> pages = meta.hasPages() ? new ArrayList<>(meta.getPages()) : new ArrayList<>();
             final List<String> lines = new ArrayList<>();

@@ -49,7 +49,7 @@ public class Commandice extends EssentialsLoopCommand {
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1 && sender.isAuthorized("essentials.ice.others")) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             return Collections.emptyList();
         }

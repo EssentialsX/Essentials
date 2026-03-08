@@ -52,7 +52,10 @@ public class PermissionsHandler implements IPermissionsHandler {
         final long start = System.nanoTime();
         final List<String> groups = new ArrayList<>();
         groups.add(defaultGroup);
-        groups.addAll(handler.getGroups(base));
+        final List<String> handlerGroups = handler.getGroups(base);
+        if (handlerGroups != null && !handlerGroups.isEmpty()) {
+            groups.addAll(handlerGroups);
+        }
         checkPermLag(start, String.format("Getting groups for %s", base.getName()));
         return Collections.unmodifiableList(groups);
     }

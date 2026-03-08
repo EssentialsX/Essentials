@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.BanList;
 import org.bukkit.Server;
@@ -52,10 +51,10 @@ public class Commandbanip extends EssentialsCommand {
             banReason = tlLiteral("defaultBanReason");
         }
 
-        final String banDisplay = AdventureUtil.miniToLegacy(tlLiteral("banFormat", banReason, senderDisplayName));
+        final String banDisplay = ess.getAdventureFacet().miniToLegacy(tlLiteral("banFormat", banReason, senderDisplayName));
 
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
-        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("playerBanIpAddress", senderDisplayName, ipAddress, banReason)));
+        ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral("playerBanIpAddress", senderDisplayName, ipAddress, banReason)));
 
         for (final Player player : ess.getServer().getOnlinePlayers()) {
             if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
@@ -70,7 +69,7 @@ public class Commandbanip extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             // TODO: Also list IP addresses?
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             return Collections.emptyList();
         }

@@ -154,7 +154,7 @@ public class Commandexp extends EssentialsLoopCommand {
                 }
             }
             if (user.isAuthorized("essentials.exp.others")) {
-                return getPlayers(server, user);
+                return getPlayers(user);
             }
         } else if (args.length == 3 && !(args[0].equalsIgnoreCase("show") || args[0].equalsIgnoreCase("reset"))) {
             final String levellessArg = args[2].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
@@ -182,10 +182,10 @@ public class Commandexp extends EssentialsLoopCommand {
                     return Collections.emptyList();
                 }
             } else { // even without 'show'
-                return getPlayers(server, sender);
+                return getPlayers(sender);
             }
         } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("give"))) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             return Collections.emptyList();
         }

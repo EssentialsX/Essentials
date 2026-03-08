@@ -6,7 +6,6 @@ import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
@@ -26,6 +25,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tlLiteral;
@@ -174,10 +174,11 @@ public class Kit {
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
             final boolean autoEquip = ess.getSettings().isKitAutoEquip();
             final List<ItemStack> itemList = new ArrayList<>();
+            final Map<Integer, ItemStack> itemsWithSlot = new HashMap<>();
             final List<String> commandQueue = new ArrayList<>();
             final List<String> moneyQueue = new ArrayList<>();
             final String currencySymbol = ess.getSettings().getCurrencySymbol().isEmpty() ? "$" : ess.getSettings().getCurrencySymbol();
-            for (final String kitItem : output.getLines()) {
+            for (String kitItem : output.getLines()) {
                 if (kitItem.startsWith("$") || kitItem.startsWith(currencySymbol)) {
                     moneyQueue.add(NumberUtil.sanitizeCurrencyString(kitItem, ess));
                     continue;
@@ -191,12 +192,22 @@ public class Kit {
                     continue;
                 }
 
+                int itemSlot = -1;
+                if (kitItem.startsWith("slot:")) {
+                    final int spaceIndex = kitItem.indexOf(" ");
+                    if (spaceIndex != -1) {
+                        final String slotStr = kitItem.substring("slot:".length(), spaceIndex);
+                        itemSlot = NumberUtil.isInt(slotStr) ? Integer.parseInt(slotStr) : -1;
+                        kitItem = kitItem.substring(spaceIndex + 1);
+                    }
+                }
+
                 final ItemStack stack;
                 final SerializationProvider serializationProvider = ess.provider(SerializationProvider.class);
 
                 if (kitItem.startsWith("@")) {
                     if (serializationProvider == null) {
-                        ess.getLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("kitError3", kitName, user.getName())));
+                        ess.getLogger().log(Level.WARNING, ess.getAdventureFacet().miniToLegacy(tlLiteral("kitError3", kitName, user.getName())));
                         continue;
                     }
                     stack = serializationProvider.deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
@@ -218,22 +229,35 @@ public class Kit {
                     stack = metaStack.getItemStack();
                 }
 
-                itemList.add(stack);
+                if (itemSlot == -1 || itemsWithSlot.containsKey(itemSlot)) {
+                    itemList.add(stack);
+                } else {
+                    itemsWithSlot.put(itemSlot, stack);
+                }
             }
 
             final int maxStackSize = user.isAuthorized("essentials.oversizedstacks") ? ess.getSettings().getOversizedStackSize() : 0;
             final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
 
-            final KitPreExpandItemsEvent itemsEvent = new KitPreExpandItemsEvent(user, kitName, itemList);
+            final List<ItemStack> totalItems = new ArrayList<>(itemList);
+            totalItems.addAll(itemsWithSlot.values());
+
+            final KitPreExpandItemsEvent itemsEvent = new KitPreExpandItemsEvent(user, kitName, totalItems);
             Bukkit.getPluginManager().callEvent(itemsEvent);
-
-            final ItemStack[] itemArray = itemList.toArray(new ItemStack[0]);
-
-            if (!isDropItemsIfFull && !Inventories.hasSpace(user.getBase(), maxStackSize, autoEquip, itemArray)) {
+            final ItemStack[] totalItemsArray = totalItems.toArray(new ItemStack[0]);
+            if (!isDropItemsIfFull && !Inventories.hasSpace(user.getBase(), maxStackSize, autoEquip, totalItemsArray)) {
                 user.sendTl("kitInvFullNoDrop");
                 return false;
             }
 
+            for (Map.Entry<Integer, ItemStack> itemWithSlot : itemsWithSlot.entrySet()) {
+                final ItemStack leftover = Inventories.addItem(user.getBase(), maxStackSize, itemWithSlot.getValue(), itemWithSlot.getKey());
+                if (leftover != null) {
+                    itemList.add(leftover);
+                }
+            }
+
+            final ItemStack[] itemArray = itemList.toArray(new ItemStack[0]);
             final Map<Integer, ItemStack> leftover = Inventories.addItem(user.getBase(), maxStackSize, autoEquip, itemArray);
             if (!isDropItemsIfFull && !leftover.isEmpty()) {
                 // Inventories#hasSpace should prevent this state from EVER being reached; If it does, something has gone terribly wrong, and we should just give up and hope people report it :(

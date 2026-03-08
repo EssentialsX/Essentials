@@ -36,11 +36,13 @@ public class Commandmore extends EssentialsCommand {
             if (!NumberUtil.isPositiveInt(args[0])) {
                 throw new TranslatableException("nonZeroPosNumber");
             }
-            newStackSize += Integer.parseInt(args[0]);
-
-            if (newStackSize > (canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize())) {
-                user.sendTl(canOversized ? "fullStackDefaultOversize" : "fullStackDefault", canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize());
-                newStackSize = canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize();
+            final int cap = canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize();
+            final long newSizeLong = (long) stack.getAmount() + Integer.parseInt(args[0]);
+            if (newSizeLong > cap) {
+                user.sendTl(canOversized ? "fullStackDefaultOversize" : "fullStackDefault", cap);
+                newStackSize = cap;
+            } else {
+                newStackSize = (int) newSizeLong;
             }
         } else if (canOversized) {
             newStackSize = ess.getSettings().getOversizedStackSize();

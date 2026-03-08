@@ -107,7 +107,7 @@ public class Commandtppos extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else if (args.length == 2 || args.length == 3 || args.length == 4) {
             return Lists.newArrayList("~0");
         } else if (args.length == 5 || args.length == 6) {

@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.TranslatableException;
@@ -155,7 +155,7 @@ public class Commandhome extends EssentialsCommand {
             if (canVisitOthers) {
                 final int sepIndex = args[0].indexOf(':');
                 if (sepIndex < 0) {
-                    getPlayers(server, user).forEach(player -> homes.add(player + ":"));
+                    getPlayers(user).forEach(player -> homes.add(player + ":"));
                 } else {
                     final String namePart = args[0].substring(0, sepIndex);
                     final User otherUser;

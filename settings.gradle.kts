@@ -7,10 +7,9 @@ dependencyResolutionManagement {
                 includeGroup("net.md_5")
             }
         }
-        maven("https://jitpack.io") {
+        maven("https://repo.essentialsx.net/releases") {
             content {
-                includeGroup("com.github.milkbowl")
-                includeGroup("com.github.MinnDevelopment")
+                includeGroup("net.essentialsx.deps")
             }
         }
         maven("https://repo.codemc.org/repository/maven-public") {

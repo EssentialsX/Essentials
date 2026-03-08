@@ -334,7 +334,7 @@ public class Commandmail extends EssentialsCommand {
             return options;
         } else if (args.length == 2) {
             if ((args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args[0].equalsIgnoreCase("sendtemp") && user.isAuthorized("essentials.mail.sendtemp")) || ((args[0].equalsIgnoreCase("clear"))&& user.isAuthorized("essentials.mail.clear.others"))) {
-                return getPlayers(server, user);
+                return getPlayers(user);
             } else if (args[0].equalsIgnoreCase("sendtempall") && user.isAuthorized("essentials.mail.sendtempall")) {
                 return COMMON_DATE_DIFFS;
             } else if (args[0].equalsIgnoreCase("read")) {
@@ -374,7 +374,7 @@ public class Commandmail extends EssentialsCommand {
             return Lists.newArrayList("send", "sendall", "sendtemp", "sendtempall", "clearall", "clear");
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("send") || args[0].equalsIgnoreCase("sendtemp") || args[0].equalsIgnoreCase("clear")) {
-                return getPlayers(server, sender);
+                return getPlayers(sender);
             } else if (args[0].equalsIgnoreCase("sendtempall")) {
                 return COMMON_DATE_DIFFS;
             }

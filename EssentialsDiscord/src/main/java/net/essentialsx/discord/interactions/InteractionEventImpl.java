@@ -1,6 +1,6 @@
 package net.essentialsx.discord.interactions;
 
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.base.Joiner;
 import net.dv8tion.jda.api.entities.Message;
@@ -50,7 +50,7 @@ public class InteractionEventImpl implements InteractionEvent {
 
     @Override
     public void replyTl(String tlKey, Object... args) {
-        reply(AdventureUtil.miniToLegacy(tlLiteral(tlKey, args)));
+        reply(AdventureUtil.getAdventureFacet().miniToLegacy(tlLiteral(tlKey, args)));
     }
 
     @Override

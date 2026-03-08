@@ -59,7 +59,7 @@ public class Commandkitreset extends EssentialsCommand {
         if (args.length == 1) {
             return new ArrayList<>(ess.getKits().getKitKeys());
         } else if (args.length == 2 && sender.isAuthorized("essentials.kitreset.others")) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             return Collections.emptyList();
         }

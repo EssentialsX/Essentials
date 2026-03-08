@@ -4,7 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.messaging.IMessageRecipient;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IUser;
 import net.essentialsx.api.v2.events.HelpopMessageSendEvent;
@@ -39,7 +38,7 @@ public class Commandhelpop extends EssentialsCommand {
         }
 
         final String message = FormatUtil.stripFormat(getFinalArg(args, 0));
-        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("helpOp", from.getDisplayName(), message)));
+        ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral("helpOp", from.getDisplayName(), message)));
 
         final List<IUser> recipients = new ArrayList<>();
         for (IUser user : ess.getOnlineUsers()) {
@@ -51,9 +50,11 @@ public class Commandhelpop extends EssentialsCommand {
         final HelpopMessageSendEvent sendEvent = new HelpopMessageSendEvent(from, recipients, message);
         ess.getServer().getPluginManager().callEvent(sendEvent);
 
-        final IUser sender = (IUser) from;
-        if(!recipients.contains(sender)){
-            from.sendTl("helpOp", from.getDisplayName(), message);
+        if (from instanceof IUser) {
+            final IUser sender = (IUser) from;
+            if (!recipients.contains(sender)) {
+                from.sendTl("helpOp", from.getDisplayName(), message);
+            }
         }
 
         for (IUser recipient : sendEvent.getRecipients()) {

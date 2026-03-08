@@ -178,13 +178,13 @@ public class Commandskull extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             if (user.isAuthorized("essentials.skull.others")) {
-                return getPlayers(server, user);
+                return getPlayers(user);
             } else {
                 return Lists.newArrayList(user.getName());
             }
         } else if (args.length == 2){
             if (user.isAuthorized("essentials.skull.others")) {
-                return getPlayers(server, user);
+                return getPlayers(user);
             } else {
                 return Lists.newArrayList(user.getName());
             }
