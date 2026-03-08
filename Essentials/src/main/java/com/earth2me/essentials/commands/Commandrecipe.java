@@ -163,9 +163,10 @@ public class Commandrecipe extends EssentialsCommand {
             final InventoryView view = user.getBase().openWorkbench(null, true);
             // If InventoryOpenEvent is canceled, the items can end up in the player's own crafting grid
             // which allows players to extract counterfeit items.
-            InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
+            final InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
             final Inventory topInventory = provider.getTopInventory(view);
             if (topInventory.getType() != InventoryType.WORKBENCH) {
+                user.setRecipeSee(false);
                 return;
             }
 
