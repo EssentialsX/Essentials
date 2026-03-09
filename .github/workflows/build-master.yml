@@ -41,10 +41,64 @@ jobs:
         report_paths: '**/build/test-results/test*/TEST-*.xml'
 
     - name: Archive plugin jars on GitHub
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: EssentialsX plugin jars
         path: jars/
+
+    - name: Upload EssentialsX jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsX-*.jar
+        archive: false
+
+    - name: Upload EssentialsAntiBuild jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsAntiBuild-*.jar
+        archive: false
+
+    - name: Upload EssentialsChat jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsChat-*.jar
+        archive: false
+
+    - name: Upload EssentialsDiscord jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsDiscord-*.jar
+        archive: false
+
+    - name: Upload EssentialsDiscordLink jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsDiscordLink-*.jar
+        archive: false
+
+    - name: Upload EssentialsGeoIP jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsGeoIP-*.jar
+        archive: false
+
+    - name: Upload EssentialsProtect jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsProtect-*.jar
+        archive: false
+
+    - name: Upload EssentialsSpawn jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsSpawn-*.jar
+        archive: false
+
+    - name: Upload EssentialsXMPP jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsXMPP-*.jar
+        archive: false
 
     - name: Deploy to Maven repo
       if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
@@ -67,7 +121,7 @@ jobs:
         cp -r EssentialsXMPP/build/docs/javadoc/ javadocs/EssentialsXMPP/
 
     - name: Archive Javadocs
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: javadocs
         path: javadocs/
@@ -85,7 +139,7 @@ jobs:
         node-version: 22
 
     - name: Download Javadocs
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: javadocs
         path: javadocs/
