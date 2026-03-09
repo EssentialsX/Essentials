@@ -36,7 +36,6 @@ public class Commandrecipe extends EssentialsCommand {
     private static final Material FIREWORK_STAR = EnumUtil.getMaterial("FIREWORK_STAR", "FIREWORK_CHARGE");
     private static final Material GUNPOWDER = EnumUtil.getMaterial("GUNPOWDER", "SULPHUR");
     private final boolean unsupported;
-    private final InventoryViewProvider inventoryViewProvider;
 
     public Commandrecipe() {
         super("recipe");
@@ -50,7 +49,6 @@ public class Commandrecipe extends EssentialsCommand {
             }
         }
         this.unsupported = unsupported;
-        this.inventoryViewProvider = ess.provider(InventoryViewProvider.class);
     }
 
     @Override
@@ -167,7 +165,7 @@ public class Commandrecipe extends EssentialsCommand {
                 user.setRecipeSee(false);
                 return;
             }
-            final Inventory topInventory = inventoryViewProvider.getTopInventory(view);
+            final Inventory topInventory = ess.provider(InventoryViewProvider.class).getTopInventory(view);
 
             final String[] recipeShape = recipe.getShape();
             final Map<Character, ItemStack> ingredientMap = recipe.getIngredientMap();
@@ -237,7 +235,7 @@ public class Commandrecipe extends EssentialsCommand {
                 if (VersionUtil.PRE_FLATTENING && item.getDurability() == Short.MAX_VALUE) {
                     item.setDurability((short) 0);
                 }
-                inventoryViewProvider.setItem(view, i + 1, item);
+                ess.provider(InventoryViewProvider.class).setItem(view, i + 1, item);
             }
 
         } else {
@@ -260,7 +258,7 @@ public class Commandrecipe extends EssentialsCommand {
         if (view == null)
             return null;
 
-        final Inventory inventory = inventoryViewProvider.getTopInventory(view);
+        final Inventory inventory = ess.provider(InventoryViewProvider.class).getTopInventory(view);
         return inventory.getType() == InventoryType.WORKBENCH ? view : null;
     }
 
