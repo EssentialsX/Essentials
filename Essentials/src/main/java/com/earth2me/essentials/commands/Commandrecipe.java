@@ -261,7 +261,7 @@ public class Commandrecipe extends EssentialsCommand {
             return null;
 
         final Inventory inventory = inventoryViewProvider.getTopInventory(view);
-        return inventory.getType() == InventoryType.CRAFTING ? view : null;
+        return inventory.getType() == InventoryType.WORKBENCH ? view : null;
     }
 
     public String getMaterialName(final CommandSource sender, final ItemStack stack) {
