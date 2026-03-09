@@ -59,50 +59,50 @@ jobs:
         path: jars/EssentialsX-*.jar
         archive: false
 
-    - name: Upload EssentialsAntiBuild jar
+    - name: Upload EssentialsXAntiBuild jar
       uses: actions/upload-artifact@v7
       with:
-        path: jars/EssentialsAntiBuild-*.jar
+        path: jars/EssentialsXAntiBuild-*.jar
         archive: false
 
-    - name: Upload EssentialsChat jar
+    - name: Upload EssentialsXChat jar
       uses: actions/upload-artifact@v7
       with:
-        path: jars/EssentialsChat-*.jar
+        path: jars/EssentialsXChat-*.jar
         archive: false
 
-    - name: Upload EssentialsDiscord jar
+    - name: Upload EssentialsXDiscord jar
       uses: actions/upload-artifact@v7
       with:
-        path: jars/EssentialsDiscord-*.jar
+        path: jars/EssentialsXDiscord-*.jar
         archive: false
 
-    - name: Upload EssentialsDiscordLink jar
+    - name: Upload EssentialsXDiscordLink jar
       uses: actions/upload-artifact@v7
       with:
-        path: jars/EssentialsDiscordLink-*.jar
+        path: jars/EssentialsXDiscordLink-*.jar
         archive: false
 
-    - name: Upload EssentialsGeoIP jar
+    - name: Upload EssentialsXGeoIP jar
       uses: actions/upload-artifact@v7
       with:
-        path: jars/EssentialsGeoIP-*.jar
+        path: jars/EssentialsXGeoIP-*.jar
         archive: false
 
-    - name: Upload EssentialsProtect jar
+    - name: Upload EssentialsXProtect jar
       uses: actions/upload-artifact@v7
       with:
-        path: jars/EssentialsProtect-*.jar
+        path: jars/EssentialsXProtect-*.jar
         archive: false
 
-    - name: Upload EssentialsSpawn jar
+    - name: Upload EssentialsXSpawn jar
       uses: actions/upload-artifact@v7
       with:
-        path: jars/EssentialsSpawn-*.jar
+        path: jars/EssentialsXSpawn-*.jar
         archive: false
 
-    - name: Upload EssentialsXMPP jar
+    - name: Upload EssentialsXXMPP jar
       uses: actions/upload-artifact@v7
       with:
-        path: jars/EssentialsXMPP-*.jar
+        path: jars/EssentialsXXMPP-*.jar
         archive: false
