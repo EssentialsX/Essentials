@@ -40,6 +40,7 @@ public final class VersionUtil {
     public static final BukkitVersion v1_19_R01 = BukkitVersion.fromString("1.19-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_19_4_R01 = BukkitVersion.fromString("1.19.4-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_20_1_R01 = BukkitVersion.fromString("1.20.1-R0.1-SNAPSHOT");
+    public static final BukkitVersion v1_20_4_R01 = BukkitVersion.fromString("1.20.4-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_20_6_R01 = BukkitVersion.fromString("1.20.6-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_21_R01 = BukkitVersion.fromString("1.21-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_21_3_R01 = BukkitVersion.fromString("1.21.3-R0.1-SNAPSHOT");
