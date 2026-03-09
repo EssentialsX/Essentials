@@ -36,6 +36,7 @@ public class Commandrecipe extends EssentialsCommand {
     private static final Material FIREWORK_STAR = EnumUtil.getMaterial("FIREWORK_STAR", "FIREWORK_CHARGE");
     private static final Material GUNPOWDER = EnumUtil.getMaterial("GUNPOWDER", "SULPHUR");
     private final boolean unsupported;
+    private final InventoryViewProvider inventoryViewProvider;
 
     public Commandrecipe() {
         super("recipe");
@@ -49,6 +50,7 @@ public class Commandrecipe extends EssentialsCommand {
             }
         }
         this.unsupported = unsupported;
+        this.inventoryViewProvider = ess.provider(InventoryViewProvider.class);
     }
 
     @Override
@@ -160,15 +162,12 @@ public class Commandrecipe extends EssentialsCommand {
             final User user = ess.getUser(sender.getPlayer());
             user.getBase().closeInventory();
             user.setRecipeSee(true);
-            final InventoryView view = user.getBase().openWorkbench(null, true);
-            // If InventoryOpenEvent is canceled, the items can end up in the player's own crafting grid
-            // which allows players to extract counterfeit items.
-            final InventoryViewProvider provider = ess.provider(InventoryViewProvider.class);
-            final Inventory topInventory = provider.getTopInventory(view);
-            if (topInventory.getType() != InventoryType.WORKBENCH) {
+            final InventoryView view = openWorkbench(user);
+            if (view == null) {
                 user.setRecipeSee(false);
                 return;
             }
+            final Inventory topInventory = inventoryViewProvider.getTopInventory(view);
 
             final String[] recipeShape = recipe.getShape();
             final Map<Character, ItemStack> ingredientMap = recipe.getIngredientMap();
@@ -228,13 +227,17 @@ public class Commandrecipe extends EssentialsCommand {
             final User user = ess.getUser(sender.getPlayer());
             user.getBase().closeInventory();
             user.setRecipeSee(true);
-            final InventoryView view = user.getBase().openWorkbench(null, true);
+            final InventoryView view = openWorkbench(user);
+            if (view == null) {
+                user.setRecipeSee(false);
+                return;
+            }
             for (int i = 0; i < ingredients.size(); i++) {
                 final ItemStack item = ingredients.get(i);
                 if (VersionUtil.PRE_FLATTENING && item.getDurability() == Short.MAX_VALUE) {
                     item.setDurability((short) 0);
                 }
-                ess.provider(InventoryViewProvider.class).setItem(view, i + 1, item);
+                inventoryViewProvider.setItem(view, i + 1, item);
             }
 
         } else {
@@ -248,6 +251,17 @@ public class Commandrecipe extends EssentialsCommand {
             }
             sender.sendTl("recipeShapeless", s.toString());
         }
+    }
+
+    private InventoryView openWorkbench(final User user) {
+        final InventoryView view = user.getBase().openWorkbench(null, true);
+        // If InventoryOpenEvent is canceled, the items can end up in the player's own crafting grid
+        // which allows players to extract counterfeit items.
+        if (view == null)
+            return null;
+
+        final Inventory inventory = inventoryViewProvider.getTopInventory(view);
+        return inventory.getType() == InventoryType.CRAFTING ? view : null;
     }
 
     public String getMaterialName(final CommandSource sender, final ItemStack stack) {
