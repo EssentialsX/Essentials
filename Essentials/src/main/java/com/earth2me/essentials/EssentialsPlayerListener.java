@@ -9,33 +9,19 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.userstorage.ModernUserMap;
-import com.earth2me.essentials.utils.CommonPlaceholders;
-import com.earth2me.essentials.utils.DateUtil;
-import com.earth2me.essentials.utils.FormatUtil;
-import com.earth2me.essentials.utils.LocationUtil;
-import com.earth2me.essentials.utils.MaterialUtil;
-import com.earth2me.essentials.utils.VersionUtil;
+import com.earth2me.essentials.utils.*;
 import io.papermc.lib.PaperLib;
 import io.papermc.paper.ban.BanListType;
 import io.papermc.paper.event.connection.configuration.AsyncPlayerConnectionConfigureEvent;
 import io.papermc.paper.event.player.PlayerServerFullCheckEvent;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
-import net.ess3.provider.CommandSendListenerProvider;
-import net.ess3.provider.FormattedCommandAliasProvider;
-import net.ess3.provider.InventoryViewProvider;
-import net.ess3.provider.KnownCommandsProvider;
-import net.ess3.provider.TickCountProvider;
+import net.ess3.provider.*;
 import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
 import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.PaperAdventureSmuggler;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
-import org.bukkit.BanEntry;
-import org.bukkit.BanList;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.FormattedCommandAlias;
 import org.bukkit.command.PluginCommand;
@@ -45,26 +31,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerEggThrowEvent;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -74,16 +42,8 @@ import org.bukkit.inventory.PlayerInventory;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -454,13 +414,13 @@ public class EssentialsPlayerListener implements Listener {
             effectiveMessage = null;
         } else if (ess.getSettings().isCustomJoinMessage()) {
             final String msg = (newUsername ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
-                    .replace("{PLAYER}", user.getDisplayName()).replace("{USERNAME}", user.getName())
-                    .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUsers().getUserCount()))
-                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
-                    .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
-                    .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(user.getBase())))
-                    .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(user.getBase())))
-                    .replace("{OLDUSERNAME}", lastAccountName == null ? "" : lastAccountName);
+                .replace("{PLAYER}", user.getDisplayName()).replace("{USERNAME}", user.getName())
+                .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUsers().getUserCount()))
+                .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
+                .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
+                .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(user.getBase())))
+                .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(user.getBase())))
+                .replace("{OLDUSERNAME}", lastAccountName == null ? "" : lastAccountName);
             effectiveMessage = msg.isEmpty() ? null : msg;
         } else if (ess.getSettings().allowSilentJoinQuit()) {
             effectiveMessage = message;
@@ -760,7 +720,7 @@ public class EssentialsPlayerListener implements Listener {
         final String cmd = event.getMessage().split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
         final int argStartIndex = event.getMessage().indexOf(" ");
         final String args = argStartIndex == -1 ? "" // No arguments present
-                : event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
+            : event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
 
         // If the plugin command does not exist, check if it is an alias from commands.yml
         if (ess.getServer().getPluginCommand(cmd) == null) {
@@ -792,8 +752,8 @@ public class EssentialsPlayerListener implements Listener {
                     for (final User spyer : ess.getOnlineUsers()) {
                         if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
                             final ComponentHolder base = (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers())
-                                    ? spyer.tlComponent("socialSpyMutedPrefix")
-                                    : spyer.tlComponent("socialSpyPrefix");
+                                ? spyer.tlComponent("socialSpyMutedPrefix")
+                                : spyer.tlComponent("socialSpyPrefix");
                             final ComponentHolder nameComponent = ess.getAdventureFacet().legacyToAdventure(playerName);
                             final ComponentHolder messageComponent = ess.getAdventureFacet().text(": " + event.getMessage());
 
@@ -1174,6 +1134,17 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerFishEvent(final PlayerFishEvent event) {
+
+        final PlayerFishEvent.State state = event.getState();
+
+        // Only count real player interaction
+        if (state != PlayerFishEvent.State.FISHING
+            && state != PlayerFishEvent.State.REEL_IN
+            && state != PlayerFishEvent.State.CAUGHT_FISH
+            && state != PlayerFishEvent.State.CAUGHT_ENTITY) {
+            return;
+        }
+
         final User user = ess.getUser(event.getPlayer());
         user.updateActivityOnInteract(true);
     }
@@ -1273,8 +1244,8 @@ public class EssentialsPlayerListener implements Listener {
             final PluginCommand command = ess.getServer().getPluginCommand(label);
 
             return command != null
-                    && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials") || command.getPlugin().getClass().getName().startsWith("net.essentialsx"))
-                    && (ess.getSettings().isCommandOverridden(label) || ess.getAlternativeCommandsHandler().getAlternative(label) == null);
+                && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials") || command.getPlugin().getClass().getName().startsWith("net.essentialsx"))
+                && (ess.getSettings().isCommandOverridden(label) || ess.getAlternativeCommandsHandler().getAlternative(label) == null);
         }
     }
 }
