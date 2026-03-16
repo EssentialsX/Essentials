@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.MaxMoneyException;
@@ -87,7 +87,7 @@ public class Commandeco extends EssentialsLoopCommand {
             }
             return options;
         } else if (args.length == 2) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else if (args.length == 3 && !args[0].equalsIgnoreCase(EcoCommands.RESET.name())) {
             if (args[0].equalsIgnoreCase(EcoCommands.SET.name())) {
                 return Lists.newArrayList("0", ess.getSettings().getStartingBalance().toString());

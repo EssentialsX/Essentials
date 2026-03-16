@@ -6,6 +6,7 @@ import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
+import org.bukkit.entity.AbstractNautilus;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Camel;
@@ -26,6 +27,7 @@ import org.bukkit.entity.Salmon;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
+import org.bukkit.entity.ZombieNautilus;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.invoke.MethodHandle;
@@ -69,6 +71,9 @@ public final class MobCompat {
     public static final EntityType FROG = getEntityType("FROG");
     public static final EntityType CAMEL = getEntityType("CAMEL");
     public static final EntityType SALMON = getEntityType("SALMON");
+    public static final EntityType CAMEL_HUSK = getEntityType("CAMEL_HUSK");
+    public static final EntityType NAUTILUS = getEntityType("NAUTILUS");
+    public static final EntityType ZOMBIE_NAUTILUS = getEntityType("ZOMBIE_NAUTILUS");
 
     // Constants for mobs that have changed since earlier versions
     public static final EntityType CAT = getEntityType("CAT", "OCELOT");
@@ -301,6 +306,30 @@ public final class MobCompat {
         if (spawned instanceof Pig) {
             //noinspection DataFlowIssue
             ((Pig) spawned).setVariant(RegistryUtil.valueOf(Pig.Variant.class, variant));
+        }
+    }
+
+    public static void setZombieNautilusVariant(final Entity spawned, final String variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_21_11_R01)) {
+            return;
+        }
+
+        if (spawned instanceof ZombieNautilus) {
+            //noinspection DataFlowIssue
+            ((ZombieNautilus) spawned).setVariant(RegistryUtil.valueOf(ZombieNautilus.Variant.class, variant));
+        }
+    }
+
+    public static void setNautilusSaddle(final Entity entity, final Player target) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_21_11_R01)) {
+            return;
+        }
+
+        if (entity instanceof AbstractNautilus) {
+            final AbstractNautilus nautilus = (AbstractNautilus) entity;
+            nautilus.setTamed(true);
+            nautilus.setOwner(target);
+            nautilus.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
         }
     }
 

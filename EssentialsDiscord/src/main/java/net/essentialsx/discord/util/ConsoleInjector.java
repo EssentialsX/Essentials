@@ -124,19 +124,19 @@ public class ConsoleInjector extends AbstractAppender {
             return;
         }
 
+        final String[] loggerNameSplit = event.getLoggerName().split("\\.");
+        final String loggerName = loggerNameSplit[loggerNameSplit.length - 1].trim();
+
+        if (!loggerName.isEmpty()) {
+            entry = "[" + loggerName + "] " + entry;
+        }
+        
         if (!jda.getSettings().getConsoleFilters().isEmpty()) {
             for (final Pattern pattern : jda.getSettings().getConsoleFilters()) {
                 if (pattern.matcher(entry).find()) {
                     return;
                 }
             }
-        }
-
-        final String[] loggerNameSplit = event.getLoggerName().split("\\.");
-        final String loggerName = loggerNameSplit[loggerNameSplit.length - 1].trim();
-
-        if (!loggerName.isEmpty()) {
-            entry = "[" + loggerName + "] " + entry;
         }
 
         messageQueue.addAll(Splitter.fixedLength(Message.MAX_CONTENT_LENGTH - 50).splitToList(

@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.TranslatableException;
@@ -39,7 +38,7 @@ public final class PlayerList {
                 groupString.append(tlLiteral("listHiddenTag"));
             }
             user.setDisplayNick();
-            groupString.append(AdventureUtil.legacyToMini(user.getDisplayName()));
+            groupString.append(ess.getAdventureFacet().legacyToMini(user.getDisplayName()));
 
             final String strippedNick = FormatUtil.stripFormat(user.getNickname());
             if (ess.getSettings().realNamesOnList() && strippedNick != null && !strippedNick.equals(user.getName())) {

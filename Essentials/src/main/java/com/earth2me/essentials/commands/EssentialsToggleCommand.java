@@ -74,7 +74,7 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             if (user.isAuthorized(othersPermission)) {
-                return getPlayers(server, user);
+                return getPlayers(user);
             } else {
                 return Lists.newArrayList("enable", "disable");
             }
@@ -88,7 +88,7 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else if (args.length == 2) {
             return Lists.newArrayList("enable", "disable");
         } else {

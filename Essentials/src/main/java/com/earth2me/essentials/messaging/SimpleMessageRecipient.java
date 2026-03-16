@@ -3,7 +3,7 @@ package com.earth2me.essentials.messaging;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import net.ess3.api.events.PrivateMessagePreSendEvent;
 import net.ess3.api.events.PrivateMessageSentEvent;
 import org.bukkit.entity.Player;
@@ -129,9 +129,9 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                                     && !onlineUser.equals(senderUser)
                                     && !onlineUser.equals(recipient)) {
                                 if (senderUser.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
-                                    onlineUser.sendComponent(AdventureUtil.miniMessage().deserialize(tlSender("socialSpyMutedPrefix") + tlLiteral("socialSpyMsgFormat", senderName, recipientName, message)));
+                                    onlineUser.sendComponent(ess.getAdventureFacet().deserializeMiniMessage(tlSender("socialSpyMutedPrefix") + tlLiteral("socialSpyMsgFormat", senderName, recipientName, message)));
                                 } else {
-                                    onlineUser.sendComponent(AdventureUtil.miniMessage().deserialize(tlLiteral("socialSpyPrefix") + tlLiteral("socialSpyMsgFormat", senderName, recipientName, message)));
+                                    onlineUser.sendComponent(ess.getAdventureFacet().deserializeMiniMessage(tlLiteral("socialSpyPrefix") + tlLiteral("socialSpyMsgFormat", senderName, recipientName, message)));
                                 }
                             }
                         }

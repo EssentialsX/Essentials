@@ -17,6 +17,11 @@
  */
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.adventure.AdventureFacet;
+import com.earth2me.essentials.adventure.AdventureUtil;
+import com.earth2me.essentials.adventure.ComponentHolder;
+import com.earth2me.essentials.adventure.PaperAdventureFacet;
+import com.earth2me.essentials.adventure.SpigotAdventureFacet;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
@@ -40,7 +45,6 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.ModernUserMap;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
@@ -70,6 +74,7 @@ import net.ess3.provider.providers.BaseInventoryViewProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
 import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
+import net.ess3.provider.providers.BukkitTileEntityProvider;
 import net.ess3.provider.providers.FixedHeightWorldInfoProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyBannerDataProvider;
@@ -96,11 +101,10 @@ import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperSerializationProvider;
 import net.ess3.provider.providers.PaperServerStateProvider;
 import net.ess3.provider.providers.PaperTickCountProvider;
+import net.ess3.provider.providers.PaperTileEntityProvider;
 import net.ess3.provider.providers.PrehistoricPotionMetaProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -177,7 +181,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
-    private transient BukkitAudiences bukkitAudience;
+    private transient AdventureFacet adventureFacet;
 
     static {
         EconomyLayers.init();
@@ -208,6 +212,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             LOGGER = EssentialsLogger.getLoggerProvider(this);
             EssentialsLogger.updatePluginLogger(this);
 
+            initAdventureFacet();
+
             execTimer = new ExecuteTimer();
             execTimer.start();
 
@@ -223,37 +229,37 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             switch (VersionUtil.getServerSupportStatus()) {
                 case NMS_CLEANROOM:
-                    getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedCleanroom")));
+                    getLogger().severe(getAdventureFacet().miniToLegacy(tlLiteral("serverUnsupportedCleanroom")));
                     break;
                 case DANGEROUS_FORK:
-                    getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedDangerous")));
+                    getLogger().severe(getAdventureFacet().miniToLegacy(tlLiteral("serverUnsupportedDangerous")));
                     break;
                 case STUPID_PLUGIN:
-                    getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedDumbPlugins")));
+                    getLogger().severe(getAdventureFacet().miniToLegacy(tlLiteral("serverUnsupportedDumbPlugins")));
                     break;
                 case UNSTABLE:
-                    getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedMods")));
+                    getLogger().severe(getAdventureFacet().miniToLegacy(tlLiteral("serverUnsupportedMods")));
                     break;
                 case OUTDATED:
-                    getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupported")));
+                    getLogger().severe(getAdventureFacet().miniToLegacy(tlLiteral("serverUnsupported")));
                     break;
                 case LIMITED:
-                    getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedLimitedApi")));
+                    getLogger().info(getAdventureFacet().miniToLegacy(tlLiteral("serverUnsupportedLimitedApi")));
                     break;
             }
 
             if (VersionUtil.getSupportStatusClass() != null) {
-                getLogger().info(AdventureUtil.miniToLegacy(tlLiteral("serverUnsupportedClass", VersionUtil.getSupportStatusClass())));
+                getLogger().info(getAdventureFacet().miniToLegacy(tlLiteral("serverUnsupportedClass", VersionUtil.getSupportStatusClass())));
             }
 
             if (VersionUtil.getServerBukkitVersion().isSnapshot()) {
-                getLogger().severe(AdventureUtil.miniToLegacy(tlLiteral("serverSnapshot")));
+                getLogger().severe(getAdventureFacet().miniToLegacy(tlLiteral("serverSnapshot")));
             }
 
             final PluginManager pm = getServer().getPluginManager();
             for (final Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
-                    getLogger().warning(AdventureUtil.miniToLegacy(tlLiteral("versionMismatch", plugin.getDescription().getName())));
+                    getLogger().warning(getAdventureFacet().miniToLegacy(tlLiteral("versionMismatch", plugin.getDescription().getName())));
                 }
             }
 
@@ -385,6 +391,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Biome Key Provider
             providerFactory.registerProvider(PaperBiomeKeyProvider.class);
 
+            // Tile Entity Provider
+            providerFactory.registerProvider(BukkitTileEntityProvider.class, PaperTileEntityProvider.class);
+
             // Tick Count Provider
             providerFactory.registerProvider(PaperTickCountProvider.class);
 
@@ -431,9 +440,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             if (!TESTING) {
                 updateChecker = new UpdateChecker(this);
                 runTaskAsynchronously(() -> {
-                    getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("versionFetching")));
-                    for (final Component component : updateChecker.getVersionMessages(false, true, new CommandSource(this, Bukkit.getConsoleSender()))) {
-                        getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, AdventureUtil.adventureToLegacy(component));
+                    getLogger().log(Level.INFO, getAdventureFacet().miniToLegacy(tlLiteral("versionFetching")));
+                    for (final ComponentHolder component : updateChecker.getVersionMessages(false, true, new CommandSource(this, Bukkit.getConsoleSender()))) {
+                        getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, getAdventureFacet().adventureToLegacy(component));
                     }
                 });
 
@@ -522,13 +531,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
-        if (bukkitAudience != null) {
-            bukkitAudience.close();
+        if (adventureFacet != null) {
+            adventureFacet.close();
         }
 
         final boolean stopping = TESTING || provider(ServerStateProvider.class).isStopping();
         if (!stopping) {
-            LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("serverReloading")));
+            LOGGER.log(Level.SEVERE, getAdventureFacet().miniToLegacy(tlLiteral("serverReloading")));
         }
 
         if (!TESTING) {
@@ -552,7 +561,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
         cleanupOpenInventories();
         if (!TESTING && getBackup().getTaskLock() != null && !getBackup().getTaskLock().isDone()) {
-            LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("backupInProgress")));
+            LOGGER.log(Level.SEVERE, getAdventureFacet().miniToLegacy(tlLiteral("backupInProgress")));
             getBackup().getTaskLock().join();
         }
         if (i18n != null) {
@@ -567,7 +576,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
 
         Economy.setEss(null);
-        AdventureUtil.setEss(null);
         Trade.closeLog();
         getUsers().shutdown();
 
@@ -580,11 +588,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public void reload() {
         Trade.closeLog();
 
-        if (bukkitAudience != null) {
-            bukkitAudience.close();
-            bukkitAudience = null;
-        }
-
         for (final IConf iConf : confList) {
             iConf.reloadConfig();
             execTimer.mark("Reload(" + iConf.getClass().getSimpleName() + ")");
@@ -594,16 +597,29 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         for (final String commandName : this.getDescription().getCommands().keySet()) {
             final Command command = this.getCommand(commandName);
             if (command != null) {
-                command.setDescription(AdventureUtil.miniToLegacy(tlLiteral(commandName + "CommandDescription")));
-                command.setUsage(AdventureUtil.miniToLegacy(tlLiteral(commandName + "CommandUsage")));
+                command.setDescription(getAdventureFacet().miniToLegacy(tlLiteral(commandName + "CommandDescription")));
+                command.setUsage(getAdventureFacet().miniToLegacy(tlLiteral(commandName + "CommandUsage")));
             }
         }
 
         final PluginManager pm = getServer().getPluginManager();
         registerListeners(pm);
 
-        AdventureUtil.setEss(this);
-        bukkitAudience = BukkitAudiences.create(this);
+        initAdventureFacet();
+    }
+
+    private void initAdventureFacet() {
+        if (adventureFacet != null) {
+            adventureFacet.close();
+        }
+
+        if (VersionUtil.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01)) {
+            adventureFacet = new PaperAdventureFacet(getSettings() != null ? getSettings().getPrimaryColor() : null, getSettings() != null ? getSettings().getSecondaryColor() : null);
+        } else {
+            adventureFacet = new SpigotAdventureFacet(this);
+        }
+
+        AdventureUtil.setAdventureFacet(adventureFacet);
     }
 
     private IEssentialsCommand loadCommand(final String path, final String name, final IEssentialsModule module, final ClassLoader classLoader) throws Exception {
@@ -668,7 +684,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
                 sender.sendTl("commandNotLoaded", commandLabel);
-                LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("commandNotLoaded", commandLabel)), ex);
+                LOGGER.log(Level.SEVERE, getAdventureFacet().miniToLegacy(tlLiteral("commandNotLoaded", commandLabel)), ex);
                 return Collections.emptyList();
             }
 
@@ -691,11 +707,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             } catch (final Exception ex) {
                 showError(sender, ex, commandLabel);
                 // Tab completion shouldn't fail
-                LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("commandFailed", commandLabel)), ex);
+                LOGGER.log(Level.SEVERE, getAdventureFacet().miniToLegacy(tlLiteral("commandFailed", commandLabel)), ex);
                 return Collections.emptyList();
             }
         } catch (final Throwable ex) {
-            LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("commandFailed", commandLabel)), ex);
+            LOGGER.log(Level.SEVERE, getAdventureFacet().miniToLegacy(tlLiteral("commandFailed", commandLabel)), ex);
             return Collections.emptyList();
         }
     }
@@ -722,7 +738,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
                     if (cSender instanceof Player) {
                         final PlayerLocaleProvider localeProvider = provider(PlayerLocaleProvider.class);
-                        getBukkitAudience().sender(cSender).sendMessage(AdventureUtil.miniMessage().deserialize(tlLocale(I18n.getLocale(localeProvider.getLocale((Player) cSender)), "internalError")));
+                        final String miniMessageStr = tlLocale(I18n.getLocale(localeProvider.getLocale((Player) cSender)), "internalError");
+                        getAdventureFacet().send(cSender, getAdventureFacet().deserializeMiniMessage(miniMessageStr));
                     } else {
                         cSender.sendMessage(tlLiteral("internalError"));
                     }
@@ -780,13 +797,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
                 sender.sendTl("commandNotLoaded", commandLabel);
-                LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("commandNotLoaded", commandLabel)), ex);
+                LOGGER.log(Level.SEVERE, getAdventureFacet().miniToLegacy(tlLiteral("commandNotLoaded", commandLabel)), ex);
                 return true;
             }
 
             // Check authorization
             if (user != null && !user.isAuthorized(cmd, permissionPrefix)) {
-                LOGGER.log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("deniedAccessCommand", user.getName())));
+                LOGGER.log(Level.INFO, getAdventureFacet().miniToLegacy(tlLiteral("deniedAccessCommand", user.getName())));
                 user.sendTl("noAccessCommand");
                 return true;
             }
@@ -827,7 +844,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     sender.sendMessage(command.getUsage().replace("<command>", commandLabel));
                 }
                 if (!ex.getMessage().isEmpty()) {
-                    sender.sendComponent(AdventureUtil.miniMessage().deserialize(ex.getMessage()));
+                    sender.sendComponent(getAdventureFacet().deserializeMiniMessage(ex.getMessage()));
                 }
                 if (ex.getCause() != null && settings.isDebug()) {
                     ex.getCause().printStackTrace();
@@ -841,7 +858,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return true;
             }
         } catch (final Throwable ex) {
-            LOGGER.log(Level.SEVERE, AdventureUtil.miniToLegacy(tlLiteral("commandFailed", commandLabel)), ex);
+            LOGGER.log(Level.SEVERE, getAdventureFacet().miniToLegacy(tlLiteral("commandFailed", commandLabel)), ex);
             return true;
         }
     }
@@ -877,7 +894,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             sender.sendTl("errorWithMessage", exception.getMessage());
         }
         if (getSettings().isDebug()) {
-            LOGGER.log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("errorCallingCommand", commandLabel)), exception);
+            LOGGER.log(Level.INFO, getAdventureFacet().miniToLegacy(tlLiteral("errorCallingCommand", commandLabel)), exception);
         }
     }
 
@@ -1146,7 +1163,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         final Collection<Player> players = getOnlinePlayers();
         for (final Player player : players) {
             final User user = getUser(player);
-            if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender))) || (permission != null && user.isAuthorized(permission))) {
+            if (permission == null && (sender == null || !user.isIgnoredPlayer(sender)) || permission != null && user.isAuthorized(permission)) {
                 if (shouldExclude != null && shouldExclude.test(user)) {
                     continue;
                 }
@@ -1318,8 +1335,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return this.getCommand(cmd);
     }
 
-    public BukkitAudiences getBukkitAudience() {
-        return bukkitAudience;
+    @Override
+    public AdventureFacet getAdventureFacet() {
+        return adventureFacet;
     }
 
     private AbstractItemDb getItemDbFromConfig() {

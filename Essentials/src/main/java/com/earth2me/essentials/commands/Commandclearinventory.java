@@ -153,7 +153,7 @@ public class Commandclearinventory extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (user.isAuthorized("essentials.clearinventory.others")) {
             if (args.length == 1) {
-                final List<String> options = getPlayers(server, user);
+                final List<String> options = getPlayers(user);
                 if (user.isAuthorized("essentials.clearinventory.all") || user.isAuthorized("essentials.clearinventory.multiple")) {
                     // Assume that nobody will have the 'all' permission without the 'others' permission
                     options.add("*");
@@ -182,7 +182,7 @@ public class Commandclearinventory extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            final List<String> options = getPlayers(server, sender);
+            final List<String> options = getPlayers(sender);
             options.add("*");
             return options;
         } else if (args.length == 2) {

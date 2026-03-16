@@ -87,7 +87,7 @@ public class Commanddelhome extends EssentialsCommand {
             if (canDelOthers) {
                 final int sepIndex = args[0].indexOf(':');
                 if (sepIndex < 0) {
-                    getPlayers(server, sender).forEach(player -> homes.add(player + ":"));
+                    getPlayers(sender).forEach(player -> homes.add(player + ":"));
                 } else {
                     final String namePart = args[0].substring(0, sepIndex);
                     final User otherUser;
