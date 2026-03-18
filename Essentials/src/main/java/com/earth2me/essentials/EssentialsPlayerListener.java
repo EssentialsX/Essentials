@@ -420,6 +420,12 @@ public class EssentialsPlayerListener implements Listener {
 
         final String lastAccountName = user.getLastAccountName(); // For comparison
         user.setLastAccountName(user.getBase().getName());
+
+        // If the Minecraft account name changed, reset the nickname so the old one doesn't persist
+        if (lastAccountName != null && !lastAccountName.equals(user.getBase().getName()) && user.getNickname() != null) {
+            user.setNickname(null);
+        }
+
         user.setLastLogin(currentTime);
         user.setDisplayNick();
         updateCompass(user);
