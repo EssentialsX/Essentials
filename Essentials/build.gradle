@@ -25,6 +25,7 @@ dependencies {
     api(project(path: ':providers:PaperProvider', configuration: 'shadow')){
         exclude(module: 'paper-api')
     }
+    api project(':providers:FoliaProvider')
     api(project(':providers:NMSReflectionProvider')) {
         exclude(module: 'bukkit')
     }
@@ -73,6 +74,7 @@ shadowJar {
         include (dependency('net.kyori:adventure-text-minimessage'))
         include (project(':providers:BaseProviders'))
         include (project(path: ':providers:PaperProvider', configuration: 'shadow'))
+        include (project(':providers:FoliaProvider'))
         include (project(':providers:NMSReflectionProvider'))
         include (project(':providers:1_8Provider'))
         include (project(':providers:1_12Provider'))

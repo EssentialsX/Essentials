@@ -156,7 +156,7 @@ public class RandomTeleport implements IConf {
 
     // Prompts caching random valid locations, up to a maximum number of attempts.
     public void cacheRandomLocations(final String name) {
-        ess.getServer().getScheduler().scheduleSyncDelayedTask(ess, () -> {
+        ess.runTaskAsynchronously(() -> {
             for (int i = 0; i < this.getFindAttempts(); ++i) {
                 calculateRandomLocation(getCenter(name), getMinRange(name), getMaxRange(name)).thenAccept(location -> {
                     if (isValidRandomLocation(location)) {
@@ -186,7 +186,6 @@ public class RandomTeleport implements IConf {
 
     // Calculates a random location asynchronously.
     private CompletableFuture<Location> calculateRandomLocation(final Location center, final double minRange, final double maxRange) {
-        final CompletableFuture<Location> future = new CompletableFuture<>();
         // Find an equally distributed offset by randomly rotating a point inside a rectangle about the origin
         final double rectX = RANDOM.nextDouble() * (maxRange - minRange) + minRange;
         final double rectZ = RANDOM.nextDouble() * (maxRange + minRange) - minRange;
@@ -214,15 +213,14 @@ public class RandomTeleport implements IConf {
             360 * RANDOM.nextFloat() - 180,
             0
         );
-        PaperLib.getChunkAtAsync(location).thenAccept(chunk -> {
+        return PaperLib.getChunkAtAsync(location).thenApply(chunk -> { // FIXME: use thenApplyAsync + an Executor that runs tasks on the correct region thread to be fully safe.
             if (World.Environment.NETHER.equals(center.getWorld().getEnvironment())) {
                 location.setY(getNetherYAt(location));
             } else {
                 location.setY(center.getWorld().getHighestBlockYAt(location) + HIGHEST_BLOCK_Y_OFFSET);
             }
-            future.complete(location);
+            return location;
         });
-        return future;
     }
 
     // Returns an appropriate elevation for a given location in the nether, or MIN_VALUE if none is found

@@ -9,18 +9,19 @@ import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.IUserMap;
+import net.ess3.provider.SchedulingProvider;
 import net.ess3.provider.Provider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
 import java.util.List;
@@ -80,8 +81,6 @@ public interface IEssentials extends Plugin {
 
     ISettings getSettings();
 
-    BukkitScheduler getScheduler();
-
     IJails getJails();
 
     IWarps getWarps();
@@ -96,17 +95,45 @@ public interface IEssentials extends Plugin {
 
     UpdateChecker getUpdateChecker();
 
-    BukkitTask runTaskAsynchronously(Runnable run);
+    void runTaskAsynchronously(Runnable run);
 
-    BukkitTask runTaskLaterAsynchronously(Runnable run, long delay);
+    void runTaskLaterAsynchronously(Runnable run, long delay);
 
-    BukkitTask runTaskTimerAsynchronously(Runnable run, long delay, long period);
+    SchedulingProvider.EssentialsTask runTaskTimerAsynchronously(Runnable run, long delay, long period);
 
-    int scheduleSyncDelayedTask(Runnable run);
+    void scheduleEntityDelayedTask(Entity entity, Runnable run);
 
-    int scheduleSyncDelayedTask(Runnable run, long delay);
+    SchedulingProvider.EssentialsTask scheduleEntityDelayedTask(Entity entity, Runnable run, long delay);
 
-    int scheduleSyncRepeatingTask(Runnable run, long delay, long period);
+    SchedulingProvider.EssentialsTask scheduleEntityRepeatingTask(Entity entity, Runnable run, long delay, long period);
+
+    void scheduleLocationDelayedTask(Location location, Runnable run);
+
+    void scheduleLocationDelayedTask(Location location, Runnable run, long delay);
+
+    SchedulingProvider.EssentialsTask scheduleLocationRepeatingTask(Location location, Runnable run, long delay, long period);
+
+    default void scheduleGlobalDelayedTask(Runnable run) {
+        scheduleGlobalDelayedTask(run, 1);
+    }
+
+    void scheduleGlobalDelayedTask(Runnable run, long delay);
+
+    SchedulingProvider.EssentialsTask scheduleGlobalRepeatingTask(Runnable run, long delay, long period);
+
+    void scheduleInitTask(Runnable runnable);
+
+    boolean isEntityThread(Entity entity);
+
+    boolean isRegionThread(Location location);
+
+    boolean isGlobalThread();
+
+    void ensureEntity(Entity entity, Runnable runnable);
+
+    void ensureRegion(Location location, Runnable runnable);
+
+    void ensureGlobal(Runnable runnable);
 
     PermissionsHandler getPermissionsHandler();
 

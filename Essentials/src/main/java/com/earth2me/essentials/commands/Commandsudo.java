@@ -53,7 +53,7 @@ public class Commandsudo extends EssentialsLoopCommand {
                 }
             }
 
-            ess.scheduleSyncDelayedTask(new SudoCommandTask());
+            ess.scheduleEntityDelayedTask(user.getBase(), new SudoCommandTask());
         }
     }
 }

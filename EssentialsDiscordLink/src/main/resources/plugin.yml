@@ -7,6 +7,7 @@ description: EssentialsX Discord addon which allows you link your Minecraft and 
 authors: [JRoy]
 depend: [EssentialsDiscord]
 api-version: 1.13
+folia-supported: true
 commands:
   link:
     description: Generates a code to link your Minecraft account to Discord.
