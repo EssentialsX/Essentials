@@ -8620,6 +8620,12 @@
   "gshirt": "golden_chestplate",
   "gtunic": "golden_chestplate",
   "minecraft:golden_chestplate": "golden_chestplate",
+  "golden_dandelion": {
+    "name": "golden_dandelion",
+    "material": "GOLDEN_DANDELION"
+  },
+  "goldendandelion": "golden_dandelion",
+  "minecraft:golden_dandelion": "golden_dandelion",
   "golden_helmet": {
     "material": "GOLDEN_HELMET"
   },
