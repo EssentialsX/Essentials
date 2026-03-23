@@ -290,14 +290,16 @@ public class UtilTest {
         assertEquals(v.getSnapshotRelease(), -1);
         assertEquals(v.getPrerelease(), -1);
         assertEquals(v.getReleaseCandidate(), 2);
-        // Verify old format backward compat
-        v = VersionUtil.BukkitVersion.fromString("1.21.5-R0.1-SNAPSHOT");
-        assertEquals(v.getMajor(), 1);
-        assertEquals(v.getMinor(), 21);
-        assertEquals(v.getPatch(), 5);
-        assertEquals(v.getRevision(), 0.1);
-        assertEquals(v.getSnapshotRelease(), -1);
-        assertEquals(v.getPrerelease(), -1);
-        assertEquals(v.getReleaseCandidate(), -1);
+        // Old format versions are always lower than new format versions
+        assertTrue(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")
+            .isLowerThan(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")
+            .isHigherThan(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")
+            .isLowerThan(VersionUtil.BukkitVersion.fromString("26.1-snapshot-1-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")
+            .isLowerThan(VersionUtil.BukkitVersion.fromString("26.1-pre-1-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")
+            .isLowerThan(VersionUtil.BukkitVersion.fromString("26.1-rc-1-R0.1-SNAPSHOT")));
     }
 }
