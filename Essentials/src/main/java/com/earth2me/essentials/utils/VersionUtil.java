@@ -191,7 +191,7 @@ public final class VersionUtil {
 
     public static final class BukkitVersion implements Comparable<BukkitVersion> {
         private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)?(?:-snapshot-(\\d+))?(?:-pre-?(\\d+))?(?:-rc-?(\\d+))?(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
-        private static final Pattern SNAPSHOT_PATTERN = Pattern.compile("^(\\d{2})w(\\d{2})([a-z])(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
+        private static final Pattern LEGACY_SNAPSHOT_PATTERN = Pattern.compile("^(\\d{2})w(\\d{2})([a-z])(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
 
         private final int major;
         private final int minor;
@@ -245,7 +245,7 @@ public final class VersionUtil {
             }
 
             // Try snapshot format (e.g., 25w32a-R0.1-SNAPSHOT)
-            final Matcher snapshotMatcher = SNAPSHOT_PATTERN.matcher(string);
+            final Matcher snapshotMatcher = LEGACY_SNAPSHOT_PATTERN.matcher(string);
             if (snapshotMatcher.matches()) {
                 final int year = Integer.parseInt(snapshotMatcher.group(1));
                 final int week = Integer.parseInt(snapshotMatcher.group(2));
