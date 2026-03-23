@@ -249,5 +249,55 @@ public class UtilTest {
         assertEquals(v.getRevision(), 0.1);
         assertEquals(v.getPrerelease(), -1);
         assertEquals(v.getReleaseCandidate(), 3);
+        // New versioning format (26.x)
+        v = VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT");
+        assertEquals(v.getMajor(), 26);
+        assertEquals(v.getMinor(), 1);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getRevision(), 0.1);
+        assertEquals(v.getSnapshotRelease(), -1);
+        assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), -1);
+        v = VersionUtil.BukkitVersion.fromString("26.1.1-R0.1-SNAPSHOT");
+        assertEquals(v.getMajor(), 26);
+        assertEquals(v.getMinor(), 1);
+        assertEquals(v.getPatch(), 1);
+        assertEquals(v.getRevision(), 0.1);
+        assertEquals(v.getSnapshotRelease(), -1);
+        assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), -1);
+        v = VersionUtil.BukkitVersion.fromString("26.1-snapshot-11-R0.1-SNAPSHOT");
+        assertEquals(v.getMajor(), 26);
+        assertEquals(v.getMinor(), 1);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getRevision(), 0.1);
+        assertEquals(v.getSnapshotRelease(), 11);
+        assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), -1);
+        v = VersionUtil.BukkitVersion.fromString("26.1-pre-3-R0.1-SNAPSHOT");
+        assertEquals(v.getMajor(), 26);
+        assertEquals(v.getMinor(), 1);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getRevision(), 0.1);
+        assertEquals(v.getSnapshotRelease(), -1);
+        assertEquals(v.getPrerelease(), 3);
+        assertEquals(v.getReleaseCandidate(), -1);
+        v = VersionUtil.BukkitVersion.fromString("26.1-rc-2-R0.1-SNAPSHOT");
+        assertEquals(v.getMajor(), 26);
+        assertEquals(v.getMinor(), 1);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getRevision(), 0.1);
+        assertEquals(v.getSnapshotRelease(), -1);
+        assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), 2);
+        // Verify old format backward compat
+        v = VersionUtil.BukkitVersion.fromString("1.21.5-R0.1-SNAPSHOT");
+        assertEquals(v.getMajor(), 1);
+        assertEquals(v.getMinor(), 21);
+        assertEquals(v.getPatch(), 5);
+        assertEquals(v.getRevision(), 0.1);
+        assertEquals(v.getSnapshotRelease(), -1);
+        assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), -1);
     }
 }
