@@ -169,8 +169,8 @@ public class AsyncTeleport implements IAsyncTeleport {
             }
 
             try {
-                runOnMain(() -> teleportee.getBase().eject()); //EntityDismountEvent requires a sync context.
-            } catch (final ExecutionException | InterruptedException e) {
+                ess.getSchedulerAdapter().runEntityTask(teleportee.getBase(), () -> teleportee.getBase().eject()); //EntityDismountEvent requires a sync context.
+            } catch (final Exception e) {
                 future.completeExceptionally(e);
                 return;
             }

@@ -34,7 +34,7 @@ public class CleanupCommand extends EssentialsTreeNode {
         final double moneyArg = args.length >= 2 ? FloatUtil.parseDouble(args[1].replaceAll("[^0-9.]", "")) : 0;
         final int homesArg = args.length >= 3 && NumberUtil.isInt(args[2]) ? Integer.parseInt(args[2]) : 0;
 
-        ess.runTaskAsynchronously(() -> {
+        ess.getSchedulerAdapter().runTaskAsynchronously(() -> {
             final long currTime = System.currentTimeMillis();
             for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
                 final User user = ess.getUsers().loadUncachedUser(u);

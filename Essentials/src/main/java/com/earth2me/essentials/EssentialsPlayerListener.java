@@ -15,6 +15,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import com.earth2me.essentials.utils.schedulers.SchedulerTask;
 import io.papermc.lib.PaperLib;
 import io.papermc.paper.ban.BanListType;
 import io.papermc.paper.event.connection.configuration.AsyncPlayerConnectionConfigureEvent;
@@ -94,7 +95,7 @@ import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsPlayerListener implements Listener {
     private final transient IEssentials ess;
-    private final ConcurrentHashMap<UUID, Integer> pendingMotdTasks = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, SchedulerTask> pendingMotdTasks = new ConcurrentHashMap<>();
 
     public EssentialsPlayerListener(final IEssentials parent) {
         this.ess = parent;
@@ -289,9 +290,9 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
-        final Integer pendingId = pendingMotdTasks.remove(user.getUUID());
+        final SchedulerTask pendingId = pendingMotdTasks.remove(user.getUUID());
         if (pendingId != null) {
-            ess.getScheduler().cancelTask(pendingId);
+            pendingId.cancel();
         }
 
         if (hideJoinQuitMessages() || ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit")) {
@@ -408,7 +409,7 @@ public class EssentialsPlayerListener implements Listener {
 
     private void legacyJoinFlow(final PlayerJoinEvent event) {
         final String joinMessage = event.getJoinMessage();
-        ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer(), joinMessage));
+        ess.getSchedulerAdapter().runTaskAsynchronously(() -> delayedJoin(event.getPlayer(), joinMessage));
 
         if (hideJoinQuitMessages() || ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage()) {
             event.setJoinMessage(null);
@@ -473,13 +474,13 @@ public class EssentialsPlayerListener implements Listener {
             joinMessageConsumer.accept(effectiveMessage);
         }
 
-        ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, effectiveMessage)));
+        ess.getSchedulerAdapter().runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, effectiveMessage)));
 
         if (ess.getSettings().getMotdDelay() >= 0) {
             final int motdDelay = ess.getSettings().getMotdDelay() / 50;
             final Runnable motdTask = () -> motdFlow(user);
             if (motdDelay > 0) {
-                pendingMotdTasks.put(user.getUUID(), ess.scheduleSyncDelayedTask(motdTask, motdDelay));
+                pendingMotdTasks.put(user.getUUID(), ess.getSchedulerAdapter().runTaskLater(motdTask, motdDelay));
             } else {
                 motdTask.run();
             }
@@ -496,7 +497,7 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         if (user.isAuthorized("essentials.updatecheck")) {
-            ess.runTaskAsynchronously(() -> {
+            ess.getSchedulerAdapter().runTaskAsynchronously(() -> {
                 for (final ComponentHolder component : ess.getUpdateChecker().getVersionMessages(false, false, user.getSource())) {
                     user.sendComponent(component);
                 }
@@ -581,7 +582,7 @@ public class EssentialsPlayerListener implements Listener {
         dUser.updateActivity(false, AfkStatusChangeEvent.Cause.JOIN);
         dUser.stopTransaction();
 
-        ess.scheduleSyncDelayedTask(() -> {
+        ess.getSchedulerAdapter().runEntityTask(player, () -> {
             final User user = ess.getUser(player);
 
             if (!user.getBase().isOnline()) {
@@ -751,7 +752,7 @@ public class EssentialsPlayerListener implements Listener {
         final User user = ess.getUser(event.getPlayer());
         if (user.hasUnlimited(new ItemStack(event.getBucket()))) {
             event.getItemStack().setType(event.getBucket());
-            ess.scheduleSyncDelayedTask(user.getBase()::updateInventory);
+            ess.getSchedulerAdapter().runEntityTask(user.getBase(), user.getBase()::updateInventory);
         }
     }
 
@@ -1012,7 +1013,7 @@ public class EssentialsPlayerListener implements Listener {
                 }
             }
 
-            ess.scheduleSyncDelayedTask(new DelayedClickJumpTask());
+            ess.getSchedulerAdapter().runEntityTask(user.getBase(), new DelayedClickJumpTask());
         } catch (final Exception ex) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
@@ -1043,7 +1044,7 @@ public class EssentialsPlayerListener implements Listener {
                     }
                 }
 
-                ess.scheduleSyncDelayedTask(new PowerToolUseTask());
+                ess.getSchedulerAdapter().runEntityTask(user.getBase(), new PowerToolUseTask());
 
             }
         }
@@ -1105,7 +1106,7 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         if (refreshPlayer != null) {
-            ess.scheduleSyncDelayedTask(refreshPlayer::updateInventory, 1);
+            ess.getSchedulerAdapter().runEntityTaskLater(refreshPlayer, refreshPlayer::updateInventory, 1);
         }
     }
 
@@ -1168,7 +1169,7 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         if (refreshPlayer != null) {
-            ess.scheduleSyncDelayedTask(refreshPlayer::updateInventory, 1);
+            ess.getSchedulerAdapter().runEntityTaskLater(refreshPlayer, refreshPlayer::updateInventory, 1);
         }
     }
 
@@ -1192,7 +1193,7 @@ public class EssentialsPlayerListener implements Listener {
         final Player player = event.getPlayer();
         if (player.isFlying() && player.getAllowFlight() && user.isAuthorized("essentials.fly")) {
             // The gamemode change happens after the event, so we need to delay the flight enable
-            ess.scheduleSyncDelayedTask(() -> {
+            ess.getSchedulerAdapter().runEntityTaskLater(player, () -> {
                 player.setAllowFlight(true);
                 player.setFlying(true);
             }, 1);

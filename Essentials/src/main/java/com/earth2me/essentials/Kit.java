@@ -286,9 +286,11 @@ public class Kit {
                 t.pay(user, OverflowType.DROP);
             }
 
-            for (final String cmd : commandQueue) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
-            }
+            ess.getSchedulerAdapter().runTask(() -> {
+                for (final String cmd : commandQueue) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+                }
+            });
 
             if (spew) {
                 user.sendTl("kitInvFull");

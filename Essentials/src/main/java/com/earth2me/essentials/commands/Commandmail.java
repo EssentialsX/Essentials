@@ -151,7 +151,7 @@ public class Commandmail extends EssentialsCommand {
             if (!user.isAuthorized("essentials.mail.sendall")) {
                 throw new TranslatableException("noPerm", "essentials.mail.sendall");
             }
-            ess.runTaskAsynchronously(new SendAll(user,
+            ess.getSchedulerAdapter().runTaskAsynchronously(new SendAll(user,
                     FormatUtil.formatMessage(user, "essentials.mail",
                             StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 1)))), 0));
             user.sendTl("mailSent");
@@ -161,7 +161,7 @@ public class Commandmail extends EssentialsCommand {
             if (!user.isAuthorized("essentials.mail.sendtempall")) {
                 throw new TranslatableException("noPerm", "essentials.mail.sendtempall");
             }
-            ess.runTaskAsynchronously(new SendAll(user,
+            ess.getSchedulerAdapter().runTaskAsynchronously(new SendAll(user,
                     FormatUtil.formatMessage(user, "essentials.mail",
                             StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2)))), DateUtil.parseDateDiff(args[1], true)));
             user.sendTl("mailSent");
@@ -207,7 +207,7 @@ public class Commandmail extends EssentialsCommand {
                 throw new TranslatableException("noPerm", "essentials.mail.clearall");
             }
 
-            ess.runTaskAsynchronously(new ClearAll());
+            ess.getSchedulerAdapter().runTaskAsynchronously(new ClearAll());
             user.sendTl("mailClearedAll");
             return;
 
@@ -242,7 +242,7 @@ public class Commandmail extends EssentialsCommand {
             sender.sendTl("mailCleared");
             return;
         } else if (args.length >= 1 && "clearall".equalsIgnoreCase(args[0])){
-            ess.runTaskAsynchronously(new ClearAll());
+            ess.getSchedulerAdapter().runTaskAsynchronously(new ClearAll());
             sender.sendTl("mailClearedAll");
             return;
         } else if (args.length >= 3 && "send".equalsIgnoreCase(args[0])) {
@@ -267,12 +267,12 @@ public class Commandmail extends EssentialsCommand {
             sender.sendTl("mailSent");
             return;
         } else if (args.length >= 2 && "sendall".equalsIgnoreCase(args[0])) {
-            ess.runTaskAsynchronously(new SendAll(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 1)), 0));
+            ess.getSchedulerAdapter().runTaskAsynchronously(new SendAll(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 1)), 0));
             sender.sendTl("mailSent");
             return;
         } else if (args.length >= 3 && "sendtempall".equalsIgnoreCase(args[0])) {
             final long dateDiff = DateUtil.parseDateDiff(args[1], true);
-            ess.runTaskAsynchronously(new SendAll(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 2)), dateDiff));
+            ess.getSchedulerAdapter().runTaskAsynchronously(new SendAll(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 2)), dateDiff));
             sender.sendTl("mailSent");
             return;
         } else if (args.length >= 2) {

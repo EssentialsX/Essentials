@@ -41,7 +41,7 @@ public class UsermapCommand extends EssentialsTreeNode {
                 sender.sendTl("usermapPurge", String.valueOf(seppuku));
 
                 final Set<UUID> uuids = new HashSet<>(ess.getUsers().getAllUserUUIDs());
-                ess.runTaskAsynchronously(() -> {
+                ess.getSchedulerAdapter().runTaskAsynchronously(() -> {
                     final File userdataFolder = new File(ess.getDataFolder(), "userdata");
                     final File backupFolder = new File(ess.getDataFolder(), "userdata-npc-backup-boogaloo-" + System.currentTimeMillis());
 

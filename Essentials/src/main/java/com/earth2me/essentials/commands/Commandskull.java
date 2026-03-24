@@ -106,7 +106,7 @@ public class Commandskull extends EssentialsCommand {
     }
 
     private void editSkull(final User user, final User receive, final ItemStack stack, final SkullMeta skullMeta, final String owner, final boolean spawn) {
-        ess.runTaskAsynchronously(() -> {
+        ess.getSchedulerAdapter().runTaskAsynchronously(() -> {
             // Run this stuff async because it causes an HTTP request
 
             String shortOwnerName;
@@ -159,7 +159,7 @@ public class Commandskull extends EssentialsCommand {
 
             final String shortNameFinal = shortOwnerName;
 
-            ess.scheduleSyncDelayedTask(() -> {
+            ess.getSchedulerAdapter().runEntityTask(user.getBase(), () -> {
                 stack.setItemMeta(skullMeta);
                 if (spawn) {
                     Inventories.addItem(receive.getBase(), stack);

@@ -145,7 +145,7 @@ public class VersionCommand extends EssentialsTreeNode {
         }
 
         sender.sendTl("versionFetching");
-        ess.runTaskAsynchronously(() -> {
+        ess.getSchedulerAdapter().runTaskAsynchronously(() -> {
             for (final ComponentHolder component : ess.getUpdateChecker().getVersionMessages(true, true, sender)) {
                 sender.sendComponent(component);
             }

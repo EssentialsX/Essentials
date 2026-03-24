@@ -73,7 +73,7 @@ public class Commandcreatekit extends EssentialsCommand {
     }
 
     private void uploadPaste(final CommandSource sender, final String kitName, final long delay, final List<String> list) {
-        ess.runTaskAsynchronously(() -> {
+        ess.getSchedulerAdapter().runTaskAsynchronously(() -> {
             try {
                 final StringWriter sw = new StringWriter();
                 final YamlConfigurationLoader loader = YamlConfigurationLoader.builder().sink(() -> new BufferedWriter(sw)).indent(2).nodeStyle(NodeStyle.BLOCK).build();

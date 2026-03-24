@@ -34,7 +34,7 @@ public class HomesCommand extends EssentialsTreeNode {
         switch (args[0]) {
             case "fix":
                 sender.sendTl("fixingHomes");
-                ess.runTaskAsynchronously(() -> {
+                ess.getSchedulerAdapter().runTaskAsynchronously(() -> {
                     for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
                         final User user = ess.getUsers().loadUncachedUser(u);
                         if (user == null) {
@@ -63,7 +63,7 @@ public class HomesCommand extends EssentialsTreeNode {
                 } else {
                     sender.sendTl("deletingHomes");
                 }
-                ess.runTaskAsynchronously(() -> {
+                ess.getSchedulerAdapter().runTaskAsynchronously(() -> {
                     for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
                         final User user = ess.getUsers().loadUncachedUser(u);
                         if (user == null) {

@@ -76,7 +76,7 @@ public final class UpdateChecker {
                 return pendingDevFuture;
             }
             pendingDevFuture = new CompletableFuture<>();
-            ess.runTaskAsynchronously(() -> {
+            ess.getSchedulerAdapter().runTaskAsynchronously(() -> {
                 pendingDevFuture.complete(cachedDev = fetchDistance(BRANCH, getVersionIdentifier()));
                 pendingDevFuture = null;
                 lastFetchTime = System.currentTimeMillis();
@@ -92,7 +92,7 @@ public final class UpdateChecker {
                 return pendingReleaseFuture;
             }
             pendingReleaseFuture = new CompletableFuture<>();
-            ess.runTaskAsynchronously(() -> {
+            ess.getSchedulerAdapter().runTaskAsynchronously(() -> {
                 catchBlock:
                 try {
                     final HttpURLConnection connection = tryRequestWithFallback(LATEST_RELEASE_URL, LATEST_RELEASE_PROXY_URL);

@@ -133,7 +133,7 @@ public class DumpCommand extends EssentialsTreeNode {
         final Map<String, String> disabledCommandsCopy = new HashMap<>(ess.getAlternativeCommandsHandler().disabledCommands());
 
         // Further operations will be heavy IO
-        ess.runTaskAsynchronously(() -> {
+        ess.getSchedulerAdapter().runTaskAsynchronously(() -> {
             boolean config = false;
             boolean discord = false;
             boolean kits = false;
