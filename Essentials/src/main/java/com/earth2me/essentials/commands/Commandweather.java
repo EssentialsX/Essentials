@@ -32,14 +32,16 @@ public class Commandweather extends EssentialsCommand {
 
         final World world = user.getWorld();
 
-        if (args.length > 1) {
+        ess.getSchedulerAdapter().runTask(() -> {
+            if (args.length > 1) {
+                world.setStorm(isStorm);
+                world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
+                user.sendTl(isStorm ? "weatherStormFor" : "weatherSunFor", world.getName(), args[1]);
+                return;
+            }
             world.setStorm(isStorm);
-            world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
-            user.sendTl(isStorm ? "weatherStormFor" : "weatherSunFor", world.getName(), args[1]);
-            return;
-        }
-        world.setStorm(isStorm);
-        user.sendTl(isStorm ? "weatherStorm" : "weatherSun", world.getName());
+            user.sendTl(isStorm ? "weatherStorm" : "weatherSun", world.getName());
+        });
     }
 
     @Override

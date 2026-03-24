@@ -86,7 +86,8 @@ public class Commandtime extends EssentialsCommand {
             if (!add) {
                 time -= time % 24000;
             }
-            world.setTime(time + (add ? 0 : 24000) + timeTick);
+            final long timeFinal = time + (add ? 0 : 24000) + timeTick;
+            ess.getSchedulerAdapter().runTask(() -> world.setTime(timeFinal));
             joiner.add(world.getName());
         }
 

@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.entity.LightningStrike;
+import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,15 +34,19 @@ public class Commandlightning extends EssentialsLoopCommand {
         }
         final int finalPower = power;
         loopOnlinePlayersConsumer(server, sender, false, true, args[0], player -> {
-            sender.sendTl("lightningUse", player.getDisplayName());
-            final LightningStrike strike = player.getBase().getWorld().strikeLightningEffect(player.getBase().getLocation());
+            Player bukkitPlayer = player.getBase();
 
-            if (!player.isGodModeEnabled()) {
-                player.getBase().damage(finalPower, strike);
-            }
-            if (ess.getSettings().warnOnSmite()) {
-                player.sendTl("lightningSmited");
-            }
+            ess.getSchedulerAdapter().runEntityTask(bukkitPlayer, () -> {
+                sender.sendTl("lightningUse", player.getDisplayName());
+                final LightningStrike strike = player.getBase().getWorld().strikeLightningEffect(player.getBase().getLocation());
+
+                if (!player.isGodModeEnabled()) {
+                    player.getBase().damage(finalPower, strike);
+                }
+                if (ess.getSettings().warnOnSmite()) {
+                    player.sendTl("lightningSmited");
+                }
+            });
         });
         loopOnlinePlayers(server, sender, true, true, args[0], null);
     }
