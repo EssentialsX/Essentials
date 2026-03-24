@@ -74,6 +74,7 @@ public final class VersionUtil {
 
     private static final Map<String, SupportStatus> unsupportedServerClasses;
     private static final String PFX = make("8(;4>`");
+    private static boolean FOLIA_SERVER = false;
 
     static {
         final ImmutableMap.Builder<String, SupportStatus> builder = new ImmutableMap.Builder<>();
@@ -110,6 +111,11 @@ public final class VersionUtil {
         }
 
         unsupportedServerClasses = builder.build();
+
+        try {
+            FOLIA_SERVER = Class.forName("io.papermc.paper.threadedregions.RegionizedServer") != null;
+        } catch (ClassNotFoundException ignored) {
+        }
     }
 
     private static BukkitVersion serverVersion = null;
@@ -122,6 +128,10 @@ public final class VersionUtil {
 
     public static boolean isPaper() {
         return PaperLib.isPaper();
+    }
+
+    public static boolean isFoliaServer() {
+        return FOLIA_SERVER;
     }
 
     public static BukkitVersion getServerBukkitVersion() {

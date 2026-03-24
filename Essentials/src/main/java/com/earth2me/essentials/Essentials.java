@@ -47,6 +47,8 @@ import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import com.earth2me.essentials.utils.schedulers.SchedulerAdapter;
+import com.earth2me.essentials.utils.schedulers.adapter.FoliaScheduler;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
 import com.earth2me.essentials.config.EssentialsConfiguration;
@@ -154,6 +156,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private static final Logger BUKKIT_LOGGER = Logger.getLogger("Essentials");
     private static Logger LOGGER = null;
     public static boolean TESTING = false;
+    private static SchedulerAdapter schedulerAdapter;
     private final transient TNTExplodeListener tntListener = new TNTExplodeListener();
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
     private final transient Map<String, IEssentialsCommand> commandMap = new HashMap<>();
@@ -208,6 +211,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         try {
             if (BUKKIT_LOGGER != super.getLogger()) {
                 BUKKIT_LOGGER.setParent(super.getLogger());
+            }
+            if (schedulerAdapter == null) {
+                if (VersionUtil.isFoliaServer()) {
+                    schedulerAdapter = new FoliaScheduler(this);
+                } else  {
+                    schedulerAdapter = new FoliaScheduler(this);
+                }
             }
             LOGGER = EssentialsLogger.getLoggerProvider(this);
             EssentialsLogger.updatePluginLogger(this);
@@ -428,7 +438,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 
             timer = new EssentialsTimer(this);
-            scheduleSyncRepeatingTask(timer, 1000, 50);
+            getSchedulerAdapter().runTaskTimer(timer, 1000, 50);
 
             Economy.setEss(this);
             execTimer.mark("RegHandler");
@@ -439,7 +449,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             if (!TESTING) {
                 updateChecker = new UpdateChecker(this);
-                runTaskAsynchronously(() -> {
+                getSchedulerAdapter().runTaskAsynchronously(() -> {
                     getLogger().log(Level.INFO, getAdventureFacet().miniToLegacy(tlLiteral("versionFetching")));
                     for (final ComponentHolder component : updateChecker.getVersionMessages(false, true, new CommandSource(this, Bukkit.getConsoleSender()))) {
                         getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, getAdventureFacet().adventureToLegacy(component));
@@ -1253,6 +1263,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public int scheduleSyncRepeatingTask(final Runnable run, final long delay, final long period) {
         return this.getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
+    }
+
+    @Override
+    public SchedulerAdapter getSchedulerAdapter() {
+        return schedulerAdapter;
     }
 
     @Override

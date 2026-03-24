@@ -9,6 +9,7 @@ import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.IUserMap;
+import com.earth2me.essentials.utils.schedulers.SchedulerAdapter;
 import net.ess3.provider.Provider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
@@ -107,6 +108,8 @@ public interface IEssentials extends Plugin {
     int scheduleSyncDelayedTask(Runnable run, long delay);
 
     int scheduleSyncRepeatingTask(Runnable run, long delay, long period);
+
+    SchedulerAdapter getSchedulerAdapter();
 
     PermissionsHandler getPermissionsHandler();
 
