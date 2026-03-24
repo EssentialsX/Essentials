@@ -49,6 +49,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.earth2me.essentials.utils.schedulers.SchedulerAdapter;
 import com.earth2me.essentials.utils.schedulers.adapter.FoliaScheduler;
+import com.earth2me.essentials.utils.schedulers.adapter.SpigotScheduler;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
 import com.earth2me.essentials.config.EssentialsConfiguration;
@@ -216,7 +217,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 if (VersionUtil.isFoliaServer()) {
                     schedulerAdapter = new FoliaScheduler(this);
                 } else  {
-                    schedulerAdapter = new FoliaScheduler(this);
+                    schedulerAdapter = new SpigotScheduler(this);
                 }
             }
             LOGGER = EssentialsLogger.getLoggerProvider(this);
