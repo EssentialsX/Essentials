@@ -3,10 +3,10 @@ package com.earth2me.essentials.commands.essentials;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.commands.EssentialsTreeNode;
 import com.earth2me.essentials.utils.RegistryUtil;
+import com.earth2me.essentials.utils.schedulers.SchedulerRunnable;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class NyanCommand extends EssentialsTreeNode {
         currentTune.runTaskTimer(ess, 20, 2);
     }
 
-    private static class TuneRunnable extends BukkitRunnable {
+    private static class TuneRunnable extends SchedulerRunnable {
         private static final Map<String, Float> noteMap = ImmutableMap.<String, Float>builder()
                 .put("1F#", 0.5f)
                 .put("1G", 0.53f)
