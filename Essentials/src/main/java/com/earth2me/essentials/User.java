@@ -852,14 +852,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             } else {
                 // If `afk-timeout-commands` in config.yml is populated, execute the command(s) instead of kicking the player.
-                for (final String command : ess.getSettings().getAfkTimeoutCommands()) {
-                    if (command == null || command.isEmpty()){
-                        continue;
+                ess.getSchedulerAdapter().runTask(() -> {
+                    for (final String command : ess.getSettings().getAfkTimeoutCommands()) {
+                        if (command == null || command.isEmpty()){
+                            continue;
+                        }
+                        // Replace placeholders in the command with actual values.
+                        final String cmd = command.replace("{USERNAME}", getName()).replace("{KICKTIME}", String.valueOf(kickTime));
+                        ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), cmd);
                     }
-                    // Replace placeholders in the command with actual values.
-                    final String cmd = command.replace("{USERNAME}", getName()).replace("{KICKTIME}", String.valueOf(kickTime));
-                    ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), cmd);
-                }
+                });
             }
         }
         final long autoafk = ess.getSettings().getAutoAfk();
