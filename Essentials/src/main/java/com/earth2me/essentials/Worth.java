@@ -32,6 +32,7 @@ public class Worth implements IConf {
     public BigDecimal getPrice(final IEssentials ess, final ItemStack itemStack) {
         BigDecimal result = BigDecimal.ONE.negate();
 
+
         final String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
         if (VersionUtil.PRE_FLATTENING) {
