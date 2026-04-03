@@ -301,5 +301,39 @@ public class UtilTest {
             .isLowerThan(VersionUtil.BukkitVersion.fromString("26.1-pre-1-R0.1-SNAPSHOT")));
         assertTrue(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")
             .isLowerThan(VersionUtil.BukkitVersion.fromString("26.1-rc-1-R0.1-SNAPSHOT")));
+        // Dev variants are considered higher than their base version (for feature checks)
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-snapshot-1-R0.1-SNAPSHOT")
+            .isHigherThan(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-pre-1-R0.1-SNAPSHOT")
+            .isHigherThan(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-1-R0.1-SNAPSHOT")
+            .isHigherThan(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        // Dev variants of 26.1 are lower than 26.2
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-snapshot-99-R0.1-SNAPSHOT")
+            .isLowerThan(VersionUtil.BukkitVersion.fromString("26.2-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-pre-99-R0.1-SNAPSHOT")
+            .isLowerThan(VersionUtil.BukkitVersion.fromString("26.2-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-99-R0.1-SNAPSHOT")
+            .isLowerThan(VersionUtil.BukkitVersion.fromString("26.2-R0.1-SNAPSHOT")));
+        // equalsBaseVersion: dev variants match their base version
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-snapshot-11-R0.1-SNAPSHOT")
+            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-pre-3-R0.1-SNAPSHOT")
+            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-2-R0.1-SNAPSHOT")
+            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        // equalsBaseVersion: different minor versions don't match
+        assertTrue(!VersionUtil.BukkitVersion.fromString("26.2-snapshot-1-R0.1-SNAPSHOT")
+            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        // equalsBaseVersion: different patch versions don't match
+        assertTrue(!VersionUtil.BukkitVersion.fromString("26.1.1-R0.1-SNAPSHOT")
+            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        // toString roundtrip with new PaperMC format
+        assertEquals("26.1-snapshot-11-R0.1",
+            VersionUtil.BukkitVersion.fromString("26.1-snapshot-11-R0.1-SNAPSHOT").toString());
+        assertEquals("26.1-pre-3-R0.1",
+            VersionUtil.BukkitVersion.fromString("26.1-pre-3-R0.1-SNAPSHOT").toString());
+        assertEquals("26.1-rc-2-R0.1",
+            VersionUtil.BukkitVersion.fromString("26.1-rc-2-R0.1-SNAPSHOT").toString());
     }
 }

@@ -176,7 +176,7 @@ public final class VersionUtil {
                 }
             }
 
-            if (!supportedVersions.contains(getServerBukkitVersion())) {
+            if (!isSupportedVersion(getServerBukkitVersion())) {
                 return supportStatus = SupportStatus.OUTDATED;
             }
 
@@ -187,6 +187,27 @@ public final class VersionUtil {
 
     public static String getSupportStatusClass() {
         return supportStatusClass;
+    }
+
+    /**
+     * Checks if a version is considered supported, either by exact match in the
+     * supported versions set, or by being a development variant (snapshot/pre-release/RC)
+     * of a supported version. This handles the new PaperMC versioning scheme where
+     * development builds report versions like {@code 26.1-snapshot-11-R0.1-SNAPSHOT}.
+     */
+    private static boolean isSupportedVersion(final BukkitVersion version) {
+        if (supportedVersions.contains(version)) {
+            return true;
+        }
+        // Check if this is a dev variant of a supported version
+        if (version.getSnapshotRelease() != -1 || version.getPrerelease() != -1 || version.getReleaseCandidate() != -1) {
+            for (final BukkitVersion supported : supportedVersions) {
+                if (version.equalsBaseVersion(supported)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static final class BukkitVersion implements Comparable<BukkitVersion> {
@@ -333,6 +354,22 @@ public final class VersionUtil {
             return snapshot;
         }
 
+        /**
+         * Checks if this version has the same base version (major, minor, patch, and revision)
+         * as the given version, ignoring development specifiers (snapshot release, pre-release,
+         * and release candidate numbers). This is used to match development builds against
+         * their target release version.
+         */
+        public boolean equalsBaseVersion(final BukkitVersion other) {
+            if (this.snapshot || other.snapshot) {
+                return false;
+            }
+            return this.major == other.major &&
+                this.minor == other.minor &&
+                this.patch == other.patch &&
+                Double.compare(this.revision, other.revision) == 0;
+        }
+
         @Override
         public boolean equals(final Object o) {
             if (this == o) {
@@ -379,10 +416,10 @@ public final class VersionUtil {
                 sb.append("-snapshot-").append(snapshotRelease);
             }
             if (preRelease != -1) {
-                sb.append("-pre").append(preRelease);
+                sb.append("-pre-").append(preRelease);
             }
             if (releaseCandidate != -1) {
-                sb.append("-rc").append(releaseCandidate);
+                sb.append("-rc-").append(releaseCandidate);
             }
             return sb.append("-R").append(revision).toString();
         }
