@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UtilTest {
@@ -323,10 +324,10 @@ public class UtilTest {
         assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-2-R0.1-SNAPSHOT")
             .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
         // equalsBaseVersion: different minor versions don't match
-        assertTrue(!VersionUtil.BukkitVersion.fromString("26.2-snapshot-1-R0.1-SNAPSHOT")
+        assertFalse(VersionUtil.BukkitVersion.fromString("26.2-snapshot-1-R0.1-SNAPSHOT")
             .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
         // equalsBaseVersion: different patch versions don't match
-        assertTrue(!VersionUtil.BukkitVersion.fromString("26.1.1-R0.1-SNAPSHOT")
+        assertFalse(VersionUtil.BukkitVersion.fromString("26.1.1-R0.1-SNAPSHOT")
             .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
         // toString roundtrip with new PaperMC format
         assertEquals("26.1-snapshot-11-R0.1",
