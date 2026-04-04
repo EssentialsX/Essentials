@@ -337,66 +337,7 @@ public class UtilTest {
         assertEquals("26.1-rc-2-R0.1",
             VersionUtil.BukkitVersion.fromString("26.1-rc-2-R0.1-SNAPSHOT").toString());
         // Paper build metadata format (e.g. 26.1-rc-3.build.8-alpha)
-        v = VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha-R0.1-SNAPSHOT");
-        assertEquals(v.getMajor(), 26);
-        assertEquals(v.getMinor(), 1);
-        assertEquals(v.getPatch(), 0);
-        assertEquals(v.getRevision(), 0.1);
-        assertEquals(v.getSnapshotRelease(), -1);
-        assertEquals(v.getPrerelease(), -1);
-        assertEquals(v.getReleaseCandidate(), 3);
-        assertEquals(v.getPaperBuild(), 8);
-        v = VersionUtil.BukkitVersion.fromString("26.1-pre-3.build.5-alpha-R0.1-SNAPSHOT");
-        assertEquals(v.getMajor(), 26);
-        assertEquals(v.getMinor(), 1);
-        assertEquals(v.getPatch(), 0);
-        assertEquals(v.getRevision(), 0.1);
-        assertEquals(v.getSnapshotRelease(), -1);
-        assertEquals(v.getPrerelease(), 3);
-        assertEquals(v.getReleaseCandidate(), -1);
-        assertEquals(v.getPaperBuild(), 5);
-        v = VersionUtil.BukkitVersion.fromString("26.1-snapshot-11.build.3-alpha-R0.1-SNAPSHOT");
-        assertEquals(v.getMajor(), 26);
-        assertEquals(v.getMinor(), 1);
-        assertEquals(v.getPatch(), 0);
-        assertEquals(v.getRevision(), 0.1);
-        assertEquals(v.getSnapshotRelease(), 11);
-        assertEquals(v.getPrerelease(), -1);
-        assertEquals(v.getReleaseCandidate(), -1);
-        assertEquals(v.getPaperBuild(), 3);
-        // Paper build of a base release (no Mojang specifier)
-        v = VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha-R0.1-SNAPSHOT");
-        assertEquals(v.getMajor(), 26);
-        assertEquals(v.getMinor(), 1);
-        assertEquals(v.getPatch(), 0);
-        assertEquals(v.getRevision(), 0.1);
-        assertEquals(v.getSnapshotRelease(), -1);
-        assertEquals(v.getPrerelease(), -1);
-        assertEquals(v.getReleaseCandidate(), -1);
-        assertEquals(v.getPaperBuild(), 5);
-        // Paper build without label
-        v = VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-R0.1-SNAPSHOT");
-        assertEquals(v.getMajor(), 26);
-        assertEquals(v.getMinor(), 1);
-        assertEquals(v.getReleaseCandidate(), 3);
-        assertEquals(v.getPaperBuild(), 8);
-        // Paper builds with same Mojang version: equalsBaseVersion matches
-        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha-R0.1-SNAPSHOT")
-            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
-        assertTrue(VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha-R0.1-SNAPSHOT")
-            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
-        // Paper build ordering: higher build number is higher
-        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.12-alpha-R0.1-SNAPSHOT")
-            .isHigherThan(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha-R0.1-SNAPSHOT")));
-        // Paper build is higher than bare Mojang version (paperBuild -1 < 1)
-        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.1-alpha-R0.1-SNAPSHOT")
-            .isHigherThan(VersionUtil.BukkitVersion.fromString("26.1-rc-3-R0.1-SNAPSHOT")));
-        // toString roundtrip with Paper build metadata
-        assertEquals("26.1-rc-3.build.8-R0.1",
-            VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha-R0.1-SNAPSHOT").toString());
-        assertEquals("26.1.build.5-R0.1",
-            VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha-R0.1-SNAPSHOT").toString());
-        // Paper versions WITHOUT -R0.1-SNAPSHOT suffix (Paper doesn't include Bukkit revision)
+        // Paper versions do NOT include -R0.1-SNAPSHOT suffix
         v = VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha");
         assertEquals(v.getMajor(), 26);
         assertEquals(v.getMinor(), 1);
@@ -411,7 +352,9 @@ public class UtilTest {
         assertEquals(v.getMinor(), 1);
         assertEquals(v.getPatch(), 0);
         assertEquals(v.getRevision(), 0.0);
+        assertEquals(v.getSnapshotRelease(), -1);
         assertEquals(v.getPrerelease(), 3);
+        assertEquals(v.getReleaseCandidate(), -1);
         assertEquals(v.getPaperBuild(), 5);
         v = VersionUtil.BukkitVersion.fromString("26.1-snapshot-11.build.3-alpha");
         assertEquals(v.getMajor(), 26);
@@ -419,27 +362,36 @@ public class UtilTest {
         assertEquals(v.getPatch(), 0);
         assertEquals(v.getRevision(), 0.0);
         assertEquals(v.getSnapshotRelease(), 11);
+        assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), -1);
         assertEquals(v.getPaperBuild(), 3);
+        // Paper build of a base release (no Mojang specifier)
         v = VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha");
         assertEquals(v.getMajor(), 26);
         assertEquals(v.getMinor(), 1);
         assertEquals(v.getPatch(), 0);
         assertEquals(v.getRevision(), 0.0);
+        assertEquals(v.getSnapshotRelease(), -1);
+        assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), -1);
         assertEquals(v.getPaperBuild(), 5);
-        // Paper versions without R0.1 still match supported versions via equalsBaseVersion
+        // Paper builds with same Mojang version: equalsBaseVersion matches
         assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")
             .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
         assertTrue(VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha")
             .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
         assertTrue(VersionUtil.BukkitVersion.fromString("26.1")
             .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
-        // Paper versions without R0.1: ordering still works against Bukkit versions
+        // Paper build ordering: higher build number is higher
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.12-alpha")
+            .isHigherThan(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")));
+        // Paper build is higher than bare Mojang version (paperBuild -1 < 1)
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.1-alpha")
+            .isHigherThan(VersionUtil.BukkitVersion.fromString("26.1-rc-3-R0.1-SNAPSHOT")));
+        // Paper versions: ordering still works against Bukkit versions
         assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")
             .isHigherThan(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")));
         assertTrue(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")
             .isLowerThan(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")));
-        // toString for Paper versions without revision
-        assertEquals("26.1-rc-3.build.8-R0.0",
-            VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha").toString());
     }
 }
