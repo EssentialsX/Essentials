@@ -115,10 +115,12 @@ public class RoleSyncManager implements Listener {
                     return CompletableFuture.completedFuture(null);
                 }
 
-                return ess.getApi().modifyMemberRoles(member, toAdd, toRemove).exceptionally(e -> {
-                    ess.getLogger().log(Level.WARNING, "Failed to modify Discord roles for " + player.getUniqueId() + " / " + discordId, e);
-                    return null;
-                });
+                return ess.getApi()
+                        .modifyMemberRoles(member, toAdd, toRemove)
+                        .exceptionally(e -> {
+                            ess.getLogger().log(Level.WARNING, "Failed to modify Discord roles for " + player.getUniqueId() + " / " + discordId, e);
+                            return null;
+                        });
             }).exceptionally(e -> {
                 ess.getLogger().log(Level.WARNING, "Failed to fetch Discord member for " + player.getUniqueId() + " / " + discordId, e);
                 return null;
