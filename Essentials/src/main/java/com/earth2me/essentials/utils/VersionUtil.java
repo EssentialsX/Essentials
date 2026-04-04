@@ -411,9 +411,7 @@ public final class VersionUtil {
                 revision == that.revision &&
                 snapshotRelease == that.snapshotRelease &&
                 preRelease == that.preRelease &&
-                releaseCandidate == that.releaseCandidate &&
-                paperBuild == that.paperBuild &&
-                Objects.equal(releaseChannel, that.releaseChannel);
+                releaseCandidate == that.releaseCandidate;
         }
 
         @Override
@@ -421,7 +419,7 @@ public final class VersionUtil {
             if (snapshot) {
                 return Objects.hashCode("snapshot", snapshotYear, snapshotWeek, snapshotLetter, revision);
             }
-            return Objects.hashCode(major, minor, patch, revision, snapshotRelease, preRelease, releaseCandidate, paperBuild, releaseChannel);
+            return Objects.hashCode(major, minor, patch, revision, snapshotRelease, preRelease, releaseCandidate);
         }
 
         @Override

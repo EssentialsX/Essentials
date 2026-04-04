@@ -434,8 +434,12 @@ public class UtilTest {
             .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-beta")));
         assertTrue(VersionUtil.BukkitVersion.fromString("26.1.build.5-recommended")
             .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha")));
-        // Release channel does not affect ordering (same build num, different channel)
-        assertEquals(0, VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")
-            .compareTo(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-beta")));
+        // Paper build metadata does not affect equality
+        assertEquals(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha"),
+            VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.12-beta"));
+        assertEquals(VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha"),
+            VersionUtil.BukkitVersion.fromString("26.1.build.99-recommended"));
+        assertEquals(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha"),
+            VersionUtil.BukkitVersion.fromString("26.1-rc-3-R0.0"));
     }
 }
