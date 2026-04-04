@@ -130,7 +130,12 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     }
 
     public WebhookMessage getWebhookMessage(String message, String avatarUrl, String name, boolean groupMentions) {
-        return new WebhookMessageBuilder().setAvatarUrl(avatarUrl).setAllowedMentions(groupMentions ? DiscordUtil.ALL_MENTIONS_WEBHOOK : DiscordUtil.NO_GROUP_MENTIONS_WEBHOOK).setUsername(name).setContent(message).build();
+        return new WebhookMessageBuilder()
+                .setAvatarUrl(avatarUrl)
+                .setAllowedMentions(groupMentions ? DiscordUtil.ALL_MENTIONS_WEBHOOK : DiscordUtil.NO_GROUP_MENTIONS_WEBHOOK)
+                .setUsername(name)
+                .setContent(message)
+                .build();
     }
 
     public void sendMessage(DiscordMessageEvent event, String message, boolean groupMentions) {
@@ -153,7 +158,9 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             logger.warning(tlLiteral("discordNoSendPermission", channel.getName()));
             return;
         }
-        channel.sendMessage(strippedContent).setAllowedMentions(groupMentions ? null : DiscordUtil.NO_GROUP_MENTIONS).queue(null, error -> logger.log(Level.WARNING, "Failed to send message to channel " + channel.getName(), error));
+        channel.sendMessage(strippedContent)
+                .setAllowedMentions(groupMentions ? null : DiscordUtil.NO_GROUP_MENTIONS)
+                .queue(null, error -> logger.log(Level.WARNING, "Failed to send message to channel " + channel.getName(), error));
     }
 
     public void startup() throws LoginException, InterruptedException {
@@ -171,7 +178,15 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             proxySettings.setServer(plugin.getSettings().getHttpProxyServer());
         }
 
-        jda = JDABuilder.createDefault(plugin.getSettings().getBotToken()).setWebsocketFactory(wsFactory).addEventListeners(new DiscordListener(this)).enableIntents(GatewayIntent.MESSAGE_CONTENT).enableCache(CacheFlag.EMOJI).disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE).setContextEnabled(false).build().awaitReady();
+        jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
+                .setWebsocketFactory(wsFactory)
+                .addEventListeners(new DiscordListener(this))
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                .enableCache(CacheFlag.EMOJI)
+                .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
+                .setContextEnabled(false)
+                .build()
+                .awaitReady();
         invalidStartup = false;
         updatePresence();
         logger.log(Level.INFO, tlLiteral("discordLoggingInDone", jda.getSelfUser().getAsTag()));
@@ -188,7 +203,9 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         }
 
         final Collection<Permission> requiredPermissions = ImmutableList.of(Permission.MANAGE_WEBHOOKS, Permission.MANAGE_ROLES, Permission.NICKNAME_MANAGE, Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND, Permission.MESSAGE_EMBED_LINKS);
-        final String[] missingPermissions = requiredPermissions.stream().filter(permission -> !guild.getSelfMember().hasPermission(permission)).map(Permission::getName).toArray(String[]::new);
+        final String[] missingPermissions = requiredPermissions.stream()
+                .filter(permission -> !guild.getSelfMember().hasPermission(permission))
+                .map(Permission::getName).toArray(String[]::new);
 
         if (missingPermissions.length > 0) {
             invalidStartup = true;
@@ -287,11 +304,23 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     public void sendChatMessage(ChatType chatType, Player player, String chatMessage) {
         final User user = getPlugin().getEss().getUser(player);
 
-        final String formattedMessage = MessageUtil.formatMessage(getSettings().getMcToDiscordFormat(player, chatType), MessageUtil.sanitizeDiscordMarkdown(player.getName()), MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()), user.isAuthorized("essentials.discord.markdown") ? chatMessage : MessageUtil.sanitizeDiscordMarkdown(chatMessage), MessageUtil.sanitizeDiscordMarkdown(getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName())), MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player))), MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player))));
+        final String formattedMessage = MessageUtil.formatMessage(getSettings().getMcToDiscordFormat(player, chatType),
+                MessageUtil.sanitizeDiscordMarkdown(player.getName()),
+                MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
+                user.isAuthorized("essentials.discord.markdown") ? chatMessage : MessageUtil.sanitizeDiscordMarkdown(chatMessage),
+                MessageUtil.sanitizeDiscordMarkdown(getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName())),
+                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
+                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player))));
 
         final String avatarUrl = DiscordUtil.getAvatarUrl(this, player);
 
-        final String formattedName = MessageUtil.formatMessage(getSettings().getMcToDiscordNameFormat(player), player.getName(), player.getDisplayName(), getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName()), FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player)), FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player)), guild.getMember(jda.getSelfUser()).getEffectiveName());
+        final String formattedName = MessageUtil.formatMessage(getSettings().getMcToDiscordNameFormat(player),
+                player.getName(),
+                player.getDisplayName(),
+                getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName()),
+                FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player)),
+                FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player)),
+                guild.getMember(jda.getSelfUser()).getEffectiveName());
 
         DiscordUtil.dispatchDiscordMessage(this, chatTypeToMessageType(chatType), formattedMessage, user.isAuthorized("essentials.discord.ping"), avatarUrl, formattedName, player.getUniqueId());
     }
