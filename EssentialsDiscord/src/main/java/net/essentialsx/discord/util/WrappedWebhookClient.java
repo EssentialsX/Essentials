@@ -57,6 +57,10 @@ public class WrappedWebhookClient {
         webhookQueue = queue;
     }
 
+    public long getId() {
+        return webhookClient.getId();
+    }
+
     public CompletableFuture<ReadonlyMessage> send(WebhookMessage message) {
         return webhookClient.send(message);
     }
