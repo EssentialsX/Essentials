@@ -212,7 +212,7 @@ public final class VersionUtil {
     }
 
     public static final class BukkitVersion implements Comparable<BukkitVersion> {
-        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)?(?:-snapshot-(\\d+))?(?:-pre-?(\\d+))?(?:-rc-?(\\d+))?(?:\\.build\\.(\\d+)(?:-[a-z]+)?)?(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
+        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)?(?:-snapshot-(\\d+))?(?:-pre-?(\\d+))?(?:-rc-?(\\d+))?(?:\\.build\\.(\\d+)(?:-([a-z]+))?)?(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
         private static final Pattern LEGACY_SNAPSHOT_PATTERN = Pattern.compile("^(\\d{2})w(\\d{2})([a-z])(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
 
         private final int major;
@@ -221,6 +221,7 @@ public final class VersionUtil {
         private final int preRelease;
         private final int releaseCandidate;
         private final int paperBuild;
+        private final String releaseChannel;
         private final int patch;
         private final double revision;
 
@@ -229,7 +230,7 @@ public final class VersionUtil {
         private final int snapshotWeek;
         private final char snapshotLetter;
 
-        private BukkitVersion(final int major, final int minor, final int patch, final double revision, final int snapshotRelease, final int preRelease, final int releaseCandidate, final int paperBuild) {
+        private BukkitVersion(final int major, final int minor, final int patch, final double revision, final int snapshotRelease, final int preRelease, final int releaseCandidate, final int paperBuild, final String releaseChannel) {
             this.major = major;
             this.minor = minor;
             this.patch = patch;
@@ -238,13 +239,14 @@ public final class VersionUtil {
             this.preRelease = preRelease;
             this.releaseCandidate = releaseCandidate;
             this.paperBuild = paperBuild;
+            this.releaseChannel = releaseChannel;
             this.snapshot = false;
             this.snapshotYear = -1;
             this.snapshotWeek = -1;
             this.snapshotLetter = '\0';
         }
 
-        private BukkitVersion(final int major, final int minor, final int patch, final double revision, final int snapshotRelease, final int preRelease, final int releaseCandidate, final int paperBuild,
+        private BukkitVersion(final int major, final int minor, final int patch, final double revision, final int snapshotRelease, final int preRelease, final int releaseCandidate, final int paperBuild, final String releaseChannel,
                                final boolean snapshot, final int snapshotYear, final int snapshotWeek, final char snapshotLetter) {
             this.major = major;
             this.minor = minor;
@@ -254,6 +256,7 @@ public final class VersionUtil {
             this.preRelease = preRelease;
             this.releaseCandidate = releaseCandidate;
             this.paperBuild = paperBuild;
+            this.releaseChannel = releaseChannel;
             this.snapshot = snapshot;
             this.snapshotYear = snapshotYear;
             this.snapshotWeek = snapshotWeek;
@@ -266,7 +269,7 @@ public final class VersionUtil {
             // Try standard release format first
             Matcher matcher = VERSION_PATTERN.matcher(string);
             if (matcher.matches()) {
-                return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(8), matcher.group(4), matcher.group(5), matcher.group(6), matcher.group(7));
+                return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(9), matcher.group(4), matcher.group(5), matcher.group(6), matcher.group(7), matcher.group(8));
             }
 
             // Try snapshot format (e.g., 25w32a-R0.1-SNAPSHOT)
@@ -288,10 +291,10 @@ public final class VersionUtil {
             }
             matcher = VERSION_PATTERN.matcher(v1_16_1_R01.toString());
             Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
-            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(8), matcher.group(4), matcher.group(5), matcher.group(6), matcher.group(7));
+            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(9), matcher.group(4), matcher.group(5), matcher.group(6), matcher.group(7), matcher.group(8));
         }
 
-        private static BukkitVersion from(final String major, final String minor, String patch, String revision, String snapshotRelease, String preRelease, String releaseCandidate, String paperBuild) {
+        private static BukkitVersion from(final String major, final String minor, String patch, String revision, String snapshotRelease, String preRelease, String releaseCandidate, String paperBuild, final String releaseChannel) {
             if (patch == null || patch.isEmpty()) patch = "0";
             if (revision == null || revision.isEmpty()) revision = "0";
             if (snapshotRelease == null || snapshotRelease.isEmpty()) snapshotRelease = "-1";
@@ -305,11 +308,12 @@ public final class VersionUtil {
                 Integer.parseInt(snapshotRelease),
                 Integer.parseInt(preRelease),
                 Integer.parseInt(releaseCandidate),
-                Integer.parseInt(paperBuild));
+                Integer.parseInt(paperBuild),
+                releaseChannel);
         }
 
         private static BukkitVersion fromSnapshot(final int year, final int week, final char letter, final double revision) {
-            return new BukkitVersion(-1, -1, -1, revision, -1, -1, -1, -1, true, year, week, letter);
+            return new BukkitVersion(-1, -1, -1, revision, -1, -1, -1, -1, null, true, year, week, letter);
         }
 
         public boolean isHigherThan(final BukkitVersion o) {
@@ -360,6 +364,10 @@ public final class VersionUtil {
             return paperBuild;
         }
 
+        public String getReleaseChannel() {
+            return releaseChannel;
+        }
+
         public boolean isSnapshot() {
             return snapshot;
         }
@@ -404,7 +412,8 @@ public final class VersionUtil {
                 snapshotRelease == that.snapshotRelease &&
                 preRelease == that.preRelease &&
                 releaseCandidate == that.releaseCandidate &&
-                paperBuild == that.paperBuild;
+                paperBuild == that.paperBuild &&
+                Objects.equal(releaseChannel, that.releaseChannel);
         }
 
         @Override
@@ -412,7 +421,7 @@ public final class VersionUtil {
             if (snapshot) {
                 return Objects.hashCode("snapshot", snapshotYear, snapshotWeek, snapshotLetter, revision);
             }
-            return Objects.hashCode(major, minor, patch, revision, snapshotRelease, preRelease, releaseCandidate, paperBuild);
+            return Objects.hashCode(major, minor, patch, revision, snapshotRelease, preRelease, releaseCandidate, paperBuild, releaseChannel);
         }
 
         @Override
@@ -435,6 +444,9 @@ public final class VersionUtil {
             }
             if (paperBuild != -1) {
                 sb.append(".build.").append(paperBuild);
+                if (releaseChannel != null) {
+                    sb.append("-").append(releaseChannel);
+                }
             }
             return sb.append("-R").append(revision).toString();
         }

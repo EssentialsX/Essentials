@@ -16,6 +16,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UtilTest {
@@ -347,6 +348,7 @@ public class UtilTest {
         assertEquals(v.getPrerelease(), -1);
         assertEquals(v.getReleaseCandidate(), 3);
         assertEquals(v.getPaperBuild(), 8);
+        assertEquals(v.getReleaseChannel(), "alpha");
         v = VersionUtil.BukkitVersion.fromString("26.1-pre-3.build.5-alpha");
         assertEquals(v.getMajor(), 26);
         assertEquals(v.getMinor(), 1);
@@ -356,6 +358,7 @@ public class UtilTest {
         assertEquals(v.getPrerelease(), 3);
         assertEquals(v.getReleaseCandidate(), -1);
         assertEquals(v.getPaperBuild(), 5);
+        assertEquals(v.getReleaseChannel(), "alpha");
         v = VersionUtil.BukkitVersion.fromString("26.1-snapshot-11.build.3-alpha");
         assertEquals(v.getMajor(), 26);
         assertEquals(v.getMinor(), 1);
@@ -365,6 +368,7 @@ public class UtilTest {
         assertEquals(v.getPrerelease(), -1);
         assertEquals(v.getReleaseCandidate(), -1);
         assertEquals(v.getPaperBuild(), 3);
+        assertEquals(v.getReleaseChannel(), "alpha");
         // Paper build of a base release (no Mojang specifier)
         v = VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha");
         assertEquals(v.getMajor(), 26);
@@ -375,6 +379,7 @@ public class UtilTest {
         assertEquals(v.getPrerelease(), -1);
         assertEquals(v.getReleaseCandidate(), -1);
         assertEquals(v.getPaperBuild(), 5);
+        assertEquals(v.getReleaseChannel(), "alpha");
         // Paper builds with same Mojang version: equalsBaseVersion matches
         assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")
             .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
@@ -393,5 +398,44 @@ public class UtilTest {
             .isHigherThan(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")));
         assertTrue(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")
             .isLowerThan(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")));
+        // Release channel: different channels parsed correctly
+        v = VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-beta");
+        assertEquals(v.getReleaseCandidate(), 3);
+        assertEquals(v.getPaperBuild(), 8);
+        assertEquals(v.getReleaseChannel(), "beta");
+        v = VersionUtil.BukkitVersion.fromString("26.1.build.10-recommended");
+        assertEquals(v.getMajor(), 26);
+        assertEquals(v.getMinor(), 1);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getPaperBuild(), 10);
+        assertEquals(v.getReleaseChannel(), "recommended");
+        // Release channel: Bukkit/Mojang versions have no release channel
+        assertNull(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT").getReleaseChannel());
+        assertNull(VersionUtil.BukkitVersion.fromString("26.1-rc-3-R0.1-SNAPSHOT").getReleaseChannel());
+        assertNull(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT").getReleaseChannel());
+        // Release channel: Paper build without channel suffix
+        v = VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8");
+        assertEquals(v.getPaperBuild(), 8);
+        assertNull(v.getReleaseChannel());
+        // toString roundtrip preserves release channel
+        assertEquals("26.1-rc-3.build.8-alpha-R0.0",
+            VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha").toString());
+        assertEquals("26.1.build.5-recommended-R0.0",
+            VersionUtil.BukkitVersion.fromString("26.1.build.5-recommended").toString());
+        assertEquals("26.1-pre-1.build.3-beta-R0.0",
+            VersionUtil.BukkitVersion.fromString("26.1-pre-1.build.3-beta").toString());
+        assertEquals("26.1-snapshot-11.build.3-alpha-R0.0",
+            VersionUtil.BukkitVersion.fromString("26.1-snapshot-11.build.3-alpha").toString());
+        // toString: paper build without channel omits channel suffix
+        assertEquals("26.1-rc-3.build.8-R0.0",
+            VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8").toString());
+        // Release channel does not affect equalsBaseVersion
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")
+            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-beta")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1.build.5-recommended")
+            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha")));
+        // Release channel does not affect ordering (same build num, different channel)
+        assertEquals(0, VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")
+            .compareTo(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-beta")));
     }
 }
