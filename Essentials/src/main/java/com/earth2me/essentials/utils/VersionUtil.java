@@ -191,20 +191,21 @@ public final class VersionUtil {
 
     /**
      * Checks if a version is considered supported, either by exact match in the
-     * supported versions set, or by being a development variant (snapshot/pre-release/RC)
-     * of a supported version. This handles the new PaperMC versioning scheme where
-     * development builds report versions like {@code 26.1-snapshot-11-R0.1-SNAPSHOT}.
+     * supported versions set, or by matching the base version (major.minor.patch)
+     * of a supported version. This handles both the new PaperMC versioning scheme
+     * (which omits the Bukkit revision suffix) and development builds that report
+     * versions like {@code 26.1-rc-3.build.8-alpha}.
      */
     private static boolean isSupportedVersion(final BukkitVersion version) {
         if (supportedVersions.contains(version)) {
             return true;
         }
-        // Check if this is a dev variant of a supported version
-        if (version.getSnapshotRelease() != -1 || version.getPrerelease() != -1 || version.getReleaseCandidate() != -1 || version.getPaperBuild() != -1) {
-            for (final BukkitVersion supported : supportedVersions) {
-                if (version.equalsBaseVersion(supported)) {
-                    return true;
-                }
+        // Check if this version matches a supported base version.
+        // This covers Paper versions (no -R0.1-SNAPSHOT suffix) and
+        // dev variants (snapshot/pre-release/RC/Paper builds).
+        for (final BukkitVersion supported : supportedVersions) {
+            if (version.equalsBaseVersion(supported)) {
+                return true;
             }
         }
         return false;
@@ -364,10 +365,12 @@ public final class VersionUtil {
         }
 
         /**
-         * Checks if this version has the same base version (major, minor, patch, and revision)
+         * Checks if this version has the same base version (major, minor, and patch)
          * as the given version, ignoring development specifiers (snapshot release, pre-release,
-         * and release candidate numbers). This is used to match development builds against
-         * their target release version.
+         * release candidate, paper build numbers) and Bukkit metadata (revision).
+         * Revision is ignored because Paper versions do not include the Bukkit revision
+         * suffix (e.g. {@code -R0.1-SNAPSHOT}).
+         * This is used to match development builds against their target release version.
          */
         public boolean equalsBaseVersion(final BukkitVersion other) {
             if (this.snapshot || other.snapshot) {
@@ -375,8 +378,7 @@ public final class VersionUtil {
             }
             return this.major == other.major &&
                 this.minor == other.minor &&
-                this.patch == other.patch &&
-                Double.compare(this.revision, other.revision) == 0;
+                this.patch == other.patch;
         }
 
         @Override

@@ -396,5 +396,50 @@ public class UtilTest {
             VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha-R0.1-SNAPSHOT").toString());
         assertEquals("26.1.build.5-R0.1",
             VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha-R0.1-SNAPSHOT").toString());
+        // Paper versions WITHOUT -R0.1-SNAPSHOT suffix (Paper doesn't include Bukkit revision)
+        v = VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha");
+        assertEquals(v.getMajor(), 26);
+        assertEquals(v.getMinor(), 1);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getRevision(), 0.0);
+        assertEquals(v.getSnapshotRelease(), -1);
+        assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), 3);
+        assertEquals(v.getPaperBuild(), 8);
+        v = VersionUtil.BukkitVersion.fromString("26.1-pre-3.build.5-alpha");
+        assertEquals(v.getMajor(), 26);
+        assertEquals(v.getMinor(), 1);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getRevision(), 0.0);
+        assertEquals(v.getPrerelease(), 3);
+        assertEquals(v.getPaperBuild(), 5);
+        v = VersionUtil.BukkitVersion.fromString("26.1-snapshot-11.build.3-alpha");
+        assertEquals(v.getMajor(), 26);
+        assertEquals(v.getMinor(), 1);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getRevision(), 0.0);
+        assertEquals(v.getSnapshotRelease(), 11);
+        assertEquals(v.getPaperBuild(), 3);
+        v = VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha");
+        assertEquals(v.getMajor(), 26);
+        assertEquals(v.getMinor(), 1);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getRevision(), 0.0);
+        assertEquals(v.getPaperBuild(), 5);
+        // Paper versions without R0.1 still match supported versions via equalsBaseVersion
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")
+            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1.build.5-alpha")
+            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1")
+            .equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.1-R0.1-SNAPSHOT")));
+        // Paper versions without R0.1: ordering still works against Bukkit versions
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")
+            .isHigherThan(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("1.21.11-R0.1-SNAPSHOT")
+            .isLowerThan(VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha")));
+        // toString for Paper versions without revision
+        assertEquals("26.1-rc-3.build.8-R0.0",
+            VersionUtil.BukkitVersion.fromString("26.1-rc-3.build.8-alpha").toString());
     }
 }
