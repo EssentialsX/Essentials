@@ -374,11 +374,9 @@ public final class VersionUtil {
 
         /**
          * Checks if this version has the same base version (major, minor, and patch)
-         * as the given version, ignoring development specifiers (snapshot release, pre-release,
-         * release candidate, paper build numbers) and Bukkit metadata (revision).
-         * Revision is ignored because Paper versions do not include the Bukkit revision
-         * suffix (e.g. {@code -R0.1-SNAPSHOT}).
-         * This is used to match development builds against their target release version.
+         * as the given version, ignoring development specifiers and Bukkit metadata.
+         * Revision is ignored because Paper versions do not include the Bukkit
+         * revision suffix (e.g. {@code -R0.1-SNAPSHOT}).
          */
         public boolean equalsBaseVersion(final BukkitVersion other) {
             if (this.snapshot || other.snapshot) {
@@ -449,6 +447,13 @@ public final class VersionUtil {
             return sb.append("-R").append(revision).toString();
         }
 
+        private static int compareDevSpecifier(final int a, final int b) {
+            if (a == b) return 0;
+            if (a == -1) return 1;
+            if (b == -1) return -1;
+            return Integer.compare(a, b);
+        }
+
         @Override
         public int compareTo(final BukkitVersion o) {
             // Snapshots are always considered the most recent
@@ -484,30 +489,20 @@ public final class VersionUtil {
                     } else if (patch > o.patch) {
                         return 1;
                     } else { // equal patch
-                        if (snapshotRelease < o.snapshotRelease) {
+                        // For dev specifiers, -1 means absent (final release) and
+                        // sorts HIGHER than any present value: snapshot < pre < rc < release
+                        int cmp = compareDevSpecifier(snapshotRelease, o.snapshotRelease);
+                        if (cmp != 0) return cmp;
+                        cmp = compareDevSpecifier(preRelease, o.preRelease);
+                        if (cmp != 0) return cmp;
+                        cmp = compareDevSpecifier(releaseCandidate, o.releaseCandidate);
+                        if (cmp != 0) return cmp;
+                        if (paperBuild < o.paperBuild) {
                             return -1;
-                        } else if (snapshotRelease > o.snapshotRelease) {
+                        } else if (paperBuild > o.paperBuild) {
                             return 1;
-                        } else { // equal snapshot release
-                            if (preRelease < o.preRelease) {
-                                return -1;
-                            } else if (preRelease > o.preRelease) {
-                                return 1;
-                            } else { // equal prerelease
-                                if (releaseCandidate < o.releaseCandidate) {
-                                    return -1;
-                                } else if (releaseCandidate > o.releaseCandidate) {
-                                    return 1;
-                                } else { // equal release candidate
-                                    if (paperBuild < o.paperBuild) {
-                                        return -1;
-                                    } else if (paperBuild > o.paperBuild) {
-                                        return 1;
-                                    } else { // equal paper build
-                                        return Double.compare(revision, o.revision);
-                                    }
-                                }
-                            }
+                        } else {
+                            return Double.compare(revision, o.revision);
                         }
                     }
                 }
