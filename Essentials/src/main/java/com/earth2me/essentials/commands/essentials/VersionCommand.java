@@ -37,7 +37,7 @@ public class VersionCommand extends EssentialsTreeNode {
     );
 
     public VersionCommand() {
-        super("version");
+        super("version", "ver");
     }
 
     @Override
