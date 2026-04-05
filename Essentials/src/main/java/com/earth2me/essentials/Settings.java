@@ -115,6 +115,7 @@ public class Settings implements net.ess3.api.ISettings {
     private Set<String> noGodWorlds = new HashSet<>();
     private boolean registerBackInListener;
     private boolean disableItemPickupWhileAfk;
+    private boolean disableItemPickupWhileVanished;
     private long teleportInvulnerabilityTime;
     private boolean teleportInvulnerability;
     private long loginAttackDelay;
@@ -803,6 +804,7 @@ public class Settings implements net.ess3.api.ISettings {
         teleportInvulnerabilityTime = _getTeleportInvulnerability();
         teleportInvulnerability = _isTeleportInvulnerability();
         disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();
+        disableItemPickupWhileVanished = _getDisableItemPickupWhileVanished();
         registerBackInListener = _registerBackInListener();
         cancelAfkOnInteract = _cancelAfkOnInteract();
         cancelAfkOnMove = _cancelAfkOnMove();
@@ -1436,6 +1438,15 @@ public class Settings implements net.ess3.api.ISettings {
 
     private boolean _getDisableItemPickupWhileAfk() {
         return config.getBoolean("disable-item-pickup-while-afk", false);
+    }
+
+    @Override
+    public boolean getDisableItemPickupWhileVanished() {
+        return disableItemPickupWhileVanished;
+    }
+
+    private boolean _getDisableItemPickupWhileVanished() {
+        return config.getBoolean("disable-item-pickup-while-vanished", true);
     }
 
     private EventPriority getPriority(final String priority) {

@@ -516,6 +516,10 @@ freeze-afk-players: false
 # Enable this if you want to prevent people from idling in mob traps.
 disable-item-pickup-while-afk: false
 
+# When a player is vanished, should they be able to pick up items?
+# Picking up items while vanished can reveal the player's presence.
+disable-item-pickup-while-vanished: true
+
 # This setting controls if a player is marked as active upon interaction.
 cancel-afk-on-interact: true
 

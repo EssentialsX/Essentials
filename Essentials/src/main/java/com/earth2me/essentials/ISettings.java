@@ -259,6 +259,8 @@ public interface ISettings extends IConf {
 
     boolean getDisableItemPickupWhileAfk();
 
+    boolean getDisableItemPickupWhileVanished();
+
     EventPriority getRespawnPriority();
 
     EventPriority getSpawnJoinPriority();

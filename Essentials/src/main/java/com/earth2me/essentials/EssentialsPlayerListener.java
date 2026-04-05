@@ -1213,10 +1213,12 @@ public class EssentialsPlayerListener implements Listener {
         public void onPlayerPickupItem(final org.bukkit.event.player.PlayerPickupItemEvent event) {
             if (event.getItem().hasMetadata(Commandfireball.FIREBALL_META_KEY)) {
                 event.setCancelled(true);
-            } else if (ess.getSettings().getDisableItemPickupWhileAfk()) {
-                if (ess.getUser(event.getPlayer()).isAfk()) {
-                    event.setCancelled(true);
-                }
+                return;
+            }
+            final User user = ess.getUser(event.getPlayer());
+            if ((ess.getSettings().getDisableItemPickupWhileAfk() && user.isAfk())
+                || (ess.getSettings().getDisableItemPickupWhileVanished() && user.isVanished())) {
+                event.setCancelled(true);
             }
         }
     }
@@ -1224,8 +1226,10 @@ public class EssentialsPlayerListener implements Listener {
     private final class PickupListener1_12 implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onPlayerPickupItem(final org.bukkit.event.entity.EntityPickupItemEvent event) {
-            if (ess.getSettings().getDisableItemPickupWhileAfk() && event.getEntity() instanceof Player) {
-                if (ess.getUser((Player) event.getEntity()).isAfk()) {
+            if (event.getEntity() instanceof Player) {
+                final User user = ess.getUser((Player) event.getEntity());
+                if ((ess.getSettings().getDisableItemPickupWhileAfk() && user.isAfk())
+                    || (ess.getSettings().getDisableItemPickupWhileVanished() && user.isVanished())) {
                     event.setCancelled(true);
                 }
             }
