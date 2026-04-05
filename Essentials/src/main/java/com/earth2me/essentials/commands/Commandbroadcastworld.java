@@ -55,7 +55,10 @@ public class Commandbroadcastworld extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         final String formatted = FormatUtil.replaceFormat(message).replace("\\n", "\n");
-        ess.broadcastTl(null, u -> !u.getBase().getWorld().equals(world), true, "broadcast", AdventureUtil.parsed(ess.getAdventureFacet().legacyToMiniWithUrls(ess.getAdventureFacet().escapeTags(formatted))), AdventureUtil.parsed(ess.getAdventureFacet().legacyToMini(name)));
+        ess.broadcastTl(null, u -> !u.getBase().getWorld().equals(world), true, "broadcast",
+                AdventureUtil.parsed(
+                        ess.getAdventureFacet().legacyToMiniWithUrls(ess.getAdventureFacet().escapeTags(formatted))),
+                AdventureUtil.parsed(ess.getAdventureFacet().legacyToMini(name)));
     }
 
     @Override
