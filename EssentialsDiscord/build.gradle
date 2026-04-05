@@ -32,7 +32,7 @@ shadowJar {
         include(dependency('org.jetbrains.kotlin:kotlin-stdlib'))
 
         // Emoji
-        include(dependency('com.github.MinnDevelopment:emoji-java'))
+        include(dependency('net.essentialsx.deps:emoji-java'))
         include(dependency('org.json:json'))
 
         // discord-webhooks

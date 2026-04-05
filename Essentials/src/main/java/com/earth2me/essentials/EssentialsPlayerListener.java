@@ -1174,6 +1174,10 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerFishEvent(final PlayerFishEvent event) {
+        if (!ess.getSettings().cancelAfkOnFish()) {
+            return;
+        }
+
         final User user = ess.getUser(event.getPlayer());
         user.updateActivityOnInteract(true);
     }

@@ -48,7 +48,61 @@ jobs:
         report_paths: '**/build/test-results/test*/TEST-*.xml'
 
     - name: Archive plugin jars on GitHub
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: EssentialsX plugin jars
         path: jars/
+
+    - name: Upload EssentialsX jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsX-*.jar
+        archive: false
+
+    - name: Upload EssentialsXAntiBuild jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsXAntiBuild-*.jar
+        archive: false
+
+    - name: Upload EssentialsXChat jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsXChat-*.jar
+        archive: false
+
+    - name: Upload EssentialsXDiscord jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsXDiscord-*.jar
+        archive: false
+
+    - name: Upload EssentialsXDiscordLink jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsXDiscordLink-*.jar
+        archive: false
+
+    - name: Upload EssentialsXGeoIP jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsXGeoIP-*.jar
+        archive: false
+
+    - name: Upload EssentialsXProtect jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsXProtect-*.jar
+        archive: false
+
+    - name: Upload EssentialsXSpawn jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsXSpawn-*.jar
+        archive: false
+
+    - name: Upload EssentialsXXMPP jar
+      uses: actions/upload-artifact@v7
+      with:
+        path: jars/EssentialsXXMPP-*.jar
+        archive: false
