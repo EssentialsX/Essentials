@@ -1174,14 +1174,7 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerFishEvent(final PlayerFishEvent event) {
-
-        final PlayerFishEvent.State state = event.getState();
-
-        // Only count real player interaction
-        if (state != PlayerFishEvent.State.FISHING
-            && state != PlayerFishEvent.State.REEL_IN
-            && state != PlayerFishEvent.State.CAUGHT_FISH
-            && state != PlayerFishEvent.State.CAUGHT_ENTITY) {
+        if (!ess.getSettings().cancelAfkOnFish()) {
             return;
         }
 
