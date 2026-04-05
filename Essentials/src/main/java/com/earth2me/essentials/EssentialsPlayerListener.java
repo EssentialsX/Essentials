@@ -794,10 +794,9 @@ public class EssentialsPlayerListener implements Listener {
                             final ComponentHolder base = (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers())
                                     ? spyer.tlComponent("socialSpyMutedPrefix")
                                     : spyer.tlComponent("socialSpyPrefix");
-                            final ComponentHolder nameComponent = ess.getAdventureFacet().legacyToAdventure(playerName);
-                            final ComponentHolder messageComponent = ess.getAdventureFacet().text(": " + event.getMessage());
+                            final ComponentHolder formatted = ess.getAdventureFacet().deserializeMiniMessage(spyer.playerTl("socialSpyCmdFormat", playerName, event.getMessage()));
 
-                            spyer.sendComponent(ess.getAdventureFacet().append(base, nameComponent, messageComponent));
+                            spyer.sendComponent(ess.getAdventureFacet().append(base, formatted));
                         }
                     }
                 }
