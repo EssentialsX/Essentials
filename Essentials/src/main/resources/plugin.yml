@@ -314,7 +314,7 @@ commands:
   mute:
     description: Mutes or unmutes a player.
     usage: /<command> <player> [datediff] [reason]
-    aliases: [emute,silence,esilence]
+    aliases: [emute,silence,esilence,unmute,eunmute]
   near:
     description: Lists the players near by or around a player.
     usage: /<command> [playername] [radius]
