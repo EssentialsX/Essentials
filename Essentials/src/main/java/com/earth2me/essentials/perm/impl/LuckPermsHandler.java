@@ -62,6 +62,11 @@ public class LuckPermsHandler extends ModernVaultHandler {
         return userCache.computeIfAbsent(node, k -> hasPermission(base, node));
     }
 
+    @Override
+    public void invalidatePermissionCache(final UUID uuid) {
+        invalidateCache(uuid);
+    }
+
     public void invalidateCache(final UUID uuid) {
         if (ess.getSettings().isDebug()) {
             ess.getLogger().log(Level.INFO, "Invalidating permission cache for " + uuid);

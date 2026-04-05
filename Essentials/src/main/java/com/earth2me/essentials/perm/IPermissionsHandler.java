@@ -32,6 +32,9 @@ public interface IPermissionsHandler {
         return hasPermission(base, node);
     }
 
+    default void invalidatePermissionCache(UUID uuid) {
+    }
+
     // Does not check for * permissions
     boolean isPermissionSet(Player base, String node);
 

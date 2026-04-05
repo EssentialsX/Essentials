@@ -1265,6 +1265,10 @@ public class EssentialsPlayerListener implements Listener {
     private final class CommandSendFilter implements CommandSendListenerProvider.Filter {
         @Override
         public Predicate<String> apply(Player player) {
+            // There is no event for op status changes, but the command list is resent when
+            // a player is opped/deopped, so we invalidate cached permissions here.
+            ess.getPermissionsHandler().invalidatePermissionCache(player.getUniqueId());
+
             final User user = ess.getUser(player);
             final Set<PluginCommand> checked = new HashSet<>();
             final Set<PluginCommand> toRemove = new HashSet<>();
