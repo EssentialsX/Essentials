@@ -1321,6 +1321,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean cancelAfkOnFish() {
+        return config.getBoolean("cancel-afk-on-fish", true);
+    }
+
+    @Override
     public boolean sleepIgnoresAfkPlayers() {
         return sleepIgnoresAfkPlayers;
     }

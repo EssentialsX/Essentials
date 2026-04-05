@@ -21,6 +21,7 @@ public class Commandmute extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        final boolean isUnmute = commandLabel.toLowerCase(java.util.Locale.ENGLISH).contains("unmute");
         boolean nomatch = false;
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
@@ -32,11 +33,17 @@ public class Commandmute extends EssentialsCommand {
             nomatch = true;
             user = ess.getUser(new OfflinePlayerStub(args[0], ess.getServer()));
         }
+
+        if (isUnmute && !user.getMuted()) {
+            sender.sendTl("playerNotMuted", user.getDisplayName());
+            return;
+        }
+
         if (!user.getBase().isOnline() && sender.isPlayer()) {
             if (!sender.isAuthorized("essentials.mute.offline")) {
                 throw new TranslatableException("muteExemptOffline");
             }
-        } else if (user.isAuthorized("essentials.mute.exempt")) {
+        } else if (!isUnmute && user.isAuthorized("essentials.mute.exempt")) {
             throw new TranslatableException("muteExempt");
         }
 
@@ -44,7 +51,7 @@ public class Commandmute extends EssentialsCommand {
         final String time;
         String muteReason = null;
 
-        if (args.length > 1) {
+        if (!isUnmute && args.length > 1) {
             time = args[1];
             try {
                 muteTimestamp = DateUtil.parseDateDiff(time, true);
@@ -59,7 +66,7 @@ public class Commandmute extends EssentialsCommand {
             }
         }
 
-        final boolean willMute = (args.length > 1) || !user.getMuted();
+        final boolean willMute = !isUnmute && ((args.length > 1) || !user.getMuted());
         final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
         final MuteStatusChangeEvent event = new MuteStatusChangeEvent(user, controller, willMute, muteTimestamp, muteReason);
         ess.getServer().getPluginManager().callEvent(event);
@@ -121,6 +128,8 @@ public class Commandmute extends EssentialsCommand {
             } else {
                 sender.sendTl("unmutedPlayer", user.getDisplayName());
                 user.sendTl("playerUnmuted");
+                ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral("unmuteNotify", sender.getSender().getName(), user.getName())));
+                ess.broadcastTl(null, "essentials.mute.notify", "unmuteNotify", new Object[]{sender.getSender().getName(), user.getName()});
             }
         }
     }

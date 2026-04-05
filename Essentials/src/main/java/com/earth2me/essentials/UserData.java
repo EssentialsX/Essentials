@@ -469,6 +469,15 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
+    public boolean isFlyModeEnabled() {
+        return holder.flyMode();
+    }
+
+    public void setFlyModeEnabled(final boolean set) {
+        holder.flyMode(set);
+        config.save();
+    }
+
     public boolean getMuted() {
         return holder.muted();
     }

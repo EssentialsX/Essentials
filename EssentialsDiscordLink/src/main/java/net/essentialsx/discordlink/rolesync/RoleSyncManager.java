@@ -3,7 +3,6 @@ package net.essentialsx.discordlink.rolesync;
 import com.earth2me.essentials.UUIDPlayer;
 import com.google.common.collect.BiMap;
 import net.essentialsx.api.v2.events.discordlink.DiscordLinkStatusChangeEvent;
-import net.essentialsx.api.v2.services.discord.InteractionMember;
 import net.essentialsx.api.v2.services.discord.InteractionRole;
 import net.essentialsx.discordlink.EssentialsDiscordLink;
 import org.bukkit.Bukkit;
@@ -18,6 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tlLiteral;
 
@@ -25,6 +27,8 @@ public class RoleSyncManager implements Listener {
     private final EssentialsDiscordLink ess;
     private final Map<String, InteractionRole> groupToRoleMap = new HashMap<>();
     private final Map<String, String> roleIdToGroupMap = new HashMap<>();
+    private final Semaphore syncSemaphore = new Semaphore(5);
+    private int syncCursor = 0;
 
     public RoleSyncManager(final EssentialsDiscordLink ess) {
         this.ess = ess;
@@ -36,12 +40,28 @@ public class RoleSyncManager implements Listener {
             }
 
             final BiMap<String, String> uuidToDiscordCopy = ess.getAccountStorage().getRawStorageMap();
+            if (uuidToDiscordCopy.isEmpty()) {
+                syncCursor = 0;
+                return;
+            }
+
+            final List<Map.Entry<String, String>> entries = new ArrayList<>(uuidToDiscordCopy.entrySet());
+            final int size = entries.size();
+            if (syncCursor >= size) {
+                syncCursor = 0;
+            }
+
+            final int start = syncCursor;
+            final int end = Math.min(start + 50, size);
+            syncCursor = end >= size ? 0 : end;
+
             final Map<String, InteractionRole> groupToRoleMapCopy = new HashMap<>(groupToRoleMap);
             final Map<String, String> roleIdToGroupMapCopy = new HashMap<>(roleIdToGroupMap);
             final boolean primaryOnly = ess.getSettings().isRoleSyncPrimaryGroupOnly();
             final boolean removeGroups = ess.getSettings().isRoleSyncRemoveGroups();
             final boolean removeRoles = ess.getSettings().isRoleSyncRemoveRoles();
-            for (final Map.Entry<String, String> entry : uuidToDiscordCopy.entrySet()) {
+            for (int i = start; i < end; i++) {
+                final Map.Entry<String, String> entry = entries.get(i);
                 sync(new UUIDPlayer(UUID.fromString(entry.getKey())), entry.getValue(), groupToRoleMapCopy, roleIdToGroupMapCopy, primaryOnly, removeGroups, removeRoles);
             }
         }, 0, ess.getSettings().getRoleSyncResyncDelay() * 1200L);
@@ -60,41 +80,52 @@ public class RoleSyncManager implements Listener {
                      final boolean primaryOnly, final boolean removeGroups, final boolean removeRoles) {
         final List<String> groups = primaryOnly ?
                 Collections.singletonList(ess.getEss().getPermissionsHandler().getGroup(player)) : ess.getEss().getPermissionsHandler().getGroups(player);
-        final InteractionMember member = ess.getApi().getMemberById(discordId).join();
+        ess.getEss().runTaskAsynchronously(() -> {
+            syncSemaphore.acquireUninterruptibly();
+            ess.getApi().getMemberById(discordId).thenCompose(member -> {
+                if (member == null) {
+                    if (ess.getSettings().isUnlinkOnLeave()) {
+                        ess.getLinkManager().removeAccount(ess.getEss().getUser(player), DiscordLinkStatusChangeEvent.Cause.UNSYNC_LEAVE);
+                    } else {
+                        ess.getEss().runTaskAsynchronously(() -> unSync(player.getUniqueId(), discordId));
+                    }
+                    return CompletableFuture.completedFuture(null);
+                }
 
-        if (member == null) {
-            if (ess.getSettings().isUnlinkOnLeave()) {
-                ess.getLinkManager().removeAccount(ess.getEss().getUser(player), DiscordLinkStatusChangeEvent.Cause.UNSYNC_LEAVE);
-            } else {
-                unSync(player.getUniqueId(), discordId);
-            }
-            return;
-        }
+                final List<InteractionRole> toAdd = new ArrayList<>();
+                final List<InteractionRole> toRemove = new ArrayList<>();
 
-        final List<InteractionRole> toAdd = new ArrayList<>();
-        final List<InteractionRole> toRemove = new ArrayList<>();
+                for (final Map.Entry<String, InteractionRole> entry : groupToRoleMap.entrySet()) {
+                    if (groups.contains(entry.getKey()) && !member.hasRole(entry.getValue())) {
+                        toAdd.add(entry.getValue());
+                    } else if (removeRoles && !groups.contains(entry.getKey()) && member.hasRole(entry.getValue())) {
+                        toRemove.add(entry.getValue());
+                    }
+                }
 
-        for (final Map.Entry<String, InteractionRole> entry : groupToRoleMap.entrySet()) {
-            if (groups.contains(entry.getKey()) && !member.hasRole(entry.getValue())) {
-                toAdd.add(entry.getValue());
-            } else if (removeRoles && !groups.contains(entry.getKey()) && member.hasRole(entry.getValue())) {
-                toRemove.add(entry.getValue());
-            }
-        }
+                for (final Map.Entry<String, String> entry : roleIdToGroupMap.entrySet()) {
+                    if (member.hasRole(entry.getKey()) && !groups.contains(entry.getValue())) {
+                        ess.getEss().getPermissionsHandler().addToGroup(player, entry.getValue());
+                    } else if (removeGroups && !member.hasRole(entry.getKey()) && groups.contains(entry.getValue())) {
+                        ess.getEss().getPermissionsHandler().removeFromGroup(player, entry.getValue());
+                    }
+                }
 
-        for (final Map.Entry<String, String> entry : roleIdToGroupMap.entrySet()) {
-            if (member.hasRole(entry.getKey()) && !groups.contains(entry.getValue())) {
-                ess.getEss().getPermissionsHandler().addToGroup(player, entry.getValue());
-            } else if (removeGroups && !member.hasRole(entry.getKey()) && groups.contains(entry.getValue())) {
-                ess.getEss().getPermissionsHandler().removeFromGroup(player, entry.getValue());
-            }
-        }
+                if (toAdd.isEmpty() && toRemove.isEmpty()) {
+                    return CompletableFuture.completedFuture(null);
+                }
 
-        if (toAdd.isEmpty() && toRemove.isEmpty()) {
-            return;
-        }
-
-        ess.getApi().modifyMemberRoles(member, toAdd, toRemove);
+                return ess.getApi()
+                        .modifyMemberRoles(member, toAdd, toRemove)
+                        .exceptionally(e -> {
+                            ess.getLogger().log(Level.WARNING, "Failed to modify Discord roles for " + player.getUniqueId() + " / " + discordId, e);
+                            return null;
+                        });
+            }).exceptionally(e -> {
+                ess.getLogger().log(Level.WARNING, "Failed to fetch Discord member for " + player.getUniqueId() + " / " + discordId, e);
+                return null;
+            }).whenComplete((unused, throwable) -> syncSemaphore.release());
+        });
     }
 
     public void unSync(final UUID uuid, final String discordId) {
@@ -108,7 +139,6 @@ public class RoleSyncManager implements Listener {
         final Map<String, String> roleIdToGroupMapCopy = new HashMap<>(roleIdToGroupMap);
 
         final Player player = new UUIDPlayer(uuid);
-        final InteractionMember member = ess.getApi().getMemberById(discordId).join();
 
         if (removeGroups) {
             for (final String group : roleIdToGroupMapCopy.values()) {
@@ -116,10 +146,26 @@ public class RoleSyncManager implements Listener {
             }
         }
 
-        // Check if the member is no longer in the guild (null), they don't have any roles anyway.
-        if (removeRoles && member != null) {
-            ess.getApi().modifyMemberRoles(member, null, groupToRoleMapCopy.values());
+        if (!removeRoles) {
+            return;
         }
+
+        ess.getEss().runTaskAsynchronously(() -> {
+            syncSemaphore.acquireUninterruptibly();
+            ess.getApi().getMemberById(discordId).thenCompose(member -> {
+                // Check if the member is no longer in the guild (null), they don't have any roles anyway.
+                if (member == null) {
+                    return CompletableFuture.completedFuture(null);
+                }
+                return ess.getApi().modifyMemberRoles(member, null, groupToRoleMapCopy.values()).exceptionally(e -> {
+                    ess.getLogger().log(Level.WARNING, "Failed to remove Discord roles for " + uuid + " / " + discordId, e);
+                    return null;
+                });
+            }).exceptionally(e -> {
+                ess.getLogger().log(Level.WARNING, "Failed to fetch Discord member for unsync " + uuid + " / " + discordId, e);
+                return null;
+            }).whenComplete((unused, throwable) -> syncSemaphore.release());
+        });
     }
 
     @EventHandler

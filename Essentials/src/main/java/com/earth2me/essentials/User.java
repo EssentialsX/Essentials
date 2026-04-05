@@ -23,6 +23,7 @@ import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.ess3.provider.PlayerLocaleProvider;
+import net.essentialsx.api.v2.events.PreTransactionEvent;
 import net.essentialsx.api.v2.events.TransactionEvent;
 import net.essentialsx.api.v2.services.mail.MailSender;
 import org.bukkit.Location;
@@ -263,12 +264,20 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         payUser(reciever, value, UserBalanceUpdateEvent.Cause.UNKNOWN);
     }
 
-    public void payUser(final User reciever, final BigDecimal value, final UserBalanceUpdateEvent.Cause cause) throws Exception {
+    public void payUser(final User reciever, BigDecimal value, final UserBalanceUpdateEvent.Cause cause) throws Exception {
         if (value.compareTo(BigDecimal.ZERO) < 1) {
             throw new Exception(tlLocale(playerLocale, "payMustBePositive"));
         }
 
         if (canAfford(value)) {
+            // Call an event for pre-transaction
+            final PreTransactionEvent preTransactionEvent = new PreTransactionEvent(this.getSource(), reciever, value);
+            ess.getServer().getPluginManager().callEvent(preTransactionEvent);
+            if (preTransactionEvent.isCancelled()) {
+                return;
+            }
+            value = preTransactionEvent.getAmount();
+
             setMoney(getMoney().subtract(value), cause);
             reciever.setMoney(reciever.getMoney().add(value), cause);
             sendTl("moneySentTo", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)), reciever.getDisplayName());
