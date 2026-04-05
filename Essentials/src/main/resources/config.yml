@@ -34,7 +34,7 @@ ops-name-color: '4'
 nickname-prefix: '~'
 
 # The maximum length allowed in nicknames. The nickname prefix is not included in this.
-max-nick-length: 15
+max-nick-length: 16
 
 # The regex pattern used to determine if a requested nickname should be allowed for use.
 # If the requested nickname does not match this pattern, the nickname will be rejected.
