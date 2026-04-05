@@ -21,17 +21,18 @@ import java.util.Locale;
 
 public class SpigotAdventureFacet implements AdventureFacet {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER;
+    private static final LegacyComponentSerializer LEGACY_SERIALIZER_URLS;
     private static final MiniMessage MINI_MESSAGE_NO_TAGS;
 
     static {
         final LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder()
                 .flattener(ComponentFlattener.basic())
-                .extractUrls(AbstractChatEvent.URL_PATTERN)
                 .useUnusualXRepeatedCharacterHexFormat();
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
             builder.hexColors();
         }
         LEGACY_SERIALIZER = builder.build();
+        LEGACY_SERIALIZER_URLS = builder.extractUrls(AbstractChatEvent.URL_PATTERN).build();
 
         MINI_MESSAGE_NO_TAGS = MiniMessage.builder().strict(true).build();
     }
@@ -125,6 +126,11 @@ public class SpigotAdventureFacet implements AdventureFacet {
     @Override
     public String stripTags(String input) {
         return miniMessageInstance.stripTags(input);
+    }
+
+    @Override
+    public String legacyToMiniWithUrls(String message) {
+        return miniMessageInstance.serialize(LEGACY_SERIALIZER_URLS.deserialize(message));
     }
 
     @Override

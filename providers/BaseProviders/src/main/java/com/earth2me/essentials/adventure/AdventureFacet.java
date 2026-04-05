@@ -25,6 +25,11 @@ public interface AdventureFacet {
     String legacyToMini(String message, boolean useCustomTags);
 
     /**
+     * Converts a section sign legacy string to a MiniMessage string, auto-linking detected URLs as click events.
+     */
+    String legacyToMiniWithUrls(String message);
+
+    /**
      * Convenience method for submodules to escape MiniMessage tags.
      */
     String escapeTags(String input);
