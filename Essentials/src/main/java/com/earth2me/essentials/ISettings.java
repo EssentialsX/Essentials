@@ -221,6 +221,8 @@ public interface ISettings extends IConf {
 
     boolean cancelAfkOnChat();
 
+    boolean cancelAfkOnFish();
+
     boolean sleepIgnoresAfkPlayers();
 
     boolean sleepIgnoresVanishedPlayers();
