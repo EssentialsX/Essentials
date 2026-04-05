@@ -1234,7 +1234,7 @@ public class EssentialsPlayerListener implements Listener {
             }
             final User user = ess.getUser(event.getPlayer());
             if ((ess.getSettings().getDisableItemPickupWhileAfk() && user.isAfk())
-                || (ess.getSettings().getDisableItemPickupWhileVanished() && user.isVanished())) {
+                || (user.isVanished() && !user.isAuthorizedCached("essentials.vanish.pickup"))) {
                 event.setCancelled(true);
             }
         }
@@ -1246,7 +1246,7 @@ public class EssentialsPlayerListener implements Listener {
             if (event.getEntity() instanceof Player) {
                 final User user = ess.getUser((Player) event.getEntity());
                 if ((ess.getSettings().getDisableItemPickupWhileAfk() && user.isAfk())
-                    || (ess.getSettings().getDisableItemPickupWhileVanished() && user.isVanished())) {
+                    || (user.isVanished() && !user.isAuthorizedCached("essentials.vanish.pickup"))) {
                     event.setCancelled(true);
                 }
             }

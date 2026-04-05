@@ -1374,6 +1374,9 @@ permissions:
     description: Applies invisibility effects to the player when they are in vanish mode
   essentials.vanish.interact:
     description: Allows the bearer to interact with players in vanish mode
+  essentials.vanish.pickup:
+    description: Allows the bearer to pick up items while in vanish mode
+    default: false
   essentials.version:
     description: Allows access to the /version command
   essentials.warp:
