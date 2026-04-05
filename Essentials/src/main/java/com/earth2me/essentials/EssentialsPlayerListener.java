@@ -505,7 +505,8 @@ public class EssentialsPlayerListener implements Listener {
 
         if (user.isAuthorized("essentials.fly.safelogin")) {
             user.getBase().setFallDistance(0);
-            if (LocationUtil.shouldFly(ess, user.getLocation())) {
+            final boolean inWater = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_17_R01) && user.getBase().isInWater();
+            if (!inWater && LocationUtil.shouldFly(ess, user.getLocation())) {
                 user.getBase().setAllowFlight(true);
                 user.getBase().setFlying(true);
                 if (ess.getSettings().isSendFlyEnableOnJoin()) {
