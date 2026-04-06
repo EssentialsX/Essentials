@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 
@@ -15,6 +16,9 @@ public class Commandbroadcast extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        ess.broadcastTl("broadcast", FormatUtil.replaceFormat(getFinalArg(args, 0)).replace("\\n", "\n"), sender.getDisplayName());
+        final String message = FormatUtil.replaceFormat(getFinalArg(args, 0)).replace("\\n", "\n");
+        ess.broadcastTl("broadcast",
+                AdventureUtil.parsed(ess.getAdventureFacet().legacyToMiniWithUrls(ess.getAdventureFacet().escapeTags(message))),
+                sender.getDisplayName());
     }
 }

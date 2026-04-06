@@ -17,6 +17,7 @@ import java.util.Locale;
 
 public class PaperAdventureFacet implements AdventureFacet {
     private final LegacyComponentSerializer legacySerializer;
+    private final LegacyComponentSerializer legacySerializerUrls;
     private final MiniMessage miniMessageNoTags;
     private final MiniMessage miniMessageInstance;
 
@@ -29,10 +30,10 @@ public class PaperAdventureFacet implements AdventureFacet {
 
         final LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder()
                 .flattener(ComponentFlattener.basic())
-                .extractUrls(AbstractChatEvent.URL_PATTERN)
                 .hexColors()
                 .useUnusualXRepeatedCharacterHexFormat();
         legacySerializer = builder.build();
+        legacySerializerUrls = builder.extractUrls(AbstractChatEvent.URL_PATTERN).build();
 
         miniMessageNoTags = MiniMessage.builder().strict(true).build();
 
@@ -86,6 +87,11 @@ public class PaperAdventureFacet implements AdventureFacet {
         } else {
             return miniMessageNoTags.serialize(deserializedText);
         }
+    }
+
+    @Override
+    public String legacyToMiniWithUrls(String message) {
+        return miniMessageInstance.serialize(legacySerializerUrls.deserialize(message));
     }
 
     @Override

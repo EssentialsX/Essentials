@@ -16,13 +16,17 @@ public class TransactionEvent extends Event {
 
     private final CommandSource requester;
     private final IUser target;
-    private final BigDecimal amount;
+    protected BigDecimal amount;
 
-    public TransactionEvent(CommandSource requester, IUser target, BigDecimal amount) {
-        super(!Bukkit.isPrimaryThread());
+    protected TransactionEvent(boolean async, CommandSource requester, IUser target, BigDecimal amount) {
+        super(async);
         this.requester = requester;
         this.target = target;
         this.amount = amount;
+    }
+
+    public TransactionEvent(CommandSource requester, IUser target, BigDecimal amount) {
+        this(!Bukkit.isPrimaryThread(), requester, target, amount);
     }
 
     /**

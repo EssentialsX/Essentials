@@ -315,7 +315,7 @@ commands:
   mute:
     description: Mutes or unmutes a player.
     usage: /<command> <player> [datediff] [reason]
-    aliases: [emute,silence,esilence]
+    aliases: [emute,silence,esilence,unmute,eunmute]
   near:
     description: Lists the players near by or around a player.
     usage: /<command> [playername] [radius]
@@ -1375,6 +1375,9 @@ permissions:
     description: Applies invisibility effects to the player when they are in vanish mode
   essentials.vanish.interact:
     description: Allows the bearer to interact with players in vanish mode
+  essentials.vanish.pickup:
+    description: Allows the bearer to pick up items while in vanish mode
+    default: false
   essentials.version:
     description: Allows access to the /version command
   essentials.warp:

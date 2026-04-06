@@ -28,6 +28,13 @@ public interface IPermissionsHandler {
 
     boolean hasPermission(Player base, String node);
 
+    default boolean hasPermissionCached(Player base, String node) {
+        return hasPermission(base, node);
+    }
+
+    default void invalidatePermissionCache(UUID uuid) {
+    }
+
     // Does not check for * permissions
     boolean isPermissionSet(Player base, String node);
 

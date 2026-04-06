@@ -37,7 +37,8 @@ public class Commandspeed extends EssentialsCommand {
         final float speed;
         final boolean isBypass = user.isAuthorized("essentials.speed.bypass");
         if (args.length == 1) {
-            isFly = flyPermCheck(user, user.getBase().isFlying());
+            final boolean inferredFly = isFlyAlias(commandLabel) ? true : isWalkAlias(commandLabel) ? false : user.getBase().isFlying();
+            isFly = flyPermCheck(user, inferredFly);
             speed = getMoveSpeed(args[0]);
         } else {
             isFly = flyPermCheck(user, isFlyMode(args[0]));
@@ -89,6 +90,14 @@ public class Commandspeed extends EssentialsCommand {
         if (input && canFly || !input && canWalk || !canFly && !canWalk) {
             return input;
         } else return !canWalk;
+    }
+
+    private boolean isFlyAlias(final String label) {
+        return label.contains("fly") || label.equalsIgnoreCase("fspeed") || label.equalsIgnoreCase("efspeed");
+    }
+
+    private boolean isWalkAlias(final String label) {
+        return label.contains("walk") || label.equalsIgnoreCase("wspeed") || label.equalsIgnoreCase("ewspeed");
     }
 
     private boolean isFlyMode(final String modeString) throws NotEnoughArgumentsException {

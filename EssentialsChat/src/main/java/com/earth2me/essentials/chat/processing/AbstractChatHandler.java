@@ -223,7 +223,10 @@ public abstract class AbstractChatHandler {
         server.getPluginManager().callEvent(spyEvent);
 
         if (!spyEvent.isCancelled()) {
-            final String legacyString = ess.getAdventureFacet().miniToLegacy(String.format(spyEvent.getFormat(), ess.getAdventureFacet().legacyToMini(user.getDisplayName()), ess.getAdventureFacet().legacyToMini(ess.getAdventureFacet().escapeTags(spyEvent.getMessage()))));
+            final String legacyString = ess.getAdventureFacet().miniToLegacy(
+                    String.format(spyEvent.getFormat(),
+                            ess.getAdventureFacet().legacyToMini(user.getDisplayName()),
+                            ess.getAdventureFacet().legacyToMiniWithUrls(ess.getAdventureFacet().escapeTags(spyEvent.getMessage()))));
 
             for (final Player onlinePlayer : spyEvent.getRecipients()) {
                 onlinePlayer.sendMessage(legacyString);
