@@ -17,7 +17,7 @@ public class Commandfeed extends EssentialsLoopCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (!user.isAuthorized("essentials.feed.cooldown.bypass")) {
-            user.healCooldown();
+            user.feedCooldown();
         }
 
         if (args.length > 0 && user.isAuthorized("essentials.feed.others")) {
