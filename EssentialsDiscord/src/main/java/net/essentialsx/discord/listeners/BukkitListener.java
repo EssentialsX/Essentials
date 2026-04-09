@@ -126,6 +126,9 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVanishStatusChange(VanishStatusChangeEvent event) {
+        if (event.getAffected() == null) {
+            return;
+        }
         if (!jda.getSettings().isVanishFakeJoinLeave() || event.getAffected().isLeavingHidden()) {
             return;
         }
