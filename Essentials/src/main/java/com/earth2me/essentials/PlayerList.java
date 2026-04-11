@@ -44,7 +44,7 @@ public final class PlayerList {
             if (ess.getSettings().realNamesOnList() && strippedNick != null && !strippedNick.equals(user.getName())) {
                 groupString.append(" ").append(tlLiteral("listRealName",user.getName()));
             }
-            groupString.append("<white>");
+            groupString.append("§f");
         }
         return groupString.toString();
     }
