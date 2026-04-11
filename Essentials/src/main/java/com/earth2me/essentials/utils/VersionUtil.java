@@ -213,7 +213,7 @@ public final class VersionUtil {
     }
 
     public static final class BukkitVersion implements Comparable<BukkitVersion> {
-        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)?(?:-snapshot-(\\d+))?(?:-pre-?(\\d+))?(?:-rc-?(\\d+))?(?:\\.build\\.(\\d+)(?:-([a-z]+))?)?(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
+        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)?(?:-snapshot-(\\d+))?(?:-pre-?(\\d+))?(?:-rc-?(\\d+))?(?:\\.build\\.(\\d+)(?:-([a-z]+))?)?(?:-?R?([\\d.]+))?(?:(?:\\.local)?-SNAPSHOT)?");
         private static final Pattern LEGACY_SNAPSHOT_PATTERN = Pattern.compile("^(\\d{2})w(\\d{2})([a-z])(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
 
         private final int major;
