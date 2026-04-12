@@ -288,7 +288,7 @@ public class KeywordReplacer implements IText {
                             for (final String groupName : playerList.keySet()) {
                                 final List<User> groupUsers = playerList.get(groupName);
                                 if (groupUsers != null && !groupUsers.isEmpty()) {
-                                    outputList.put(groupName, PlayerList.listUsers(ess, groupUsers, " "));
+                                    outputList.put(groupName, ess.getAdventureFacet().miniToLegacy(PlayerList.listUsers(ess, groupUsers, " ")));
                                 }
                             }
 
