@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
+import org.bukkit.metadata.MetadataValue;
 
 public class PaperAdvancementListenerProvider implements Listener {
     private final ComponentSerializer<Component, TextComponent, String> serializer;
@@ -31,7 +32,22 @@ public class PaperAdvancementListenerProvider implements Listener {
     public void onAdvancement(final PlayerAdvancementDoneEvent event) {
         final AdvancementDisplay display = event.getAdvancement().getDisplay();
         if (display != null && display.doesAnnounceToChat()) {
+            if (isVanished(event)) {
+                event.message(null);
+                return;
+            }
             Bukkit.getPluginManager().callEvent(new AbstractAchievementEvent(event.getPlayer(), serializer.serialize(display.title())));
         }
+    }
+
+    // Provider modules don't depend on Essentials core, so we check vanish via Bukkit metadata
+    // rather than casting to IUser. Essentials sets this in User.setVanished().
+    private boolean isVanished(final PlayerAdvancementDoneEvent event) {
+        for (final MetadataValue val : event.getPlayer().getMetadata("vanished")) {
+            if (val.asBoolean()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
