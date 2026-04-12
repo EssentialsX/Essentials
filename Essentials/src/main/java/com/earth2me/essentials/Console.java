@@ -13,7 +13,11 @@ import static com.earth2me.essentials.I18n.tlLiteral;
 
 public final class Console implements IMessageRecipient {
     public static final String NAME = "Console";
-    public static final String DISPLAY_NAME = tlLiteral("consoleName");
+
+    public static String displayName() {
+        return tlLiteral("consoleName");
+    }
+
     private static Console instance; // Set in essentials
 
     private final IEssentials ess;
@@ -56,7 +60,7 @@ public final class Console implements IMessageRecipient {
 
     @Override
     public String getDisplayName() {
-        return Console.DISPLAY_NAME;
+        return displayName();
     }
 
     @Override

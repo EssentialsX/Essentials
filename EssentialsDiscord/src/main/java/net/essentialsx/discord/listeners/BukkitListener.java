@@ -80,7 +80,7 @@ public class BukkitListener implements Listener {
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getDisplayName()),
                             MessageUtil.sanitizeDiscordMarkdown(console ? Console.NAME : event.getController().getName()),
-                            MessageUtil.sanitizeDiscordMarkdown(console ? Console.DISPLAY_NAME : event.getController().getDisplayName()),
+                            MessageUtil.sanitizeDiscordMarkdown(console ? Console.displayName() : event.getController().getDisplayName()),
                             DateUtil.formatDateDiff(event.getTimestamp().get()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getReason())));
         } else {
@@ -91,7 +91,7 @@ public class BukkitListener implements Listener {
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getDisplayName()),
                             MessageUtil.sanitizeDiscordMarkdown(console ? Console.NAME : event.getController().getName()),
-                            MessageUtil.sanitizeDiscordMarkdown(console ? Console.DISPLAY_NAME : event.getController().getDisplayName()),
+                            MessageUtil.sanitizeDiscordMarkdown(console ? Console.displayName() : event.getController().getDisplayName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getReason())));
         }
     }
