@@ -380,8 +380,10 @@ public class KeywordReplacer implements IText {
                 }
 
                 if (this.replaceSpacesWithUnderscores) {
-                    // Don't replace spaces with underscores in command nor escape underscores.
-                    if (!line.startsWith("/")) {
+                    // Don't replace spaces with underscores in commands, and skip escaping
+                    // for USERNAME since Minecraft names never contain spaces but can
+                    // contain underscores that must stay literal (e.g. player:{USERNAME}).
+                    if (!line.startsWith("/") && validKeyword != KeywordType.USERNAME) {
                         replacer = replacer.replace("_", "\\_").replaceAll("\\s", "_");
                     }
                 }
