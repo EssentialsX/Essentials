@@ -837,7 +837,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     sender.sendTl("commandHelpLine2", description);
                     sender.sendTl("commandHelpLine3");
                     for (Map.Entry<String, String> usage : cmd.getUsageStrings().entrySet()) {
-                        sender.sendTl("commandHelpLineUsage", AdventureUtil.parsed(usage.getKey().replace("<command>", commandLabel)), AdventureUtil.parsed(usage.getValue()));
+                        sender.sendTl("commandHelpLineUsage", AdventureUtil.parsed(usage.getKey().replace("<command>", commandLabel)), AdventureUtil.parsed(sender.tl(usage.getValue())));
                     }
                 } else {
                     sender.sendMessage(command.getDescription());
