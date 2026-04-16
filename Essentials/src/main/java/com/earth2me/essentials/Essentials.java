@@ -77,6 +77,7 @@ import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSchedulingProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
 import net.ess3.provider.providers.BukkitTileEntityProvider;
+import net.ess3.provider.providers.BukkitWorldTileEntityCountProvider;
 import net.ess3.provider.providers.FixedHeightWorldInfoProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.FoliaSchedulingProvider;
@@ -105,6 +106,7 @@ import net.ess3.provider.providers.PaperSerializationProvider;
 import net.ess3.provider.providers.PaperServerStateProvider;
 import net.ess3.provider.providers.PaperTickCountProvider;
 import net.ess3.provider.providers.PaperTileEntityProvider;
+import net.ess3.provider.providers.PaperWorldTileEntityCountProvider;
 import net.ess3.provider.providers.PrehistoricPotionMetaProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
@@ -395,6 +397,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // Tile Entity Provider
             providerFactory.registerProvider(BukkitTileEntityProvider.class, PaperTileEntityProvider.class);
+
+            // World Tile Entity Count Provider
+            providerFactory.registerProvider(BukkitWorldTileEntityCountProvider.class, PaperWorldTileEntityCountProvider.class);
 
             // Tick Count Provider
             providerFactory.registerProvider(PaperTickCountProvider.class);
