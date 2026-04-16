@@ -33,15 +33,17 @@ public class Commandlightning extends EssentialsLoopCommand {
         }
         final int finalPower = power;
         loopOnlinePlayersConsumer(server, sender, false, true, args[0], player -> {
-            sender.sendTl("lightningUse", player.getDisplayName());
-            final LightningStrike strike = player.getBase().getWorld().strikeLightningEffect(player.getBase().getLocation());
+            ess.scheduleEntityDelayedTask(player.getBase(), () -> {
+                sender.sendTl("lightningUse", player.getDisplayName());
+                final LightningStrike strike = player.getBase().getWorld().strikeLightningEffect(player.getBase().getLocation());
 
-            if (!player.isGodModeEnabled()) {
-                player.getBase().damage(finalPower, strike);
-            }
-            if (ess.getSettings().warnOnSmite()) {
-                player.sendTl("lightningSmited");
-            }
+                if (!player.isGodModeEnabled()) {
+                    player.getBase().damage(finalPower, strike);
+                }
+                if (ess.getSettings().warnOnSmite()) {
+                    player.sendTl("lightningSmited");
+                }
+            });
         });
         loopOnlinePlayers(server, sender, true, true, args[0], null);
     }
