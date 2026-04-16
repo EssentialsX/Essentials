@@ -108,7 +108,6 @@ import net.ess3.provider.providers.PaperTileEntityProvider;
 import net.ess3.provider.providers.PrehistoricPotionMetaProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -612,8 +611,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
         }
 
-        AdventureUtil.setEss(this);
-        bukkitAudience = BukkitAudiences.create(this);
+        initAdventureFacet();
     }
 
     private void initAdventureFacet() {
