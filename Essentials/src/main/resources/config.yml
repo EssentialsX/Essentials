@@ -833,6 +833,10 @@ spawn-if-no-home: true
 # Should players be asked to provide confirmation for homes they attempt to overwrite?
 confirm-home-overwrite: false
 
+# Block /sethome and /home for players over their home limit.
+# By default, players with more homes than permitted can overwrite existing homes and still use /home.
+strict-home-limit: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                       Economy                        | #
