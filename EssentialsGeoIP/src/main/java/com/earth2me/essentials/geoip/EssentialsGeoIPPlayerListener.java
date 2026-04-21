@@ -115,6 +115,9 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             u.setGeoLocation(sb.toString());
         }
         if (config.getBoolean("show-on-login", true) && !u.isHidden()) {
+            // 输出到控制台
+            essGeo.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral("geoipJoinFormat", u.getDisplayName(), sb.toString())));
+            // 输出给在线管理员
             for (final Player onlinePlayer : player.getServer().getOnlinePlayers()) {
                 final User user = ess.getUser(onlinePlayer);
                 if (user.isAuthorized("essentials.geoip.show")) {
