@@ -1,10 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
-// This command can be used to echo messages to the users screen, mostly useless but also an #EasterEgg
 public class Commandping extends EssentialsCommand {
     public Commandping() {
         super("ping");
@@ -13,9 +12,38 @@ public class Commandping extends EssentialsCommand {
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0) {
-            sender.sendTl("pong");
+            if (sender.isPlayer()) {
+                final Player player = sender.getPlayer();
+                final int ping = player.getPing();
+                sender.sendTl(getOwnPingKey(ping), ping);
+            } else {
+                sender.sendTl("pong");
+            }
         } else {
-            sender.sendMessage(FormatUtil.replaceFormat(getFinalArg(args, 0)));
+            final Player target = server.getPlayerExact(args[0]);
+            if (target == null) {
+                throw new PlayerNotFoundException();
+            }
+            final int ping = target.getPing();
+            sender.sendTl(getPingKey(ping), target.getName(), ping);
         }
+    }
+
+    private static String getOwnPingKey(final int ping) {
+        if (ping < 100) {
+            return "pingOwnGood";
+        } else if (ping < 200) {
+            return "pingOwnMid";
+        }
+        return "pingOwnBad";
+    }
+
+    private static String getPingKey(final int ping) {
+        if (ping < 100) {
+            return "pingGood";
+        } else if (ping < 200) {
+            return "pingMid";
+        }
+        return "pingBad";
     }
 }
