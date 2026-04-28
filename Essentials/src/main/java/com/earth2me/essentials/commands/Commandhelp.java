@@ -54,7 +54,7 @@ public class Commandhelp extends EssentialsCommand {
                         user.sendTl("commandHelpLine3");
                         if (essCommand != null && !essCommand.getUsageStrings().isEmpty()) {
                             for (Map.Entry<String, String> usage : essCommand.getUsageStrings().entrySet()) {
-                                user.sendTl("commandHelpLineUsage", AdventureUtil.parsed(usage.getKey().replace("<command>", cmd)), AdventureUtil.parsed(usage.getValue()));
+                                user.sendTl("commandHelpLineUsage", AdventureUtil.parsed(usage.getKey().replace("<command>", cmd)), AdventureUtil.parsed(user.playerTl(usage.getValue())));
                             }
                         } else {
                             user.sendMessage(bukkit.getUsage());

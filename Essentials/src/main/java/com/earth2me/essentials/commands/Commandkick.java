@@ -50,7 +50,7 @@ public class Commandkick extends EssentialsCommand {
 
         kickReason = event.getReason();
         target.getBase().kickPlayer(kickReason);
-        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
+        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.displayName();
 
         final String tlKey = "playerKicked";
         final Object[] objects = {senderDisplayName, target.getName(), kickReason};

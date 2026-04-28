@@ -32,6 +32,8 @@ import java.util.regex.Pattern;
 public interface IUser {
     boolean isAuthorized(String node);
 
+    boolean isAuthorizedCached(String node);
+
     boolean isAuthorized(IEssentialsCommand cmd);
 
     boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix);

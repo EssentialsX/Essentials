@@ -503,12 +503,21 @@ public class EssentialsPlayerListener implements Listener {
             });
         }
 
+        final boolean restoreFly = user.isFlyModeEnabled() && user.isAuthorized("essentials.fly");
+        if (restoreFly) {
+            user.getBase().setAllowFlight(true);
+            if (ess.getSettings().isSendFlyEnableOnJoin()) {
+                user.sendTl("flyMode", CommonPlaceholders.enableDisable(user.getSource(), true), user.getDisplayName());
+            }
+        }
+
         if (user.isAuthorized("essentials.fly.safelogin")) {
             user.getBase().setFallDistance(0);
-            if (LocationUtil.shouldFly(ess, user.getLocation())) {
+            final boolean inWater = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_17_R01) && user.getBase().isInWater();
+            if (!inWater && LocationUtil.shouldFly(ess, user.getLocation())) {
                 user.getBase().setAllowFlight(true);
                 user.getBase().setFlying(true);
-                if (ess.getSettings().isSendFlyEnableOnJoin()) {
+                if (!restoreFly && ess.getSettings().isSendFlyEnableOnJoin()) {
                     user.sendTl("flyMode", CommonPlaceholders.enableDisable(user.getSource(), true), user.getDisplayName());
                 }
             }
@@ -522,6 +531,11 @@ public class EssentialsPlayerListener implements Listener {
         if (user.isSocialSpyEnabled() && !user.isAuthorized("essentials.socialspy")) {
             user.setSocialSpyEnabled(false);
             ess.getLogger().log(Level.INFO, "Set socialspy to false for {0} because they had it enabled without permission.", user.getName());
+        }
+
+        if (user.isFlyModeEnabled() && !user.isAuthorized("essentials.fly")) {
+            user.setFlyModeEnabled(false);
+            ess.getLogger().log(Level.INFO, "Set fly mode to false for {0} because they had it enabled without permission.", user.getName());
         }
 
         if (user.isGodModeEnabled() && !user.isAuthorized("essentials.god")) {
@@ -794,10 +808,9 @@ public class EssentialsPlayerListener implements Listener {
                             final ComponentHolder base = (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers())
                                     ? spyer.tlComponent("socialSpyMutedPrefix")
                                     : spyer.tlComponent("socialSpyPrefix");
-                            final ComponentHolder nameComponent = ess.getAdventureFacet().legacyToAdventure(playerName);
-                            final ComponentHolder messageComponent = ess.getAdventureFacet().text(": " + event.getMessage());
+                            final ComponentHolder formatted = ess.getAdventureFacet().deserializeMiniMessage(spyer.playerTl("socialSpyCmdFormat", playerName, event.getMessage()));
 
-                            spyer.sendComponent(ess.getAdventureFacet().append(base, nameComponent, messageComponent));
+                            spyer.sendComponent(ess.getAdventureFacet().append(base, formatted));
                         }
                     }
                 }
@@ -1174,6 +1187,10 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerFishEvent(final PlayerFishEvent event) {
+        if (!ess.getSettings().cancelAfkOnFish()) {
+            return;
+        }
+
         final User user = ess.getUser(event.getPlayer());
         user.updateActivityOnInteract(true);
     }
@@ -1213,10 +1230,12 @@ public class EssentialsPlayerListener implements Listener {
         public void onPlayerPickupItem(final org.bukkit.event.player.PlayerPickupItemEvent event) {
             if (event.getItem().hasMetadata(Commandfireball.FIREBALL_META_KEY)) {
                 event.setCancelled(true);
-            } else if (ess.getSettings().getDisableItemPickupWhileAfk()) {
-                if (ess.getUser(event.getPlayer()).isAfk()) {
-                    event.setCancelled(true);
-                }
+                return;
+            }
+            final User user = ess.getUser(event.getPlayer());
+            if ((ess.getSettings().getDisableItemPickupWhileAfk() && user.isAfk())
+                || (user.isVanished() && !user.isAuthorizedCached("essentials.vanish.pickup"))) {
+                event.setCancelled(true);
             }
         }
     }
@@ -1224,8 +1243,10 @@ public class EssentialsPlayerListener implements Listener {
     private final class PickupListener1_12 implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onPlayerPickupItem(final org.bukkit.event.entity.EntityPickupItemEvent event) {
-            if (ess.getSettings().getDisableItemPickupWhileAfk() && event.getEntity() instanceof Player) {
-                if (ess.getUser((Player) event.getEntity()).isAfk()) {
+            if (event.getEntity() instanceof Player) {
+                final User user = ess.getUser((Player) event.getEntity());
+                if ((ess.getSettings().getDisableItemPickupWhileAfk() && user.isAfk())
+                    || (user.isVanished() && !user.isAuthorizedCached("essentials.vanish.pickup"))) {
                     event.setCancelled(true);
                 }
             }
@@ -1244,6 +1265,10 @@ public class EssentialsPlayerListener implements Listener {
     private final class CommandSendFilter implements CommandSendListenerProvider.Filter {
         @Override
         public Predicate<String> apply(Player player) {
+            // There is no event for op status changes, but the command list is resent when
+            // a player is opped/deopped, so we invalidate cached permissions here.
+            ess.getPermissionsHandler().invalidatePermissionCache(player.getUniqueId());
+
             final User user = ess.getUser(player);
             final Set<PluginCommand> checked = new HashSet<>();
             final Set<PluginCommand> toRemove = new HashSet<>();

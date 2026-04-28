@@ -34,7 +34,7 @@ ops-name-color: '4'
 nickname-prefix: '~'
 
 # The maximum length allowed in nicknames. The nickname prefix is not included in this.
-max-nick-length: 15
+max-nick-length: 16
 
 # The regex pattern used to determine if a requested nickname should be allowed for use.
 # If the requested nickname does not match this pattern, the nickname will be rejected.
@@ -491,7 +491,7 @@ auto-afk: 300
 auto-afk-timeout: -1
 
 # A list of commands to be executed instead of kicking the player once the
-# threshold defined above in 'afk-auto-timeout' is reached. If this list is empty 
+# threshold defined above in 'afk-auto-timeout' is reached. If this list is empty
 # and 'afk-auto-timeout' is not set to -1, Essentials will default to
 # kicking the player once they reach the timeout threshold.
 #
@@ -526,6 +526,9 @@ cancel-afk-on-move: true
 
 # Should Essentials automatically remove AFK status when a player sends a chat message?
 cancel-afk-on-chat: true
+
+# Should Essentials automatically remove AFK status when a player uses a fishing rod?
+cancel-afk-on-fish: true
 
 # Should AFK players be ignored when other players are trying to sleep?
 # When this setting is false, players won't be able to skip the night if some players are AFK.
@@ -897,8 +900,8 @@ baltop-requirements:
   minimum-balance: 0
   minimum-playtime: 0
 
-# Limit the number of cached balance top entries. 
-# Recommended for servers with a large number of players, as it reduces memory usage. 
+# Limit the number of cached balance top entries.
+# Recommended for servers with a large number of players, as it reduces memory usage.
 # Set to -1 to disable the limit.
 baltop-entry-limit: -1
 
