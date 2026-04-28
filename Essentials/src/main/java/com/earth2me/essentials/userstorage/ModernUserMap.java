@@ -102,6 +102,13 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
     @Override
     public User getUser(final Player base) {
+        // Fast path: if the cached user already wraps this exact Player instance, skip loadUncachedUser and put
+        final User cached = userCache.getIfPresent(base.getUniqueId());
+        if (cached != null && base.equals(cached.getBase())) {
+            // Still keep the name→UUID mapping fresh (e.g. after a name change while online)
+            uuidCache.updateCache(cached.getUUID(), cached.getName());
+            return cached;
+        }
         final User user = loadUncachedUser(base);
         userCache.put(user.getUUID(), user);
         debugLogCache(user);

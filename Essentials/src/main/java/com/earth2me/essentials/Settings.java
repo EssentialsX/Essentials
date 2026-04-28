@@ -24,7 +24,6 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.io.File;
@@ -837,13 +836,7 @@ public class Settings implements net.ess3.api.ISettings {
             if (reloadCount.get() < 2) {
                 // on startup: add plugins again in case they registered commands with the new API
                 // we need to schedule this task before any of the below tasks using _addAlternativeCommand.
-                ess.scheduleSyncDelayedTask(() -> {
-                    for (final Plugin plugin : ess.getServer().getPluginManager().getPlugins()) {
-                        if (plugin.isEnabled()) {
-                            ess.getAlternativeCommandsHandler().addPlugin(plugin);
-                        }
-                    }
-                });
+                ess.scheduleSyncDelayedTask(() -> ess.getAlternativeCommandsHandler().addPlugins(ess.getServer().getPluginManager().getPlugins()));
             }
 
             for (final String command : disabledCommands) {

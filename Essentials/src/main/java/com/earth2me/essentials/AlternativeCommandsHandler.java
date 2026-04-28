@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import java.util.stream.Collectors;
 import net.ess3.provider.KnownCommandsProvider;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginIdentifiableCommand;
@@ -22,10 +21,38 @@ public class AlternativeCommandsHandler {
 
     public AlternativeCommandsHandler(final IEssentials ess) {
         this.ess = ess;
-        for (final Plugin plugin : ess.getServer().getPluginManager().getPlugins()) {
-            if (plugin.isEnabled()) {
-                addPlugin(plugin);
+        addPlugins(ess.getServer().getPluginManager().getPlugins());
+    }
+
+    public final void addPlugins(final Plugin[] plugins) {
+        // Build a set of plugins we care about for fast lookup
+        final Map<Plugin, List<Map.Entry<String, Command>>> byPlugin = new HashMap<>();
+        for (final Plugin plugin : plugins) {
+            if (!plugin.isEnabled()) continue;
+            if (plugin.getDescription().getMain().contains("com.earth2me.essentials") || plugin.getDescription().getMain().contains("net.essentialsx")) continue;
+            byPlugin.put(plugin, null); // placeholder so we can check containsKey cheaply
+        }
+
+        if (byPlugin.isEmpty()) return;
+
+        // Single pass over the command map
+        for (final Map.Entry<String, Command> entry : ess.provider(KnownCommandsProvider.class).getKnownCommands().entrySet()) {
+            if (!(entry.getValue() instanceof PluginIdentifiableCommand)) continue;
+            final Plugin owner = ((PluginIdentifiableCommand) entry.getValue()).getPlugin();
+            if (!byPlugin.containsKey(owner)) continue;
+
+            List<Map.Entry<String, Command>> list = byPlugin.get(owner);
+            if (list == null) {
+                list = new ArrayList<>();
+                byPlugin.put(owner, list);
             }
+            list.add(entry);
+        }
+
+        for (final Map.Entry<Plugin, List<Map.Entry<String, Command>>> pluginEntry : byPlugin.entrySet()) {
+            final List<Map.Entry<String, Command>> cmds = pluginEntry.getValue();
+            if (cmds == null) continue;
+            registerPluginCommands(pluginEntry.getKey(), cmds);
         }
     }
 
@@ -33,7 +60,23 @@ public class AlternativeCommandsHandler {
         if (plugin.getDescription().getMain().contains("com.earth2me.essentials") || plugin.getDescription().getMain().contains("net.essentialsx")) {
             return;
         }
-        for (final Map.Entry<String, Command> entry : getPluginCommands(plugin)) {
+        registerPluginCommands(plugin, getPluginCommands(plugin));
+    }
+
+    private void registerPluginCommands(final Plugin plugin, final List<Map.Entry<String, Command>> entries) {
+        // Sort: non-namespaced first
+        final List<Map.Entry<String, Command>> plain = new ArrayList<>();
+        final List<Map.Entry<String, Command>> namespaced = new ArrayList<>();
+        for (final Map.Entry<String, Command> entry : entries) {
+            if (entry.getKey().indexOf(':') >= 0) {
+                namespaced.add(entry);
+            } else {
+                plain.add(entry);
+            }
+        }
+        plain.addAll(namespaced);
+
+        for (final Map.Entry<String, Command> entry : plain) {
             final String[] commandSplit = entry.getKey().split(":", 2);
             final String commandName = commandSplit.length > 1 ? commandSplit[1] : entry.getKey();
             final Command command = entry.getValue();
@@ -67,22 +110,13 @@ public class AlternativeCommandsHandler {
     }
 
     private List<Map.Entry<String, Command>> getPluginCommands(Plugin plugin) {
-        final Map<String, Command> commands = new HashMap<>();
+        final List<Map.Entry<String, Command>> result = new ArrayList<>();
         for (final Map.Entry<String, Command> entry : ess.provider(KnownCommandsProvider.class).getKnownCommands().entrySet()) {
             if (entry.getValue() instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) entry.getValue()).getPlugin().equals(plugin)) {
-                commands.put(entry.getKey(), entry.getValue());
+                result.add(entry);
             }
         }
-        // Try to use non-namespaced commands first if we can, some Commands may not like being registered under a
-        // different label than their getName() returns, so avoid doing that when we can
-        return commands.entrySet().stream().sorted((o1, o2) -> {
-            if (o1.getKey().contains(":") && !o2.getKey().contains(":")) {
-                return 1;
-            } else if (!o1.getKey().contains(":") && o2.getKey().contains(":")) {
-                return -1;
-            }
-            return 0;
-        }).collect(Collectors.toList());
+        return result;
     }
 
     public void removePlugin(final Plugin plugin) {
