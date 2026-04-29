@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IUser;
+import com.earth2me.essentials.Offence;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -56,6 +57,15 @@ public class Commandtempban extends EssentialsCommand {
         final String banDisplay = user.playerTl("tempBanned", expiry, senderDisplayName, banReason);
         user.getBase().kickPlayer(ess.getAdventureFacet().miniToLegacy(banDisplay));
 
+        ess.getOffenceRegistry().addOffence(new Offence(
+                Offence.Type.TEMPBAN,
+                user.getName(),
+                senderName,
+                banReason,
+                System.currentTimeMillis(),
+                "Expires: " + expiry
+        ));
+
         ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral("playerTempBanned", senderDisplayName, user.getName(), expiry, banReason)));
         ess.broadcastTl((IUser) null, "essentials.ban.notify", "playerTempBanned", senderDisplayName, user.getName(), expiry, banReason);
     }
@@ -65,8 +75,8 @@ public class Commandtempban extends EssentialsCommand {
         if (args.length == 1) {
             return getPlayers(sender);
         } else {
-            // Note: following args are both date diffs _and_ messages; ideally we'd mix with the vanilla handler
             return COMMON_DATE_DIFFS;
         }
     }
 }
+

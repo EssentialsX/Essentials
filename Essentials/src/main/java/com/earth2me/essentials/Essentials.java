@@ -182,6 +182,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
     private transient AdventureFacet adventureFacet;
+    // --- ADDED ---
+    private transient OffenceRegistry offenceRegistry;
 
     static {
         EconomyLayers.init();
@@ -280,6 +282,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             userMap = new ModernUserMap(this);
             legacyUserMap = new UserMap(userMap);
             execTimer.mark("Init(Usermap)");
+
+            // --- ADDED ---
+            offenceRegistry = new OffenceRegistry(this);
+            getServer().getScheduler().runTaskTimerAsynchronously(this, offenceRegistry::purgeOld, 72000L, 72000L);
+            execTimer.mark("Init(OffenceRegistry)");
 
             balanceTop = new BalanceTopImpl(this);
             execTimer.mark("Init(BalanceTop)");
@@ -640,7 +647,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
-            "com.earth2me.essentials.commands.Command", "essentials.", null);
+                "com.earth2me.essentials.commands.Command", "essentials.", null);
     }
 
     @Override
@@ -1340,6 +1347,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return adventureFacet;
     }
 
+    // --- ADDED ---
+    public OffenceRegistry getOffenceRegistry() {
+        return offenceRegistry;
+    }
+
     private AbstractItemDb getItemDbFromConfig() {
         final String setting = settings.getItemDbType();
 
@@ -1376,3 +1388,4 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
     }
 }
+

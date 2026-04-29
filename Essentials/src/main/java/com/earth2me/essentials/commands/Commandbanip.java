@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
+import com.earth2me.essentials.Offence;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.BanList;
@@ -29,12 +30,14 @@ public class Commandbanip extends EssentialsCommand {
         final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.displayName();
 
         String ipAddress;
+        String resolvedPlayerName = null;
         if (FormatUtil.validIP(args[0])) {
             ipAddress = args[0];
         } else {
             try {
                 final User player = getPlayer(server, args, 0, true, true);
                 ipAddress = player.getLastLoginAddress();
+                resolvedPlayerName = player.getName();
             } catch (final PlayerNotFoundException ex) {
                 ipAddress = args[0];
             }
@@ -62,16 +65,27 @@ public class Commandbanip extends EssentialsCommand {
             }
         }
 
+        // Store under player name if we resolved one, otherwise store under IP
+        final String offenceTarget = resolvedPlayerName != null ? resolvedPlayerName : ipAddress;
+        ess.getOffenceRegistry().addOffence(new Offence(
+                Offence.Type.BANIP,
+                offenceTarget,
+                senderName,
+                banReason,
+                System.currentTimeMillis(),
+                ipAddress
+        ));
+
         ess.broadcastTl(null, u -> !u.isAuthorized("essentials.banip.notify"), "playerBanIpAddress", senderDisplayName, ipAddress, banReason);
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            // TODO: Also list IP addresses?
             return getPlayers(sender);
         } else {
             return Collections.emptyList();
         }
     }
 }
+

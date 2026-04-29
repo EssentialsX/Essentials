@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
+import com.earth2me.essentials.Offence;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.TranslatableException;
@@ -52,6 +53,15 @@ public class Commandkick extends EssentialsCommand {
         target.getBase().kickPlayer(kickReason);
         final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.displayName();
 
+        ess.getOffenceRegistry().addOffence(new Offence(
+                Offence.Type.KICK,
+                target.getName(),
+                senderDisplayName,
+                kickReason,
+                System.currentTimeMillis(),
+                null
+        ));
+
         final String tlKey = "playerKicked";
         final Object[] objects = {senderDisplayName, target.getName(), kickReason};
         ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral(tlKey, objects)));
@@ -67,3 +77,4 @@ public class Commandkick extends EssentialsCommand {
         }
     }
 }
+

@@ -327,6 +327,10 @@ commands:
     description: May death rain upon them.
     usage: /<command> [player]
     aliases: [enuke]
+  offences:
+    description: View a player's offences in the last 90 days.
+    usage: /offences [player]
+    aliases: [offe]
   tpoffline:
     description: Teleport to a player's last known logout location
     usage: /<command> <player>
@@ -1092,6 +1096,10 @@ permissions:
     description: Allows access to the /nuke command
   essentials.oversizedstacks:
     description: Allows the bearer to spawn oversized stacks
+  essentials.offences:
+    description: Allows a player to view their own offences.
+  essentials.offences.others:
+    description: Allows staff to view any player's offences.
   essentials.pay:
     description: Allows access to the /pay command
   essentials.pay.multiple:

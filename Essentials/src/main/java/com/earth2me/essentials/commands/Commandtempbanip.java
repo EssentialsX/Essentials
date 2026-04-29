@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
+import com.earth2me.essentials.Offence;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -31,12 +32,14 @@ public class Commandtempbanip extends EssentialsCommand {
         final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.displayName();
 
         String ipAddress;
+        String resolvedPlayerName = null;
         if (FormatUtil.validIP(args[0])) {
             ipAddress = args[0];
         } else {
             try {
                 final User player = getPlayer(server, args, 0, true, true);
                 ipAddress = player.getLastLoginAddress();
+                resolvedPlayerName = player.getName();
             } catch (final PlayerNotFoundException ex) {
                 ipAddress = args[0];
             }
@@ -69,8 +72,19 @@ public class Commandtempbanip extends EssentialsCommand {
             }
         }
 
+        final String expiry = DateUtil.formatDateDiff(banTimestamp);
+        final String offenceTarget = resolvedPlayerName != null ? resolvedPlayerName : ipAddress;
+        ess.getOffenceRegistry().addOffence(new Offence(
+                Offence.Type.TEMPBANIP,
+                offenceTarget,
+                senderName,
+                banReason,
+                System.currentTimeMillis(),
+                "IP: " + ipAddress + " | Expires: " + expiry
+        ));
+
         final String tlKey = "playerTempBanIpAddress";
-        final Object[] objects = {senderDisplayName, ipAddress, banReason, DateUtil.formatDateDiff(banTimestamp), banReason};
+        final Object[] objects = {senderDisplayName, ipAddress, banReason, expiry, banReason};
         ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral(tlKey, objects)));
         ess.broadcastTl(null, "essentials.banip.notify", tlKey, objects);
     }
@@ -78,11 +92,10 @@ public class Commandtempbanip extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            // TODO: Also list IP addresses?
             return getPlayers(sender);
         } else {
-            // Note: following args are both date diffs _and_ messages; ideally we'd mix with the vanilla handler
             return COMMON_DATE_DIFFS;
         }
     }
 }
+

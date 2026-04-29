@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
+import com.earth2me.essentials.Offence;
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -53,9 +54,17 @@ public class Commandban extends EssentialsCommand {
         ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, null, senderName);
 
         final String banDisplay = tlLiteral("banFormat", banReason, senderDisplayName);
-
         user.getBase().kickPlayer(ess.getAdventureFacet().miniToLegacy(banDisplay));
         ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral("playerBanned", senderDisplayName, user.getName(), banDisplay)));
+
+        ess.getOffenceRegistry().addOffence(new Offence(
+                Offence.Type.BAN,
+                user.getName(),
+                senderName,
+                banReason,
+                System.currentTimeMillis(),
+                null
+        ));
 
         if (nomatch) {
             sender.sendTl("userUnknown", user.getName());
@@ -73,3 +82,4 @@ public class Commandban extends EssentialsCommand {
         }
     }
 }
+

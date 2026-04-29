@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.Offence;
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
@@ -90,6 +91,16 @@ public class Commandmute extends EssentialsCommand {
             }
 
             if (muted) {
+                final Offence.Type muteType = muteTimestamp > 0 ? Offence.Type.TEMPMUTE : Offence.Type.MUTE;
+                ess.getOffenceRegistry().addOffence(new Offence(
+                        muteType,
+                        user.getName(),
+                        sender.getSender().getName(),
+                        muteReason != null && !muteReason.isEmpty() ? muteReason : "No reason given",
+                        System.currentTimeMillis(),
+                        muteTimestamp > 0 ? "Expires: " + muteTime : null
+                ));
+
                 if (muteTimestamp > 0) {
                     if (!user.hasMuteReason()) {
                         sender.sendTl("mutedPlayerFor", user.getDisplayName(), muteTime);
@@ -139,7 +150,8 @@ public class Commandmute extends EssentialsCommand {
         if (args.length == 1) {
             return getPlayers(sender);
         } else {
-            return COMMON_DATE_DIFFS; // Date diff can span multiple words
+            return COMMON_DATE_DIFFS;
         }
     }
 }
+

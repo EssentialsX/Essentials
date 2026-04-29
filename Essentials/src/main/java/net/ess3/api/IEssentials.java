@@ -1,6 +1,7 @@
 package net.ess3.api;
 
 import com.earth2me.essentials.items.CustomItemResolver;
+import com.earth2me.essentials.OffenceRegistry;
 
 import java.util.Collection;
 
@@ -18,6 +19,13 @@ public interface IEssentials extends com.earth2me.essentials.IEssentials {
     Collection<String> getVanishedPlayersNew();
 
     /**
+     * Gets the offence registry used to track player punishments.
+     *
+     * @return the offence registry
+     */
+    OffenceRegistry getOffenceRegistry();
+
+    /**
      * Get the {@link CustomItemResolver} that is currently in use.
      *
      * <b>Note: external plugins should generally avoid using this. If you want to add custom items from your plugin,
@@ -27,3 +35,4 @@ public interface IEssentials extends com.earth2me.essentials.IEssentials {
      */
     CustomItemResolver getCustomItemResolver();
 }
+
