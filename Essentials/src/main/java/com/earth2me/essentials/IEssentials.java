@@ -94,8 +94,6 @@ public interface IEssentials extends Plugin {
 
     RandomTeleport getRandomTeleport();
 
-    boolean isResetNickOnNameChange();
-
     UpdateChecker getUpdateChecker();
 
     BukkitTask runTaskAsynchronously(Runnable run);
