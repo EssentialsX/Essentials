@@ -422,7 +422,7 @@ public class EssentialsPlayerListener implements Listener {
         user.setLastAccountName(user.getBase().getName());
 
         // Check for new username. If they don't want the message, let's just say it's false.
-final boolean newUsername = ess.getSettings().isCustomNewUsernameMessage() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
+        final boolean newUsername = ess.getSettings().isCustomNewUsernameMessage() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
 
         // If the Minecraft account name changed, reset the nickname so the old one doesn't persist
         if (ess.getSettings().isResetNickOnNameChange() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName()) && user.getNickname() != null) {
