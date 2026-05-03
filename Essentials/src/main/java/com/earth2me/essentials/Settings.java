@@ -147,7 +147,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean logCommandBlockCommands;
     private boolean logConsoleCommands;
     private Set<Predicate<String>> nickBlacklist;
-    private boolean resetNickOnNameChange = false;
+    private boolean resetNickOnNameChange;
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
     private Map<String, String> worldAliases;
