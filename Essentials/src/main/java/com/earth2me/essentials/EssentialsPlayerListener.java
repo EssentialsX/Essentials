@@ -433,15 +433,6 @@ public class EssentialsPlayerListener implements Listener {
         user.setDisplayNick();
         updateCompass(user);
         user.setLeavingHidden(false);
-        // If the Minecraft account name changed, reset the nickname so the old one doesn't persist
-        if (ess.getSettings().isResetNickOnNameChange() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName()) && user.getNickname() != null) {
-            user.setNickname(null);
-        }
-
-        user.setLastLogin(currentTime);
-        user.setDisplayNick();
-        updateCompass(user);
-        user.setLeavingHidden(false);
 
         if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
             for (final String p : ess.getVanishedPlayersNew()) {
