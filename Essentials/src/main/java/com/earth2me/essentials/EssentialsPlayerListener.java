@@ -443,9 +443,6 @@ public class EssentialsPlayerListener implements Listener {
         updateCompass(user);
         user.setLeavingHidden(false);
 
-        // Check for new username. If they don't want the message, let's just say it's false.
-        final boolean newUsername = ess.getSettings().isCustomNewUsernameMessage() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
-
         if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
             for (final String p : ess.getVanishedPlayersNew()) {
                 final Player toVanish = ess.getServer().getPlayerExact(p);
