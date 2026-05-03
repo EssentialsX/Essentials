@@ -246,7 +246,7 @@ commands:
   jailedplayers:
     description: List all jailed players.
     usage: /<command>
-    aliases: [ejailed, ejp]
+    aliases: [ejailedplayers, ejailed, ejp]
   jails:
     description: List all jails.
     usage: /<command>
