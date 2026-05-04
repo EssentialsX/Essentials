@@ -420,13 +420,18 @@ public class EssentialsPlayerListener implements Listener {
 
         final String lastAccountName = user.getLastAccountName(); // For comparison
         user.setLastAccountName(user.getBase().getName());
+
+        final boolean newUsername = lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
+
+        // If the Minecraft account name changed, reset the nickname so the old one doesn't persist
+        if (ess.getSettings().isResetNickOnNameChange() && newUsername && user.getNickname() != null) {
+            user.setNickname(null);
+        }
+
         user.setLastLogin(currentTime);
         user.setDisplayNick();
         updateCompass(user);
         user.setLeavingHidden(false);
-
-        // Check for new username. If they don't want the message, let's just say it's false.
-        final boolean newUsername = ess.getSettings().isCustomNewUsernameMessage() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
 
         if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
             for (final String p : ess.getVanishedPlayersNew()) {
@@ -453,7 +458,7 @@ public class EssentialsPlayerListener implements Listener {
         } else if (message == null || hideJoinQuitMessages()) {
             effectiveMessage = null;
         } else if (ess.getSettings().isCustomJoinMessage()) {
-            final String msg = (newUsername ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
+            final String msg = (newUsername && ess.getSettings().isCustomNewUsernameMessage() ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
                     .replace("{PLAYER}", user.getDisplayName()).replace("{USERNAME}", user.getName())
                     .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUsers().getUserCount()))
                     .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))

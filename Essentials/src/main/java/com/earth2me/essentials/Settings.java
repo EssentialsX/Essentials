@@ -147,6 +147,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean logCommandBlockCommands;
     private boolean logConsoleCommands;
     private Set<Predicate<String>> nickBlacklist;
+    private boolean resetNickOnNameChange;
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
     private Map<String, String> worldAliases;
@@ -508,9 +509,18 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getString("nickname-prefix", "~");
     }
 
+    private boolean _resetNickOnNameChange() {
+        return config.getBoolean("reset-nick-on-name-change", false);
+    }
+
     @Override
     public String getNicknamePrefix() {
         return nicknamePrefix;
+    }
+
+    @Override
+    public boolean isResetNickOnNameChange() {
+        return resetNickOnNameChange;
     }
 
     @Override
@@ -886,6 +896,7 @@ public class Settings implements net.ess3.api.ISettings {
         }
 
         nicknamePrefix = _getNicknamePrefix();
+        resetNickOnNameChange = _resetNickOnNameChange();
         operatorColor = _getOperatorColor();
         changePlayerListName = _changePlayerListName();
         configDebug = _isDebug();

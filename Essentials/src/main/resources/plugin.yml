@@ -243,6 +243,10 @@ commands:
     description: Names an item.
     usage: /<command> [name]
     aliases: [iname, einame, eitemname, itemrename, irename, eitemrename, eirename]
+  jailedplayers:
+    description: List all jailed players.
+    usage: /<command>
+    aliases: [ejailedplayers, ejailed, ejp]
   jails:
     description: List all jails.
     usage: /<command>
@@ -955,6 +959,8 @@ permissions:
     description: Allows the bearer to damage blocks while jailed
   essentials.jail.allow-interact:
     description: Allows the bearer to interact with blocks while jailed
+  essentials.jailedplayers:
+    description: Allows access to the /jailedplayers command
   essentials.jails:
     description: Allows access to the /jails command
   essentials.deljail:

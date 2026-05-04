@@ -94,6 +94,8 @@ public interface ISettings extends IConf {
 
     String getNicknamePrefix();
 
+    boolean isResetNickOnNameChange();
+
     String getOperatorColor() throws Exception;
 
     boolean getPerWarpPermission();

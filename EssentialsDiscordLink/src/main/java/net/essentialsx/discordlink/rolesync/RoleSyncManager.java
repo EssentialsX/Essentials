@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tlLiteral;
@@ -28,13 +30,14 @@ public class RoleSyncManager implements Listener {
     private final Map<String, InteractionRole> groupToRoleMap = new HashMap<>();
     private final Map<String, String> roleIdToGroupMap = new HashMap<>();
     private final Semaphore syncSemaphore = new Semaphore(5);
+    private BukkitTask syncTask;
     private int syncCursor = 0;
 
     public RoleSyncManager(final EssentialsDiscordLink ess) {
         this.ess = ess;
         Bukkit.getPluginManager().registerEvents(this, ess);
         onReload();
-        this.ess.getEss().runTaskTimerAsynchronously(() -> {
+        this.syncTask = this.ess.getEss().runTaskTimerAsynchronously(() -> {
             if (groupToRoleMap.isEmpty() && roleIdToGroupMap.isEmpty()) {
                 return;
             }
@@ -67,6 +70,12 @@ public class RoleSyncManager implements Listener {
         }, 0, ess.getSettings().getRoleSyncResyncDelay() * 1200L);
     }
 
+    public void shutdown() {
+        if (syncTask != null) {
+            syncTask.cancel();
+        }
+    }
+
     public void sync(final UUID uuid, final String discordId) {
         final Map<String, InteractionRole> groupToRoleMapCopy = new HashMap<>(groupToRoleMap);
         final Map<String, String> roleIdToGroupMapCopy = new HashMap<>(roleIdToGroupMap);
@@ -81,7 +90,13 @@ public class RoleSyncManager implements Listener {
         final List<String> groups = primaryOnly ?
                 Collections.singletonList(ess.getEss().getPermissionsHandler().getGroup(player)) : ess.getEss().getPermissionsHandler().getGroups(player);
         ess.getEss().runTaskAsynchronously(() -> {
-            syncSemaphore.acquireUninterruptibly();
+            try {
+                if (!syncSemaphore.tryAcquire(5, TimeUnit.SECONDS)) {
+                    return;
+                }
+            } catch (final InterruptedException e) {
+                return;
+            }
             ess.getApi().getMemberById(discordId).thenCompose(member -> {
                 if (member == null) {
                     if (ess.getSettings().isUnlinkOnLeave()) {
@@ -151,7 +166,13 @@ public class RoleSyncManager implements Listener {
         }
 
         ess.getEss().runTaskAsynchronously(() -> {
-            syncSemaphore.acquireUninterruptibly();
+            try {
+                if (!syncSemaphore.tryAcquire(5, TimeUnit.SECONDS)) {
+                    return;
+                }
+            } catch (final InterruptedException e) {
+                return;
+            }
             ess.getApi().getMemberById(discordId).thenCompose(member -> {
                 // Check if the member is no longer in the guild (null), they don't have any roles anyway.
                 if (member == null) {
