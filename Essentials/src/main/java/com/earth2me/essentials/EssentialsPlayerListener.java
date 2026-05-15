@@ -344,19 +344,19 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         if (event.getValue()) {
-            String quitMessage = buildQuitMessage((User) event.getAffected());
+            String quitMessage = ChatColor.YELLOW + event.getAffected().getName() + " left the game";
 
-            if (quitMessage.isEmpty())
-                quitMessage = ChatColor.YELLOW + event.getAffected().getName() + " left the game";
+            if (ess.getSettings().isCustomQuitMessage())
+                quitMessage = buildQuitMessage((User) event.getAffected());;
 
             Bukkit.broadcastMessage(quitMessage);
             return;
         }
 
-        String joinMessage = buildJoinMessage((User) event.getAffected(), false, null);
+        String joinMessage = ChatColor.YELLOW + event.getAffected().getName() + " joined the game";
 
-        if (joinMessage.isEmpty())
-            joinMessage = ChatColor.YELLOW + event.getAffected().getName() + " joined the game";
+        if (ess.getSettings().isCustomJoinMessage())
+            joinMessage = buildJoinMessage((User) event.getAffected(), false, null);;
 
         Bukkit.broadcastMessage(joinMessage);
     }
