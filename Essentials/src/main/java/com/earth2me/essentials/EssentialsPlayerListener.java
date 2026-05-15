@@ -34,6 +34,7 @@ import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -343,20 +344,21 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         if (event.getValue()) {
-            final String quitMessage = buildQuitMessage((User) event.getAffected());
+            String quitMessage = buildQuitMessage((User) event.getAffected());
 
-            if (!quitMessage.isEmpty()) {
-                Bukkit.broadcastMessage(quitMessage);
-            }
+            if (quitMessage.isEmpty())
+                quitMessage = ChatColor.YELLOW + event.getAffected().getName() + " left the game";
 
+            Bukkit.broadcastMessage(quitMessage);
             return;
         }
 
-        final String joinMessage = buildJoinMessage((User) event.getAffected(), false, null);
+        String joinMessage = buildJoinMessage((User) event.getAffected(), false, null);
 
-        if (!joinMessage.isEmpty()) {
-            Bukkit.broadcastMessage(joinMessage);
-        }
+        if (joinMessage.isEmpty())
+            joinMessage = ChatColor.YELLOW + event.getAffected().getName() + " joined the game";
+
+        Bukkit.broadcastMessage(joinMessage);
     }
 
     private String buildJoinMessage(final User user, boolean newUsername, String lastAccountName) {
