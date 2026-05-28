@@ -343,20 +343,25 @@ public class EssentialsPlayerListener implements Listener {
             return;
         }
 
-        if (event.getValue()) {
-            String quitMessage = ChatColor.YELLOW + event.getAffected().getName() + " left the game";
+        // Note: getController() returns the vanished player due to a long-standing parameter swap in Commandvanish.
+        User user = (User) event.getController();
 
-            if (ess.getSettings().isCustomQuitMessage())
-                quitMessage = buildQuitMessage((User) event.getAffected());;
+        if (event.getValue()) {
+            String quitMessage = ChatColor.YELLOW + user.getName() + " left the game";
+
+            if (ess.getSettings().isCustomQuitMessage()) {
+                quitMessage = buildQuitMessage(user);
+            }
 
             Bukkit.broadcastMessage(quitMessage);
             return;
         }
 
-        String joinMessage = ChatColor.YELLOW + event.getAffected().getName() + " joined the game";
+        String joinMessage = ChatColor.YELLOW + user.getName() + " joined the game";
 
-        if (ess.getSettings().isCustomJoinMessage())
-            joinMessage = buildJoinMessage((User) event.getAffected(), false, null);;
+        if (ess.getSettings().isCustomJoinMessage()) {
+            joinMessage = buildJoinMessage(user, false, null);
+        }
 
         Bukkit.broadcastMessage(joinMessage);
     }
