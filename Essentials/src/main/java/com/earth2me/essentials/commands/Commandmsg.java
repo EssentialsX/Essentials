@@ -40,7 +40,7 @@ public class Commandmsg extends EssentialsLoopCommand {
         }
 
         // Sending messages to console
-        if (args[0].equalsIgnoreCase(Console.NAME) || args[0].equalsIgnoreCase(Console.DISPLAY_NAME)) {
+        if (args[0].equalsIgnoreCase(Console.NAME) || args[0].equalsIgnoreCase(Console.displayName())) {
             final IMessageRecipient messageSender = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getInstance();
             messageSender.sendMessage(Console.getInstance(), message);
             return;

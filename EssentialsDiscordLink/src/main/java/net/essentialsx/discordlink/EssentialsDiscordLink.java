@@ -87,6 +87,9 @@ public class EssentialsDiscordLink extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (roleSyncManager != null) {
+            roleSyncManager.shutdown();
+        }
         if (accounts != null) {
             accounts.shutdown();
         }

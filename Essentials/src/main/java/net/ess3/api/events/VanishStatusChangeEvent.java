@@ -8,6 +8,12 @@ import org.bukkit.event.HandlerList;
  * <p>
  * For other cases where the player's vanish status changes, you should listen on PlayerJoinEvent and
  * check with {@link IUser#isVanished()}.
+ *
+ * <b>WARNING: The values of {@link #getAffected()} and {@link #getController()} are inverted due to
+ * a long-standing parameter swap. {@link #getAffected()} returns the command sender (null for console),
+ * and {@link #getController()} returns the player whose vanish status changed.</b>
+ *
+ * @see <a href="https://github.com/EssentialsX/Essentials/issues/2604">#2604</a>
  */
 public class VanishStatusChangeEvent extends StatusChangeEvent {
     private static final HandlerList handlers = new HandlerList();

@@ -41,7 +41,10 @@ public class Commandhome extends EssentialsCommand {
             }
         }
         try {
-            if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
+            if ("bed".equalsIgnoreCase(homeName)) {
+                if (!user.isAuthorized("essentials.home.bed")) {
+                    throw new TranslatableException("noAccessCommand");
+                }
                 if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayerStub) {
                     throw new TranslatableException("bedOffline");
                 }
@@ -73,10 +76,15 @@ public class Commandhome extends EssentialsCommand {
                 final List<String> homes = finalPlayer.getHomes();
                 if (homes.isEmpty() && finalPlayer.equals(user)) {
                     if (ess.getSettings().isSpawnIfNoHome()) {
-                        final UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, null, bed != null ? bed : finalPlayer.getWorld().getSpawnLocation(), bed != null ? UserTeleportHomeEvent.HomeType.BED : UserTeleportHomeEvent.HomeType.SPAWN);
+                        final boolean useBed = bed != null && user.isAuthorized("essentials.home.bed");
+                        final UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, null, useBed ? bed : finalPlayer.getWorld().getSpawnLocation(), useBed ? UserTeleportHomeEvent.HomeType.BED : UserTeleportHomeEvent.HomeType.SPAWN);
                         server.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
-                            user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+                            if (useBed) {
+                                user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+                            } else {
+                                user.getAsyncTeleport().teleport(finalPlayer.getWorld().getSpawnLocation(), charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+                            }
                         }
                     } else {
                         showError(user.getBase(), new TranslatableException("noHomeSetPlayer"), commandLabel);

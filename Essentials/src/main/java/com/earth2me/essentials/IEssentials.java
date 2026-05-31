@@ -82,6 +82,8 @@ public interface IEssentials extends Plugin {
 
     BukkitScheduler getScheduler();
 
+    List<Player> getJailedPlayers();
+
     IJails getJails();
 
     IWarps getWarps();
