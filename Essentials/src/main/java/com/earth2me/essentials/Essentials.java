@@ -79,6 +79,8 @@ import net.ess3.provider.providers.FixedHeightWorldInfoProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyBannerDataProvider;
 import net.ess3.provider.providers.LegacyBiomeNameProvider;
+import net.ess3.provider.providers.LegacyPatternTypeProvider;
+import net.ess3.provider.providers.ModernPatternTypeProvider;
 import net.ess3.provider.providers.LegacyDamageEventProvider;
 import net.ess3.provider.providers.LegacyInventoryViewProvider;
 import net.ess3.provider.providers.LegacyItemUnbreakableProvider;
@@ -341,6 +343,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             //Banner Meta Provider
             providerFactory.registerProvider(LegacyBannerDataProvider.class, BaseBannerDataProvider.class);
+
+            // Pattern Type Provider
+            providerFactory.registerProvider(LegacyPatternTypeProvider.class, ModernPatternTypeProvider.class);
 
             // Server State Provider
             providerFactory.registerProvider(ReflServerStateProvider.class, PaperServerStateProvider.class);
