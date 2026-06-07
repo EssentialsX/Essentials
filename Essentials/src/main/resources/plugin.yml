@@ -943,8 +943,6 @@ permissions:
     description: Allows access to the /itemname command with RGB text
   essentials.itemname.prevent-type.<item-name>:
     description: Prevents the player from using the /itemname command with the specified item
-  essentials.jail:
-    description: Allows access to the /jail command
   essentials.jail.exempt:
     description: Prevent a specified group or player from being jailed
   essentials.jail.allow.<command>:
