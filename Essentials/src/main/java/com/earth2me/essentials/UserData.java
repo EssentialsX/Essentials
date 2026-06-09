@@ -399,6 +399,18 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return holder.teleportEnabled();
     }
 
+    public boolean isTeleportAllowedFor(final IUser teleporter) {
+        if (isTeleportEnabled()) {
+            return true;
+        }
+        if (teleporter == null) {
+            return true;
+        }
+        return teleporter.isAuthorized("essentials.tptoggle.bypass")
+            || teleporter.isAuthorized("essentials.tpo")
+            || teleporter.isAuthorized("essentials.tpohere");
+    }
+
     public void setTeleportEnabled(final boolean set) {
         holder.teleportEnabled(set);
         config.save();

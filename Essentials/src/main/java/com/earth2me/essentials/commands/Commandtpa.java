@@ -30,7 +30,7 @@ public class Commandtpa extends EssentialsCommand {
         if (!player.isAuthorized("essentials.tpaccept")) {
             throw new TranslatableException("teleportNoAcceptPermission", player.getDisplayName());
         }
-        if (!player.isTeleportEnabled()) {
+        if (!player.isTeleportAllowedFor(user)) {
             throw new TranslatableException("teleportDisabled", player.getDisplayName());
         }
         if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + player.getWorld().getName())) {

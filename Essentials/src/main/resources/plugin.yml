@@ -1350,6 +1350,8 @@ permissions:
     description: Allows access to the /tptoggle command
   essentials.tptoggle.others:
     description: Allows access to the /tptoggle command for other players
+  essentials.tptoggle.bypass:
+    description: Allows the bearer to bypass the tptoggle setting for other players
   essentials.tpr:
     description: Allows access to the /tpr command
   essentials.settpr:
