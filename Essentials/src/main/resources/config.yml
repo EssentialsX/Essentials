@@ -126,6 +126,9 @@ teleport-to-center: true
 heal-cooldown: 60
 
 # Should potion effects be removed when healing a player?
+# Accepts: true/all, false/none, negative-effects/negative
+# When set to negative-effects, only harmful effects (poison, slowness, etc.) are removed.
+# Positive effects like Hero of the Village, speed, and regeneration are preserved.
 remove-effects-on-heal: true
 
 # The default radius when /near is used.

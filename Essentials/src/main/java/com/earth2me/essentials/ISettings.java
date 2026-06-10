@@ -425,6 +425,8 @@ public interface ISettings extends IConf {
 
     boolean isRemovingEffectsOnHeal();
 
+    HealEffectRemovalMode getHealEffectRemovalMode();
+
     boolean isSpawnIfNoHome();
 
     boolean isConfirmHomeOverwrite();

@@ -5,6 +5,7 @@ import com.earth2me.essentials.utils.RegistryUtil;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,6 +14,7 @@ import java.util.Set;
 public final class Potions {
     private static final Map<String, PotionEffectType> POTIONS = new HashMap<>();
     private static final Map<String, PotionEffectType> ALIASPOTIONS = new HashMap<>();
+    private static final Set<PotionEffectType> HARMFUL_EFFECTS = new HashSet<>();
 
     static {
 
@@ -169,9 +171,44 @@ public final class Potions {
             ALIASPOTIONS.put("nautilus", PotionEffectType.BREATH_OF_THE_NAUTILUS);
         } catch (final Throwable ignored) {
         }
+
+        registerHarmful(SLOWNESS);
+        registerHarmful(MINING_FATIGUE);
+        registerHarmful(INSTANT_DAMAGE);
+        registerHarmful(NAUSEA);
+        registerHarmful(PotionEffectType.BLINDNESS);
+        registerHarmful(PotionEffectType.HUNGER);
+        registerHarmful(PotionEffectType.WEAKNESS);
+        registerHarmful(PotionEffectType.POISON);
+        registerHarmful(PotionEffectType.WITHER);
+        registerHarmful(PotionEffectType.UNLUCK);
+
+        try {
+            registerHarmful(PotionEffectType.GLOWING);
+            registerHarmful(PotionEffectType.LEVITATION);
+            registerHarmful(PotionEffectType.BAD_OMEN);
+            registerHarmful(PotionEffectType.DARKNESS);
+            registerHarmful(PotionEffectType.INFESTED);
+            registerHarmful(PotionEffectType.OOZING);
+            registerHarmful(PotionEffectType.WEAVING);
+            registerHarmful(PotionEffectType.WIND_CHARGED);
+            registerHarmful(PotionEffectType.TRIAL_OMEN);
+            registerHarmful(PotionEffectType.RAID_OMEN);
+        } catch (final Throwable ignored) {
+        }
+    }
+
+    private static void registerHarmful(final PotionEffectType type) {
+        if (type != null) {
+            HARMFUL_EFFECTS.add(type);
+        }
     }
 
     private Potions() {
+    }
+
+    public static boolean isHarmful(final PotionEffectType type) {
+        return type != null && HARMFUL_EFFECTS.contains(type);
     }
 
     public static PotionEffectType getByName(final String name) {

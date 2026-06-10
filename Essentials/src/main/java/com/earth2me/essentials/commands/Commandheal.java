@@ -1,6 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.HealEffectRemovalMode;
+import com.earth2me.essentials.Potions;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -65,9 +67,12 @@ public class Commandheal extends EssentialsLoopCommand {
             player.setFireTicks(0);
             player.setRemainingAir(player.getMaximumAir());
             user.sendTl("heal");
-            if (ess.getSettings().isRemovingEffectsOnHeal()) {
+            final HealEffectRemovalMode effectRemovalMode = ess.getSettings().getHealEffectRemovalMode();
+            if (effectRemovalMode != HealEffectRemovalMode.NONE) {
                 for (final PotionEffect effect : player.getActivePotionEffects()) {
-                    player.removePotionEffect(effect.getType());
+                    if (effectRemovalMode == HealEffectRemovalMode.ALL || Potions.isHarmful(effect.getType())) {
+                        player.removePotionEffect(effect.getType());
+                    }
                 }
             }
             if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
