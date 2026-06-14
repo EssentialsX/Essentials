@@ -101,7 +101,7 @@ public class BukkitListener implements Listener {
         // Delay join to let nickname load
         if (!isSilentJoinQuit(event.getUser(), "join") && !isVanishHide(event.getUser())) {
             // Check if this is the first time the player has joined
-            if (!event.getUser().getBase().hasPlayedBefore()) {
+            if (event.isFirstJoin()) {
                 sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), MessageType.DefaultTypes.FIRST_JOIN);
             } else {
                 sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), MessageType.DefaultTypes.JOIN);

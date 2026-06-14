@@ -423,6 +423,11 @@ public class EssentialsPlayerListener implements Listener {
 
         final boolean newUsername = lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
 
+        // A null last account name means EssentialsX has never recorded this player before, i.e. it's their first join.
+        // We rely on EssentialsX's own user data here rather than Player#hasPlayedBefore(), which is unreliable on modern
+        // server platforms that persist player data during the login/configuration phase (see GH-6466, GH-6464).
+        final boolean firstJoin = lastAccountName == null;
+
         // If the Minecraft account name changed, reset the nickname so the old one doesn't persist
         if (ess.getSettings().isResetNickOnNameChange() && newUsername && user.getNickname() != null) {
             user.setNickname(null);
@@ -478,7 +483,7 @@ public class EssentialsPlayerListener implements Listener {
             joinMessageConsumer.accept(effectiveMessage);
         }
 
-        ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, effectiveMessage)));
+        ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, effectiveMessage, firstJoin)));
 
         if (ess.getSettings().getMotdDelay() >= 0) {
             final int motdDelay = ess.getSettings().getMotdDelay() / 50;
