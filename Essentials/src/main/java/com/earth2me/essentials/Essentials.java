@@ -620,7 +620,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             adventureFacet.close();
         }
 
-        if (VersionUtil.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01)) {
+        // Paper only started bundling a modern enough native Adventure (with the MiniMessage TagResolver API)
+        // in 1.18.2, so older versions must continue using our bundled Adventure via the Spigot facet.
+        if (VersionUtil.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_18_2_R01)) {
             adventureFacet = new PaperAdventureFacet(getSettings() != null ? getSettings().getPrimaryColor() : null, getSettings() != null ? getSettings().getSecondaryColor() : null);
         } else {
             adventureFacet = new SpigotAdventureFacet(this);
