@@ -46,6 +46,7 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.PasteUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
@@ -587,6 +588,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         getUsers().shutdown();
 
         EssentialsConfiguration.shutdownExecutor();
+        PasteUtil.shutdownExecutor();
+        getServer().getScheduler().cancelTasks(this);
 
         HandlerList.unregisterAll(this);
     }

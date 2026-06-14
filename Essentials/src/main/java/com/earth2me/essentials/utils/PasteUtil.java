@@ -16,12 +16,13 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPOutputStream;
 
 public final class PasteUtil {
     private static final String PASTE_URL = "https://pastes.dev/";
     private static final String PASTE_UPLOAD_URL = "https://api.pastes.dev/post";
-    private static final ExecutorService PASTE_EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+    private static volatile ExecutorService PASTE_EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private static final Gson GSON = new Gson();
 
     private PasteUtil() {
@@ -35,7 +36,7 @@ public final class PasteUtil {
      */
     public static CompletableFuture<PasteResult> createPaste(List<PasteFile> pages) {
         final CompletableFuture<PasteResult> future = new CompletableFuture<>();
-        PASTE_EXECUTOR_SERVICE.submit(() -> {
+        getExecutor().submit(() -> {
             try {
                 final HttpURLConnection connection = (HttpURLConnection) new URL(PASTE_UPLOAD_URL).openConnection();
                 connection.setRequestMethod("POST");
@@ -79,6 +80,28 @@ public final class PasteUtil {
             }
         });
         return future;
+    }
+
+    private static synchronized ExecutorService getExecutor() {
+        if (PASTE_EXECUTOR_SERVICE == null || PASTE_EXECUTOR_SERVICE.isShutdown() || PASTE_EXECUTOR_SERVICE.isTerminated()) {
+            PASTE_EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+        }
+        return PASTE_EXECUTOR_SERVICE;
+    }
+
+    public static synchronized void shutdownExecutor() {
+        final ExecutorService exec = PASTE_EXECUTOR_SERVICE;
+        if (exec == null) {
+            return;
+        }
+        exec.shutdown();
+        try {
+            if (!exec.awaitTermination(5, TimeUnit.SECONDS)) {
+                exec.shutdownNow();
+            }
+        } catch (final InterruptedException ignored) {
+            exec.shutdownNow();
+        }
     }
 
     public static class PasteFile {
