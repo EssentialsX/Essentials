@@ -93,7 +93,13 @@ public class LuckPermsHandler extends ModernVaultHandler {
 
     @Override
     public boolean isOfflinePermissionSet(UUID uuid, String node) {
-        final net.luckperms.api.model.user.User user = this.luckPerms.getUserManager().loadUser(uuid).join();
+        // Try to get the user from LuckPerms' cache first to avoid blocking the main
+        // thread with a database lookup. In the context of a player join (e.g.
+        // PlayerServerFullCheckEvent), the user should already be loaded.
+        net.luckperms.api.model.user.User user = this.luckPerms.getUserManager().getUser(uuid);
+        if (user == null) {
+            user = this.luckPerms.getUserManager().loadUser(uuid).join();
+        }
         if (user == null) {
             return false;
         }
