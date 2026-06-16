@@ -208,8 +208,13 @@ public class MetaItemStack {
 
             try {
                 final String components = Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length));
-                // modifyItemStack requires that the item namespaced key is prepended to the components for some reason
-                stack = ess.getServer().getUnsafe().modifyItemStack(stack, stack.getType().getKey() + components);
+                // From 1.20.6 through 1.21.11, modifyItemStack parses its argument as a full item string, so the item's
+                // namespaced key must be prepended to the components. As of 26.1, the implementation prepends the item
+                // key itself, so prepending it here would produce a malformed (double-namespaced) item string.
+                final String itemString = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v26_1_R01)
+                        ? components
+                        : stack.getType().getKey() + components;
+                stack = ess.getServer().getUnsafe().modifyItemStack(stack, itemString);
             } catch (final NullPointerException npe) {
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);

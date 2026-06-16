@@ -21,6 +21,7 @@ jobs:
 
     steps:
       - name: Mirror dump to a private Gist
+        id: mirror
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GIST_TOKEN }}
@@ -46,13 +47,19 @@ jobs:
               public: false
             });
 
-            const link = `${process.env.GIST_LINK_FMT}${gist.id}`;
+            core.setOutput('link', `${process.env.GIST_LINK_FMT}${gist.id}`);
+            core.setOutput('issue_number', issue.number);
 
+      - name: Comment gist link on issue
+        if: steps.mirror.outputs.link != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo:  context.repo.repo,
-              issue_number: issue.number,
-              body: `📋 Essentials Dump Backup → ${link}`
+              issue_number: ${{ steps.mirror.outputs.issue_number }},
+              body: `📋 Essentials Dump Backup → ${{ steps.mirror.outputs.link }}`
             });
 
   cleanup-gist:
