@@ -92,24 +92,24 @@ public class Commandcondense extends EssentialsCommand {
             
             final int crafts = amount / input.getAmount();
             final int output = crafts * result.getAmount();
-            
+
             amount -= amount % input.getAmount();
-            
+
             if (amount > 0) {
                 input.setAmount(amount);
                 result.setAmount(output);
-                
+
                 final Trade remove = new Trade(input, ess);
                 final Trade add = new Trade(result, ess);
-                
+
                 remove.charge(user);
                 add.pay(user, OverflowType.DROP);
-                
+
                 for (final ItemStack remainingItem : condenseType.getRemainingItems()) {
                     remainingItem.setAmount(remainingItem.getAmount() * crafts);
                     new Trade(remainingItem, ess).pay(user, OverflowType.DROP);
                 }
-                
+
                 return true;
             }
         }
@@ -214,23 +214,23 @@ public class Commandcondense extends EssentialsCommand {
         public ItemStack getInput() {
             return input.clone();
         }
-        
+
         public List<ItemStack> getRemainingItems() {
             final List<ItemStack> clonedItems = new ArrayList<>();
-            
+
             for (final ItemStack item : remainingItems) {
                 clonedItems.add(item.clone());
             }
-            
+
             return clonedItems;
         }
     }
-    
+
     private List<ItemStack> getRemainingItems(final ItemStack input, final int inputAmount) {
         if (input.getType() == Material.HONEY_BOTTLE) {
             return Collections.singletonList(new ItemStack(Material.GLASS_BOTTLE, inputAmount));
         }
-        
+
         return Collections.emptyList();
     }
 
