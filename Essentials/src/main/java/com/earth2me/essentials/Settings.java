@@ -1350,6 +1350,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("sleep-ignores-vanished-player", true);
     }
 
+    @Override
+    public boolean isVanishHideMessages() {
+        return config.getBoolean("vanish-hide-messages", false);
+    }
+
     public String _getAfkListName() {
         return FormatUtil.replaceFormat(config.getString("afk-list-name", "none"));
     }

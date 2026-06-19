@@ -294,7 +294,7 @@ public class EssentialsPlayerListener implements Listener {
             ess.getScheduler().cancelTask(pendingId);
         }
 
-        if (hideJoinQuitMessages() || ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit")) {
+        if (hideJoinQuitMessages() || ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit") || isVanishHide(user)) {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
@@ -339,6 +339,10 @@ public class EssentialsPlayerListener implements Listener {
         user.stopTransaction();
 
         user.dispose();
+    }
+
+    private boolean isVanishHide(final User user) {
+        return ess.getSettings().isVanishHideMessages() && (user.isHidden() || user.isLeavingHidden());
     }
 
     @SuppressWarnings("UnstableApiUsage")

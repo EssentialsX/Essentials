@@ -171,9 +171,13 @@ public class EssentialsEntityListener implements Listener {
             user.setLastLocation();
             user.sendTl("backAfterDeath");
         }
-        if (!ess.getSettings().areDeathMessagesEnabled()) {
+        if (!ess.getSettings().areDeathMessagesEnabled() || isVanishHide(user)) {
             event.setDeathMessage("");
         }
+    }
+
+    private boolean isVanishHide(final User user) {
+        return ess.getSettings().isVanishHideMessages() && user.isHidden();
     }
 
     @EventHandler(priority = EventPriority.LOW)
