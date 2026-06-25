@@ -149,7 +149,7 @@ public class Settings implements net.ess3.api.ISettings {
     private Set<Predicate<String>> nickBlacklist;
     private boolean resetNickOnNameChange;
     private double maxProjectileSpeed;
-    private boolean removeEffectsOnHeal;
+    private HealEffectRemovalMode healEffectRemovalMode;
     private Map<String, String> worldAliases;
     private String primaryColor = DEFAULT_PRIMARY_COLOR;
     private String secondaryColor = DEFAULT_SECONDARY_COLOR;
@@ -944,7 +944,7 @@ public class Settings implements net.ess3.api.ISettings {
         logConsoleCommands = _logConsoleCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
-        removeEffectsOnHeal = _isRemovingEffectsOnHeal();
+        healEffectRemovalMode = _getHealEffectRemovalMode();
         vanishingItemPolicy = _getVanishingItemsPolicy();
         bindingItemPolicy = _getBindingItemsPolicy();
         currencySymbol = _getCurrencySymbol();
@@ -2138,13 +2138,40 @@ public class Settings implements net.ess3.api.ISettings {
         return maxProjectileSpeed;
     }
 
-    private boolean _isRemovingEffectsOnHeal() {
-        return config.getBoolean("remove-effects-on-heal", true);
+    private HealEffectRemovalMode _getHealEffectRemovalMode() {
+        if (!config.hasProperty("remove-effects-on-heal")) {
+            return HealEffectRemovalMode.ALL;
+        }
+        if (config.isBoolean("remove-effects-on-heal")) {
+            return config.getBoolean("remove-effects-on-heal", true) ? HealEffectRemovalMode.ALL : HealEffectRemovalMode.NONE;
+        }
+        final String value = config.getString("remove-effects-on-heal", "true").toLowerCase(Locale.ENGLISH);
+        switch (value) {
+            case "true":
+            case "all":
+                return HealEffectRemovalMode.ALL;
+            case "false":
+            case "none":
+                return HealEffectRemovalMode.NONE;
+            case "negative":
+            case "negative-effects":
+            case "negative_only":
+            case "negative-only":
+                return HealEffectRemovalMode.NEGATIVE_ONLY;
+            default:
+                ess.getLogger().warning("Unknown remove-effects-on-heal value: '" + value + "'. Using 'all'.");
+                return HealEffectRemovalMode.ALL;
+        }
     }
 
     @Override
     public boolean isRemovingEffectsOnHeal() {
-        return removeEffectsOnHeal;
+        return healEffectRemovalMode != HealEffectRemovalMode.NONE;
+    }
+
+    @Override
+    public HealEffectRemovalMode getHealEffectRemovalMode() {
+        return healEffectRemovalMode;
     }
 
     @Override
