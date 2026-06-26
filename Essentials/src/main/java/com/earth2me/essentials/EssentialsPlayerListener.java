@@ -902,15 +902,15 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         // Command warmups
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().info("Warmup check - enabled: " + ess.getSettings().isCommandWarmupsEnabled() 
-                + ", bypass: " + user.isAuthorized("essentials.commandwarmups.bypass")
-                + ", command: " + effectiveCommand);
-        }
         
         if (ess.getSettings().isCommandWarmupsEnabled()
             && !user.isAuthorized("essentials.commandwarmups.bypass")
             && (pluginCommand == null || !user.isAuthorized("essentials.commandwarmups.bypass." + pluginCommand.getName()))) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("Warmup check - enabled: " + ess.getSettings().isCommandWarmupsEnabled() 
+                    + ", bypass: " + user.isAuthorized("essentials.commandwarmups.bypass")
+                    + ", command: " + effectiveCommand);
+            }
             final int argStartIndex = effectiveCommand.indexOf(" ");
             final String args = argStartIndex == -1 ? ""
                 : " " + effectiveCommand.substring(argStartIndex);
