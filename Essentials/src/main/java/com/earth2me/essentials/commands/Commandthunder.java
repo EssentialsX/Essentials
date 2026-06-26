@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -21,15 +22,16 @@ public class Commandthunder extends EssentialsCommand {
 
         final World world = user.getWorld();
         final boolean setThunder = args[0].equalsIgnoreCase("true");
+
         if (args.length == 1) {
             world.setThundering(setThunder);
-            user.sendTl("thunder", setThunder ? user.playerTl("enabled") : user.playerTl("disabled"));
+            user.sendTl("thunder", CommonPlaceholders.enableDisable(user.getSource(), setThunder));
             return;
         }
 
         world.setThundering(setThunder);
         world.setThunderDuration(Integer.parseInt(args[1]) * 20);
-        user.sendTl("thunderDuration", setThunder ? user.playerTl("enabled") : user.playerTl("disabled"), Integer.parseInt(args[1]));
+        user.sendTl("thunderDuration", CommonPlaceholders.enableDisable(user.getSource(), setThunder), Integer.parseInt(args[1]));
     }
 
     @Override

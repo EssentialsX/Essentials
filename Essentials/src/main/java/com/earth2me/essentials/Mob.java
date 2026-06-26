@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -131,6 +131,7 @@ public enum Mob {
     NAUTILUS("Nautilus", Enemies.NEUTRAL, "NAUTILUS"),
     ZOMBIE_NAUTILUS("ZombieNautilus", Enemies.NEUTRAL, "ZOMBIE_NAUTILUS"),
     PARCHED("Parched", Enemies.ENEMY, "PARCHED"),
+    SULFUR_CUBE("SulfurCube", Enemies.FRIENDLY, "SULFUR_CUBE"),
     ;
 
     private static final Map<String, Mob> hashMap = new HashMap<>();
@@ -191,7 +192,7 @@ public enum Mob {
     public Entity spawn(final World world, final Server server, final Location loc) throws MobException {
         final Entity entity = world.spawn(loc, this.bukkitType.getEntityClass());
         if (entity == null) {
-            Essentials.getWrappedLogger().log(Level.WARNING, AdventureUtil.miniToLegacy(tlLiteral("unableToSpawnMob")));
+            Essentials.getWrappedLogger().log(Level.WARNING, AdventureUtil.getAdventureFacet().miniToLegacy(tlLiteral("unableToSpawnMob")));
             throw new MobException();
         }
         return entity;

@@ -3,12 +3,13 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import net.ess3.provider.PlayerLocaleProvider;
 import org.bukkit.Server;
 
 import java.math.BigDecimal;
@@ -34,7 +35,14 @@ public class Commandeco extends EssentialsLoopCommand {
         try {
             cmd = EcoCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
             isPercent = cmd != EcoCommands.RESET && args[2].endsWith("%");
-            amount = (cmd == EcoCommands.RESET) ? ess.getSettings().getStartingBalance() : new BigDecimal(args[2].replaceAll("[^0-9\\.]", ""));
+            if (cmd == EcoCommands.RESET) {
+                amount = ess.getSettings().getStartingBalance();
+            } else if (sender.isPlayer() && ess.getSettings().isPerPlayerLocale()) {
+                final String playerLocale = ess.provider(PlayerLocaleProvider.class).getLocale(sender.getPlayer());
+                amount = NumberUtil.parseStringToBDecimal(args[2], ess.getUser(sender.getPlayer()).getPlayerLocale(playerLocale));
+            } else {
+                amount = NumberUtil.parseStringToBDecimal(args[2]);
+            }
         } catch (final Exception ex) {
             throw new NotEnoughArgumentsException(ex);
         }
@@ -87,7 +95,7 @@ public class Commandeco extends EssentialsLoopCommand {
             }
             return options;
         } else if (args.length == 2) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else if (args.length == 3 && !args[0].equalsIgnoreCase(EcoCommands.RESET.name())) {
             if (args[0].equalsIgnoreCase(EcoCommands.SET.name())) {
                 return Lists.newArrayList("0", ess.getSettings().getStartingBalance().toString());

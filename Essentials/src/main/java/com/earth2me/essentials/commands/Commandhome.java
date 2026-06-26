@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.TranslatableException;
@@ -41,7 +41,10 @@ public class Commandhome extends EssentialsCommand {
             }
         }
         try {
-            if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
+            if ("bed".equalsIgnoreCase(homeName)) {
+                if (!user.isAuthorized("essentials.home.bed")) {
+                    throw new TranslatableException("noAccessCommand");
+                }
                 if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayerStub) {
                     throw new TranslatableException("bedOffline");
                 }
@@ -73,10 +76,15 @@ public class Commandhome extends EssentialsCommand {
                 final List<String> homes = finalPlayer.getHomes();
                 if (homes.isEmpty() && finalPlayer.equals(user)) {
                     if (ess.getSettings().isSpawnIfNoHome()) {
-                        final UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, null, bed != null ? bed : finalPlayer.getWorld().getSpawnLocation(), bed != null ? UserTeleportHomeEvent.HomeType.BED : UserTeleportHomeEvent.HomeType.SPAWN);
+                        final boolean useBed = bed != null && user.isAuthorized("essentials.home.bed");
+                        final UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, null, useBed ? bed : finalPlayer.getWorld().getSpawnLocation(), useBed ? UserTeleportHomeEvent.HomeType.BED : UserTeleportHomeEvent.HomeType.SPAWN);
                         server.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
-                            user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+                            if (useBed) {
+                                user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+                            } else {
+                                user.getAsyncTeleport().teleport(finalPlayer.getWorld().getSpawnLocation(), charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+                            }
                         }
                     } else {
                         showError(user.getBase(), new TranslatableException("noHomeSetPlayer"), commandLabel);
@@ -155,7 +163,7 @@ public class Commandhome extends EssentialsCommand {
             if (canVisitOthers) {
                 final int sepIndex = args[0].indexOf(':');
                 if (sepIndex < 0) {
-                    getPlayers(server, user).forEach(player -> homes.add(player + ":"));
+                    getPlayers(user).forEach(player -> homes.add(player + ":"));
                 } else {
                     final String namePart = args[0].substring(0, sepIndex);
                     final User otherUser;

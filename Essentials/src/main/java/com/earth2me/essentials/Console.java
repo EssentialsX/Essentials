@@ -1,10 +1,8 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.adventure.AdventureFacet;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
-import com.earth2me.essentials.utils.AdventureUtil;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,7 +13,11 @@ import static com.earth2me.essentials.I18n.tlLiteral;
 
 public final class Console implements IMessageRecipient {
     public static final String NAME = "Console";
-    public static final String DISPLAY_NAME = tlLiteral("consoleName");
+
+    public static String displayName() {
+        return tlLiteral("consoleName");
+    }
+
     private static Console instance; // Set in essentials
 
     private final IEssentials ess;
@@ -58,7 +60,7 @@ public final class Console implements IMessageRecipient {
 
     @Override
     public String getDisplayName() {
-        return Console.DISPLAY_NAME;
+        return displayName();
     }
 
     @Override
@@ -73,10 +75,8 @@ public final class Console implements IMessageRecipient {
             return;
         }
 
-        final Audience consoleAudience = ((Essentials) ess).getBukkitAudience().sender(getCommandSender());
-        final Component component = AdventureUtil.miniMessage()
-                .deserialize(translation);
-        consoleAudience.sendMessage(component);
+        final AdventureFacet adventureFacet = ess.getAdventureFacet();
+        adventureFacet.send(getCommandSender(), adventureFacet.deserializeMiniMessage(translation));
     }
 
     @Override

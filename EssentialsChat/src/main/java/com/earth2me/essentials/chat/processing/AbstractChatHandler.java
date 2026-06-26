@@ -5,7 +5,6 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.chat.EssentialsChat;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.LocalChatSpyEvent;
 import net.ess3.provider.AbstractChatEvent;
@@ -93,16 +92,16 @@ public abstract class AbstractChatHandler {
 
         final ChatType chatType = chat.getType();
         String format = ess.getSettings().getChatFormat(group, chat.getRadius() > 0 && chatType == ChatType.UNKNOWN ? ChatType.LOCAL : chatType);
-        format = format.replace("{0}", group);
-        format = format.replace("{1}", ess.getSettings().getWorldAlias(world));
-        format = format.replace("{2}", world.substring(0, 1).toUpperCase(Locale.ENGLISH));
-        format = format.replace("{3}", team == null ? "" : team.getPrefix());
-        format = format.replace("{4}", team == null ? "" : team.getSuffix());
-        format = format.replace("{5}", team == null ? "" : team.getDisplayName());
-        format = format.replace("{6}", prefix);
-        format = format.replace("{7}", suffix);
-        format = format.replace("{8}", username);
-        format = format.replace("{9}", nickname == null ? username : nickname);
+        format = format.replace("{0}", group.replace("%", "%%"));
+        format = format.replace("{1}", ess.getSettings().getWorldAlias(world).replace("%", "%%"));
+        format = format.replace("{2}", world.substring(0, 1).toUpperCase(Locale.ENGLISH).replace("%", "%%"));
+        format = format.replace("{3}", team == null ? "" : team.getPrefix().replace("%", "%%"));
+        format = format.replace("{4}", team == null ? "" : team.getSuffix().replace("%", "%%"));
+        format = format.replace("{5}", team == null ? "" : team.getDisplayName().replace("%", "%%"));
+        format = format.replace("{6}", prefix.replace("%", "%%"));
+        format = format.replace("{7}", suffix.replace("%", "%%"));
+        format = format.replace("{8}", username.replace("%", "%%"));
+        format = format.replace("{9}", (nickname == null ? username : nickname).replace("%", "%%"));
 
         // Local, shout and question chat types are only enabled when there's a valid radius
         if (chat.getRadius() > 0 && !event.getMessage().isEmpty()) {
@@ -117,9 +116,9 @@ public abstract class AbstractChatHandler {
             }
 
             if (chat.getType() == ChatType.UNKNOWN) {
-                format = AdventureUtil.miniToLegacy(tlLiteral("chatTypeLocal")).concat(format);
+                format = ess.getAdventureFacet().miniToLegacy(tlLiteral("chatTypeLocal")).concat(format);
             } else {
-                format = AdventureUtil.miniToLegacy(tlLiteral(chat.getType().key() + "Format", format));
+                format = ess.getAdventureFacet().miniToLegacy(tlLiteral(chat.getType().key() + "Format", format));
             }
         }
 
@@ -215,7 +214,7 @@ public abstract class AbstractChatHandler {
 
         // Strip local chat prefix to preserve API behaviour
         final String localPrefix = tlLiteral("chatTypeLocal");
-        String baseFormat = AdventureUtil.legacyToMini(event.getFormat());
+        String baseFormat = ess.getAdventureFacet().legacyToMini(event.getFormat());
         if (baseFormat.startsWith(localPrefix)) {
             baseFormat = baseFormat.substring(localPrefix.length());
         }
@@ -224,7 +223,10 @@ public abstract class AbstractChatHandler {
         server.getPluginManager().callEvent(spyEvent);
 
         if (!spyEvent.isCancelled()) {
-            final String legacyString = AdventureUtil.miniToLegacy(String.format(spyEvent.getFormat(), AdventureUtil.legacyToMini(user.getDisplayName()), AdventureUtil.legacyToMini(AdventureUtil.escapeTags(spyEvent.getMessage()))));
+            final String legacyString = ess.getAdventureFacet().miniToLegacy(
+                    String.format(spyEvent.getFormat(),
+                            ess.getAdventureFacet().legacyToMini(user.getDisplayName()),
+                            ess.getAdventureFacet().legacyToMiniWithUrls(ess.getAdventureFacet().escapeTags(spyEvent.getMessage()))));
 
             for (final Player onlinePlayer : spyEvent.getRecipients()) {
                 onlinePlayer.sendMessage(legacyString);

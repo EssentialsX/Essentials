@@ -1,5 +1,6 @@
 package com.earth2me.essentials.utils;
 
+import com.earth2me.essentials.adventure.AdventureUtil;
 import net.ess3.api.IUser;
 import net.ess3.provider.AbstractChatEvent;
 import org.bukkit.ChatColor;
@@ -44,7 +45,7 @@ public final class FormatUtil {
         if (input == null) {
             return null;
         }
-        return AdventureUtil.miniMessage().stripTags(input);
+        return AdventureUtil.getAdventureFacet().stripTags(input);
     }
 
     //This method is used to simply strip the & convention colour codes

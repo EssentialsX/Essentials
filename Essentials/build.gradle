@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly('com.github.milkbowl:VaultAPI:1.7') {
+    compileOnly('net.essentialsx.deps:VaultAPI:1.7') {
         exclude group: "org.bukkit", module: "bukkit"
     }
     compileOnly 'net.luckperms:api:5.3'
@@ -95,7 +95,7 @@ shadowJar {
     relocate 'io.leangen.geantyref', 'com.earth2me.essentials.libs.geantyref'
     relocate 'org.checkerframework', 'com.earth2me.essentials.libs.checkerframework'
     relocate 'net.kyori', 'com.earth2me.essentials.libs.kyori'
-    relocate 'net.essentialsx.temp.adventure', 'net.kyori.adventure'
+    relocate 'net.essentialsx.temp.adventure', 'net.kyori.adventure' // Undo temporary relocation for Paper Provider
 
     minimize {
         include(dependency('org.checkerframework:checker-qual'))

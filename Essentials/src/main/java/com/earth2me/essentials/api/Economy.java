@@ -323,7 +323,13 @@ public class Economy {
             throw new IllegalArgumentException("Economy user cannot be null");
         }
         final BigDecimal result = getMoneyExact(user).add(amount, MATH_CONTEXT);
-        setMoney(user, result);
+        // Deposits (positive amounts) always improve the balance, so minMoney and
+        // loan checks don't apply — they exist to prevent the balance from dropping.
+        if (amount.signum() <= 0) {
+            setMoney(user, result);
+        } else {
+            user.setMoney(result, UserBalanceUpdateEvent.Cause.API);
+        }
         Trade.log("API", "Add", "API", user.getName(), new Trade(amount, ess), null, null, null, result, ess);
     }
 

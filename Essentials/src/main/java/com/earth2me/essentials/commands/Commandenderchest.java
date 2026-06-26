@@ -26,7 +26,7 @@ public class Commandenderchest extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.enderchest.others")) {
-            return getPlayers(server, user);
+            return getPlayers(user);
         } else {
             return Collections.emptyList();
         }

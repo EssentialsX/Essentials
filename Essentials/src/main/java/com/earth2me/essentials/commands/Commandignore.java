@@ -45,7 +45,7 @@ public class Commandignore extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, user);
+            return getPlayers(user);
         } else {
             return Collections.emptyList();
         }

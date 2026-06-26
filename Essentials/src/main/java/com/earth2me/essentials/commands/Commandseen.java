@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.BanLookup;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.CommonPlaceholders;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -201,7 +201,7 @@ public class Commandseen extends EssentialsCommand {
     }
 
     private void seenIP(final CommandSource sender, final String ipAddress, final String display) {
-        sender.sendTl("runningPlayerMatch", AdventureUtil.parsed(AdventureUtil.legacyToMini(display)));
+        sender.sendTl("runningPlayerMatch", AdventureUtil.parsed(ess.getAdventureFacet().legacyToMini(display)));
 
         ess.runTaskAsynchronously(() -> {
             final List<String> matches = new ArrayList<>();
@@ -232,7 +232,7 @@ public class Commandseen extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             return Collections.emptyList();
         }

@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.FloatUtil;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -37,7 +37,8 @@ public class Commandspeed extends EssentialsCommand {
         final float speed;
         final boolean isBypass = user.isAuthorized("essentials.speed.bypass");
         if (args.length == 1) {
-            isFly = flyPermCheck(user, user.getBase().isFlying());
+            final boolean inferredFly = isFlyAlias(commandLabel) ? true : isWalkAlias(commandLabel) ? false : user.getBase().isFlying();
+            isFly = flyPermCheck(user, inferredFly);
             speed = getMoveSpeed(args[0]);
         } else {
             isFly = flyPermCheck(user, isFlyMode(args[0]));
@@ -91,6 +92,14 @@ public class Commandspeed extends EssentialsCommand {
         } else return !canWalk;
     }
 
+    private boolean isFlyAlias(final String label) {
+        return label.contains("fly") || label.equalsIgnoreCase("fspeed") || label.equalsIgnoreCase("efspeed");
+    }
+
+    private boolean isWalkAlias(final String label) {
+        return label.contains("walk") || label.equalsIgnoreCase("wspeed") || label.equalsIgnoreCase("ewspeed");
+    }
+
     private boolean isFlyMode(final String modeString) throws NotEnoughArgumentsException {
         final boolean isFlyMode;
         if (modeString.contains("fly") || modeString.equalsIgnoreCase("f")) {
@@ -140,7 +149,7 @@ public class Commandspeed extends EssentialsCommand {
         } else if (args.length == 2) {
             return speeds;
         } else if (args.length == 3 && sender.isAuthorized("essentials.speed.others")) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             return Collections.emptyList();
         }

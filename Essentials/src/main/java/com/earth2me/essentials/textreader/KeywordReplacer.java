@@ -4,7 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.ExecuteTimer;
 import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.EnumUtil;
@@ -228,7 +227,7 @@ public class KeywordReplacer implements IText {
                         break;
                     case BALANCE:
                         if (user != null) {
-                            replacer = AdventureUtil.miniToLegacy(NumberUtil.displayCurrency(user.getMoney(), ess));
+                            replacer = ess.getAdventureFacet().miniToLegacy(NumberUtil.displayCurrency(user.getMoney(), ess));
                         }
                         break;
                     case MAILS:
@@ -289,7 +288,7 @@ public class KeywordReplacer implements IText {
                             for (final String groupName : playerList.keySet()) {
                                 final List<User> groupUsers = playerList.get(groupName);
                                 if (groupUsers != null && !groupUsers.isEmpty()) {
-                                    outputList.put(groupName, PlayerList.listUsers(ess, groupUsers, " "));
+                                    outputList.put(groupName, ess.getAdventureFacet().miniToLegacy(PlayerList.listUsers(ess, groupUsers, " ")));
                                 }
                             }
 
@@ -381,8 +380,10 @@ public class KeywordReplacer implements IText {
                 }
 
                 if (this.replaceSpacesWithUnderscores) {
-                    // Don't replace spaces with underscores in command nor escape underscores.
-                    if (!line.startsWith("/")) {
+                    // Don't replace spaces with underscores in commands, and skip escaping
+                    // for USERNAME since Minecraft names never contain spaces but can
+                    // contain underscores that must stay literal (e.g. player:{USERNAME}).
+                    if (!line.startsWith("/") && validKeyword != KeywordType.USERNAME) {
                         replacer = replacer.replace("_", "\\_").replaceAll("\\s", "_");
                     }
                 }

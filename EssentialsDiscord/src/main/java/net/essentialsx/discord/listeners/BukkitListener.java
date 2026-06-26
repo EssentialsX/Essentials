@@ -80,7 +80,7 @@ public class BukkitListener implements Listener {
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getDisplayName()),
                             MessageUtil.sanitizeDiscordMarkdown(console ? Console.NAME : event.getController().getName()),
-                            MessageUtil.sanitizeDiscordMarkdown(console ? Console.DISPLAY_NAME : event.getController().getDisplayName()),
+                            MessageUtil.sanitizeDiscordMarkdown(console ? Console.displayName() : event.getController().getDisplayName()),
                             DateUtil.formatDateDiff(event.getTimestamp().get()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getReason())));
         } else {
@@ -91,7 +91,7 @@ public class BukkitListener implements Listener {
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getDisplayName()),
                             MessageUtil.sanitizeDiscordMarkdown(console ? Console.NAME : event.getController().getName()),
-                            MessageUtil.sanitizeDiscordMarkdown(console ? Console.DISPLAY_NAME : event.getController().getDisplayName()),
+                            MessageUtil.sanitizeDiscordMarkdown(console ? Console.displayName() : event.getController().getDisplayName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getReason())));
         }
     }
@@ -126,14 +126,16 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVanishStatusChange(VanishStatusChangeEvent event) {
-        if (!jda.getSettings().isVanishFakeJoinLeave() || event.getAffected().isLeavingHidden()) {
+        // Note: getController() returns the vanished player due to a long-standing parameter swap in Commandvanish.
+        final IUser vanished = event.getController();
+        if (vanished == null || !jda.getSettings().isVanishFakeJoinLeave() || vanished.isLeavingHidden()) {
             return;
         }
         if (event.getValue()) {
-            sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " left the game", MessageType.DefaultTypes.LEAVE);
+            sendJoinQuitMessage(vanished.getBase(), ChatColor.YELLOW + vanished.getName() + " left the game", MessageType.DefaultTypes.LEAVE);
             return;
         }
-        sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " joined the game", MessageType.DefaultTypes.JOIN);
+        sendJoinQuitMessage(vanished.getBase(), ChatColor.YELLOW + vanished.getName() + " joined the game", MessageType.DefaultTypes.JOIN);
     }
 
     public void sendJoinQuitMessage(final Player player, final String message, MessageType type) {

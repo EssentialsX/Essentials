@@ -4,7 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.BanList;
@@ -50,21 +49,21 @@ public class Commandtempban extends EssentialsCommand {
         }
 
         final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
+        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.displayName();
         ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, new Date(banTimestamp), senderName);
         final String expiry = DateUtil.formatDateDiff(banTimestamp);
 
         final String banDisplay = user.playerTl("tempBanned", expiry, senderDisplayName, banReason);
-        user.getBase().kickPlayer(AdventureUtil.miniToLegacy(banDisplay));
+        user.getBase().kickPlayer(ess.getAdventureFacet().miniToLegacy(banDisplay));
 
-        ess.getLogger().log(Level.INFO, AdventureUtil.miniToLegacy(tlLiteral("playerTempBanned", senderDisplayName, user.getName(), expiry, banReason)));
+        ess.getLogger().log(Level.INFO, ess.getAdventureFacet().miniToLegacy(tlLiteral("playerTempBanned", senderDisplayName, user.getName(), expiry, banReason)));
         ess.broadcastTl((IUser) null, "essentials.ban.notify", "playerTempBanned", senderDisplayName, user.getName(), expiry, banReason);
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             // Note: following args are both date diffs _and_ messages; ideally we'd mix with the vanilla handler
             return COMMON_DATE_DIFFS;

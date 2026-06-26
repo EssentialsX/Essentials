@@ -138,16 +138,16 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
     protected abstract void updatePlayer(Server server, CommandSource sender, User user, String[] args) throws NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException;
 
     @Override
-    protected List<String> getPlayers(final Server server, final CommandSource interactor) {
-        final List<String> players = super.getPlayers(server, interactor);
+    protected List<String> getPlayers(final CommandSource interactor) {
+        final List<String> players = super.getPlayers(interactor);
         players.add("**");
         players.add("*");
         return players;
     }
 
     @Override
-    protected List<String> getPlayers(final Server server, final User interactor) {
-        final List<String> players = super.getPlayers(server, interactor);
+    protected List<String> getPlayers(final User interactor) {
+        final List<String> players = super.getPlayers(interactor);
         players.add("**");
         players.add("*");
         return players;

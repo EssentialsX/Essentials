@@ -56,7 +56,7 @@ public class Commandtp extends EssentialsCommand {
                     throw new NotEnoughArgumentsException(user.playerTl("teleportInvalidLocation"));
                 }
                 final Location locpos = new Location(user.getWorld(), x2, y2, z2, user.getLocation().getYaw(), user.getLocation().getPitch());
-                user.getAsyncTeleport().now(locpos, false, TeleportCause.COMMAND, future);
+                user.getAsyncTeleport().now(locpos, true, TeleportCause.COMMAND, future);
                 future.thenAccept(success -> {
                     if (success) {
                         user.sendTl("teleporting", locpos.getWorld().getName(), locpos.getBlockX(), locpos.getBlockY(), locpos.getBlockZ());
@@ -120,7 +120,7 @@ public class Commandtp extends EssentialsCommand {
         final User target = getPlayer(server, args, 0, true, false);
         if (args.length == 2) {
             final User toPlayer = getPlayer(server, args, 1, true, false);
-            target.sendTl("teleportAtoB", Console.DISPLAY_NAME, toPlayer.getDisplayName());
+            target.sendTl("teleportAtoB", Console.displayName(), toPlayer.getDisplayName());
             target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, getNewExceptionFuture(sender, commandLabel));
         } else if (args.length > 3) {
             final double x = args[1].startsWith("~") ? target.getLocation().getX() + (args[1].length() > 1 ? Double.parseDouble(args[1].substring(1)) : 0) : Double.parseDouble(args[1]);
@@ -147,7 +147,7 @@ public class Commandtp extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         // Don't handle coords
         if (args.length == 1 || (args.length == 2 && user.isAuthorized("essentials.tp.others"))) {
-            return getPlayers(server, user);
+            return getPlayers(user);
         } else {
             return Collections.emptyList();
         }
@@ -157,7 +157,7 @@ public class Commandtp extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         // Don't handle coords
         if (args.length == 1 || args.length == 2) {
-            return getPlayers(server, sender);
+            return getPlayers(sender);
         } else {
             return Collections.emptyList();
         }

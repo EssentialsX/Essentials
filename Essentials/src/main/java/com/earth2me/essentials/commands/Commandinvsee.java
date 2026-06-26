@@ -45,7 +45,7 @@ public class Commandinvsee extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            final List<String> suggestions = getPlayers(server, user);
+            final List<String> suggestions = getPlayers(user);
             suggestions.remove(user.getName());
             return suggestions;
         } else {

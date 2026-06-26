@@ -1,12 +1,13 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.adventure.AdventureUtil;
+import com.earth2me.essentials.adventure.ComponentHolder;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -22,10 +23,9 @@ import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.ess3.provider.PlayerLocaleProvider;
+import net.essentialsx.api.v2.events.PreTransactionEvent;
 import net.essentialsx.api.v2.events.TransactionEvent;
 import net.essentialsx.api.v2.services.mail.MailSender;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -148,6 +148,19 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
+    public boolean isAuthorizedCached(final String node) {
+        if (Essentials.TESTING) {
+            return false;
+        }
+
+        final boolean result = isAuthorizedCachedCheck(node);
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " has " + node + " (cached) - " + result);
+        }
+        return result;
+    }
+
+    @Override
     public boolean isPermissionSet(final String node) {
         if (Essentials.TESTING) {
             return false;
@@ -175,6 +188,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
         try {
             return ess.getPermissionsHandler().hasPermission(base, node);
+        } catch (final Exception ex) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+            } else {
+                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+            }
+
+            return false;
+        }
+    }
+
+    private boolean isAuthorizedCachedCheck(final String node) {
+        if (base instanceof OfflinePlayerStub) {
+            return false;
+        }
+
+        try {
+            return ess.getPermissionsHandler().hasPermissionCached(base, node);
         } catch (final Exception ex) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
@@ -264,12 +295,20 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         payUser(reciever, value, UserBalanceUpdateEvent.Cause.UNKNOWN);
     }
 
-    public void payUser(final User reciever, final BigDecimal value, final UserBalanceUpdateEvent.Cause cause) throws Exception {
+    public void payUser(final User reciever, BigDecimal value, final UserBalanceUpdateEvent.Cause cause) throws Exception {
         if (value.compareTo(BigDecimal.ZERO) < 1) {
             throw new Exception(tlLocale(playerLocale, "payMustBePositive"));
         }
 
         if (canAfford(value)) {
+            // Call an event for pre-transaction
+            final PreTransactionEvent preTransactionEvent = new PreTransactionEvent(this.getSource(), reciever, value);
+            ess.getServer().getPluginManager().callEvent(preTransactionEvent);
+            if (preTransactionEvent.isCancelled()) {
+                return;
+            }
+            value = preTransactionEvent.getAmount();
+
             setMoney(getMoney().subtract(value), cause);
             reciever.setMoney(reciever.getMoney().add(value), cause);
             sendTl("moneySentTo", AdventureUtil.parsed(NumberUtil.displayCurrency(value, ess)), reciever.getDisplayName());
@@ -648,7 +687,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || (set && ess.getSettings().sleepIgnoresAfkPlayers()));
+        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || set && ess.getSettings().sleepIgnoresAfkPlayers());
         if (set && !isAfk()) {
             afkPosition = this.getLocation();
             this.afkSince = System.currentTimeMillis();
@@ -841,14 +880,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 && !isAuthorized("essentials.afk.kickexempt")) {
             lastActivity = 0;
             final double kickTime = autoafktimeout / 60.0;
-            
+
             // If `afk-timeout-command` in config.yml is empty, use default Essentials kicking behaviour instead of executing a command.
             if (ess.getSettings().getAfkTimeoutCommands().isEmpty()) {
-                this.getBase().kickPlayer(AdventureUtil.miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
+                this.getBase().kickPlayer(ess.getAdventureFacet().miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
 
                 for (final User user : ess.getOnlineUsers()) {
                     if (user.isAuthorized("essentials.kick.notify")) {
-                        user.sendTl("playerKicked", Console.DISPLAY_NAME, getName(), user.playerTl("autoAfkKickReason", kickTime));
+                        user.sendTl("playerKicked", Console.displayName(), getName(), user.playerTl("autoAfkKickReason", kickTime));
                     }
                 }
             } else {
@@ -864,7 +903,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
         }
         final long autoafk = ess.getSettings().getAutoAfk();
-        if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAuthorized("essentials.afk.auto")) {
+        if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAuthorizedCached("essentials.afk.auto")) {
             setAfk(true, AfkStatusChangeEvent.Cause.ACTIVITY);
             if (isAfk() && !isHidden()) {
                 setDisplayNick();
@@ -1074,14 +1113,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public void sendComponent(ComponentLike component) {
-        ess.getBukkitAudience().player(base).sendMessage(component);
+    public void sendComponent(ComponentHolder component) {
+        ess.getAdventureFacet().send(base, component);
     }
 
     @Override
-    public Component tlComponent(String tlKey, Object... args) {
+    public ComponentHolder tlComponent(String tlKey, Object... args) {
         final String translation = playerTl(tlKey, args);
-        return AdventureUtil.miniMessage().deserialize(translation);
+        return ess.getAdventureFacet().deserializeMiniMessage(translation);
     }
 
     @Override
@@ -1091,7 +1130,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        sendComponent(AdventureUtil.miniMessage().deserialize(translation));
+        sendComponent(ess.getAdventureFacet().deserializeMiniMessage(translation));
     }
 
     @Override
@@ -1112,7 +1151,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public Locale getPlayerLocale(final String locale) {
-        if (locale.equals(lastLocaleString)) {
+        if (locale == null || locale.equals(lastLocaleString)) {
             return playerLocale;
         }
         lastLocaleString = locale;

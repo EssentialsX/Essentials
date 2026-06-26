@@ -5,7 +5,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -106,7 +106,7 @@ public class EssentialsSign {
             // they won't change it to §1[Signname]
             return true;
         }
-        sign.setLine(0, AdventureUtil.miniToLegacy(tlLiteral("signFormatFail", this.signName)));
+        sign.setLine(0, ess.getAdventureFacet().miniToLegacy(tlLiteral("signFormatFail", this.signName)));
 
         final SignCreateEvent signEvent = new SignCreateEvent(sign, this, user);
         ess.getServer().getPluginManager().callEvent(signEvent);
@@ -140,7 +140,7 @@ public class EssentialsSign {
     }
 
     public String getSuccessName() {
-        String successName = AdventureUtil.miniToLegacy(tlLiteral("signFormatSuccess", this.signName));
+        String successName = AdventureUtil.getAdventureFacet().miniToLegacy(tlLiteral("signFormatSuccess", this.signName));
         if (successName.isEmpty() || !successName.contains(this.signName)) {
             // Set to null to cause an error in place of no functionality. This makes an error obvious as opposed to leaving users baffled by lack of
             // functionality.
@@ -150,7 +150,7 @@ public class EssentialsSign {
     }
 
     public String getTemplateName() {
-        return AdventureUtil.miniToLegacy(tlLiteral("signFormatTemplate", this.signName));
+        return AdventureUtil.getAdventureFacet().miniToLegacy(tlLiteral("signFormatTemplate", this.signName));
     }
 
     public String getName() {

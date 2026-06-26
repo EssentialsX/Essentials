@@ -106,6 +106,16 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public boolean hasPermissionCached(final Player base, final String node) {
+        return handler.hasPermissionCached(base, node);
+    }
+
+    @Override
+    public void invalidatePermissionCache(final UUID uuid) {
+        handler.invalidatePermissionCache(uuid);
+    }
+
+    @Override
     public boolean isPermissionSet(final Player base, final String node) {
         return handler.isPermissionSet(base, node);
     }

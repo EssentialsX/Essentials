@@ -1,21 +1,24 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.utils.AdventureUtil;
+import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.TreeSet;
@@ -82,11 +85,26 @@ public class Commandtime extends EssentialsCommand {
 
         final StringJoiner joiner = new StringJoiner(", ");
         for (final World world : worlds) {
+            // Capture intended visible time for players with relative ptime before world time changes
+            final Map<Player, Long> ptimePlayers = new HashMap<>();
+            for (final Player player : world.getPlayers()) {
+                if (player.getPlayerTimeOffset() != 0 && player.isPlayerTimeRelative()) {
+                    ptimePlayers.put(player, player.getPlayerTime());
+                }
+            }
+
             long time = world.getTime();
             if (!add) {
                 time -= time % 24000;
             }
             world.setTime(time + (add ? 0 : 24000) + timeTick);
+
+            // Re-apply ptime offsets so players maintain their intended visible time
+            final long newWorldTime = world.getTime();
+            for (final Map.Entry<Player, Long> entry : ptimePlayers.entrySet()) {
+                entry.getKey().setPlayerTime(entry.getValue() - newWorldTime, true);
+            }
+
             joiner.add(world.getName());
         }
 
@@ -96,7 +114,7 @@ public class Commandtime extends EssentialsCommand {
     private void getWorldsTime(final CommandSource sender, final Collection<World> worlds) {
         if (worlds.size() == 1) {
             final Iterator<World> iter = worlds.iterator();
-            sender.sendComponent(AdventureUtil.miniMessage().deserialize(DescParseTickFormat.format(iter.next().getTime())));
+            sender.sendComponent(ess.getAdventureFacet().deserializeMiniMessage(DescParseTickFormat.format(iter.next().getTime())));
             return;
         }
 

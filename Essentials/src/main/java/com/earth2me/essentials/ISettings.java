@@ -4,7 +4,6 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
 import net.essentialsx.api.v2.ChatType;
-import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.bukkit.Material;
 import org.bukkit.event.EventPriority;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -94,6 +93,8 @@ public interface ISettings extends IConf {
     String getNewbieSpawn();
 
     String getNicknamePrefix();
+
+    boolean isResetNickOnNameChange();
 
     String getOperatorColor() throws Exception;
 
@@ -221,6 +222,8 @@ public interface ISettings extends IConf {
     boolean cancelAfkOnInteract();
 
     boolean cancelAfkOnChat();
+
+    boolean cancelAfkOnFish();
 
     boolean sleepIgnoresAfkPlayers();
 
@@ -448,9 +451,9 @@ public interface ISettings extends IConf {
 
     int getMaxItemLore();
 
-    Tag getPrimaryColor();
+    String getPrimaryColor();
 
-    Tag getSecondaryColor();
+    String getSecondaryColor();
 
     BigDecimal getBaltopMinBalance();
 
