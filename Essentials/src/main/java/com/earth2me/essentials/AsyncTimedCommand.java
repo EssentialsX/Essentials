@@ -21,7 +21,7 @@ public class AsyncTimedCommand implements Runnable {
     private final String timer_command;
     private final Pattern timer_pattern;
     private final boolean timer_canMove;
-    private int timer_task;
+    private volatile int timer_task;
     private volatile double timer_health;
 
     AsyncTimedCommand(final IUser user, final IEssentials ess, final long delay, final String command, final Pattern pattern) {
