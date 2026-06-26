@@ -30,9 +30,17 @@ public class AsyncTimedCommand implements Runnable {
         this.timer_started = System.currentTimeMillis();
         this.timer_delay = delay;
         this.timer_health = user.getBase().getHealth();
-        this.timer_initX = Math.round(user.getBase().getLocation().getX() * MOVE_CONSTANT);
-        this.timer_initY = Math.round(user.getBase().getLocation().getY() * MOVE_CONSTANT);
-        this.timer_initZ = Math.round(user.getBase().getLocation().getZ() * MOVE_CONSTANT);
+        Location initLocation = user.getBase().getLocation();
+        if (initLocation == null) {
+            // Defensive: set to zero if location is null (could also throw or cancel)
+            this.timer_initX = 0;
+            this.timer_initY = 0;
+            this.timer_initZ = 0;
+        } else {
+            this.timer_initX = Math.round(initLocation.getX() * MOVE_CONSTANT);
+            this.timer_initY = Math.round(initLocation.getY() * MOVE_CONSTANT);
+            this.timer_initZ = Math.round(initLocation.getZ() * MOVE_CONSTANT);
+        }
         this.timer_userId = user.getBase().getUniqueId();
         this.timer_command = command;
         this.timer_pattern = pattern;
