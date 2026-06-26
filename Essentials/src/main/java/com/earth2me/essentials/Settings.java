@@ -133,7 +133,10 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean isCustomNewUsernameMessage;
     private List<String> spawnOnJoinGroups;
     private Map<Pattern, Long> commandCooldowns;
-    private List<Entry<Pattern, Long>> commandWarmups; // Optimized: List is 19% faster than Map for sequential lookup
+    // Note: List was chosen over Map for commandWarmups due to observed ~19% faster sequential lookup in local profiling
+    // with fewer than 10 entries. For larger configuration files with many warmup entries, a Map would provide O(1) lookup
+    // vs O(n) for List. If the number of warmup entries is expected to grow, consider switching to a Map for scalability.
+    private List<Entry<Pattern, Long>> commandWarmups;
     private boolean npcsInBalanceRanking = false;
     private NumberFormat currencyFormat;
     private List<EssentialsSign> unprotectedSigns = Collections.emptyList();
