@@ -85,15 +85,14 @@ public class AsyncTimedCommand implements Runnable {
 
                         // Execute the command by dispatching it to the server
                         Bukkit.getScheduler().runTask(ess, () -> {
-                            // Execute as server command to bypass the warmup check
-                            Bukkit.dispatchCommand(user.getBase(), timer_command.substring(1)); // Remove the leading '/'
+                            try {
+                                // Execute as server command to bypass the warmup check
+                                Bukkit.dispatchCommand(user.getBase(), timer_command.substring(1)); // Remove the leading '/'
+                                user.sendTl("commandWarmupComplete");
+                            } catch (final Exception ex) {
+                                ess.showError(user.getSource(), ex, "\\ command warmup");
+                            }
                         });
-                        
-                        user.sendTl("commandWarmupComplete");
-
-                    } catch (final Exception ex) {
-                        ess.showError(user.getSource(), ex, "\\ command warmup");
-                    }
                 }
             }
         }
