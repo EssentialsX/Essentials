@@ -37,24 +37,6 @@ public class ConsoleInjector extends AbstractAppender {
         this.jda = jda;
         ((Logger) LogManager.getRootLogger()).addAppender(this);
         task = jda.getPlugin().getEss().runTaskTimerAsynchronously(() -> {
-            // Check to see if we're supposed to be backing off, preform backoff if the case.
-            if (recentRateLimit.get() < 0) {
-                if (totalBackoffEvents.get() * 20 >= jda.getSettings().getConsoleSkipDelay() * 60) {
-                    logger.warning("EssXBackoff: Reached console skip delay, attempt to skip");
-                    jda.getConsoleWebhook().abandonRequests();
-                    messageQueue.clear();
-                    totalBackoffEvents.set(0);
-                    recentRateLimit.set(0);
-                    lastRateLimitTime.set(0);
-                    return;
-                }
-
-                final int backoff = recentRateLimit.incrementAndGet();
-                if (jda.isDebug()) {
-                    logger.warning("EssXBackoff: Webhook backoff in progress, skipping queue processing. Resuming in " + Math.abs(backoff) + " cycles.");
-                }
-                return;
-            }
             final StringBuilder buffer = new StringBuilder();
             String curLine;
             while ((curLine = messageQueue.peek()) != null) {
