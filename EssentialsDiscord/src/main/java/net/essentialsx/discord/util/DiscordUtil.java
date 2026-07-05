@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.MessageType;
+import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.JDADiscordService;
 import okhttp3.OkHttpClient;
 import org.bukkit.Bukkit;
@@ -26,8 +27,11 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class DiscordUtil {
+    private static final Logger logger = EssentialsDiscord.getWrappedLogger();
     public final static String ADVANCED_RELAY_NAME = "EssX Advanced Relay";
     public final static String CONSOLE_RELAY_NAME = "EssX Console Relay";
     public final static List<Message.MentionType> NO_GROUP_MENTIONS;
@@ -63,7 +67,6 @@ public final class DiscordUtil {
      *
      * @param channel     The channel to search for/create webhooks in.
      * @param webhookName The name of the webhook to search for/create.
-     *
      * @return A future which completes with the webhook by the given name in the given channel, or null
      * if the bot lacks the proper permissions.
      */
@@ -82,7 +85,7 @@ public final class DiscordUtil {
                 }
             }
             createWebhook(channel, webhookName).thenAccept(future::complete);
-        });
+        }, error -> logger.log(Level.WARNING, "Failed to retrieve webhooks from channel " + channel.getName(), error));
         return future;
     }
 
@@ -101,17 +104,17 @@ public final class DiscordUtil {
         guild.retrieveWebhooks().queue(webhooks -> {
             for (final Webhook webhook : webhooks) {
                 if (webhook.getName().equalsIgnoreCase(webhookName) && !ACTIVE_WEBHOOKS.contains(webhook.getId())) {
-                    webhook.delete().reason("EssentialsX Discord: webhook cleanup").queue();
+                    webhook.delete().reason("EssentialsX Discord: webhook cleanup").queue(null, error -> logger.log(Level.WARNING, "Failed to delete webhook " + webhook.getName(), error));
                 }
             }
-        });
+        }, error -> logger.log(Level.WARNING, "Failed to retrieve webhooks from guild " + guild.getName(), error));
     }
 
     /**
      * Creates a webhook with the given name in the given channel.
      *
-     * @param channel        The channel to search for webhooks in.
-     * @param webhookName    The name of the webhook to look for.
+     * @param channel     The channel to search for webhooks in.
+     * @param webhookName The name of the webhook to look for.
      * @return A future which completes with the webhook by the given name in the given channel or null if no permissions.
      */
     public static CompletableFuture<Webhook> createWebhook(TextChannel channel, String webhookName) {
@@ -123,7 +126,7 @@ public final class DiscordUtil {
         channel.createWebhook(webhookName).queue(webhook -> {
             future.complete(webhook);
             ACTIVE_WEBHOOKS.addIfAbsent(webhook.getId());
-        });
+        }, error -> logger.log(Level.WARNING, "Failed to create webhook " + webhookName + " in channel " + channel.getName(), error));
         return future;
     }
 

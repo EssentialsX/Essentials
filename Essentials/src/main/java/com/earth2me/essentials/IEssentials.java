@@ -81,6 +81,8 @@ public interface IEssentials extends Plugin {
 
     ISettings getSettings();
 
+    List<Player> getJailedPlayers();
+
     IJails getJails();
 
     IWarps getWarps();

@@ -18,9 +18,19 @@ public final class StringUtil {
     private StringUtil() {
     }
 
+    private static final Pattern WINDOWS_RESERVED = Pattern.compile("^(con|prn|aux|nul|com[0-9]|lpt[0-9])$");
+
     //Used to clean file names before saving to disk
     public static String sanitizeFileName(final String name) {
         return INVALIDFILECHARS.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+    }
+
+    /**
+     * Returns true if the given name is a Windows reserved filename (e.g. CON, NUL, AUX).
+     * Using these as file names on Windows will hang or crash the server.
+     */
+    public static boolean isReservedFileName(final String name) {
+        return WINDOWS_RESERVED.matcher(name.toLowerCase(Locale.ENGLISH)).matches();
     }
 
     //Used to clean strings/names before saving as filenames/permissions

@@ -25,6 +25,10 @@ public class Commandsetwarp extends EssentialsCommand {
             throw new TranslatableException("invalidWarpName");
         }
 
+        if (StringUtil.isReservedFileName(args[0])) {
+            throw new TranslatableException("invalidWarpName");
+        }
+
         final IWarps warps = ess.getWarps();
         Location warpLoc = null;
 

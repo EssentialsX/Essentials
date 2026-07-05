@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import net.ess3.provider.PlayerLocaleProvider;
 import org.bukkit.Server;
 
 import java.math.BigDecimal;
@@ -34,7 +35,14 @@ public class Commandeco extends EssentialsLoopCommand {
         try {
             cmd = EcoCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
             isPercent = cmd != EcoCommands.RESET && args[2].endsWith("%");
-            amount = (cmd == EcoCommands.RESET) ? ess.getSettings().getStartingBalance() : new BigDecimal(args[2].replaceAll("[^0-9\\.]", ""));
+            if (cmd == EcoCommands.RESET) {
+                amount = ess.getSettings().getStartingBalance();
+            } else if (sender.isPlayer() && ess.getSettings().isPerPlayerLocale()) {
+                final String playerLocale = ess.provider(PlayerLocaleProvider.class).getLocale(sender.getPlayer());
+                amount = NumberUtil.parseStringToBDecimal(args[2], ess.getUser(sender.getPlayer()).getPlayerLocale(playerLocale));
+            } else {
+                amount = NumberUtil.parseStringToBDecimal(args[2]);
+            }
         } catch (final Exception ex) {
             throw new NotEnoughArgumentsException(ex);
         }

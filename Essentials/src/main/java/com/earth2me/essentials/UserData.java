@@ -42,7 +42,9 @@ public abstract class UserData extends PlayerExtension implements IConf {
         super(base);
         this.ess = (Essentials) ess;
         final File folder = new File(ess.getDataFolder(), "userdata");
-        if (!folder.exists() && !folder.mkdirs()) {
+        // mkdirs() may return false if another thread created the folder concurrently,
+        // so fall back to checking whether the directory now exists to avoid a race.
+        if (!folder.isDirectory() && !folder.mkdirs() && !folder.isDirectory()) {
             throw new RuntimeException("Unable to create userdata folder!");
         }
 
@@ -466,6 +468,15 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public void setGodModeEnabled(final boolean set) {
         holder.godMode(set);
+        config.save();
+    }
+
+    public boolean isFlyModeEnabled() {
+        return holder.flyMode();
+    }
+
+    public void setFlyModeEnabled(final boolean set) {
+        holder.flyMode(set);
         config.save();
     }
 

@@ -49,7 +49,7 @@ public class Commandtempban extends EssentialsCommand {
         }
 
         final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
+        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.displayName();
         ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, new Date(banTimestamp), senderName);
         final String expiry = DateUtil.formatDateDiff(banTimestamp);
 

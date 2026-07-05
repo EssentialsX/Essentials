@@ -56,7 +56,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             //noinspection InfiniteLoopStatement
             while (true) {
                 final String baseKey = name + "CommandUsage" + i;
-                addUsageString(tlLiteral(baseKey), tlLiteral(baseKey + "Description"));
+                addUsageString(tlLiteral(baseKey), baseKey + "Description");
                 i++;
             }
         } catch (MissingResourceException ignored) {

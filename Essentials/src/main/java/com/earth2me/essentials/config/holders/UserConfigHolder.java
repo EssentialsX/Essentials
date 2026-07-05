@@ -171,6 +171,16 @@ public class UserConfigHolder {
         this.godmode = value;
     }
 
+    private boolean flymode = false;
+
+    public boolean flyMode() {
+        return this.flymode;
+    }
+
+    public void flyMode(final boolean value) {
+        this.flymode = value;
+    }
+
     private boolean muted = false;
 
     public boolean muted() {

@@ -17,13 +17,13 @@ public final class Enchantments {
 
     static {
         final Enchantment SHARPNESS = RegistryUtil.valueOf(Enchantment.class, "DAMAGE_ALL", "SHARPNESS");
-        
+
         ENCHANTMENTS.put("alldamage", SHARPNESS);
         ALIASENCHANTMENTS.put("alldmg", SHARPNESS);
         ENCHANTMENTS.put("sharpness", SHARPNESS);
         ALIASENCHANTMENTS.put("sharp", SHARPNESS);
         ALIASENCHANTMENTS.put("dal", SHARPNESS);
-        
+
         final Enchantment BANE_OF_ARTHROPODS = RegistryUtil.valueOf(Enchantment.class, "DAMAGE_ARTHROPODS", "BANE_OF_ARTHROPODS");
 
         ENCHANTMENTS.put("ardmg", BANE_OF_ARTHROPODS);
@@ -31,13 +31,13 @@ public final class Enchantments {
         ALIASENCHANTMENTS.put("baneofarthropod", BANE_OF_ARTHROPODS);
         ALIASENCHANTMENTS.put("arthropod", BANE_OF_ARTHROPODS);
         ALIASENCHANTMENTS.put("dar", BANE_OF_ARTHROPODS);
-        
+
         final Enchantment SMITE = RegistryUtil.valueOf(Enchantment.class, "DAMAGE_UNDEAD", "SMITE");
 
         ENCHANTMENTS.put("undeaddamage", SMITE);
         ENCHANTMENTS.put("smite", SMITE);
         ALIASENCHANTMENTS.put("du", SMITE);
-        
+
         final Enchantment EFFICIENCY = RegistryUtil.valueOf(Enchantment.class, "DIG_SPEED", "EFFICIENCY");
 
         ENCHANTMENTS.put("digspeed", EFFICIENCY);
@@ -46,7 +46,7 @@ public final class Enchantments {
         ALIASENCHANTMENTS.put("cutspeed", EFFICIENCY);
         ALIASENCHANTMENTS.put("ds", EFFICIENCY);
         ALIASENCHANTMENTS.put("eff", EFFICIENCY);
-        
+
         final Enchantment UNBREAKING = RegistryUtil.valueOf(Enchantment.class, "DURABILITY", "UNBREAKING");
 
         ENCHANTMENTS.put("durability", UNBREAKING);
@@ -70,21 +70,21 @@ public final class Enchantments {
         ALIASENCHANTMENTS.put("kback", Enchantment.KNOCKBACK);
         ALIASENCHANTMENTS.put("kb", Enchantment.KNOCKBACK);
         ALIASENCHANTMENTS.put("k", Enchantment.KNOCKBACK);
-        
+
         final Enchantment FORTUNE = RegistryUtil.valueOf(Enchantment.class, "LOOT_BONUS_BLOCKS", "FORTUNE");
 
         ALIASENCHANTMENTS.put("blockslootbonus", FORTUNE);
         ENCHANTMENTS.put("fortune", FORTUNE);
         ALIASENCHANTMENTS.put("fort", FORTUNE);
         ALIASENCHANTMENTS.put("lbb", FORTUNE);
-        
+
         final Enchantment LOOTING = RegistryUtil.valueOf(Enchantment.class, "LOOT_BONUS_MOBS", "LOOTING");
 
         ALIASENCHANTMENTS.put("mobslootbonus", LOOTING);
         ENCHANTMENTS.put("mobloot", LOOTING);
         ENCHANTMENTS.put("looting", LOOTING);
         ALIASENCHANTMENTS.put("lbm", LOOTING);
-        
+
         final Enchantment RESPIRATION = RegistryUtil.valueOf(Enchantment.class, "OXYGEN", "RESPIRATION");
 
         ALIASENCHANTMENTS.put("oxygen", RESPIRATION);
@@ -92,14 +92,14 @@ public final class Enchantments {
         ALIASENCHANTMENTS.put("breathing", RESPIRATION);
         ENCHANTMENTS.put("breath", RESPIRATION);
         ALIASENCHANTMENTS.put("o", RESPIRATION);
-        
+
         final Enchantment PROTECTION = RegistryUtil.valueOf(Enchantment.class, "PROTECTION_ENVIRONMENTAL", "PROTECTION");
 
         ENCHANTMENTS.put("protection", PROTECTION);
         ALIASENCHANTMENTS.put("prot", PROTECTION);
         ENCHANTMENTS.put("protect", PROTECTION);
         ALIASENCHANTMENTS.put("p", PROTECTION);
-        
+
         final Enchantment BLAST_PROTECTION = RegistryUtil.valueOf(Enchantment.class, "PROTECTION_EXPLOSIONS", "BLAST_PROTECTION");
 
         ALIASENCHANTMENTS.put("explosionsprotection", BLAST_PROTECTION);
@@ -110,7 +110,7 @@ public final class Enchantments {
         ALIASENCHANTMENTS.put("bprotect", BLAST_PROTECTION);
         ENCHANTMENTS.put("blastprotect", BLAST_PROTECTION);
         ALIASENCHANTMENTS.put("pe", BLAST_PROTECTION);
-        
+
         final Enchantment FEATHER_FALLING = RegistryUtil.valueOf(Enchantment.class, "PROTECTION_FALL", "FEATHER_FALLING");
 
         ALIASENCHANTMENTS.put("fallprotection", FEATHER_FALLING);
@@ -118,7 +118,7 @@ public final class Enchantments {
         ENCHANTMENTS.put("featherfall", FEATHER_FALLING);
         ALIASENCHANTMENTS.put("featherfalling", FEATHER_FALLING);
         ALIASENCHANTMENTS.put("pfa", FEATHER_FALLING);
-        
+
         final Enchantment FIRE_PROTECTION = RegistryUtil.valueOf(Enchantment.class, "PROTECTION_FIRE", "FIRE_PROTECTION");
 
         ALIASENCHANTMENTS.put("fireprotection", FIRE_PROTECTION);
@@ -128,7 +128,7 @@ public final class Enchantments {
         ENCHANTMENTS.put("fireprot", FIRE_PROTECTION);
         ALIASENCHANTMENTS.put("flameprot", FIRE_PROTECTION);
         ALIASENCHANTMENTS.put("pf", FIRE_PROTECTION);
-        
+
         final Enchantment PROJECTILE_PROTECTION = RegistryUtil.valueOf(Enchantment.class, "PROTECTION_PROJECTILE", "PROJECTILE_PROTECTION");
 
         ENCHANTMENTS.put("projectileprotection", PROJECTILE_PROTECTION);
@@ -138,28 +138,28 @@ public final class Enchantments {
         ENCHANTMENTS.put("silktouch", Enchantment.SILK_TOUCH);
         ALIASENCHANTMENTS.put("softtouch", Enchantment.SILK_TOUCH);
         ALIASENCHANTMENTS.put("st", Enchantment.SILK_TOUCH);
-        
+
         final Enchantment AQUA_AFFINITY = RegistryUtil.valueOf(Enchantment.class, "WATER_WORKER", "AQUA_AFFINITY");
 
         ENCHANTMENTS.put("waterworker", AQUA_AFFINITY);
         ENCHANTMENTS.put("aquaaffinity", AQUA_AFFINITY);
         ALIASENCHANTMENTS.put("watermine", AQUA_AFFINITY);
         ALIASENCHANTMENTS.put("ww", AQUA_AFFINITY);
-        
+
         final Enchantment FLAME = RegistryUtil.valueOf(Enchantment.class, "ARROW_FIRE", "FLAME");
 
         ALIASENCHANTMENTS.put("firearrow", FLAME);
         ENCHANTMENTS.put("flame", FLAME);
         ENCHANTMENTS.put("flamearrow", FLAME);
         ALIASENCHANTMENTS.put("af", FLAME);
-        
+
         final Enchantment POWER = RegistryUtil.valueOf(Enchantment.class, "ARROW_DAMAGE", "POWER");
 
         ENCHANTMENTS.put("arrowdamage", POWER);
         ENCHANTMENTS.put("power", POWER);
         ALIASENCHANTMENTS.put("arrowpower", POWER);
         ALIASENCHANTMENTS.put("ad", POWER);
-        
+
         final Enchantment PUNCH = RegistryUtil.valueOf(Enchantment.class, "ARROW_KNOCKBACK", "PUNCH");
 
         ENCHANTMENTS.put("arrowknockback", PUNCH);
@@ -167,7 +167,7 @@ public final class Enchantments {
         ENCHANTMENTS.put("punch", PUNCH);
         ALIASENCHANTMENTS.put("arrowpunch", PUNCH);
         ALIASENCHANTMENTS.put("ak", PUNCH);
-        
+
         final Enchantment INFINITY = RegistryUtil.valueOf(Enchantment.class, "ARROW_INFINITE", "INFINITY");
 
         ALIASENCHANTMENTS.put("infinitearrows", INFINITY);
@@ -177,7 +177,7 @@ public final class Enchantments {
         ALIASENCHANTMENTS.put("unlimited", INFINITY);
         ALIASENCHANTMENTS.put("unlimitedarrows", INFINITY);
         ALIASENCHANTMENTS.put("ai", INFINITY);
-        
+
         final Enchantment LUCK_OF_THE_SEA = RegistryUtil.valueOf(Enchantment.class, "LUCK", "LUCK_OF_THE_SEA");
 
         ENCHANTMENTS.put("luck", LUCK_OF_THE_SEA);
@@ -317,6 +317,14 @@ public final class Enchantments {
                 ENCHANTMENTS.put("windburst", windBurst);
                 ALIASENCHANTMENTS.put("wind", windBurst);
                 ALIASENCHANTMENTS.put("burst", windBurst);
+            }
+        } catch (final IllegalArgumentException ignored) {
+        }
+
+        try { // 1.21.11
+            final Enchantment lunge = Enchantment.getByName("LUNGE");
+            if (lunge != null) {
+                ENCHANTMENTS.put("lunge", lunge);
             }
         } catch (final IllegalArgumentException ignored) {
         }

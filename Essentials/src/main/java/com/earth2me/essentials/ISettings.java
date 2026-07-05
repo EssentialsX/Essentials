@@ -94,6 +94,8 @@ public interface ISettings extends IConf {
 
     String getNicknamePrefix();
 
+    boolean isResetNickOnNameChange();
+
     String getOperatorColor() throws Exception;
 
     boolean getPerWarpPermission();
@@ -220,6 +222,8 @@ public interface ISettings extends IConf {
     boolean cancelAfkOnInteract();
 
     boolean cancelAfkOnChat();
+
+    boolean cancelAfkOnFish();
 
     boolean sleepIgnoresAfkPlayers();
 

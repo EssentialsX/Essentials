@@ -47,6 +47,7 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.PasteUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
@@ -83,6 +84,8 @@ import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.FoliaSchedulingProvider;
 import net.ess3.provider.providers.LegacyBannerDataProvider;
 import net.ess3.provider.providers.LegacyBiomeNameProvider;
+import net.ess3.provider.providers.LegacyPatternTypeProvider;
+import net.ess3.provider.providers.ModernPatternTypeProvider;
 import net.ess3.provider.providers.LegacyDamageEventProvider;
 import net.ess3.provider.providers.LegacyInventoryViewProvider;
 import net.ess3.provider.providers.LegacyItemUnbreakableProvider;
@@ -153,6 +156,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tlLiteral;
 import static com.earth2me.essentials.I18n.tlLocale;
@@ -343,6 +348,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             //Banner Meta Provider
             providerFactory.registerProvider(LegacyBannerDataProvider.class, BaseBannerDataProvider.class);
+
+            // Pattern Type Provider
+            providerFactory.registerProvider(LegacyPatternTypeProvider.class, ModernPatternTypeProvider.class);
 
             // Server State Provider
             providerFactory.registerProvider(ReflServerStateProvider.class, PaperServerStateProvider.class);
@@ -594,6 +602,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         getUsers().shutdown();
 
         EssentialsConfiguration.shutdownExecutor();
+        PasteUtil.shutdownExecutor();
+        getServer().getScheduler().cancelTasks(this);
 
         HandlerList.unregisterAll(this);
     }
@@ -624,7 +634,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             adventureFacet.close();
         }
 
-        if (VersionUtil.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01)) {
+        // Paper only started bundling a modern enough native Adventure (with the MiniMessage TagResolver API)
+        // in 1.18.2, so older versions must continue using our bundled Adventure via the Spigot facet.
+        if (VersionUtil.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_18_2_R01)) {
             adventureFacet = new PaperAdventureFacet(getSettings() != null ? getSettings().getPrimaryColor() : null, getSettings() != null ? getSettings().getSecondaryColor() : null);
         } else {
             adventureFacet = new SpigotAdventureFacet(this);
@@ -848,7 +860,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     sender.sendTl("commandHelpLine2", description);
                     sender.sendTl("commandHelpLine3");
                     for (Map.Entry<String, String> usage : cmd.getUsageStrings().entrySet()) {
-                        sender.sendTl("commandHelpLineUsage", AdventureUtil.parsed(usage.getKey().replace("<command>", commandLabel)), AdventureUtil.parsed(usage.getValue()));
+                        sender.sendTl("commandHelpLineUsage", AdventureUtil.parsed(usage.getKey().replace("<command>", commandLabel)), AdventureUtil.parsed(sender.tl(usage.getValue())));
                     }
                 } else {
                     sender.sendMessage(command.getDescription());
@@ -907,6 +919,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         if (getSettings().isDebug()) {
             LOGGER.log(Level.INFO, getAdventureFacet().miniToLegacy(tlLiteral("errorCallingCommand", commandLabel)), exception);
         }
+    }
+
+    @Override
+    public List<Player> getJailedPlayers() {
+        return getUsers().getAllUserUUIDs().stream().map(this::getUser).filter(Objects::nonNull).filter(User::isJailed).map(User::getBase).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     @Override
