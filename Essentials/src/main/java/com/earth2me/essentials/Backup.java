@@ -18,10 +18,10 @@ public class Backup implements Runnable {
     private transient final Server server;
     private transient final IEssentials ess;
     private final AtomicBoolean pendingShutdown = new AtomicBoolean(false);
-    private transient boolean running = false;
-    private transient SchedulingProvider.EssentialsTask task = null;
-    private transient boolean active = false;
-    private transient CompletableFuture<Object> taskLock = null;
+    private transient volatile boolean running = false;
+    private transient volatile SchedulingProvider.EssentialsTask task = null;
+    private transient volatile boolean active = false;
+    private transient volatile CompletableFuture<Object> taskLock = null;
 
     public Backup(final IEssentials ess) {
         this.ess = ess;
