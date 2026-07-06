@@ -173,36 +173,38 @@ public class AsyncTeleport implements IAsyncTeleport {
             targetLoc.setZ(LocationUtil.getZInsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockZ()));
         }
         PaperLib.getChunkAtAsync(targetLoc.getWorld(), targetLoc.getBlockX() >> 4, targetLoc.getBlockZ() >> 4, true, true).thenAccept(chunk -> {
-            Location loc = targetLoc;
-            if (LocationUtil.isBlockUnsafeForUser(ess, teleportee, chunk.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
-                if (ess.getSettings().isTeleportSafetyEnabled()) {
+            ess.scheduleLocationDelayedTask(targetLoc, () -> {
+                Location loc = targetLoc;
+                if (LocationUtil.isBlockUnsafeForUser(ess, teleportee, chunk.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+                    if (ess.getSettings().isTeleportSafetyEnabled()) {
+                        if (ess.getSettings().isForceDisableTeleportSafety()) {
+                            PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
+                        } else {
+                            try {
+                                //There's a chance the safer location is outside the loaded chunk so still teleport async here.
+                                PaperLib.teleportAsync(teleportee.getBase(), LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
+                            } catch (final Exception e) {
+                                future.completeExceptionally(e);
+                                return;
+                            }
+                        }
+                    } else {
+                        future.completeExceptionally(new TranslatableException("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                        return;
+                    }
+                } else {
                     if (ess.getSettings().isForceDisableTeleportSafety()) {
                         PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
                     } else {
-                        try {
-                            //There's a chance the safer location is outside the loaded chunk so still teleport async here.
-                            PaperLib.teleportAsync(teleportee.getBase(), LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
-                        } catch (final Exception e) {
-                            future.completeExceptionally(e);
-                            return;
+                        if (ess.getSettings().isTeleportToCenterLocation()) {
+                            loc = LocationUtil.getRoundedDestination(loc);
                         }
+                        //There's a *small* chance the rounded destination produces a location outside the loaded chunk so still teleport async here.
+                        PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
                     }
-                } else {
-                    future.completeExceptionally(new TranslatableException("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-                    return;
                 }
-            } else {
-                if (ess.getSettings().isForceDisableTeleportSafety()) {
-                    PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
-                } else {
-                    if (ess.getSettings().isTeleportToCenterLocation()) {
-                        loc = LocationUtil.getRoundedDestination(loc);
-                    }
-                    //There's a *small* chance the rounded destination produces a location outside the loaded chunk so still teleport async here.
-                    PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
-                }
-            }
-            future.complete(true);
+                future.complete(true);
+            });
         }).exceptionally(th -> {
             future.completeExceptionally(th);
             return null;
