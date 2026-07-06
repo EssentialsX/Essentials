@@ -122,6 +122,16 @@ public class FoliaSchedulingProvider implements SchedulingProvider, Listener {
         return task::cancel;
     }
 
+    @Override
+    public void cancelAllTasks() {
+        // Legacy Bukkit scheduler cancellation (getServer().getScheduler().cancelTasks(plugin)) throws
+        // UnsupportedOperationException on Folia's CraftScheduler; the global/async schedulers below are the
+        // Folia-safe equivalent. Region-owned entity/location tasks are torn down by RegionShutdownThread's
+        // own halt sequence during plugin disable, so they don't need a separate plugin-wide cancel here.
+        plugin.getServer().getGlobalRegionScheduler().cancelTasks(plugin);
+        plugin.getServer().getAsyncScheduler().cancelTasks(plugin);
+    }
+
     @ProviderTest
     public static boolean test() {
         try {

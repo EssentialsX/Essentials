@@ -34,6 +34,8 @@ public interface SchedulingProvider extends Provider {
 
     EssentialsTask runAsyncTaskRepeating(Runnable runnable, long delay, long period);
 
+    void cancelAllTasks();
+
     interface EssentialsTask {
         void cancel();
     }

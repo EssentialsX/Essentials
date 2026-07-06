@@ -101,4 +101,9 @@ public class BukkitSchedulingProvider implements SchedulingProvider {
         final BukkitTask task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, runnable, delay, period);
         return task::cancel;
     }
+
+    @Override
+    public void cancelAllTasks() {
+        plugin.getServer().getScheduler().cancelTasks(plugin);
+    }
 }
