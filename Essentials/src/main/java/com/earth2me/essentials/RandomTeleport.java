@@ -213,14 +213,21 @@ public class RandomTeleport implements IConf {
             360 * RANDOM.nextFloat() - 180,
             0
         );
-        return PaperLib.getChunkAtAsync(location).thenApply(chunk -> { // FIXME: use thenApplyAsync + an Executor that runs tasks on the correct region thread to be fully safe.
-            if (World.Environment.NETHER.equals(center.getWorld().getEnvironment())) {
-                location.setY(getNetherYAt(location));
-            } else {
-                location.setY(center.getWorld().getHighestBlockYAt(location) + HIGHEST_BLOCK_Y_OFFSET);
-            }
-            return location;
+        final CompletableFuture<Location> future = new CompletableFuture<>();
+        PaperLib.getChunkAtAsync(location).thenAccept(chunk -> {
+            ess.scheduleLocationDelayedTask(location, () -> {
+                if (World.Environment.NETHER.equals(center.getWorld().getEnvironment())) {
+                    location.setY(getNetherYAt(location));
+                } else {
+                    location.setY(center.getWorld().getHighestBlockYAt(location) + HIGHEST_BLOCK_Y_OFFSET);
+                }
+                future.complete(location);
+            });
+        }).exceptionally(th -> {
+            future.completeExceptionally(th);
+            return null;
         });
+        return future;
     }
 
     // Returns an appropriate elevation for a given location in the nether, or MIN_VALUE if none is found
