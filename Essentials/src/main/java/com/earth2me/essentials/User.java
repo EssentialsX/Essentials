@@ -92,8 +92,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     // Timestamps
     private transient long lastOnlineActivity;
     private transient long lastThrottledAction;
-    private transient long lastActivity = System.currentTimeMillis();
-    private transient long teleportInvulnerabilityTimestamp = 0;
+    private transient volatile long lastActivity = System.currentTimeMillis();
+    private transient volatile long teleportInvulnerabilityTimestamp = 0;
     private long lastNotifiedAboutMailsMs;
     private long lastHomeConfirmationTimestamp;
 

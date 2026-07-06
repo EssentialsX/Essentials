@@ -394,7 +394,7 @@ public class UserConfigHolder {
             this.lastheal = value;
         }
 
-        private long mute = 0L;
+        private volatile long mute = 0L;
 
         public long mute() {
             return this.mute;
@@ -404,7 +404,7 @@ public class UserConfigHolder {
             this.mute = value;
         }
 
-        private long jail = 0L;
+        private volatile long jail = 0L;
 
         public long jail() {
             return this.jail;
