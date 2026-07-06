@@ -871,12 +871,7 @@ public class Settings implements net.ess3.api.ISettings {
                         disabledBukkitCommands.put(effectiveAlias, removed);
                     }
 
-                    // This is 2 because Settings are reloaded twice in the startup lifecycle
-                    if (reloadCount.get() < 2) {
-                        ess.scheduleGlobalDelayedTask(() -> _addAlternativeCommand(effectiveAlias, toDisable));
-                    } else {
-                        _addAlternativeCommand(effectiveAlias, toDisable);
-                    }
+                    ess.scheduleGlobalDelayedTask(() -> _addAlternativeCommand(effectiveAlias, toDisable));
                     mapModified = true;
                 }
             }
@@ -887,11 +882,7 @@ public class Settings implements net.ess3.api.ISettings {
                 if (isDebug()) {
                     ess.getLogger().log(Level.INFO, "Syncing commands");
                 }
-                if (reloadCount.get() < 2) {
-                    ess.scheduleGlobalDelayedTask(syncCommandsProvider::syncCommands);
-                } else {
-                    syncCommandsProvider.syncCommands();
-                }
+                ess.scheduleGlobalDelayedTask(syncCommandsProvider::syncCommands);
             }
         }
 
