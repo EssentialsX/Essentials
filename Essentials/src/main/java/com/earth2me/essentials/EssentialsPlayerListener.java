@@ -522,6 +522,15 @@ public class EssentialsPlayerListener implements Listener {
             if (!inWater && LocationUtil.shouldFly(ess, user.getLocation())) {
                 user.getBase().setAllowFlight(true);
                 user.getBase().setFlying(true);
+                // The client sends a flight-abilities sync shortly after joining, which resets the flying state
+                // and drops the player out of the air. Re-apply the flight state a tick later so it sticks and the
+                // player keeps flying instead of falling (see the equivalent world-change handling below).
+                ess.scheduleSyncDelayedTask(() -> {
+                    if (user.getBase().isOnline()) {
+                        user.getBase().setAllowFlight(true);
+                        user.getBase().setFlying(true);
+                    }
+                }, 1);
                 if (!restoreFly && ess.getSettings().isSendFlyEnableOnJoin()) {
                     user.sendTl("flyMode", CommonPlaceholders.enableDisable(user.getSource(), true), user.getDisplayName());
                 }
