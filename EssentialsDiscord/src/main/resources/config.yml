@@ -8,10 +8,10 @@
 # This config was generated for version ${full.version}.
 
 # You need to create a bot user in order to connect your server to Discord.
-# You can find instructions on this here: https://essentialsx.net/discord-tutorial
+# You can find instructions on this here: https://essentialsx.net/wiki/discord
 
 # The token for your bot from the Discord Developers site.
-# Please make sure to use this site to add the bot to your server as it grants special permissions you may not be familiar with: https://essentialsx.net/discord.html
+# Please make sure to use this site to add the bot to your server as it grants special permissions you may not be familiar with: https://essentialsx.net/discord
 token: "INSERT-TOKEN-HERE"
 
 # The ID of your server.
