@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.userstorage.ModernUserMap;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,7 +15,11 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 public class UserTest {
     private PlayerMock base1;
@@ -43,6 +48,15 @@ public class UserTest {
     public void testUpdate() {
         final Player base1alt = server.getPlayer(base1.getName());
         assertEquals(base1alt, ess.getUser(base1alt).getBase());
+    }
+
+    @Test
+    public void testCachedPlayerLookupDoesNotReloadUser() {
+        final User expected = ess.getUser(base1);
+        final ModernUserMap userMap = spy((ModernUserMap) ess.getUsers());
+
+        assertSame(expected, userMap.getUser(base1));
+        verify(userMap, never()).loadUncachedUser(base1);
     }
 
     @Test
