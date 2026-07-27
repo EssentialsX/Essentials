@@ -776,7 +776,8 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
-        final String cmd = event.getMessage().split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
+        final String commandLabel = event.getMessage().split(" ")[0].replace("/", "");
+        final String cmd = commandLabel.toLowerCase(Locale.ENGLISH);
         final int argStartIndex = event.getMessage().indexOf(" ");
         final String args = argStartIndex == -1 ? "" // No arguments present
                 : event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
@@ -784,7 +785,7 @@ public class EssentialsPlayerListener implements Listener {
         // If the plugin command does not exist, check if it is an alias from commands.yml
         if (ess.getServer().getPluginCommand(cmd) == null) {
             final Command knownCommand = ess.provider(KnownCommandsProvider.class).getKnownCommands().get(cmd);
-            if (knownCommand instanceof FormattedCommandAlias) {
+            if (isCommandRegistered(commandLabel) && knownCommand instanceof FormattedCommandAlias) {
                 final FormattedCommandAlias command = (FormattedCommandAlias) knownCommand;
                 for (String fullCommand : ess.provider(FormattedCommandAliasProvider.class).createCommands(command, event.getPlayer(), args.split(" "))) {
                     handlePlayerCommandPreprocess(event, fullCommand);
@@ -794,12 +795,13 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         // Handle the command given from the event.
-        handlePlayerCommandPreprocess(event, cmd + args);
+        handlePlayerCommandPreprocess(event, commandLabel + args);
     }
 
     public void handlePlayerCommandPreprocess(final PlayerCommandPreprocessEvent event, final String effectiveCommand) {
         final Player player = event.getPlayer();
-        final String cmd = effectiveCommand.split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
+        final String commandLabel = effectiveCommand.split(" ")[0].replace("/", "");
+        final String cmd = commandLabel.toLowerCase(Locale.ENGLISH);
         final PluginCommand pluginCommand = ess.getServer().getPluginCommand(cmd);
 
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
@@ -862,7 +864,8 @@ public class EssentialsPlayerListener implements Listener {
             user.updateActivityOnInteract(broadcast);
         }
 
-        if (ess.getSettings().isCommandCooldownsEnabled()
+        if (isCommandRegistered(commandLabel)
+            && ess.getSettings().isCommandCooldownsEnabled()
             && !user.isAuthorized("essentials.commandcooldowns.bypass")
             && (pluginCommand == null || !user.isAuthorized("essentials.commandcooldowns.bypass." + pluginCommand.getName()))) {
             final int argStartIndex = effectiveCommand.indexOf(" ");
@@ -900,6 +903,12 @@ public class EssentialsPlayerListener implements Listener {
                 }
             }
         }
+    }
+
+    private boolean isCommandRegistered(final String commandLabel) {
+        final Map<String, Command> knownCommands = ess.provider(KnownCommandsProvider.class).getKnownCommands();
+        return knownCommands.containsKey(commandLabel)
+            || (VersionUtil.PRE_FLATTENING && knownCommands.containsKey(commandLabel.toLowerCase(Locale.ENGLISH)));
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
