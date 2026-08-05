@@ -125,6 +125,13 @@ public final class LocationUtil {
         return x < x1 || x > x2 || z < z1 || z > z2;
     }
 
+    public static boolean isAboveNetherRoof(final World world, final int x, final int y, final int z) {
+        if (world.getEnvironment() != World.Environment.NETHER) {
+            return false;
+        }
+        return y >= world.getHighestBlockYAt(x, z);
+    }
+
     public static int getXInsideWorldBorder(final World world, final int x) {
         final Location center = world.getWorldBorder().getCenter();
         final int radius = (int) world.getWorldBorder().getSize() / 2;
@@ -276,6 +283,9 @@ public final class LocationUtil {
                     throw new TranslatableException("holeInFloor");
                 }
             }
+        }
+        if (isAboveNetherRoof(world, x, y, z)) {
+            y = world.getHighestBlockYAt(x, z) - 1;
         }
         return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
     }
