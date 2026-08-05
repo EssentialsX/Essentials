@@ -91,6 +91,18 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         }
 
         message = preSendEvent.getMessage();
+
+        final User senderUser = getUser(this);
+        // A muted player must not have their message delivered to the recipient. However, social spies
+        // may still observe the attempted message (see the socialspy-listen-muted-players setting).
+        // Note: PrivateMessageSentEvent is intentionally not fired here so the message is not relayed
+        // elsewhere (e.g. to Discord) as though it had actually been delivered.
+        if (senderUser != null && senderUser.isMuted()) {
+            sendSocialSpy(recipient, message, true);
+            senderUser.notifyMuted();
+            return MessageResponse.SENDER_MUTED;
+        }
+
         final MessageResponse messageResponse = recipient.onReceiveMessage(this.parent, message);
         switch (messageResponse) {
             case UNREACHABLE:
@@ -114,29 +126,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                 sendTl("msgFormat", AdventureUtil.parsed(tlSender("meSender")), recipient.getDisplayName(), message);
 
                 // Better Social Spy
-                if (ess.getSettings().isSocialSpyMessages()) {
-                    final User senderUser = getUser(this);
-                    final User recipientUser = getUser(recipient);
-                    if (senderUser != null // not null if player.
-                            // Dont spy on chats involving socialspy exempt players
-                            && !senderUser.isAuthorized("essentials.chat.spy.exempt")
-                            && recipientUser != null && !recipientUser.isAuthorized("essentials.chat.spy.exempt")) {
-                        final String senderName = ess.getSettings().isSocialSpyDisplayNames() ? getDisplayName() : getName();
-                        final String recipientName = ess.getSettings().isSocialSpyDisplayNames() ? recipient.getDisplayName() : recipient.getName();
-                        for (final User onlineUser : ess.getOnlineUsers()) {
-                            if (onlineUser.isSocialSpyEnabled()
-                                    // Don't send socialspy messages to message sender/receiver to prevent spam
-                                    && !onlineUser.equals(senderUser)
-                                    && !onlineUser.equals(recipient)) {
-                                if (senderUser.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
-                                    onlineUser.sendComponent(ess.getAdventureFacet().deserializeMiniMessage(tlSender("socialSpyMutedPrefix") + tlLiteral("socialSpyMsgFormat", senderName, recipientName, message)));
-                                } else {
-                                    onlineUser.sendComponent(ess.getAdventureFacet().deserializeMiniMessage(tlLiteral("socialSpyPrefix") + tlLiteral("socialSpyMsgFormat", senderName, recipientName, message)));
-                                }
-                            }
-                        }
-                    }
-                }
+                sendSocialSpy(recipient, message, false);
                 break;
         }
         // If the message was a success, set this sender's reply-recipient to the current recipient.
@@ -148,6 +138,45 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         ess.getServer().getPluginManager().callEvent(sentEvent);
 
         return messageResponse;
+    }
+
+    /**
+     * Shows a private message to all online social spies, unless either party is exempt from being spied on.
+     *
+     * @param recipient the recipient of the private message
+     * @param message   the message that was sent
+     * @param muted     whether the sender is muted; muted messages are only shown when
+     *                  {@code socialspy-listen-muted-players} is enabled and use a distinct prefix
+     */
+    private void sendSocialSpy(final IMessageRecipient recipient, final String message, final boolean muted) {
+        if (!ess.getSettings().isSocialSpyMessages()) {
+            return;
+        }
+        if (muted && !ess.getSettings().getSocialSpyListenMutedPlayers()) {
+            return;
+        }
+
+        final User senderUser = getUser(this);
+        final User recipientUser = getUser(recipient);
+        // Don't spy on chats involving socialspy exempt players.
+        if (senderUser == null // not null if player.
+                || senderUser.isAuthorized("essentials.chat.spy.exempt")
+                || recipientUser == null
+                || recipientUser.isAuthorized("essentials.chat.spy.exempt")) {
+            return;
+        }
+
+        final String senderName = ess.getSettings().isSocialSpyDisplayNames() ? getDisplayName() : getName();
+        final String recipientName = ess.getSettings().isSocialSpyDisplayNames() ? recipient.getDisplayName() : recipient.getName();
+        final String prefix = muted ? tlSender("socialSpyMutedPrefix") : tlLiteral("socialSpyPrefix");
+        for (final User onlineUser : ess.getOnlineUsers()) {
+            if (onlineUser.isSocialSpyEnabled()
+                    // Don't send socialspy messages to message sender/receiver to prevent spam
+                    && !onlineUser.equals(senderUser)
+                    && !onlineUser.equals(recipient)) {
+                onlineUser.sendComponent(ess.getAdventureFacet().deserializeMiniMessage(prefix + tlLiteral("socialSpyMsgFormat", senderName, recipientName, message)));
+            }
+        }
     }
 
     @Override
