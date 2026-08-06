@@ -127,7 +127,12 @@ public interface IMessageRecipient extends MailSender {
          * States that the message was <b>NOT</b> delivered as a result of the sender being muted. The message may
          * still have been shown to social spies.
          */
-        SENDER_MUTED;
+        SENDER_MUTED,
+        /**
+         * States that the message was <b>NOT</b> received as a result of the recipient blocking incoming private
+         * messages via {@code essentials.chat.spy.exempt.block}.
+         */
+        RECIPIENT_BLOCKED;
 
         /**
          * Returns whether this response is a success. In other words equal to {@link #SUCCESS} or {@link #SUCCESS_BUT_AFK}
