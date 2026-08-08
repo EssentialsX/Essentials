@@ -125,13 +125,6 @@ public final class LocationUtil {
         return x < x1 || x > x2 || z < z1 || z > z2;
     }
 
-    public static boolean isAboveNetherRoof(final World world, final int x, final int y, final int z) {
-        if (world.getEnvironment() != World.Environment.NETHER) {
-            return false;
-        }
-        return y >= world.getHighestBlockYAt(x, z);
-    }
-
     public static int getXInsideWorldBorder(final World world, final int x) {
         final Location center = world.getWorldBorder().getCenter();
         final int radius = (int) world.getWorldBorder().getSize() / 2;
@@ -172,6 +165,10 @@ public final class LocationUtil {
 
     public static boolean isBlockUnsafe(IEssentials ess, final World world, final int x, final int y, final int z) {
         return isBlockDamaging(world, x, y, z) || isBlockAboveAir(ess, world, x, y, z);
+    }
+
+    private static boolean isBlockUnsafe(IEssentials ess, final World world, final int x, final int y, final int z, final int maxY) {
+        return y >= maxY || isBlockUnsafe(ess, world, x, y, z);
     }
 
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
@@ -249,12 +246,12 @@ public final class LocationUtil {
                 break;
             }
         }
-        if (isBlockUnsafe(ess, world, x, y, z)) {
+        if (isBlockUnsafe(ess, world, x, y, z, worldMaxY)) {
             x = Math.round(loc.getX()) == origX ? x - 1 : x + 1;
             z = Math.round(loc.getZ()) == origZ ? z - 1 : z + 1;
         }
         int i = 0;
-        while (isBlockUnsafe(ess, world, x, y, z)) {
+        while (isBlockUnsafe(ess, world, x, y, z, worldMaxY)) {
             i++;
             if (i >= VOLUME.length) {
                 x = origX;
@@ -266,14 +263,14 @@ public final class LocationUtil {
             y = NumberUtil.constrainToRange(origY + VOLUME[i].y, worldMinY, worldMaxY);
             z = origZ + VOLUME[i].z;
         }
-        while (isBlockUnsafe(ess, world, x, y, z)) {
+        while (isBlockUnsafe(ess, world, x, y, z, worldMaxY)) {
             y += 1;
             if (y >= worldMaxY) {
                 x += 1;
                 break;
             }
         }
-        while (isBlockUnsafe(ess, world, x, y, z)) {
+        while (isBlockUnsafe(ess, world, x, y, z, worldMaxY)) {
             y -= 1;
             if (y <= worldMinY + 1) {
                 x += 1;
@@ -283,9 +280,6 @@ public final class LocationUtil {
                     throw new TranslatableException("holeInFloor");
                 }
             }
-        }
-        if (isAboveNetherRoof(world, x, y, z)) {
-            y = world.getHighestBlockYAt(x, z) - 1;
         }
         return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
     }

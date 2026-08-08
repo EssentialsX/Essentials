@@ -3,6 +3,12 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import net.ess3.provider.WorldInfoProvider;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
+import org.bukkit.block.Block;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class UtilTest {
 
@@ -64,6 +73,38 @@ public class UtilTest {
         assertEquals(testSet.size(), count);
         final int diameter = LocationUtil.RADIUS * 2 + 1;
         assertEquals(diameter * diameter * diameter, count);
+    }
+
+    @Test
+    public void testSafeLocationRespectsLogicalHeight() throws Exception {
+        final IEssentials essentials = mock(IEssentials.class);
+        final WorldInfoProvider worldInfoProvider = mock(WorldInfoProvider.class);
+        final World world = mock(World.class);
+        final WorldBorder worldBorder = mock(WorldBorder.class);
+        final Block solid = mock(Block.class);
+        final Block hollow = mock(Block.class);
+
+        when(essentials.provider(WorldInfoProvider.class)).thenReturn(worldInfoProvider);
+        when(worldInfoProvider.getMinHeight(world)).thenReturn(0);
+        when(worldInfoProvider.getLogicalHeight(world)).thenReturn(128);
+        when(worldInfoProvider.getMaxHeight(world)).thenReturn(256);
+        when(world.getWorldBorder()).thenReturn(worldBorder);
+        when(worldBorder.getCenter()).thenReturn(new Location(world, 0, 0, 0));
+        when(worldBorder.getSize()).thenReturn(60_000_000D);
+        when(solid.getType()).thenReturn(Material.BEDROCK);
+        when(hollow.getType()).thenReturn(Material.LIGHT);
+        when(world.getBlockAt(anyInt(), anyInt(), anyInt())).thenAnswer(invocation -> {
+            final int x = invocation.getArgument(0);
+            final int y = invocation.getArgument(1);
+            final int z = invocation.getArgument(2);
+            return y >= 128 || x == 1 && z == 0 && (y == 100 || y == 101) ? hollow : solid;
+        });
+
+        final Location safe = LocationUtil.getSafeDestination(essentials, new Location(world, 0, 64, 0));
+
+        assertEquals(1, safe.getBlockX());
+        assertEquals(100, safe.getBlockY());
+        assertFalse(LocationUtil.isBlockUnsafe(essentials, world, safe.getBlockX(), safe.getBlockY(), safe.getBlockZ()));
     }
 
     @Test
