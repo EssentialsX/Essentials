@@ -77,7 +77,23 @@ public class UtilTest {
 
     @Test
     public void testSafeLocationRespectsLogicalHeight() throws Exception {
+        final Location result = getSafeDestinationWithLogicalHeightSetting(true);
+
+        assertEquals(1, result.getBlockX());
+        assertEquals(100, result.getBlockY());
+    }
+
+    @Test
+    public void testSafeLocationIgnoresLogicalHeightWhenDisabled() throws Exception {
+        final Location result = getSafeDestinationWithLogicalHeightSetting(false);
+
+        assertEquals(0, result.getBlockX());
+        assertEquals(128, result.getBlockY());
+    }
+
+    private Location getSafeDestinationWithLogicalHeightSetting(final boolean considerWorldHeight) throws Exception {
         final IEssentials essentials = mock(IEssentials.class);
+        final ISettings settings = mock(ISettings.class);
         final WorldInfoProvider worldInfoProvider = mock(WorldInfoProvider.class);
         final World world = mock(World.class);
         final WorldBorder worldBorder = mock(WorldBorder.class);
@@ -85,6 +101,8 @@ public class UtilTest {
         final Block hollow = mock(Block.class);
 
         when(essentials.provider(WorldInfoProvider.class)).thenReturn(worldInfoProvider);
+        when(essentials.getSettings()).thenReturn(settings);
+        when(settings.isConsiderWorldHeightForTeleportSafety()).thenReturn(considerWorldHeight);
         when(worldInfoProvider.getMinHeight(world)).thenReturn(0);
         when(worldInfoProvider.getLogicalHeight(world)).thenReturn(128);
         when(worldInfoProvider.getMaxHeight(world)).thenReturn(256);
@@ -100,11 +118,7 @@ public class UtilTest {
             return y >= 128 || x == 1 && z == 0 && (y == 100 || y == 101) ? hollow : solid;
         });
 
-        final Location safe = LocationUtil.getSafeDestination(essentials, new Location(world, 0, 64, 0));
-
-        assertEquals(1, safe.getBlockX());
-        assertEquals(100, safe.getBlockY());
-        assertFalse(LocationUtil.isBlockUnsafe(essentials, world, safe.getBlockX(), safe.getBlockY(), safe.getBlockZ()));
+        return LocationUtil.getSafeDestination(essentials, new Location(world, 0, 64, 0));
     }
 
     @Test

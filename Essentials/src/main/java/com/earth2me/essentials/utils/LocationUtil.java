@@ -228,7 +228,9 @@ public final class LocationUtil {
         final World world = loc.getWorld();
         final int worldMinY = worldInfoProvider.getMinHeight(world);
         final int worldLogicalY = worldInfoProvider.getLogicalHeight(world);
-        final int worldMaxY = loc.getBlockY() < worldLogicalY ? worldLogicalY : worldInfoProvider.getMaxHeight(world);
+        final int worldMaxY = ess.getSettings().isConsiderWorldHeightForTeleportSafety() && loc.getBlockY() < worldLogicalY
+                ? worldLogicalY
+                : worldInfoProvider.getMaxHeight(world);
         int x = loc.getBlockX();
         int y = (int) Math.round(loc.getY());
         int z = loc.getBlockZ();
