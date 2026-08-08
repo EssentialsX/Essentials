@@ -214,7 +214,8 @@ public final class VersionUtil {
     }
 
     public static final class BukkitVersion implements Comparable<BukkitVersion> {
-        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)?(?:-snapshot-(\\d+))?(?:-pre-?(\\d+))?(?:-rc-?(\\d+))?(?:\\.build\\.(\\d+)(?:-([a-z]+))?)?(?:-?R?([\\d.]+))?(?:(?:\\.local)?-SNAPSHOT)?");
+        // Paper/API jars may report a literal "+" build (e.g. "26.2.build.+") when the build number is unresolved.
+        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)?(?:-snapshot-(\\d+))?(?:-pre-?(\\d+))?(?:-rc-?(\\d+))?(?:\\.build\\.(\\d+|\\+)(?:-([a-z]+))?)?(?:-?R?([\\d.]+))?(?:(?:\\.local)?-SNAPSHOT)?");
         private static final Pattern LEGACY_SNAPSHOT_PATTERN = Pattern.compile("^(\\d{2})w(\\d{2})([a-z])(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
 
         private final int major;
@@ -302,7 +303,8 @@ public final class VersionUtil {
             if (snapshotRelease == null || snapshotRelease.isEmpty()) snapshotRelease = "-1";
             if (preRelease == null || preRelease.isEmpty()) preRelease = "-1";
             if (releaseCandidate == null || releaseCandidate.isEmpty()) releaseCandidate = "-1";
-            if (paperBuild == null || paperBuild.isEmpty()) paperBuild = "-1";
+            // "+" is used by some Paper/API jars when the build number is unresolved (e.g. "26.2.build.+").
+            if (paperBuild == null || paperBuild.isEmpty() || "+".equals(paperBuild)) paperBuild = "-1";
             return new BukkitVersion(Integer.parseInt(major),
                 Integer.parseInt(minor),
                 Integer.parseInt(patch),

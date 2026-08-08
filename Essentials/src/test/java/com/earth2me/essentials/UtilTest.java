@@ -457,5 +457,16 @@ public class UtilTest {
             .isHigherThan(VersionUtil.BukkitVersion.fromString("26.1-pre-1.build.99-alpha")));
         assertTrue(VersionUtil.BukkitVersion.fromString("26.1.build.1-alpha")
             .isHigherThan(VersionUtil.BukkitVersion.fromString("26.1-snapshot-99.build.99-alpha")));
+        // Unresolved Paper/API build placeholder (e.g. ASPaper reports "26.2.build.+")
+        v = VersionUtil.BukkitVersion.fromString("26.2.build.+");
+        assertEquals(v.getMajor(), 26);
+        assertEquals(v.getMinor(), 2);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getRevision(), 0.0);
+        assertEquals(v.getPaperBuild(), -1);
+        assertNull(v.getReleaseChannel());
+        assertTrue(v.equalsBaseVersion(VersionUtil.BukkitVersion.fromString("26.2-R0.1-SNAPSHOT")));
+        assertTrue(VersionUtil.BukkitVersion.fromString("26.2.build.+")
+            .equalsBaseVersion(VersionUtil.v26_2_R01));
     }
 }
