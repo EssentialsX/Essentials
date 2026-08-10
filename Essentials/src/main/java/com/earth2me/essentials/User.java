@@ -822,6 +822,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
+    // Notifies this (muted) user that they have been silenced, including the reason and remaining time if applicable.
+    public void notifyMuted() {
+        final String dateDiff = getMuteTimeout() > 0 ? DateUtil.formatDateDiff(getMuteTimeout()) : null;
+        if (dateDiff == null) {
+            if (hasMuteReason()) {
+                sendTl("voiceSilencedReason", getMuteReason());
+            } else {
+                sendTl("voiceSilenced");
+            }
+        } else {
+            if (hasMuteReason()) {
+                sendTl("voiceSilencedReasonTime", dateDiff, getMuteReason());
+            } else {
+                sendTl("voiceSilencedTime", dateDiff);
+            }
+        }
+    }
+
     @Override
     public long getLastActivityTime() {
         return this.lastActivity;

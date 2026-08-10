@@ -76,7 +76,7 @@ public class SpigotAdventureFacet implements AdventureFacet {
 
     @Override
     public String legacyToMini(String message) {
-        return legacyToMini(message, true);
+        return legacyToMini(message, false);
     }
 
     @Override

@@ -167,6 +167,10 @@ public final class LocationUtil {
         return isBlockDamaging(world, x, y, z) || isBlockAboveAir(ess, world, x, y, z);
     }
 
+    private static boolean isBlockUnsafe(IEssentials ess, final World world, final int x, final int y, final int z, final int maxY) {
+        return y >= maxY || isBlockUnsafe(ess, world, x, y, z);
+    }
+
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
         final Material block = world.getBlockAt(x, y, z).getType();
         final Material below = world.getBlockAt(x, y - 1, z).getType();
@@ -224,7 +228,9 @@ public final class LocationUtil {
         final World world = loc.getWorld();
         final int worldMinY = worldInfoProvider.getMinHeight(world);
         final int worldLogicalY = worldInfoProvider.getLogicalHeight(world);
-        final int worldMaxY = loc.getBlockY() < worldLogicalY ? worldLogicalY : worldInfoProvider.getMaxHeight(world);
+        final int worldMaxY = ess.getSettings().isConsiderWorldHeightForTeleportSafety() && loc.getBlockY() < worldLogicalY
+                ? worldLogicalY
+                : worldInfoProvider.getMaxHeight(world);
         int x = loc.getBlockX();
         int y = (int) Math.round(loc.getY());
         int z = loc.getBlockZ();
@@ -242,12 +248,12 @@ public final class LocationUtil {
                 break;
             }
         }
-        if (isBlockUnsafe(ess, world, x, y, z)) {
+        if (isBlockUnsafe(ess, world, x, y, z, worldMaxY)) {
             x = Math.round(loc.getX()) == origX ? x - 1 : x + 1;
             z = Math.round(loc.getZ()) == origZ ? z - 1 : z + 1;
         }
         int i = 0;
-        while (isBlockUnsafe(ess, world, x, y, z)) {
+        while (isBlockUnsafe(ess, world, x, y, z, worldMaxY)) {
             i++;
             if (i >= VOLUME.length) {
                 x = origX;
@@ -259,14 +265,14 @@ public final class LocationUtil {
             y = NumberUtil.constrainToRange(origY + VOLUME[i].y, worldMinY, worldMaxY);
             z = origZ + VOLUME[i].z;
         }
-        while (isBlockUnsafe(ess, world, x, y, z)) {
+        while (isBlockUnsafe(ess, world, x, y, z, worldMaxY)) {
             y += 1;
             if (y >= worldMaxY) {
                 x += 1;
                 break;
             }
         }
-        while (isBlockUnsafe(ess, world, x, y, z)) {
+        while (isBlockUnsafe(ess, world, x, y, z, worldMaxY)) {
             y -= 1;
             if (y <= worldMinY + 1) {
                 x += 1;

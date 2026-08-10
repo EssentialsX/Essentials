@@ -4,9 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.messaging.IMessageRecipient;
-import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
-import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 
 import java.util.Collections;
@@ -27,13 +25,8 @@ public class Commandmsg extends EssentialsLoopCommand {
         final boolean canWildcard = sender.isAuthorized("essentials.msg.multiple");
         if (sender.isPlayer()) {
             final User user = ess.getUser(sender.getPlayer());
-            if (user.isMuted()) {
-                final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
-                if (dateDiff == null) {
-                    throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReason" : "voiceSilenced", user.getMuteReason());
-                }
-                throw new TranslatableException(user.hasMuteReason() ? "voiceSilencedReasonTime" : "voiceSilencedTime", dateDiff, user.getMuteReason());
-            }
+            // Muted players are handled in SimpleMessageRecipient#sendMessage so that the message can still
+            // be shown to social spies before being dropped instead of being delivered to the recipient.
             message = FormatUtil.formatMessage(user, "essentials.msg", message);
         } else {
             message = FormatUtil.replaceFormat(message);

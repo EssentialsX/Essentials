@@ -56,7 +56,7 @@ public class Commandtp extends EssentialsCommand {
                     throw new NotEnoughArgumentsException(user.playerTl("teleportInvalidLocation"));
                 }
                 final Location locpos = new Location(user.getWorld(), x2, y2, z2, user.getLocation().getYaw(), user.getLocation().getPitch());
-                user.getAsyncTeleport().now(locpos, false, TeleportCause.COMMAND, future);
+                user.getAsyncTeleport().now(locpos, true, TeleportCause.COMMAND, future);
                 future.thenAccept(success -> {
                     if (success) {
                         user.sendTl("teleporting", locpos.getWorld().getName(), locpos.getBlockX(), locpos.getBlockY(), locpos.getBlockZ());

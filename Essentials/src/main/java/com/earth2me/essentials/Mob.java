@@ -131,6 +131,7 @@ public enum Mob {
     NAUTILUS("Nautilus", Enemies.NEUTRAL, "NAUTILUS"),
     ZOMBIE_NAUTILUS("ZombieNautilus", Enemies.NEUTRAL, "ZOMBIE_NAUTILUS"),
     PARCHED("Parched", Enemies.ENEMY, "PARCHED"),
+    SULFUR_CUBE("SulfurCube", Enemies.FRIENDLY, "SULFUR_CUBE"),
     ;
 
     private static final Map<String, Mob> hashMap = new HashMap<>();
