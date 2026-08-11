@@ -147,13 +147,17 @@ public class Commandexp extends EssentialsLoopCommand {
             }
             return options;
         } else if (args.length == 2) {
-            if ((args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give")) || (args[0].equalsIgnoreCase("take") && user.isAuthorized("essentials.exp.take"))) {
+            final String subCmd = args[0].toLowerCase(Locale.ENGLISH);
+            final boolean isModifyCmd = (subCmd.equals("set") && user.isAuthorized("essentials.exp.set")) || (subCmd.equals("give") && user.isAuthorized("essentials.exp.give")) || (subCmd.equals("take") && user.isAuthorized("essentials.exp.take"));
+            final boolean hasOthers = (subCmd.equals("set") && user.isAuthorized("essentials.exp.set.others")) || (subCmd.equals("give") && user.isAuthorized("essentials.exp.give.others")) || (subCmd.equals("take") && user.isAuthorized("essentials.exp.take.others")) || (subCmd.equals("show") && user.isAuthorized("essentials.exp.others")) || (subCmd.equals("reset") && user.isAuthorized("essentials.exp.reset.others"));
+            if (isModifyCmd && !hasOthers) {
                 final String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
                 if (NumberUtil.isInt(levellessArg)) {
                     return Lists.newArrayList(levellessArg + "l");
                 }
+                return Collections.emptyList();
             }
-            if (user.isAuthorized("essentials.exp.others")) {
+            if (hasOthers) {
                 return getPlayers(user);
             }
         } else if (args.length == 3 && !(args[0].equalsIgnoreCase("show") || args[0].equalsIgnoreCase("reset"))) {
