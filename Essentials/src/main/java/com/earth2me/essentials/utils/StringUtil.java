@@ -60,11 +60,7 @@ public final class StringUtil {
             if (each instanceof Collection) {
                 buf.append(joinList(seperator, ((Collection) each).toArray()));
             } else {
-                try {
-                    buf.append(each.toString());
-                } catch (final Exception e) {
-                    buf.append(each.toString());
-                }
+                buf.append(each.toString());
             }
         }
         return buf.toString();
@@ -84,11 +80,7 @@ public final class StringUtil {
             if (each instanceof Collection) {
                 buf.append(joinListSkip(seperator, skip, ((Collection) each).toArray()));
             } else {
-                try {
-                    buf.append(each.toString());
-                } catch (final Exception e) {
-                    buf.append(each.toString());
-                }
+                buf.append(each.toString());
             }
         }
         return buf.toString();
