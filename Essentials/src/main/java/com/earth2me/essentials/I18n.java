@@ -36,6 +36,9 @@ import java.util.regex.Pattern;
 public class I18n implements net.ess3.api.II18n {
     private static final String MESSAGES = "messages";
     private static final Pattern NODOUBLEMARK = Pattern.compile("''");
+    // A color tag is invisible once rendered, so a translation with whitespace on
+    // both sides of one shows a double space in chat. Many locales carry this.
+    private static final Pattern SPACED_COLOR_TAG = Pattern.compile("\\s+(</?(?:primary|secondary)>)\\s+");
     private static volatile ExecutorService BUNDLE_LOADER_EXECUTOR = Executors.newFixedThreadPool(2);
     private static final ResourceBundle NULL_BUNDLE = new ResourceBundle() {
         @SuppressWarnings("NullableProblems")
@@ -193,7 +196,7 @@ public class I18n implements net.ess3.api.II18n {
     }
 
     private String format(final Locale locale, final String string, final Object... objects) {
-        String format = translate(locale, string);
+        String format = SPACED_COLOR_TAG.matcher(translate(locale, string)).replaceAll(" $1");
 
         MessageFormat messageFormat = messageFormatCache.computeIfAbsent(locale, l -> new HashMap<>()).get(format);
         if (messageFormat == null) {
