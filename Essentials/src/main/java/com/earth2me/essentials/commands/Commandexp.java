@@ -147,14 +147,20 @@ public class Commandexp extends EssentialsLoopCommand {
             }
             return options;
         } else if (args.length == 2) {
-            if ((args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give")) || (args[0].equalsIgnoreCase("take") && user.isAuthorized("essentials.exp.take"))) {
+            final ExpCommands cmd;
+            try {
+                cmd = ExpCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
+            } catch (final IllegalArgumentException e) {
+                return Collections.emptyList();
+            }
+            if (cmd.hasOtherPermission(user)) {
+                return getPlayers(user);
+            }
+            if (cmd.hasPermission(user) && cmd != ExpCommands.SHOW && cmd != ExpCommands.RESET) {
                 final String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
                 if (NumberUtil.isInt(levellessArg)) {
                     return Lists.newArrayList(levellessArg + "l");
                 }
-            }
-            if (user.isAuthorized("essentials.exp.others")) {
-                return getPlayers(user);
             }
         } else if (args.length == 3 && !(args[0].equalsIgnoreCase("show") || args[0].equalsIgnoreCase("reset"))) {
             final String levellessArg = args[2].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
