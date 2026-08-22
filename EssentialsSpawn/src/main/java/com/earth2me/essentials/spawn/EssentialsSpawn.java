@@ -49,7 +49,8 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
         final EventPriority joinPriority = ess.getSettings().getSpawnJoinPriority();
         if (joinPriority != null) {
             // Listen on AsyncUserDataLoadEvent (fired after the core join flow) so we can reliably tell whether this is
-            // a player's first join, instead of using the unreliable Player#hasPlayedBefore() (see GH-6466).
+            // a player's first join, instead of using Player#hasPlayedBefore() which doesn't since data is persisted during the configuration phase.
+            // See https://github.com/EssentialsX/Essentials/issues/6466
             pluginManager.registerEvent(AsyncUserDataLoadEvent.class, playerListener, joinPriority, (ll, event) ->
                 ((EssentialsSpawnPlayerListener) ll).onUserDataLoad((AsyncUserDataLoadEvent) event), this);
         }

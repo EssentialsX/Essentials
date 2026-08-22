@@ -425,7 +425,8 @@ public class EssentialsPlayerListener implements Listener {
 
         // A null last account name means EssentialsX has never recorded this player before, i.e. it's their first join.
         // We rely on EssentialsX's own user data here rather than Player#hasPlayedBefore(), which is unreliable on modern
-        // server platforms that persist player data during the login/configuration phase (see GH-6466, GH-6464).
+        // server platforms that persist player data during the login/configuration phase.
+        // See https://github.com/EssentialsX/Essentials/issues/6466, https://github.com/EssentialsX/Essentials/issues/6464
         final boolean firstJoin = lastAccountName == null;
 
         // If the Minecraft account name changed, reset the nickname so the old one doesn't persist
