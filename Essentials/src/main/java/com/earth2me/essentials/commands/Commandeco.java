@@ -35,13 +35,14 @@ public class Commandeco extends EssentialsLoopCommand {
         try {
             cmd = EcoCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
             isPercent = cmd != EcoCommands.RESET && args[2].endsWith("%");
+            final String amountStr = isPercent ? args[2].substring(0, args[2].length() - 1) : args[2];
             if (cmd == EcoCommands.RESET) {
                 amount = ess.getSettings().getStartingBalance();
             } else if (sender.isPlayer() && ess.getSettings().isPerPlayerLocale()) {
                 final String playerLocale = ess.provider(PlayerLocaleProvider.class).getLocale(sender.getPlayer());
-                amount = NumberUtil.parseStringToBDecimal(args[2], ess.getUser(sender.getPlayer()).getPlayerLocale(playerLocale));
+                amount = NumberUtil.parseStringToBDecimal(amountStr, ess.getUser(sender.getPlayer()).getPlayerLocale(playerLocale));
             } else {
-                amount = NumberUtil.parseStringToBDecimal(args[2]);
+                amount = NumberUtil.parseStringToBDecimal(amountStr);
             }
         } catch (final Exception ex) {
             throw new NotEnoughArgumentsException(ex);
