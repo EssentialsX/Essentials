@@ -13,11 +13,13 @@ public class AsyncUserDataLoadEvent extends Event {
 
     private final IUser user;
     private final String joinMessage;
+    private final boolean firstJoin;
 
-    public AsyncUserDataLoadEvent(IUser user, String joinMessage) {
+    public AsyncUserDataLoadEvent(IUser user, String joinMessage, boolean firstJoin) {
         super(true);
         this.user = user;
         this.joinMessage = joinMessage;
+        this.firstJoin = firstJoin;
     }
 
     /**
@@ -32,6 +34,18 @@ public class AsyncUserDataLoadEvent extends Event {
      */
     public String getJoinMessage() {
         return joinMessage;
+    }
+
+    /**
+     * Whether this is the first time EssentialsX has seen this player join.
+     * <p>
+     * This is determined from EssentialsX's own user data rather than {@link org.bukkit.OfflinePlayer#hasPlayedBefore()},
+     * which is unreliable on modern server platforms that persist player data during the login/configuration phase.
+     *
+     * @return {@code true} if this is the player's first recorded join, otherwise {@code false}.
+     */
+    public boolean isFirstJoin() {
+        return firstJoin;
     }
 
     @Override

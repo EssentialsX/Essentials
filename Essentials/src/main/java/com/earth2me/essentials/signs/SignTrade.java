@@ -97,8 +97,9 @@ public class SignTrade extends EssentialsSign {
                 stack = stack.clone();
                 stack.setAmount(amount);
                 final Trade store = new Trade(stack, ess);
-                addAmount(sign, 2, store, ess, false);
+                addAmount(sign, 2, store, ess, true);
                 store.charge(player);
+                addAmount(sign, 2, store, ess, false);
                 return store;
             }
         }
