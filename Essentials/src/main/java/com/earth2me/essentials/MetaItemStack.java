@@ -13,6 +13,7 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.TranslatableException;
 import net.ess3.provider.BannerDataProvider;
 import net.ess3.provider.ItemUnbreakableProvider;
+import net.ess3.provider.PatternTypeProvider;
 import net.ess3.provider.PotionMetaProvider;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -207,8 +208,13 @@ public class MetaItemStack {
 
             try {
                 final String components = Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length));
-                // modifyItemStack requires that the item namespaced key is prepended to the components for some reason
-                stack = ess.getServer().getUnsafe().modifyItemStack(stack, stack.getType().getKey() + components);
+                // From 1.20.6 through 1.21.11, modifyItemStack parses its argument as a full item string, so the item's
+                // namespaced key must be prepended to the components. As of 26.1, the implementation prepends the item
+                // key itself, so prepending it here would produce a malformed (double-namespaced) item string.
+                final String itemString = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v26_1_R01)
+                        ? components
+                        : stack.getType().getKey() + components;
+                stack = ess.getServer().getUnsafe().modifyItemStack(stack, itemString);
             } catch (final NullPointerException npe) {
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
@@ -712,22 +718,15 @@ public class MetaItemStack {
                 throw new TranslatableException("invalidBanner", split[1]);
             }
 
-            PatternType patternType = null;
-            try {
-                //noinspection removal
-                patternType = PatternType.getByIdentifier(split[0]);
-            } catch (final Exception ignored) {
-            }
+            final PatternType patternType = ess.provider(PatternTypeProvider.class).getPatternTypeByIdentifier(split[0]);
 
             final BannerMeta meta = (BannerMeta) stack.getItemMeta();
             if (split[0].equalsIgnoreCase("basecolor")) {
                 final Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 ess.provider(BannerDataProvider.class).setBaseColor(stack, DyeColor.getByColor(color));
             } else if (patternType != null) {
-                //noinspection removal
-                final PatternType type = PatternType.getByIdentifier(split[0]);
                 final DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
-                final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
+                final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, patternType);
                 meta.addPattern(pattern);
             }
 
@@ -739,12 +738,7 @@ public class MetaItemStack {
                 throw new TranslatableException("invalidBanner", split[1]);
             }
 
-            PatternType patternType = null;
-            try {
-                //noinspection removal
-                patternType = PatternType.getByIdentifier(split[0]);
-            } catch (final Exception ignored) {
-            }
+            final PatternType patternType = ess.provider(PatternTypeProvider.class).getPatternTypeByIdentifier(split[0]);
 
             // Hacky fix for accessing Shield meta - https://github.com/drtshock/Essentials/pull/745#issuecomment-234843795
             final BlockStateMeta meta = (BlockStateMeta) stack.getItemMeta();
@@ -753,10 +747,8 @@ public class MetaItemStack {
                 final Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 banner.setBaseColor(DyeColor.getByColor(color));
             } else if (patternType != null) {
-                //noinspection removal
-                final PatternType type = PatternType.getByIdentifier(split[0]);
                 final DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
-                final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
+                final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, patternType);
                 banner.addPattern(pattern);
             }
             banner.update();

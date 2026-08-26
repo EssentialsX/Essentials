@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
 public class I18n implements net.ess3.api.II18n {
     private static final String MESSAGES = "messages";
     private static final Pattern NODOUBLEMARK = Pattern.compile("''");
-    private static final ExecutorService BUNDLE_LOADER_EXECUTOR = Executors.newFixedThreadPool(2);
+    private static volatile ExecutorService BUNDLE_LOADER_EXECUTOR = Executors.newFixedThreadPool(2);
     private static final ResourceBundle NULL_BUNDLE = new ResourceBundle() {
         @SuppressWarnings("NullableProblems")
         public Enumeration<String> getKeys() {
@@ -106,6 +107,29 @@ public class I18n implements net.ess3.api.II18n {
 
     public void onDisable() {
         instance = null;
+        shutdownExecutor();
+    }
+
+    private static synchronized ExecutorService getExecutor() {
+        if (BUNDLE_LOADER_EXECUTOR == null || BUNDLE_LOADER_EXECUTOR.isShutdown() || BUNDLE_LOADER_EXECUTOR.isTerminated()) {
+            BUNDLE_LOADER_EXECUTOR = Executors.newFixedThreadPool(2);
+        }
+        return BUNDLE_LOADER_EXECUTOR;
+    }
+
+    private static synchronized void shutdownExecutor() {
+        final ExecutorService exec = BUNDLE_LOADER_EXECUTOR;
+        if (exec == null) {
+            return;
+        }
+        exec.shutdown();
+        try {
+            if (!exec.awaitTermination(5, TimeUnit.SECONDS)) {
+                exec.shutdownNow();
+            }
+        } catch (final InterruptedException ignored) {
+            exec.shutdownNow();
+        }
     }
 
     @Override
@@ -124,7 +148,7 @@ public class I18n implements net.ess3.api.II18n {
             synchronized (loadingBundles) {
                 if (!loadingBundles.contains(locale)) {
                     loadingBundles.add(locale);
-                    BUNDLE_LOADER_EXECUTOR.submit(() -> {
+                    getExecutor().submit(() -> {
                         blockingLoadBundle(locale);
                         synchronized (loadingBundles) {
                             loadingBundles.remove(locale);

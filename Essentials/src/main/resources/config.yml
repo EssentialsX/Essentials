@@ -99,6 +99,10 @@ force-disable-teleport-safety: false
 # safe location. If you'd like players to be teleported to a safe location all of the time, set this option to true.
 force-safe-teleport-location: false
 
+# When teleporting to an unsafe location, should Essentials consider the world's logical height when finding a safe destination?
+# This prevents safety checks from moving players above the Nether roof unless the requested destination is already above it.
+consider-world-height-for-teleport-safety: true
+
 # Consider water blocks as "safe", therefore allowing players to teleport
 # using commands such as /home or /spawn to a location that is occupied by water blocks.
 is-water-safe: false

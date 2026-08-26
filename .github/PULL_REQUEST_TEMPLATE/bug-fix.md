@@ -80,7 +80,7 @@ Java version:
     bug fix on. If this feature does not apply to a server, strike through the server software using ~~strikethrough~~. If you have tested on other
     environments, add a new line with relevant details.
 -->
-- [ ] Most recent Paper version (1.XX.Y, git-Paper-BUILD)
+- [ ] Most recent Paper version (XX.YY.Z, git-Paper-BUILD)
 - [ ] CraftBukkit/Spigot/Paper 1.12.2
 - [ ] CraftBukkit 1.8.8
 

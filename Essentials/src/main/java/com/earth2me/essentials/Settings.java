@@ -298,6 +298,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isConsiderWorldHeightForTeleportSafety() {
+        return config.getBoolean("consider-world-height-for-teleport-safety", false);
+    }
+
+    @Override
     public boolean isTeleportPassengerDismount() {
         return config.getBoolean("teleport-passenger-dismount", true);
     }

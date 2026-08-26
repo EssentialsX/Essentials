@@ -193,22 +193,7 @@ public class EssentialsPlayerListener implements Listener {
         final User user = ess.getUser(event.getPlayer());
         if (user.isMuted()) {
             event.setCancelled(true);
-
-            final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
-            if (dateDiff == null) {
-                if (user.hasMuteReason()) {
-                    user.sendTl("voiceSilencedReason", user.getMuteReason());
-                } else {
-                    user.sendTl("voiceSilenced");
-                }
-            } else {
-                if (user.hasMuteReason()) {
-                    user.sendTl("voiceSilencedReasonTime", dateDiff, user.getMuteReason());
-                } else {
-                    user.sendTl("voiceSilencedTime", dateDiff);
-                }
-            }
-
+            user.notifyMuted();
             ess.getLogger().info(ess.getAdventureFacet().miniToLegacy(tlLiteral("mutedUserSpeaks", user.getName(), event.getMessage())));
         }
         try {
@@ -423,6 +408,12 @@ public class EssentialsPlayerListener implements Listener {
 
         final boolean newUsername = lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
 
+        // A null last account name means EssentialsX has never recorded this player before, i.e. it's their first join.
+        // We rely on EssentialsX's own user data here rather than Player#hasPlayedBefore(), which is unreliable on modern
+        // server platforms that persist player data during the login/configuration phase.
+        // See https://github.com/EssentialsX/Essentials/issues/6466, https://github.com/EssentialsX/Essentials/issues/6464
+        final boolean firstJoin = lastAccountName == null;
+
         // If the Minecraft account name changed, reset the nickname so the old one doesn't persist
         if (ess.getSettings().isResetNickOnNameChange() && newUsername && user.getNickname() != null) {
             user.setNickname(null);
@@ -478,7 +469,7 @@ public class EssentialsPlayerListener implements Listener {
             joinMessageConsumer.accept(effectiveMessage);
         }
 
-        ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, effectiveMessage)));
+        ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, effectiveMessage, firstJoin)));
 
         if (ess.getSettings().getMotdDelay() >= 0) {
             final int motdDelay = ess.getSettings().getMotdDelay() / 50;
@@ -825,20 +816,7 @@ public class EssentialsPlayerListener implements Listener {
         final User user = ess.getUser(player);
         if (user.isMuted() && (ess.getSettings().getMuteCommands().contains(cmd) || ess.getSettings().getMuteCommands().contains("*"))) {
             event.setCancelled(true);
-            final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
-            if (dateDiff == null) {
-                if (user.hasMuteReason()) {
-                    user.sendTl("voiceSilencedReason", user.getMuteReason());
-                } else {
-                    user.sendTl("voiceSilenced");
-                }
-            } else {
-                if (user.hasMuteReason()) {
-                    user.sendTl("voiceSilencedReasonTime", dateDiff, user.getMuteReason());
-                } else {
-                    user.sendTl("voiceSilencedTime", dateDiff);
-                }
-            }
+            user.notifyMuted();
             ess.getLogger().info(ess.getAdventureFacet().miniToLegacy(tlLiteral("mutedUserSpeaks", player.getName(), event.getMessage())));
             return;
         }
