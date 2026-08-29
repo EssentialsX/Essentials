@@ -5,11 +5,13 @@ import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.config.annotations.DeleteIfIncomplete;
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
 import com.earth2me.essentials.config.entities.CommandCooldown;
+import com.earth2me.essentials.config.entities.CommandWarmup;
 import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.config.processors.DeleteIfIncompleteProcessor;
 import com.earth2me.essentials.config.processors.DeleteOnEmptyProcessor;
 import com.earth2me.essentials.config.serializers.BigDecimalTypeSerializer;
 import com.earth2me.essentials.config.serializers.CommandCooldownSerializer;
+import com.earth2me.essentials.config.serializers.CommandWarmupSerializer;
 import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
 import com.earth2me.essentials.config.serializers.MailMessageSerializer;
 import com.earth2me.essentials.config.serializers.MaterialTypeSerializer;
@@ -62,6 +64,7 @@ public class EssentialsConfiguration {
             .register(LazyLocation.class, new LocationTypeSerializer())
             .register(Material.class, new MaterialTypeSerializer())
             .register(CommandCooldown.class, new CommandCooldownSerializer())
+            .register(CommandWarmup.class, new CommandWarmupSerializer())
             .register(MailMessage.class, new MailMessageSerializer())
             .build();
 

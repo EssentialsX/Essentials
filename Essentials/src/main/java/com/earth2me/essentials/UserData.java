@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.config.entities.CommandCooldown;
+import com.earth2me.essentials.config.entities.CommandWarmup;
 import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.config.holders.UserConfigHolder;
 import com.earth2me.essentials.userstorage.ModernUserMap;
@@ -700,6 +701,58 @@ public abstract class UserData extends PlayerExtension implements IConf {
         }
 
         if (getCooldownsList().removeIf(cooldown -> cooldown != null && !cooldown.isIncomplete() && cooldown.pattern().equals(pattern))) {
+            save();
+            return true;
+        }
+        return false;
+    }
+
+    public List<CommandWarmup> getWarmupsList() {
+        return holder.timestamps().commandWarmups();
+    }
+
+    public Map<Pattern, Long> getCommandWarmups() {
+        final Map<Pattern, Long> map = new HashMap<>();
+        for (final CommandWarmup w : getWarmupsList()) {
+            if (w == null || w.isIncomplete()) {
+                continue;
+            }
+            map.put(w.pattern(), w.value());
+        }
+        return map;
+    }
+
+    public Date getCommandWarmupExpiry(final String label) {
+        for (CommandWarmup warmup : getWarmupsList()) {
+            if (warmup == null || warmup.isIncomplete()) {
+                continue;
+            }
+            if (warmup.pattern().matcher(label).matches()) {
+                return new Date(warmup.value());
+            }
+        }
+        return null;
+    }
+
+    public void addCommandWarmup(final Pattern pattern, final Date expiresAt, final boolean save) {
+        final CommandWarmup warmup = new CommandWarmup();
+        warmup.pattern(pattern);
+        warmup.value(expiresAt.getTime());
+        if (warmup.isIncomplete()) {
+            return;
+        }
+        holder.timestamps().commandWarmups().add(warmup);
+        if (save) {
+            save();
+        }
+    }
+
+    public boolean clearCommandWarmup(final Pattern pattern) {
+        if (holder.timestamps().commandWarmups().isEmpty()) {
+            return false;
+        }
+
+        if (getWarmupsList().removeIf(warmup -> warmup != null && !warmup.isIncomplete() && warmup.pattern().equals(pattern))) {
             save();
             return true;
         }
