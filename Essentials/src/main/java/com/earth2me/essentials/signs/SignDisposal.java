@@ -21,10 +21,8 @@ public class SignDisposal extends EssentialsSign {
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) {
-        String title = (sign.getLine(1) + " " + sign.getLine(2) + " " + sign.getLine(3)).trim();
-        if (title.isEmpty()) {
-            title = player.playerTl("disposal");
-        }
+        final String customTitle = (sign.getLine(1) + " " + sign.getLine(2) + " " + sign.getLine(3)).trim();
+        final String title = customTitle.isEmpty() ? ess.getAdventureFacet().miniToLegacy(player.playerTl("disposal")) : customTitle;
         player.getBase().openInventory(ess.getServer().createInventory(player.getBase(), 36, title));
         return true;
     }
