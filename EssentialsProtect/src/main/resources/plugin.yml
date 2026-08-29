@@ -7,6 +7,8 @@ description: Provides protection for various parts of the world.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, drtshock]
 softdepend: [Essentials]
 api-version: 1.13
+folia-supported: true
+
 permissions:
   essentials.protect.entitytarget.bypass:
     description: Allows the bearer to be targeted by entities

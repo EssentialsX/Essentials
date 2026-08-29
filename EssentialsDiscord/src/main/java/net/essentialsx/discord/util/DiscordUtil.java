@@ -245,10 +245,6 @@ public final class DiscordUtil {
             return;
         }
 
-        if (Bukkit.getServer().isPrimaryThread()) {
-            Bukkit.getPluginManager().callEvent(event);
-        } else {
-            Bukkit.getScheduler().runTask(jda.getPlugin(), () -> Bukkit.getPluginManager().callEvent(event));
-        }
+        Bukkit.getPluginManager().callEvent(event);
     }
 }

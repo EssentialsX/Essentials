@@ -53,6 +53,7 @@ public final class VersionUtil {
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01, v1_18_2_R01, v1_19_4_R01, v1_20_6_R01, v1_21_11_R01, v26_1_R01, v26_2_R01);
 
     public static final boolean PRE_FLATTENING = VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01);
+    public static final boolean FOLIA;
 
     public static final List<String> officialPlugins = Arrays.asList(
             "EssentialsAntiBuild",
@@ -78,6 +79,15 @@ public final class VersionUtil {
     private static final String PFX = make("8(;4>`");
 
     static {
+        boolean isFolia;
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            isFolia = true;
+        } catch (Throwable ignored) {
+            isFolia = false;
+        }
+        FOLIA = isFolia;
+
         final ImmutableMap.Builder<String, SupportStatus> builder = new ImmutableMap.Builder<>();
 
         // Leaf, yet another "High Performance" fork of Paper. Not supported by EssentialsX.

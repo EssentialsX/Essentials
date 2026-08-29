@@ -30,7 +30,7 @@ public class DiscordCommandDispatcher extends ListenerAdapter {
             }
 
             final String command = event.getMessage().getContentRaw();
-            Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
+            jda.getPlugin().getEss().scheduleGlobalDelayedTask(() -> {
                 try {
                     Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), message ->
                             event.getMessage().reply(message).queue()).getSender(), command);
