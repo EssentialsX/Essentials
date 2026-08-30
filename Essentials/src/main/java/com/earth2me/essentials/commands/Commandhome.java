@@ -40,6 +40,13 @@ public class Commandhome extends EssentialsCommand {
                 }
             }
         }
+        if (ess.getSettings().isStrictHomeLimit() && user.equals(player)
+                && !user.isAuthorized("essentials.sethome.multiple.unlimited")) {
+            final int limit = ess.getSettings().getHomeLimit(user);
+            if (user.getHomes().size() > limit) {
+                throw new TranslatableException("strictHomeLimitExceeded", limit);
+            }
+        }
         try {
             if ("bed".equalsIgnoreCase(homeName)) {
                 if (!user.isAuthorized("essentials.home.bed")) {
