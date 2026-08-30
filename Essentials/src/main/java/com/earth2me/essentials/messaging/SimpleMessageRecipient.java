@@ -93,6 +93,17 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         message = preSendEvent.getMessage();
 
         final User senderUser = getUser(this);
+        final User recipientUser = getUser(recipient);
+        // A recipient with essentials.chat.spy.exempt.block fully blocks incoming private messages,
+        // rather than merely being exempt from the socialspy broadcast. Since the message is never
+        // delivered, there is nothing for social spies to observe either.
+        // Note: PrivateMessageSentEvent is intentionally not fired here so the message is not relayed
+        // elsewhere (e.g. to Discord) as though it had actually been delivered.
+        if (recipientUser != null && recipientUser.isAuthorized("essentials.chat.spy.exempt.block")) {
+            sendTl("msgIgnore", recipient.getDisplayName());
+            return MessageResponse.RECIPIENT_BLOCKED;
+        }
+
         // A muted player must not have their message delivered to the recipient. However, social spies
         // may still observe the attempted message (see the socialspy-listen-muted-players setting).
         // Note: PrivateMessageSentEvent is intentionally not fired here so the message is not relayed
@@ -142,6 +153,9 @@ public class SimpleMessageRecipient implements IMessageRecipient {
 
     /**
      * Shows a private message to all online social spies, unless either party is exempt from being spied on.
+     * <p>
+     * Note: a recipient holding {@code essentials.chat.spy.exempt.block} never reaches this method, since
+     * their message is blocked before delivery in {@link #sendMessage(IMessageRecipient, String)}.
      *
      * @param recipient the recipient of the private message
      * @param message   the message that was sent
@@ -162,7 +176,8 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         if (senderUser == null // not null if player.
                 || senderUser.isAuthorized("essentials.chat.spy.exempt")
                 || recipientUser == null
-                || recipientUser.isAuthorized("essentials.chat.spy.exempt")) {
+                || recipientUser.isAuthorized("essentials.chat.spy.exempt")
+                || recipientUser.isAuthorized("essentials.chat.spy.exempt.block")) {
             return;
         }
 
