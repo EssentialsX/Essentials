@@ -58,7 +58,7 @@ public class Commandeco extends EssentialsLoopCommand {
                     final BigDecimal serverMaxBal = ess.getSettings().getMaxMoney();
                     final BigDecimal postTransactionBal = player.getMoney().add(userAmount);
                     if (postTransactionBal.compareTo(serverMaxBal) > 0) {
-                        ess.showError(sender, new TranslatableException("maxMoneyError", AdventureUtil.parsed(NumberUtil.displayCurrency(serverMaxBal, ess))), commandLabel);
+                        ess.showError(sender, new TranslatableException("maxMoney", AdventureUtil.parsed(NumberUtil.displayCurrency(serverMaxBal, ess))), commandLabel);
                     } else {
                         player.giveMoney(userAmount, sender, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
                     }
