@@ -81,8 +81,10 @@ public class Commandpay extends EssentialsLoopCommand {
                 }
                 final BigDecimal serverMaxBal = ess.getSettings().getMaxMoney();
                 final BigDecimal postTransactionBal = player.getMoney().add(amount);
-                if ((postTransactionBal.compareTo(serverMaxBal) > 0) && !args[0].equals("*")) {
-                    user.sendMessage("§c" + player.getDisplayName() + " would surpass the server's maximum balance limit!");
+                if (postTransactionBal.compareTo(serverMaxBal) > 0) {
+                    if (!args[0].equals("*")) {
+                        user.sendMessage("§c" + player.getDisplayName() + " would surpass the server's maximum balance limit!");
+                    }
                     return;
                 }
                 user.payUser(player, amount, UserBalanceUpdateEvent.Cause.COMMAND_PAY);
