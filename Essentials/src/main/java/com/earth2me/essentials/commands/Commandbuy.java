@@ -28,14 +28,16 @@ public class Commandbuy extends EssentialsCommand {
         super("buy");
     }
 
+    // Starting point for when the command is run
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         BigDecimal totalWorth = BigDecimal.ZERO;
+        // Throw an error if the user has not specified enough arguments.
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
 
-        // Let's check if the user is authorized to buy stuff more of the stuff in hand.
+        // Let's check if the user is authorized to buy more of the stuff in hand
         // Consider removing the first if.
         if (args[0].equalsIgnoreCase("hand") && !user.isAuthorized("essentials.buy.hand")) {
             throw new TranslatableException("buyHandPermission");
@@ -48,12 +50,12 @@ public class Commandbuy extends EssentialsCommand {
 
         final boolean isBulk = is.size() > 1;
 
-        final List<ItemStack> notSold = new ArrayList<>();
+        final List<ItemStack> notBought = new ArrayList<>();
         for (ItemStack stack : is) {
             if (!ess.getSettings().isAllowBuyNamedItems()) {
                 if (stack.getItemMeta() != null && stack.getItemMeta().hasDisplayName()) {
                     if (isBulk) {
-                        notSold.add(stack);
+                        notBought.add(stack);
                         continue;
                     }
                     throw new TranslatableException("cannotBuyNamedItem");
@@ -95,8 +97,8 @@ public class Commandbuy extends EssentialsCommand {
         }
     }
 
-    private BigDecimal sellItem(final User user, final ItemStack is, final String[] args, final boolean isBulkSell) throws Exception {
-        final int amount = ess.getWorth().getAmount(ess, user, is, args, isBulkSell);
+    private BigDecimal buyItem(final User user, final ItemStack is, final String[] args, final boolean isBulkBuy) throws Exception {
+        final int amount = ess.getWorth().getAmount(ess, user, is, args, isBulkBuy);
         final BigDecimal originalWorth = ess.getWorth().getPrice(ess, is);
         final BigDecimal worth = originalWorth == null ? null : originalWorth.multiply(ess.getSettings().getMultiplier(user));
 
@@ -126,7 +128,7 @@ public class Commandbuy extends EssentialsCommand {
         user.getBase().updateInventory();
         Trade.log("Command", "Buy", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), user.getMoney(), ess);
         // Needs to be changed to a method for taking money
-        user.giveMoney(result, null, UserBalanceUpdateEvent.Cause.COMMAND_BUY);
+        user.takeMoney(result, null, UserBalanceUpdateEvent.Cause.COMMAND_BUY);
         final String typeName = is.getType().toString().toLowerCase(Locale.ENGLISH);
         final AdventureUtil.ParsedPlaceholder worthDisplay = AdventureUtil.parsed(NumberUtil.displayCurrency(worth, ess));
         user.sendTl("itemBought", AdventureUtil.parsed(NumberUtil.displayCurrency(result, ess)), amount, typeName, worthDisplay);
