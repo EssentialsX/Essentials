@@ -11,8 +11,8 @@
     </option>
     <option name="locations">
       <list>
-        <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
-        <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
+        <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">bundled-sun-checks</ConfigurationLocation>
+        <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">bundled-google-checks</ConfigurationLocation>
         <ConfigurationLocation id="321e5753-4201-4d2c-bf31-6232011122fd" type="PROJECT_RELATIVE" scope="All" description="EssentialsX">
           $PROJECT_DIR$/.checkstyle/checkstyle.xml
           <option name="properties">
