@@ -129,6 +129,10 @@ public class AlternativeCommandsHandler {
             }
         }
 
+        if (commands.isEmpty()) {
+            return null;
+        }
+
         // return the first alias
         return commands.get(0).get();
     }
