@@ -409,6 +409,7 @@ public final class MobCompat {
         OAK("GENERIC", "OAK"),
         SPRUCE("REDWOOD", "SPRUCE"),
         MANGROVE("GENERIC", "MANGROVE"),
+        POPLAR("GENERIC", "POPLAR"),
         ;
 
         private final String treeSpecies;
