@@ -101,7 +101,7 @@ public class Commandcondense extends EssentialsCommand {
                 remove.charge(user);
                 add.pay(user, OverflowType.DROP);
                 final Material remainingItemType = input.getType().getCraftingRemainingItem();
-                if (remainingItemType != Material.GLASS_BOTTLE) return true;
+                if (remainingItemType == null) return true;
                 final int remainingItems = input.getAmount();
                 final Trade returnRemainder = new Trade(new ItemStack(remainingItemType, remainingItems), ess);
                 returnRemainder.pay(user, OverflowType.DROP);
