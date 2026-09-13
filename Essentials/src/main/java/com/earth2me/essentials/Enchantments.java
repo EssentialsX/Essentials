@@ -313,7 +313,7 @@ public final class Enchantments {
                 ENCHANTMENTS.put("density", density);
             }
             final Enchantment windBurst = Enchantment.getByName("WIND_BURST");
-            if (breach != null) {
+            if (windBurst != null) {
                 ENCHANTMENTS.put("windburst", windBurst);
                 ALIASENCHANTMENTS.put("wind", windBurst);
                 ALIASENCHANTMENTS.put("burst", windBurst);
