@@ -52,7 +52,7 @@ public final class MaterialUtil {
         BEDS = EnumUtil.getAllMatching(Material.class, "BED", "BED_BLOCK", "WHITE_BED", "ORANGE_BED",
             "MAGENTA_BED", "LIGHT_BLUE_BED", "YELLOW_BED", "LIME_BED", "PINK_BED", "GRAY_BED",
             "LIGHT_GRAY_BED", "CYAN_BED", "PURPLE_BED", "BLUE_BED", "BROWN_BED", "GREEN_BED",
-            "RED_BED", "BLACK_BED");
+            "RED_BED", "BLACK_BED", "STRAW_BED");
 
         BANNERS = EnumUtil.getAllMatching(Material.class, "BANNER", "WHITE_BANNER",
             "ORANGE_BANNER", "MAGENTA_BANNER", "LIGHT_BLUE_BANNER", "YELLOW_BANNER", "LIME_BANNER",
