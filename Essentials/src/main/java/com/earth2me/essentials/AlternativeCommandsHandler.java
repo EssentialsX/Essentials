@@ -116,6 +116,8 @@ public class AlternativeCommandsHandler {
         }
 
         // return the first command that is not an alias
+        Command firstAlias = null;
+
         final Iterator<WeakReference<Command>> iterator = commands.iterator();
         while (iterator.hasNext()) {
             final Command cmd = iterator.next().get();
@@ -127,10 +129,14 @@ public class AlternativeCommandsHandler {
             if (cmd.getName().equalsIgnoreCase(label)) {
                 return cmd;
             }
+
+            if (firstAlias == null) {
+                firstAlias = cmd;
+            }
         }
 
-        // return the first alias
-        return commands.get(0).get();
+        // return the first alias, or null if every reference in this bucket has been collected
+        return firstAlias;
     }
 
     public void executed(final String label, final Command pc) {
