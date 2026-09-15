@@ -24,13 +24,15 @@ public class Commandthunder extends EssentialsCommand {
         final boolean setThunder = args[0].equalsIgnoreCase("true");
 
         if (args.length == 1) {
-            world.setThundering(setThunder);
+            ess.scheduleGlobalDelayedTask(() -> world.setThundering(setThunder));
             user.sendTl("thunder", CommonPlaceholders.enableDisable(user.getSource(), setThunder));
             return;
         }
 
-        world.setThundering(setThunder);
-        world.setThunderDuration(Integer.parseInt(args[1]) * 20);
+        ess.scheduleGlobalDelayedTask(() -> {
+            world.setThundering(setThunder);
+            world.setThunderDuration(Integer.parseInt(args[1]) * 20);
+        });
         user.sendTl("thunderDuration", CommonPlaceholders.enableDisable(user.getSource(), setThunder), Integer.parseInt(args[1]));
     }
 

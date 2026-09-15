@@ -92,8 +92,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     // Timestamps
     private transient long lastOnlineActivity;
     private transient long lastThrottledAction;
-    private transient long lastActivity = System.currentTimeMillis();
-    private transient long teleportInvulnerabilityTimestamp = 0;
+    private transient volatile long lastActivity = System.currentTimeMillis();
+    private transient volatile long teleportInvulnerabilityTimestamp = 0;
     private long lastNotifiedAboutMailsMs;
     private long lastHomeConfirmationTimestamp;
 
@@ -879,7 +879,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public void updateActivityOnChat(final boolean broadcast) {
         if (ess.getSettings().cancelAfkOnChat()) {
             //Chat happens async, make sure we have a sync context
-            ess.scheduleSyncDelayedTask(() -> updateActivity(broadcast, AfkStatusChangeEvent.Cause.CHAT));
+            ess.scheduleEntityDelayedTask(base, () -> updateActivity(broadcast, AfkStatusChangeEvent.Cause.CHAT));
         }
     }
 
@@ -901,11 +901,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
             // If `afk-timeout-command` in config.yml is empty, use default Essentials kicking behaviour instead of executing a command.
             if (ess.getSettings().getAfkTimeoutCommands().isEmpty()) {
-                this.getBase().kickPlayer(ess.getAdventureFacet().miniToLegacy(playerTl("autoAfkKickReason", kickTime)));
+                ess.scheduleEntityDelayedTask(this.getBase(), () ->
+                        this.getBase().kickPlayer(ess.getAdventureFacet().miniToLegacy(playerTl("autoAfkKickReason", kickTime))));
 
                 for (final User user : ess.getOnlineUsers()) {
                     if (user.isAuthorized("essentials.kick.notify")) {
-                        user.sendTl("playerKicked", Console.displayName(), getName(), user.playerTl("autoAfkKickReason", kickTime));
+                        ess.scheduleEntityDelayedTask(user.getBase(), () ->
+                                user.sendTl("playerKicked", Console.displayName(), getName(), user.playerTl("autoAfkKickReason", kickTime)));
                     }
                 }
             } else {

@@ -32,13 +32,15 @@ public class Commandkill extends EssentialsLoopCommand {
         }
         final DamageEventProvider provider = ess.provider(DamageEventProvider.class);
 
-        final EntityDamageEvent ede = provider.callDamageEvent(matchPlayer, sender.isPlayer() && sender.getPlayer().getName().equals(matchPlayer.getName()) ? EntityDamageEvent.DamageCause.SUICIDE : EntityDamageEvent.DamageCause.CUSTOM, Float.MAX_VALUE);
-        if (ede.isCancelled() && sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.kill.force")) {
-            return;
-        }
-        ede.getEntity().setLastDamageCause(ede);
-        matchPlayer.setHealth(0);
-        sender.sendTl("kill", matchPlayer.getDisplayName());
+        ess.scheduleEntityDelayedTask(matchPlayer, () -> {
+            final EntityDamageEvent ede = provider.callDamageEvent(matchPlayer, sender.isPlayer() && sender.getPlayer().getName().equals(matchPlayer.getName()) ? EntityDamageEvent.DamageCause.SUICIDE : EntityDamageEvent.DamageCause.CUSTOM, Float.MAX_VALUE);
+            if (ede.isCancelled() && sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.kill.force")) {
+                return;
+            }
+            ede.getEntity().setLastDamageCause(ede);
+            matchPlayer.setHealth(0);
+            sender.sendTl("kill", matchPlayer.getDisplayName());
+        });
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.bukkit.Server;
 import org.bukkit.block.CreatureSpawner;
 
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Commandspawner extends EssentialsCommand {
 
@@ -31,10 +32,6 @@ public class Commandspawner extends EssentialsCommand {
         }
 
         final Location target = LocationUtil.getTarget(user.getBase());
-
-        if (target.getBlock().getType() != MOB_SPAWNER) {
-            throw new TranslatableException("mobSpawnTarget");
-        }
 
         final String name = args[0];
         int delay = 0;
@@ -54,25 +51,36 @@ public class Commandspawner extends EssentialsCommand {
         if (args.length > 1 && NumberUtil.isInt(args[1]) && user.isAuthorized("essentials.spawner.delay")) {
             delay = Integer.parseInt(args[1]);
         }
+        final int finalDelay = delay;
         final Trade charge = new Trade("spawner-" + mob.name.toLowerCase(Locale.ENGLISH), ess);
         charge.isAffordableFor(user);
-        try {
-            final CreatureSpawner spawner = (CreatureSpawner) target.getBlock().getState();
-            spawner.setSpawnedType(mob.getType());
-            if (delay > 0) {
-                final SpawnerBlockProvider spawnerBlockProvider = ess.provider(SpawnerBlockProvider.class);
-                spawnerBlockProvider.setMinSpawnDelay(spawner, 1);
-                spawnerBlockProvider.setMaxSpawnDelay(spawner, Integer.MAX_VALUE);
-                spawnerBlockProvider.setMinSpawnDelay(spawner, delay);
-                spawnerBlockProvider.setMaxSpawnDelay(spawner, delay);
+
+        final AtomicReference<TranslatableException> spawnError = new AtomicReference<>();
+        ess.ensureRegion(target, () -> {
+            if (target.getBlock().getType() != MOB_SPAWNER) {
+                spawnError.set(new TranslatableException("mobSpawnTarget"));
+                return;
             }
-            spawner.setDelay(delay);
-            spawner.update();
-        } catch (final Throwable ex) {
-            throw new TranslatableException(ex, "mobSpawnError");
+            try {
+                final CreatureSpawner spawner = (CreatureSpawner) target.getBlock().getState();
+                spawner.setSpawnedType(mob.getType());
+                if (finalDelay > 0) {
+                    final SpawnerBlockProvider spawnerBlockProvider = ess.provider(SpawnerBlockProvider.class);
+                    spawnerBlockProvider.setMinSpawnDelay(spawner, 1);
+                    spawnerBlockProvider.setMaxSpawnDelay(spawner, Integer.MAX_VALUE);
+                    spawnerBlockProvider.setMinSpawnDelay(spawner, finalDelay);
+                    spawnerBlockProvider.setMaxSpawnDelay(spawner, finalDelay);
+                }
+                spawner.setDelay(finalDelay);
+                spawner.update();
+            } catch (final Throwable ex) {
+                spawnError.set(new TranslatableException(ex, "mobSpawnError"));
+            }
+        });
+        if (spawnError.get() != null) {
+            throw spawnError.get();
         }
         charge.charge(user);
         user.sendTl("setSpawner", mob.name);
-
     }
 }

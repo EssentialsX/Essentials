@@ -30,16 +30,18 @@ public class Commandweather extends EssentialsCommand {
             isStorm = args[0].equalsIgnoreCase("storm");
         }
 
-        final World world = user.getWorld();
+        ess.scheduleGlobalDelayedTask(() -> {
+            final World world = user.getWorld();
 
-        if (args.length > 1) {
+            if (args.length > 1) {
+                world.setStorm(isStorm);
+                world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
+                user.sendTl(isStorm ? "weatherStormFor" : "weatherSunFor", world.getName(), args[1]);
+                return;
+            }
             world.setStorm(isStorm);
-            world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
-            user.sendTl(isStorm ? "weatherStormFor" : "weatherSunFor", world.getName(), args[1]);
-            return;
-        }
-        world.setStorm(isStorm);
-        user.sendTl(isStorm ? "weatherStorm" : "weatherSun", world.getName());
+            user.sendTl(isStorm ? "weatherStorm" : "weatherSun", world.getName());
+        });
     }
 
     @Override
@@ -54,14 +56,16 @@ public class Commandweather extends EssentialsCommand {
             throw new TranslatableException("weatherInvalidWorld", args[0]);
         }
 
-        if (args.length > 2) {
+        ess.scheduleLocationDelayedTask(world.getSpawnLocation(), () -> {
+            if (args.length > 2) {
+                world.setStorm(isStorm);
+                world.setWeatherDuration(Integer.parseInt(args[2]) * 20);
+                sender.sendTl(isStorm ? "weatherStormFor" : "weatherSunFor", world.getName(), args[2]);
+                return;
+            }
             world.setStorm(isStorm);
-            world.setWeatherDuration(Integer.parseInt(args[2]) * 20);
-            sender.sendTl(isStorm ? "weatherStormFor" : "weatherSunFor", world.getName(), args[2]);
-            return;
-        }
-        world.setStorm(isStorm);
-        sender.sendTl(isStorm ? "weatherStorm" : "weatherSun", world.getName());
+            sender.sendTl(isStorm ? "weatherStorm" : "weatherSun", world.getName());
+        });
     }
 
     @Override
