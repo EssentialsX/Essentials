@@ -266,12 +266,12 @@ public class Kit {
 
             for (final ItemStack itemStack : leftover.values()) {
                 int spillAmount = itemStack.getAmount();
+                final int itemMaxStackSize = itemStack.getMaxStackSize();
                 while (spillAmount > 0) {
-                    if (maxStackSize != 0) {
-                        itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
-                    }
-                    user.getWorld().dropItemNaturally(user.getLocation(), itemStack);
-                    spillAmount -= itemStack.getAmount();
+                    final ItemStack spillStack = itemStack.clone();
+                    spillStack.setAmount(Math.min(spillAmount, itemMaxStackSize));
+                    user.getWorld().dropItemNaturally(user.getLocation(), spillStack);
+                    spillAmount -= spillStack.getAmount();
                 }
                 spew = true;
             }
