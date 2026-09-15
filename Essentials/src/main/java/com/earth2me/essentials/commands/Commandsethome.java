@@ -90,6 +90,9 @@ public class Commandsethome extends EssentialsCommand {
         if (!user.isAuthorized("essentials.sethome.multiple.unlimited")) {
             final int limit = ess.getSettings().getHomeLimit(user);
             if (usersHome.getHomes().size() >= limit) {
+                if (ess.getSettings().isStrictHomeLimit() && user.equals(usersHome) && usersHome.getHomes().size() > limit) {
+                    throw new TranslatableException("strictHomeLimitExceeded", limit);
+                }
                 if (usersHome.getHomes().contains(name)) {
                     return false;
                 }

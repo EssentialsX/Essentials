@@ -2163,6 +2163,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isStrictHomeLimit() {
+        return config.getBoolean("strict-home-limit", false);
+    }
+
+    @Override
     public boolean infoAfterDeath() {
         return config.getBoolean("send-info-after-death", false);
     }
