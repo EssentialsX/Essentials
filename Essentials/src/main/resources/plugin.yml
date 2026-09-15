@@ -710,6 +710,8 @@ permissions:
     description: Allows the bearers to see all local chat messages, regardless of their proximity to the sender
   essentials.chat.spy.exempt:
     description: Allows the bearer to be exempt from the local chat spy permission
+  essentials.chat.spy.exempt.block:
+    description: Allows the bearer to fully block incoming private messages, in addition to being exempt from the local chat spy permission
   essentials.clearinventory:
     description: Allows access to the /clearinventory command
   essentials.clearinventory.all:
