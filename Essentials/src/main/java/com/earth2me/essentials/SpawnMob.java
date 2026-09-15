@@ -32,6 +32,10 @@ public final class SpawnMob {
 
     private static final Material GOLDEN_HELMET = EnumUtil.getMaterial("GOLDEN_HELMET", "GOLD_HELMET");
     private static final Material GOLDEN_CHESTPLATE = EnumUtil.getMaterial("GOLDEN_CHESTPLATE", "GOLD_CHESTPLATE");
+    private static final Material COPPER_HELMET = EnumUtil.getMaterial("COPPER_HELMET");
+    private static final Material COPPER_CHESTPLATE = EnumUtil.getMaterial("COPPER_CHESTPLATE");
+    private static final Material COPPER_LEGGINGS = EnumUtil.getMaterial("COPPER_LEGGINGS");
+    private static final Material COPPER_BOOTS = EnumUtil.getMaterial("COPPER_BOOTS");
     private static final Material GOLDEN_LEGGINGS = EnumUtil.getMaterial("GOLDEN_LEGGINGS", "GOLD_LEGGINGS");
     private static final Material GOLDEN_BOOTS = EnumUtil.getMaterial("GOLDEN_BOOTS", "GOLD_BOOTS");
     private static final Material GOLDEN_SWORD = EnumUtil.getMaterial("GOLDEN_SWORD", "GOLD_SWORD");
@@ -210,6 +214,11 @@ public final class SpawnMob {
                     invent.setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS, 1));
                     invent.setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE, 1));
                     invent.setHelmet(new ItemStack(Material.NETHERITE_HELMET, 1));
+                } else if (inputData.contains("copper") && COPPER_HELMET != null) {
+                    invent.setBoots(new ItemStack(COPPER_BOOTS, 1));
+                    invent.setLeggings(new ItemStack(COPPER_LEGGINGS, 1));
+                    invent.setChestplate(new ItemStack(COPPER_CHESTPLATE, 1));
+                    invent.setHelmet(new ItemStack(COPPER_HELMET, 1));
                 } else if (inputData.contains("diamond")) {
                     invent.setBoots(new ItemStack(Material.DIAMOND_BOOTS, 1));
                     invent.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS, 1));

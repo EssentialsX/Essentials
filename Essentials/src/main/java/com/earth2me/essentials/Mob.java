@@ -60,6 +60,7 @@ public enum Mob {
     CHERRY_BOAT("CherryBoat", Enemies.NEUTRAL, "CHERRY_BOAT"),
     BAMBOO_RAFT("BambooRaft", Enemies.NEUTRAL, "BAMBOO_RAFT"),
     PALE_OAK_BOAT("PaleOakBoat", Enemies.NEUTRAL, "PALE_OAK_BOAT"),
+    POPLAR_BOAT("PoplarBoat", Enemies.NEUTRAL, "POPLAR_BOAT"),
     MINECART("Minecart", Enemies.NEUTRAL, EntityType.MINECART),
     MINECART_CHEST("ChestMinecart", Enemies.NEUTRAL, MobCompat.CHEST_MINECART),
     MINECART_FURNACE("FurnaceMinecart", Enemies.NEUTRAL, MobCompat.FURNACE_MINECART),
@@ -118,7 +119,17 @@ public enum Mob {
     FROG("Frog", Enemies.FRIENDLY, "FROG"),
     TADPOLE("Tadpole", Enemies.FRIENDLY, "TADPOLE"),
     WARDEN("Warden", Enemies.ENEMY, "WARDEN"),
-    CHEST_BOAT("ChestBoat", Enemies.NEUTRAL, "CHEST_BOAT"),
+    CHEST_BOAT("ChestBoat", Enemies.NEUTRAL, MobCompat.OAK_CHEST_BOAT),
+    ACACIA_CHEST_BOAT("AcaciaChestBoat", Enemies.NEUTRAL, "ACACIA_CHEST_BOAT"),
+    DARK_OAK_CHEST_BOAT("DarkOakChestBoat", Enemies.NEUTRAL, "DARK_OAK_CHEST_BOAT"),
+    BIRCH_CHEST_BOAT("BirchChestBoat", Enemies.NEUTRAL, "BIRCH_CHEST_BOAT"),
+    JUNGLE_CHEST_BOAT("JungleChestBoat", Enemies.NEUTRAL, "JUNGLE_CHEST_BOAT"),
+    SPRUCE_CHEST_BOAT("SpruceChestBoat", Enemies.NEUTRAL, "SPRUCE_CHEST_BOAT"),
+    MANGROVE_CHEST_BOAT("MangroveChestBoat", Enemies.NEUTRAL, "MANGROVE_CHEST_BOAT"),
+    CHERRY_CHEST_BOAT("CherryChestBoat", Enemies.NEUTRAL, "CHERRY_CHEST_BOAT"),
+    BAMBOO_CHEST_RAFT("BambooChestRaft", Enemies.NEUTRAL, "BAMBOO_CHEST_RAFT"),
+    PALE_OAK_CHEST_BOAT("PaleOakChestBoat", Enemies.NEUTRAL, "PALE_OAK_CHEST_BOAT"),
+    POPLAR_CHEST_BOAT("PoplarChestBoat", Enemies.NEUTRAL, "POPLAR_CHEST_BOAT"),
     CAMEL("Camel", Enemies.FRIENDLY, "CAMEL"),
     SNIFFER("Sniffer", Enemies.FRIENDLY, "SNIFFER"),
     ARMADILLO("Armadillo", Enemies.FRIENDLY, "ARMADILLO"),
@@ -132,6 +143,7 @@ public enum Mob {
     ZOMBIE_NAUTILUS("ZombieNautilus", Enemies.NEUTRAL, "ZOMBIE_NAUTILUS"),
     PARCHED("Parched", Enemies.ENEMY, "PARCHED"),
     SULFUR_CUBE("SulfurCube", Enemies.FRIENDLY, "SULFUR_CUBE"),
+    CUSHION("Cushion", Enemies.FRIENDLY, "CUSHION")
     ;
 
     private static final Map<String, Mob> hashMap = new HashMap<>();
