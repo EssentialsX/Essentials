@@ -1401,6 +1401,8 @@ permissions:
     description: Allows access to the /whois command
   essentials.whois.ip:
     description: Allows access to the /whois command with IP address
+  essentials.whois.location:
+    description: Allows access to the /whois command with location
   essentials.workbench:
     description: Allows access to the /workbench command
   essentials.anvil:
