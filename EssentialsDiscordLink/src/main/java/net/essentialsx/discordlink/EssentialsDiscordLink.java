@@ -37,6 +37,11 @@ public class EssentialsDiscordLink extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if (com.earth2me.essentials.utils.VersionUtil.FOLIA) {
+            getLogger().warning("Discord integration is not yet supported on Folia; disabling.");
+            setEnabled(false);
+            return;
+        }
         ess = (IEssentials) getServer().getPluginManager().getPlugin("Essentials");
         final EssentialsDiscord essDiscord = (EssentialsDiscord) getServer().getPluginManager().getPlugin("EssentialsDiscord");
         if (ess == null || !ess.isEnabled() || essDiscord == null || !essDiscord.isEnabled()) {

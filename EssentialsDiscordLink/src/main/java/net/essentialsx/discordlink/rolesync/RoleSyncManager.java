@@ -5,12 +5,12 @@ import com.google.common.collect.BiMap;
 import net.essentialsx.api.v2.events.discordlink.DiscordLinkStatusChangeEvent;
 import net.essentialsx.api.v2.services.discord.InteractionRole;
 import net.essentialsx.discordlink.EssentialsDiscordLink;
+import net.ess3.provider.SchedulingProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +30,7 @@ public class RoleSyncManager implements Listener {
     private final Map<String, InteractionRole> groupToRoleMap = new HashMap<>();
     private final Map<String, String> roleIdToGroupMap = new HashMap<>();
     private final Semaphore syncSemaphore = new Semaphore(5);
-    private BukkitTask syncTask;
+    private SchedulingProvider.EssentialsTask syncTask;
     private int syncCursor = 0;
 
     public RoleSyncManager(final EssentialsDiscordLink ess) {

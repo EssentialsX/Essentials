@@ -28,6 +28,7 @@ import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.commands.QuietAbortException;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.economy.vault.VaultEconomyProvider;
 import com.earth2me.essentials.items.AbstractItemDb;
@@ -46,11 +47,11 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.ModernPaperEnvironment;
 import com.earth2me.essentials.utils.PasteUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
-import com.earth2me.essentials.config.EssentialsConfiguration;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
@@ -69,15 +70,19 @@ import net.ess3.provider.InventoryViewProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.PlayerLocaleProvider;
 import net.ess3.provider.ProviderListener;
+import net.ess3.provider.SchedulingProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.providers.BaseBannerDataProvider;
 import net.ess3.provider.providers.BaseInventoryViewProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
 import net.ess3.provider.providers.BukkitMaterialTagProvider;
+import net.ess3.provider.providers.BukkitSchedulingProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
 import net.ess3.provider.providers.BukkitTileEntityProvider;
+import net.ess3.provider.providers.BukkitWorldTileEntityCountProvider;
 import net.ess3.provider.providers.FixedHeightWorldInfoProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
+import net.ess3.provider.providers.FoliaSchedulingProvider;
 import net.ess3.provider.providers.LegacyBannerDataProvider;
 import net.ess3.provider.providers.LegacyBiomeNameProvider;
 import net.ess3.provider.providers.LegacyPatternTypeProvider;
@@ -105,10 +110,12 @@ import net.ess3.provider.providers.PaperSerializationProvider;
 import net.ess3.provider.providers.PaperServerStateProvider;
 import net.ess3.provider.providers.PaperTickCountProvider;
 import net.ess3.provider.providers.PaperTileEntityProvider;
+import net.ess3.provider.providers.PaperWorldTileEntityCountProvider;
 import net.ess3.provider.providers.PrehistoricPotionMetaProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -118,6 +125,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
@@ -132,8 +140,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -146,6 +152,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -261,6 +269,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 getLogger().severe(getAdventureFacet().miniToLegacy(tlLiteral("serverSnapshot")));
             }
 
+            if (PaperLib.isPaper()) {
+                PaperLib.setCustomEnvironment(new ModernPaperEnvironment());
+            }
+
             final PluginManager pm = getServer().getPluginManager();
             for (final Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
@@ -326,9 +338,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             jails = new Jails(this);
             confList.add(jails);
             execTimer.mark("Init(Jails)");
-
-            EconomyLayers.onEnable(this);
-            execTimer.mark("Init(EconomyLayers)");
 
             // Spawner item provider only uses one, but it's here for legacy...
             providerFactory.registerProvider(BlockMetaSpawnerItemProvider.class);
@@ -402,10 +411,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Tile Entity Provider
             providerFactory.registerProvider(BukkitTileEntityProvider.class, PaperTileEntityProvider.class);
 
+            // World Tile Entity Count Provider
+            providerFactory.registerProvider(BukkitWorldTileEntityCountProvider.class, PaperWorldTileEntityCountProvider.class);
+
             // Tick Count Provider
             providerFactory.registerProvider(PaperTickCountProvider.class);
 
-            if (!TESTING) {
+            // Scheduling provider
+            providerFactory.registerProvider(FoliaSchedulingProvider.class, BukkitSchedulingProvider.class);
+
+            if (!TESTING || true) { // FIXME: The scheduling provider is necessary for tests to pass without adding checks for TESTING everywhere
                 providerFactory.finalizeRegistration();
             }
 
@@ -426,6 +441,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
 
             execTimer.mark("Init(Providers)");
+
+            EconomyLayers.onEnable(this);
+            execTimer.mark("Init(EconomyLayers)");
+
+            registerListeners(getServer().getPluginManager());
+            initAdventureFacet();
             reload();
 
             // The item spawn blacklist is loaded with all other settings, before the item
@@ -436,7 +457,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 
             timer = new EssentialsTimer(this);
-            scheduleSyncRepeatingTask(timer, 1000, 50);
+            scheduleGlobalRepeatingTask(timer, 1000, 50);
 
             Economy.setEss(this);
             execTimer.mark("RegHandler");
@@ -489,8 +510,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     private void registerListeners(final PluginManager pm) {
-        HandlerList.unregisterAll(this);
-
         if (getSettings().isDebug()) {
             LOGGER.log(Level.INFO, "Registering Listeners");
         }
@@ -589,7 +608,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         EssentialsConfiguration.shutdownExecutor();
         PasteUtil.shutdownExecutor();
-        getServer().getScheduler().cancelTasks(this);
+        provider(SchedulingProvider.class).cancelAllTasks();
 
         HandlerList.unregisterAll(this);
     }
@@ -611,9 +630,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 command.setUsage(getAdventureFacet().miniToLegacy(tlLiteral(commandName + "CommandUsage")));
             }
         }
-
-        final PluginManager pm = getServer().getPluginManager();
-        registerListeners(pm);
 
         initAdventureFacet();
     }
@@ -908,11 +924,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         if (getSettings().isDebug()) {
             LOGGER.log(Level.INFO, getAdventureFacet().miniToLegacy(tlLiteral("errorCallingCommand", commandLabel)), exception);
         }
-    }
-
-    @Override
-    public BukkitScheduler getScheduler() {
-        return this.getServer().getScheduler();
     }
 
     @Override
@@ -1243,33 +1254,135 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public BukkitTask runTaskAsynchronously(final Runnable run) {
-        return this.getScheduler().runTaskAsynchronously(this, run);
+    public void scheduleInitTask(Runnable runnable) {
+        provider(SchedulingProvider.class).registerInitTask(runnable);
     }
 
     @Override
-    public BukkitTask runTaskLaterAsynchronously(final Runnable run, final long delay) {
-        return this.getScheduler().runTaskLaterAsynchronously(this, run, delay);
+    public void runTaskAsynchronously(final Runnable run) {
+        provider(SchedulingProvider.class).runAsyncTask(run);
     }
 
     @Override
-    public BukkitTask runTaskTimerAsynchronously(final Runnable run, final long delay, final long period) {
-        return this.getScheduler().runTaskTimerAsynchronously(this, run, delay, period);
+    public void runTaskLaterAsynchronously(final Runnable run, final long delay) {
+        provider(SchedulingProvider.class).runAsyncTaskLater(run, delay);
     }
 
     @Override
-    public int scheduleSyncDelayedTask(final Runnable run) {
-        return this.getScheduler().scheduleSyncDelayedTask(this, run);
+    public SchedulingProvider.EssentialsTask runTaskTimerAsynchronously(final Runnable run, final long delay, final long period) {
+        return provider(SchedulingProvider.class).runAsyncTaskRepeating(run, delay, period);
     }
 
     @Override
-    public int scheduleSyncDelayedTask(final Runnable run, final long delay) {
-        return this.getScheduler().scheduleSyncDelayedTask(this, run, delay);
+    public void scheduleEntityDelayedTask(Entity entity, Runnable run) {
+        provider(SchedulingProvider.class).runEntityTask(entity, run);
     }
 
     @Override
-    public int scheduleSyncRepeatingTask(final Runnable run, final long delay, final long period) {
-        return this.getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
+    public SchedulingProvider.EssentialsTask scheduleEntityDelayedTask(Entity entity, Runnable run, long delay) {
+        return provider(SchedulingProvider.class).runEntityTask(entity, run, delay);
+    }
+
+    @Override
+    public SchedulingProvider.EssentialsTask scheduleEntityRepeatingTask(Entity entity, Runnable run, long delay, long period) {
+        return provider(SchedulingProvider.class).runEntityTaskRepeating(entity, run, delay, period);
+    }
+
+    @Override
+    public void scheduleLocationDelayedTask(Location location, Runnable run) {
+        provider(SchedulingProvider.class).runLocationalTask(location, run);
+    }
+
+    @Override
+    public void scheduleLocationDelayedTask(Location location, Runnable run, long delay) {
+        provider(SchedulingProvider.class).runLocationalTask(location, run, delay);
+    }
+
+    @Override
+    public SchedulingProvider.EssentialsTask scheduleLocationRepeatingTask(Location location, Runnable run, long delay, long period) {
+        return provider(SchedulingProvider.class).runLocationalTaskRepeating(location, run, delay, period);
+    }
+
+    @Override
+    public void scheduleGlobalDelayedTask(Runnable run, long delay) {
+        provider(SchedulingProvider.class).runGlobalLocationalTask(run, delay);
+    }
+
+    @Override
+    public SchedulingProvider.EssentialsTask scheduleGlobalRepeatingTask(Runnable run, long delay, long period) {
+        return provider(SchedulingProvider.class).runGlobalLocationalTaskRepeating(run, delay, period);
+    }
+
+    @Override
+    public boolean isEntityThread(Entity entity) {
+        return provider(SchedulingProvider.class).isEntityThread(entity);
+    }
+
+    @Override
+    public boolean isRegionThread(Location location) {
+        return provider(SchedulingProvider.class).isRegionThread(location);
+    }
+
+    @Override
+    public boolean isGlobalThread() {
+        return provider(SchedulingProvider.class).isGlobalThread();
+    }
+
+    @Override
+    public void ensureEntity(Entity entity, Runnable runnable) {
+        if (isEntityThread(entity)) {
+            runnable.run();
+            return;
+        }
+
+        final CompletableFuture<Object> taskLock = new CompletableFuture<>();
+        scheduleEntityDelayedTask(entity, () -> {
+            runnable.run();
+            taskLock.complete(new Object());
+        });
+        try {
+            taskLock.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void ensureRegion(Location location, Runnable runnable) {
+        if (isRegionThread(location)) {
+            runnable.run();
+            return;
+        }
+
+        final CompletableFuture<Object> taskLock = new CompletableFuture<>();
+        scheduleLocationDelayedTask(location, () -> {
+            runnable.run();
+            taskLock.complete(new Object());
+        });
+        try {
+            taskLock.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void ensureGlobal(Runnable runnable) {
+        if (isGlobalThread()) {
+            runnable.run();
+            return;
+        }
+
+        final CompletableFuture<Object> taskLock = new CompletableFuture<>();
+        scheduleGlobalDelayedTask(() -> {
+            runnable.run();
+            taskLock.complete(new Object());
+        });
+        try {
+            taskLock.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

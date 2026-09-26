@@ -3,15 +3,13 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-import net.ess3.provider.TileEntityProvider;
+import net.ess3.provider.WorldTileEntityCountProvider;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.Server;
 import org.bukkit.World;
 
 import java.lang.management.ManagementFactory;
 import java.util.List;
-import java.util.logging.Level;
 
 public class Commandgc extends EssentialsCommand {
     public Commandgc() {
@@ -37,7 +35,7 @@ public class Commandgc extends EssentialsCommand {
         sender.sendTl("gcfree", Runtime.getRuntime().freeMemory() / 1024 / 1024);
 
         final List<World> worlds = server.getWorlds();
-        final TileEntityProvider tileEntityProvider = ess.provider(TileEntityProvider.class);
+        final WorldTileEntityCountProvider worldTileEntityCountProvider = ess.provider(WorldTileEntityCountProvider.class);
         for (final World w : worlds) {
             String worldType = "World";
             switch (w.getEnvironment()) {
@@ -49,15 +47,7 @@ public class Commandgc extends EssentialsCommand {
                     break;
             }
 
-            int tileEntities = 0;
-
-            try {
-                for (final Chunk chunk : w.getLoadedChunks()) {
-                    tileEntities += tileEntityProvider.getTileEntities(chunk).length;
-                }
-            } catch (final java.lang.ClassCastException ex) {
-                ess.getLogger().log(Level.SEVERE, "Corrupted chunk data on world " + w, ex);
-            }
+            final int tileEntities = worldTileEntityCountProvider.getTileEntityCount(w);
 
             sender.sendTl("gcWorld", worldType, w.getName(), w.getLoadedChunks().length, w.getEntities().size(), tileEntities);
         }

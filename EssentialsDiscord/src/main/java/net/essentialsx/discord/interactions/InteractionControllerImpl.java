@@ -64,7 +64,8 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
             interactionEvent.replyTl("noAccessCommand");
             return;
         }
-        jda.getPlugin().getEss().scheduleSyncDelayedTask(() -> command.onCommand(interactionEvent));
+
+        command.onCommand(interactionEvent);
     }
 
     @Override
