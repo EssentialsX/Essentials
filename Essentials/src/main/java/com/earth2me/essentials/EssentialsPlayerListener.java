@@ -21,6 +21,7 @@ import io.papermc.paper.event.connection.configuration.AsyncPlayerConnectionConf
 import io.papermc.paper.event.player.PlayerServerFullCheckEvent;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
+import net.ess3.api.events.VanishStatusChangeEvent;
 import net.ess3.provider.CommandSendListenerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.InventoryViewProvider;
@@ -32,6 +33,8 @@ import net.essentialsx.PaperAdventureSmuggler;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -282,14 +285,7 @@ public class EssentialsPlayerListener implements Listener {
         if (hideJoinQuitMessages() || ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit")) {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
-            final Player player = event.getPlayer();
-            final String msg = ess.getSettings().getCustomQuitMessage()
-                .replace("{PLAYER}", player.getDisplayName())
-                .replace("{USERNAME}", player.getName())
-                .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size() - 1)) // Subtract 1 as the leaving player is still online during this time
-                .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
-                .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
-                .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)));
+            final String msg = buildQuitMessage(user);
 
             event.setQuitMessage(msg.isEmpty() ? null : msg);
         }
@@ -324,6 +320,56 @@ public class EssentialsPlayerListener implements Listener {
         user.stopTransaction();
 
         user.dispose();
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onVanishStatusChange(final VanishStatusChangeEvent event) {
+        if (!ess.getSettings().isVanishFakeJoinLeave()) {
+            return;
+        }
+
+        // Note: getController() returns the vanished player due to a long-standing parameter swap in Commandvanish.
+        User user = (User) event.getController();
+
+        if (event.getValue()) {
+            String quitMessage = ChatColor.YELLOW + user.getName() + " left the game";
+
+            if (ess.getSettings().isCustomQuitMessage()) {
+                quitMessage = buildQuitMessage(user);
+            }
+
+            Bukkit.broadcastMessage(quitMessage);
+            return;
+        }
+
+        String joinMessage = ChatColor.YELLOW + user.getName() + " joined the game";
+
+        if (ess.getSettings().isCustomJoinMessage()) {
+            joinMessage = buildJoinMessage(user, false, null);
+        }
+
+        Bukkit.broadcastMessage(joinMessage);
+    }
+
+    private String buildJoinMessage(final User user, boolean newUsername, String lastAccountName) {
+        return (newUsername && ess.getSettings().isCustomNewUsernameMessage() ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
+          .replace("{PLAYER}", user.getDisplayName()).replace("{USERNAME}", user.getName())
+          .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUsers().getUserCount()))
+          .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
+          .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
+          .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(user.getBase())))
+          .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(user.getBase())))
+          .replace("{OLDUSERNAME}", lastAccountName == null ? "" : lastAccountName);
+    }
+
+    private String buildQuitMessage(final User user) {
+        return ess.getSettings().getCustomQuitMessage()
+          .replace("{PLAYER}", user.getDisplayName())
+          .replace("{USERNAME}", user.getName())
+          .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size() - 1)) // Subtract 1 as the leaving player is still online during this time
+          .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
+          .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(user.getBase())))
+          .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(user.getBase())));
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -449,14 +495,7 @@ public class EssentialsPlayerListener implements Listener {
         } else if (message == null || hideJoinQuitMessages()) {
             effectiveMessage = null;
         } else if (ess.getSettings().isCustomJoinMessage()) {
-            final String msg = (newUsername && ess.getSettings().isCustomNewUsernameMessage() ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
-                    .replace("{PLAYER}", user.getDisplayName()).replace("{USERNAME}", user.getName())
-                    .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUsers().getUserCount()))
-                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
-                    .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
-                    .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(user.getBase())))
-                    .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(user.getBase())))
-                    .replace("{OLDUSERNAME}", lastAccountName == null ? "" : lastAccountName);
+            final String msg = buildJoinMessage(user, newUsername, lastAccountName);
             effectiveMessage = msg.isEmpty() ? null : msg;
         } else if (ess.getSettings().allowSilentJoinQuit()) {
             effectiveMessage = message;
