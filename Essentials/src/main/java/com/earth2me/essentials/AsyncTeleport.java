@@ -90,11 +90,11 @@ public class AsyncTeleport implements IAsyncTeleport {
                 applies = !teleportOwner.isAuthorized(globalBypassPerm);
                 break;
             case BACK:
-                applies = !(teleportOwner.isAuthorized(globalBypassPerm) &&
+                applies = !(teleportOwner.isAuthorized(globalBypassPerm) ||
                     teleportOwner.isAuthorized("essentials.teleport.cooldown.bypass.back"));
                 break;
             case TPA:
-                applies = !(teleportOwner.isAuthorized(globalBypassPerm) &&
+                applies = !(teleportOwner.isAuthorized(globalBypassPerm) ||
                     teleportOwner.isAuthorized("essentials.teleport.cooldown.bypass.tpa"));
                 break;
         }
