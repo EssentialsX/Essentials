@@ -617,7 +617,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         final BigDecimal value = _getMoney();
         final long elapsed = System.nanoTime() - start;
         if (elapsed > ess.getSettings().getEconomyLagWarning()) {
-            ess.getLogger().log(Level.INFO, "Lag Notice - Slow Economy Response - Request took over {0}ms!", elapsed / 1000000.0);
+            ess.getLogger().log(Level.INFO, String.format(Locale.ROOT,
+                    "Lag Notice - Slow Economy Response - Request took over %.3fms!", elapsed / 1_000_000.0));
         }
         return value;
     }
