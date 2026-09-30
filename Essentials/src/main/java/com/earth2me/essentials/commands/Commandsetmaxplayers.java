@@ -3,8 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import org.bukkit.Server;
 
-import java.util.List;
-
 public class Commandsetmaxplayers extends EssentialsCommand {
     public Commandsetmaxplayers() {
         super("setmaxplayers");
@@ -29,12 +27,4 @@ public class Commandsetmaxplayers extends EssentialsCommand {
         }
     }
 
-    @Override
-    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1) {
-            return getPlayers(sender);
-        } else {
-            return COMMON_DATE_DIFFS;
-        }
-    }
 }
