@@ -19,13 +19,13 @@ public class Commandsetmaxplayers extends EssentialsCommand {
         try {
             final int maxPlayers = Integer.parseInt(args[0]);
             if (maxPlayers < 0) {
-                throw new Exception("The player limit cannot be set below 0.");
+                throw new Exception(sender.tl("setmaxplayersBelowZero"));
             }
 
             server.setMaxPlayers(maxPlayers);
-            sender.sendMessage("Player limit updated to " + maxPlayers + ".");
+            sender.sendMessage(sender.tl("setmaxplayersSuccess", maxPlayers));
         } catch (NumberFormatException e) {
-            throw new Exception("Invalid number.");
+            throw new Exception(sender.tl("setmaxplayersInvalid"));
         }
     }
 
