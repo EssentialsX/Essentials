@@ -52,7 +52,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
         pluginManager.registerEvents(playerListener, this);
 
         users = new UserManager(this.getDataFolder());
-        xmpp = new XMPPManager(this);
+        xmpp = new XMPPManager(this, ess.getTaskScheduler());
 
         ess.addReloadListener(users);
         ess.addReloadListener(xmpp);
