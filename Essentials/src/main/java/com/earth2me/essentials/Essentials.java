@@ -71,14 +71,17 @@ import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.PlayerLocaleProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
+import net.ess3.provider.TaskSchedulerProvider;
 import net.ess3.provider.providers.BaseBannerDataProvider;
 import net.ess3.provider.providers.BaseInventoryViewProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
 import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
+import net.ess3.provider.providers.BukkitTaskSchedulerProvider;
 import net.ess3.provider.providers.BukkitTileEntityProvider;
 import net.ess3.provider.providers.FixedHeightWorldInfoProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
+import net.ess3.provider.providers.FoliaTaskSchedulerProvider;
 import net.ess3.provider.providers.LegacyBannerDataProvider;
 import net.ess3.provider.providers.LegacyBiomeNameProvider;
 import net.ess3.provider.providers.LegacyPatternTypeProvider;
@@ -188,6 +191,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
     private transient AdventureFacet adventureFacet;
+    private transient TaskSchedulerProvider taskScheduler;
 
     static {
         EconomyLayers.init();
@@ -332,9 +336,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             confList.add(jails);
             execTimer.mark("Init(Jails)");
 
-            EconomyLayers.onEnable(this);
-            execTimer.mark("Init(EconomyLayers)");
-
             // Spawner item provider only uses one, but it's here for legacy...
             providerFactory.registerProvider(BlockMetaSpawnerItemProvider.class);
 
@@ -410,9 +411,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Tick Count Provider
             providerFactory.registerProvider(PaperTickCountProvider.class);
 
+            // Task Scheduler Provider
+            providerFactory.registerProvider(BukkitTaskSchedulerProvider.class, FoliaTaskSchedulerProvider.class);
+
             if (!TESTING) {
                 providerFactory.finalizeRegistration();
             }
+            taskScheduler = TESTING ? new BukkitTaskSchedulerProvider(this) : provider(TaskSchedulerProvider.class);
+
+            EconomyLayers.onEnable(this);
+            execTimer.mark("Init(EconomyLayers)");
 
             // Event Providers
             if (PaperLib.isPaper()) {
@@ -594,7 +602,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         EssentialsConfiguration.shutdownExecutor();
         PasteUtil.shutdownExecutor();
-        getServer().getScheduler().cancelTasks(this);
+        if (taskScheduler != null) {
+            taskScheduler.cancelAll();
+        }
 
         HandlerList.unregisterAll(this);
     }
@@ -916,8 +926,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    @Deprecated
     public BukkitScheduler getScheduler() {
         return this.getServer().getScheduler();
+    }
+
+    @Override
+    public TaskSchedulerProvider getTaskScheduler() {
+        return taskScheduler;
     }
 
     @Override
