@@ -8,6 +8,7 @@ authors: [mdcfe, JRoy, pop4959, Glare]
 depend: [Essentials]
 softdepend: [EssentialsChat, PlaceholderAPI]
 api-version: 1.13
+folia-supported: true
 commands:
   discordbroadcast:
     description: Broadcasts a message to the specified Discord channel.
