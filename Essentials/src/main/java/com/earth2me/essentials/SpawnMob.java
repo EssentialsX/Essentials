@@ -106,6 +106,19 @@ public final class SpawnMob {
 
     // This method spawns a mob at loc, owned by target
     public static void spawnmob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final Location loc, final List<String> parts, final List<String> data, int mobCount) throws Exception {
+        if (!ess.getTaskScheduler().isOwnedByCurrentThread(loc)) {
+            // Mobs can only be spawned, and the surroundings read, by the thread that owns the location
+            final int requestedCount = mobCount;
+            ess.getTaskScheduler().runLocation(loc, () -> {
+                try {
+                    spawnmob(ess, server, sender, target, loc, parts, data, requestedCount);
+                } catch (final Exception e) {
+                    ess.showError(sender, e, "spawnmob");
+                }
+            });
+            return;
+        }
+
         final Location sloc = LocationUtil.getSafeDestination(ess, loc);
 
         for (final String part : parts) {
