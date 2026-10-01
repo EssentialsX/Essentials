@@ -20,7 +20,7 @@ public class BukkitChatListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
-        Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
+        jda.getPlugin().getEss().getTaskScheduler().runEntity(player, () -> {
             final DiscordChatMessageEvent chatEvent = new DiscordChatMessageEvent(event.getPlayer(), event.getMessage(), ChatType.UNKNOWN);
             chatEvent.setCancelled(!jda.getSettings().isShowAllChat() && !event.getRecipients().containsAll(Bukkit.getOnlinePlayers()));
             Bukkit.getPluginManager().callEvent(chatEvent);
