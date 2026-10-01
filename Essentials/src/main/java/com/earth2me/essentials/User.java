@@ -70,6 +70,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private String lastHomeConfirmation;
 
     // User teleport variables
+    // Requesters add to the queue from their own thread while this user reads it from theirs, so it is guarded by this user's monitor
     private final transient LinkedHashMap<String, TpaRequest> teleportRequestQueue = new LinkedHashMap<>();
 
     // User properties
@@ -403,7 +404,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public void requestTeleport(final User player, final boolean here) {
+    public synchronized void requestTeleport(final User player, final boolean here) {
         final TpaRequest request = teleportRequestQueue.getOrDefault(player.getName(), new TpaRequest(player.getName(), player.getUUID()));
         request.setTime(System.currentTimeMillis());
         request.setHere(here);
@@ -420,8 +421,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         teleportRequestQueue.put(request.getName(), request);
     }
 
-    public Collection<String> getPendingTpaKeys() {
-        return teleportRequestQueue.keySet();
+    public synchronized Collection<String> getPendingTpaKeys() {
+        return new ArrayList<>(teleportRequestQueue.keySet());
     }
 
     @Override
@@ -434,7 +435,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return request != null && request.isHere() == here;
     }
 
-    public @Nullable TpaRequest getOutstandingTpaRequest(String playerUsername, boolean inform) {
+    public synchronized @Nullable TpaRequest getOutstandingTpaRequest(String playerUsername, boolean inform) {
         if (!teleportRequestQueue.containsKey(playerUsername)) {
             return null;
         }
@@ -451,12 +452,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return null;
     }
 
-    public TpaRequest removeTpaRequest(String playerUsername) {
+    public synchronized TpaRequest removeTpaRequest(String playerUsername) {
         return teleportRequestQueue.remove(playerUsername);
     }
 
     @Override
-    public TpaRequest getNextTpaRequest(boolean inform, boolean ignoreExpirations, boolean excludeHere) {
+    public synchronized TpaRequest getNextTpaRequest(boolean inform, boolean ignoreExpirations, boolean excludeHere) {
         if (teleportRequestQueue.isEmpty()) {
             return null;
         }
