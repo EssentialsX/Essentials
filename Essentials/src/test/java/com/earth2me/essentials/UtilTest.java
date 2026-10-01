@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import net.ess3.provider.TaskSchedulerProvider;
 import net.ess3.provider.WorldInfoProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -91,7 +93,35 @@ public class UtilTest {
         assertEquals(128, result.getBlockY());
     }
 
+    @Test
+    public void testBlocksOwnedByAnotherRegionAreUnsafe() {
+        final IEssentials essentials = mock(IEssentials.class);
+        final WorldInfoProvider worldInfoProvider = mock(WorldInfoProvider.class);
+        final TaskSchedulerProvider scheduler = mock(TaskSchedulerProvider.class);
+        final World world = mock(World.class);
+        final Block solid = mock(Block.class);
+        final Block hollow = mock(Block.class);
+
+        when(essentials.provider(WorldInfoProvider.class)).thenReturn(worldInfoProvider);
+        when(essentials.getTaskScheduler()).thenReturn(scheduler);
+        when(worldInfoProvider.getMaxHeight(world)).thenReturn(256);
+        when(solid.getType()).thenReturn(Material.BEDROCK);
+        when(hollow.getType()).thenReturn(Material.LIGHT);
+        when(world.getBlockAt(anyInt(), anyInt(), anyInt())).thenAnswer(invocation -> (int) invocation.getArgument(1) < 64 ? solid : hollow);
+        when(scheduler.isOwnedByCurrentThread(any(Location.class))).thenAnswer(invocation -> ((Location) invocation.getArgument(0)).getBlockX() <= 0);
+
+        assertFalse(LocationUtil.isBlockUnsafe(essentials, world, 1, 64, 0), "every block is readable when the world is not split between regions");
+
+        when(scheduler.isRegionized()).thenReturn(true);
+        assertFalse(LocationUtil.isBlockUnsafe(essentials, world, 0, 64, 0));
+        assertTrue(LocationUtil.isBlockUnsafe(essentials, world, 1, 64, 0));
+    }
+
     private Location getSafeDestinationWithLogicalHeightSetting(final boolean considerWorldHeight) throws Exception {
+        return getSafeDestinationWithLogicalHeightSetting(considerWorldHeight, mock(TaskSchedulerProvider.class));
+    }
+
+    private Location getSafeDestinationWithLogicalHeightSetting(final boolean considerWorldHeight, final TaskSchedulerProvider scheduler) throws Exception {
         final IEssentials essentials = mock(IEssentials.class);
         final ISettings settings = mock(ISettings.class);
         final WorldInfoProvider worldInfoProvider = mock(WorldInfoProvider.class);
@@ -101,6 +131,7 @@ public class UtilTest {
         final Block hollow = mock(Block.class);
 
         when(essentials.provider(WorldInfoProvider.class)).thenReturn(worldInfoProvider);
+        when(essentials.getTaskScheduler()).thenReturn(scheduler);
         when(essentials.getSettings()).thenReturn(settings);
         when(settings.isConsiderWorldHeightForTeleportSafety()).thenReturn(considerWorldHeight);
         when(worldInfoProvider.getMinHeight(world)).thenReturn(0);

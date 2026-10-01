@@ -139,19 +139,6 @@ public class AsyncTeleport implements IAsyncTeleport {
         paperFuture.exceptionally(future::completeExceptionally);
     }
 
-    private void runOnMain(final Runnable runnable) throws ExecutionException, InterruptedException {
-        if (Bukkit.isPrimaryThread()) {
-            runnable.run();
-            return;
-        }
-        final CompletableFuture<Object> taskLock = new CompletableFuture<>();
-        Bukkit.getScheduler().runTask(ess, () -> {
-            runnable.run();
-            taskLock.complete(new Object());
-        });
-        taskLock.get();
-    }
-
     protected void nowAsync(final IUser teleportee, final ITarget target, final TeleportCause cause, final CompletableFuture<Boolean> future) {
         cancel(false);
 
@@ -168,14 +155,23 @@ public class AsyncTeleport implements IAsyncTeleport {
                 return;
             }
 
-            try {
-                runOnMain(() -> teleportee.getBase().eject()); //EntityDismountEvent requires a sync context.
-            } catch (final ExecutionException | InterruptedException e) {
-                future.completeExceptionally(e);
-                return;
+            // EntityDismountEvent requires the thread that owns the teleportee, which is not necessarily this one
+            final Runnable ejectAndTeleport = () -> {
+                teleportee.getBase().eject();
+                nowAsyncTeleport(teleportee, target, cause, future);
+            };
+            if (ess.getTaskScheduler().isOwnedByCurrentThread(teleportee.getBase())) {
+                ejectAndTeleport.run();
+            } else {
+                ess.getTaskScheduler().runEntity(teleportee.getBase(), ejectAndTeleport, () -> future.complete(false), 0);
             }
+            return;
         }
 
+        nowAsyncTeleport(teleportee, target, cause, future);
+    }
+
+    private void nowAsyncTeleport(final IUser teleportee, final ITarget target, final TeleportCause cause, final CompletableFuture<Boolean> future) {
         if (teleportee.isAuthorized("essentials.back.onteleport")) {
             teleportee.setLastLocation();
         }
@@ -185,13 +181,12 @@ public class AsyncTeleport implements IAsyncTeleport {
             targetLoc.setX(LocationUtil.getXInsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockX()));
             targetLoc.setZ(LocationUtil.getZInsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockZ()));
         }
-        PaperLib.getChunkAtAsync(targetLoc.getWorld(), targetLoc.getBlockX() >> 4, targetLoc.getBlockZ() >> 4, true, true).thenAccept(chunk -> {
+        PaperLib.getChunkAtAsync(targetLoc.getWorld(), targetLoc.getBlockX() >> 4, targetLoc.getBlockZ() >> 4, true, true).thenAccept(chunk -> ess.getTaskScheduler().executeLocation(targetLoc, () -> {
             Location loc = targetLoc;
             if (LocationUtil.isBlockUnsafeForUser(ess, teleportee, chunk.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
                 if (ess.getSettings().isTeleportSafetyEnabled()) {
                     if (ess.getSettings().isForceDisableTeleportSafety()) {
-                        //The chunk we're teleporting to is 100% going to be loaded here, no need to teleport async.
-                        teleportee.getBase().teleport(loc, cause);
+                        teleportToLoadedChunk(teleportee, loc, cause);
                     } else {
                         try {
                             //There's a chance the safer location is outside the loaded chunk so still teleport async here.
@@ -207,8 +202,7 @@ public class AsyncTeleport implements IAsyncTeleport {
                 }
             } else {
                 if (ess.getSettings().isForceDisableTeleportSafety()) {
-                    //The chunk we're teleporting to is 100% going to be loaded here, no need to teleport async.
-                    teleportee.getBase().teleport(loc, cause);
+                    teleportToLoadedChunk(teleportee, loc, cause);
                 } else {
                     if (ess.getSettings().isTeleportToCenterLocation()) {
                         loc = LocationUtil.getRoundedDestination(loc);
@@ -218,10 +212,20 @@ public class AsyncTeleport implements IAsyncTeleport {
                 }
             }
             future.complete(true);
-        }).exceptionally(th -> {
+        })).exceptionally(th -> {
             future.completeExceptionally(th);
             return null;
         });
+    }
+
+    private void teleportToLoadedChunk(final IUser teleportee, final Location loc, final TeleportCause cause) {
+        if (ess.getTaskScheduler().isRegionized()) {
+            // Folia has no synchronous teleports
+            PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
+            return;
+        }
+        //The chunk we're teleporting to is 100% going to be loaded here, no need to teleport async.
+        teleportee.getBase().teleport(loc, cause);
     }
 
     @Override
