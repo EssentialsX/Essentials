@@ -449,7 +449,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 
             timer = new EssentialsTimer(this);
-            scheduleSyncRepeatingTask(timer, 1000, 50);
+            taskScheduler.runGlobalTimer(timer, 1000, 50);
 
             Economy.setEss(this);
             execTimer.mark("RegHandler");
@@ -460,7 +460,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             if (!TESTING) {
                 updateChecker = new UpdateChecker(this);
-                runTaskAsynchronously(() -> {
+                taskScheduler.runAsync(() -> {
                     getLogger().log(Level.INFO, getAdventureFacet().miniToLegacy(tlLiteral("versionFetching")));
                     for (final ComponentHolder component : updateChecker.getVersionMessages(false, true, new CommandSource(this, Bukkit.getConsoleSender()))) {
                         getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, getAdventureFacet().adventureToLegacy(component));

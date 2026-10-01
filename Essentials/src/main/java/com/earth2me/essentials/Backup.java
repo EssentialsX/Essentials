@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
+import net.ess3.provider.TaskSchedulerProvider;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -18,7 +19,7 @@ public class Backup implements Runnable {
     private transient final IEssentials ess;
     private final AtomicBoolean pendingShutdown = new AtomicBoolean(false);
     private transient boolean running = false;
-    private transient int taskId = -1;
+    private transient TaskSchedulerProvider.Task task = null;
     private transient boolean active = false;
     private transient CompletableFuture<Object> taskLock = null;
 
@@ -26,7 +27,7 @@ public class Backup implements Runnable {
         this.ess = ess;
         server = ess.getServer();
         if (!ess.getOnlinePlayers().isEmpty() || ess.getSettings().isAlwaysRunBackup()) {
-            ess.runTaskAsynchronously(this::startTask);
+            ess.getTaskScheduler().runAsync(this::startTask);
         }
     }
 
@@ -36,10 +37,10 @@ public class Backup implements Runnable {
 
     public synchronized void stopTask() {
         running = false;
-        if (taskId != -1) {
-            server.getScheduler().cancelTask(taskId);
+        if (task != null) {
+            task.cancel();
         }
-        taskId = -1;
+        task = null;
     }
 
     private synchronized void startTask() {
@@ -48,7 +49,7 @@ public class Backup implements Runnable {
             if (interval < 1200) {
                 return;
             }
-            taskId = ess.scheduleSyncRepeatingTask(this, interval, interval);
+            task = ess.getTaskScheduler().runGlobalTimer(this, interval, interval);
             running = true;
         }
     }
@@ -84,13 +85,13 @@ public class Backup implements Runnable {
         server.dispatchCommand(cs, "save-all");
         server.dispatchCommand(cs, "save-off");
 
-        ess.runTaskAsynchronously(() -> {
+        ess.getTaskScheduler().runAsync(() -> {
             try {
                 final ProcessBuilder childBuilder = new ProcessBuilder(command.split(" "));
                 childBuilder.redirectErrorStream(true);
                 childBuilder.directory(ess.getDataFolder().getParentFile().getParentFile());
                 final Process child = childBuilder.start();
-                ess.runTaskAsynchronously(() -> {
+                ess.getTaskScheduler().runAsync(() -> {
                     try {
                         try (final BufferedReader reader = new BufferedReader(new InputStreamReader(child.getInputStream()))) {
                             String line;
@@ -123,7 +124,7 @@ public class Backup implements Runnable {
                 }
 
                 if (!pendingShutdown.get()) {
-                    ess.scheduleSyncDelayedTask(new BackupEnableSaveTask());
+                    ess.getTaskScheduler().runGlobal(new BackupEnableSaveTask());
                 }
             }
         });
