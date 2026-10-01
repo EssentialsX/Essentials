@@ -46,6 +46,7 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.ModernPaperEnvironment;
 import com.earth2me.essentials.utils.PasteUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
@@ -259,6 +260,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             if (VersionUtil.getServerBukkitVersion().isSnapshot()) {
                 getLogger().severe(getAdventureFacet().miniToLegacy(tlLiteral("serverSnapshot")));
+            }
+
+            if (PaperLib.isPaper() && !PaperLib.isVersion(13) && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
+                PaperLib.setCustomEnvironment(new ModernPaperEnvironment());
             }
 
             final PluginManager pm = getServer().getPluginManager();
