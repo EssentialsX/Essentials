@@ -61,7 +61,7 @@ public class Commandseen extends EssentialsCommand {
                     return;
                 }
             }
-            ess.getScheduler().runTaskAsynchronously(ess, new Runnable() {
+            ess.getTaskScheduler().runAsync(new Runnable() {
                 @Override
                 public void run() {
                     final User userFromBukkit = ess.getUsers().getUser(args[0]);
@@ -203,7 +203,7 @@ public class Commandseen extends EssentialsCommand {
     private void seenIP(final CommandSource sender, final String ipAddress, final String display) {
         sender.sendTl("runningPlayerMatch", AdventureUtil.parsed(ess.getAdventureFacet().legacyToMini(display)));
 
-        ess.runTaskAsynchronously(() -> {
+        ess.getTaskScheduler().runAsync(() -> {
             final List<String> matches = new ArrayList<>();
             for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
                 final User user = ess.getUsers().loadUncachedUser(u);
