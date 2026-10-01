@@ -31,7 +31,7 @@ public class EssentialsChatListener implements Listener {
     private void processChatEvent(ChatEvent event) {
         final Player player = event.getPlayer();
 
-        Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
+        jda.getPlugin().getEss().getTaskScheduler().runEntity(player, () -> {
             final DiscordChatMessageEvent chatEvent = new DiscordChatMessageEvent(event.getPlayer(), event.getMessage(), event.getChatType());
             Bukkit.getPluginManager().callEvent(chatEvent);
 

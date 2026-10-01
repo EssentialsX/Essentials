@@ -287,7 +287,7 @@ public class Kit {
             }
 
             for (final String cmd : commandQueue) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+                ess.getTaskScheduler().executeGlobal(() -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd));
             }
 
             if (spew) {

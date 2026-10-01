@@ -36,16 +36,22 @@ public class Commandnuke extends EssentialsCommand {
                 continue;
             }
             user.sendTl("nuke");
-            final Location loc = user.getLocation();
-            final World world = loc.getWorld();
-            if (world != null) {
-                for (int x = -10; x <= 10; x += 5) {
-                    for (int z = -10; z <= 10; z += 5) {
-                        final TNTPrimed entity = world.spawn(new Location(world, loc.getBlockX() + x, world.getHighestBlockYAt(loc) + 64, loc.getBlockZ() + z), TNTPrimed.class);
-                        entity.setMetadata(NUKE_META_KEY, new FixedMetadataValue(ess, true));
+            // The player is read on their own thread, and each bomb is spawned by the thread that owns where it falls
+            ess.getTaskScheduler().executeEntity(user.getBase(), () -> {
+                final Location loc = user.getLocation();
+                final World world = loc.getWorld();
+                if (world != null) {
+                    for (int x = -10; x <= 10; x += 5) {
+                        for (int z = -10; z <= 10; z += 5) {
+                            final Location bomb = new Location(world, loc.getBlockX() + x, world.getHighestBlockYAt(loc) + 64, loc.getBlockZ() + z);
+                            ess.getTaskScheduler().executeLocation(bomb, () -> {
+                                final TNTPrimed entity = world.spawn(bomb, TNTPrimed.class);
+                                entity.setMetadata(NUKE_META_KEY, new FixedMetadataValue(ess, true));
+                            });
+                        }
                     }
                 }
-            }
+            });
         }
     }
 

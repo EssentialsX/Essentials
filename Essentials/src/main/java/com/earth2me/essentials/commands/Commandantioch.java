@@ -20,6 +20,6 @@ public class Commandantioch extends EssentialsCommand {
         }
 
         final Location loc = LocationUtil.getTarget(user.getBase());
-        loc.getWorld().spawn(loc, TNTPrimed.class);
+        ess.getTaskScheduler().executeLocation(loc, () -> loc.getWorld().spawn(loc, TNTPrimed.class));
     }
 }

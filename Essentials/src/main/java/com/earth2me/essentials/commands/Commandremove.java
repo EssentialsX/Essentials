@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.google.common.collect.Lists;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 // This could be rewritten in a simpler form if we made a mapping of all Entity names to their types (which would also provide possible mod support)
 
@@ -105,11 +107,9 @@ public class Commandremove extends EssentialsCommand {
         removeHandler(sender, types, customTypes, world, radius);
     }
 
-    private void removeHandler(final CommandSource sender, final List<String> types, final List<String> customTypes, final World world, int radius) {
-        int removed = 0;
-        if (radius > 0) {
-            radius *= radius;
-        }
+    private void removeHandler(final CommandSource sender, final List<String> types, final List<String> customTypes, final World world, final int radius) {
+        final AtomicInteger removed = new AtomicInteger();
+        final int radiusSquared = radius > 0 ? radius * radius : radius;
 
         final ArrayList<ToRemove> removeTypes = new ArrayList<>();
         final ArrayList<Mob> customRemoveTypes = new ArrayList<>();
@@ -133,134 +133,145 @@ public class Commandremove extends EssentialsCommand {
             sender.sendTl("invalidMob");
         }
 
-        for (final Chunk chunk : world.getLoadedChunks()) {
-            for (final Entity e : chunk.getEntities()) {
-                if (radius > 0) {
-                    if (sender.getPlayer().getLocation().distanceSquared(e.getLocation()) > radius) {
-                        continue;
-                    }
-                }
-                if (e instanceof HumanEntity) {
-                    continue;
-                }
-
-                for (final ToRemove toRemove : removeTypes) {
-
-                    // We should skip any animals tamed by players unless we are specifially targetting them.
-                    if (e instanceof Tameable && ((Tameable) e).isTamed() && (((Tameable) e).getOwner() instanceof Player || ((Tameable) e).getOwner() instanceof OfflinePlayer) && !removeTypes.contains(ToRemove.TAMED)) {
-                        continue;
-                    }
-
-                    // We should skip any NAMED animals unless we are specifially targetting them.
-                    if (e instanceof LivingEntity && e.getCustomName() != null && !removeTypes.contains(ToRemove.NAMED)) {
-                        continue;
-                    }
-
-                    switch (toRemove) {
-                        case TAMED:
-                            if (e instanceof Tameable && ((Tameable) e).isTamed()) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case NAMED:
-                            if (e instanceof LivingEntity && e.getCustomName() != null) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case DROPS:
-                            if (e instanceof Item) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case ARROWS:
-                            if (e instanceof Projectile) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case BOATS:
-                            if (e instanceof Boat) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case MINECARTS:
-                            if (e instanceof Minecart) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case XP:
-                            if (e instanceof ExperienceOrb) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case PAINTINGS:
-                            if (e instanceof Painting) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case ITEMFRAMES:
-                            if (e instanceof ItemFrame) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case ENDERCRYSTALS:
-                            if (e instanceof EnderCrystal) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case AMBIENT:
-                            if (e instanceof Flying) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case HOSTILE:
-                        case MONSTERS:
-                            if (e instanceof Monster || e instanceof ComplexLivingEntity || e instanceof Flying || e instanceof Slime) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case PASSIVE:
-                        case ANIMALS:
-                            if (e instanceof Animals || e instanceof NPC || e instanceof Snowman || e instanceof WaterMob || e instanceof Ambient) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case MOBS:
-                            if (e instanceof Animals || e instanceof NPC || e instanceof Snowman || e instanceof WaterMob || e instanceof Monster || e instanceof ComplexLivingEntity || e instanceof Flying || e instanceof Slime || e instanceof Ambient) {
-                                e.remove();
-                                removed++;
-                            }
-                            break;
-                        case ENTITIES:
-                        case ALL:
-                            e.remove();
-                            removed++;
-                            break;
-                        case CUSTOM:
-                            for (final Mob type : customRemoveTypes) {
-                                if (e.getType() == type.getType()) {
-                                    e.remove();
-                                    removed++;
-                                }
-                            }
-                            break;
-                    }
-                }
-            }
+        final Chunk[] chunks = world.getLoadedChunks();
+        if (chunks.length == 0) {
+            sender.sendTl("removed", 0);
+            return;
         }
-        sender.sendTl("removed", removed);
+        final AtomicInteger remainingChunks = new AtomicInteger(chunks.length);
+        for (final Chunk chunk : chunks) {
+            // Entities can only be removed by the thread that owns their chunk, which on Folia differs between chunks
+            ess.getTaskScheduler().executeLocation(new Location(world, chunk.getX() << 4, 0, chunk.getZ() << 4), () -> {
+                for (final Entity e : chunk.getEntities()) {
+                    if (radiusSquared > 0) {
+                        if (sender.getPlayer().getLocation().distanceSquared(e.getLocation()) > radiusSquared) {
+                            continue;
+                        }
+                    }
+                    if (e instanceof HumanEntity) {
+                        continue;
+                    }
+
+                    for (final ToRemove toRemove : removeTypes) {
+
+                        // We should skip any animals tamed by players unless we are specifially targetting them.
+                        if (e instanceof Tameable && ((Tameable) e).isTamed() && (((Tameable) e).getOwner() instanceof Player || ((Tameable) e).getOwner() instanceof OfflinePlayer) && !removeTypes.contains(ToRemove.TAMED)) {
+                            continue;
+                        }
+
+                        // We should skip any NAMED animals unless we are specifially targetting them.
+                        if (e instanceof LivingEntity && e.getCustomName() != null && !removeTypes.contains(ToRemove.NAMED)) {
+                            continue;
+                        }
+
+                        switch (toRemove) {
+                            case TAMED:
+                                if (e instanceof Tameable && ((Tameable) e).isTamed()) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case NAMED:
+                                if (e instanceof LivingEntity && e.getCustomName() != null) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case DROPS:
+                                if (e instanceof Item) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case ARROWS:
+                                if (e instanceof Projectile) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case BOATS:
+                                if (e instanceof Boat) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case MINECARTS:
+                                if (e instanceof Minecart) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case XP:
+                                if (e instanceof ExperienceOrb) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case PAINTINGS:
+                                if (e instanceof Painting) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case ITEMFRAMES:
+                                if (e instanceof ItemFrame) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case ENDERCRYSTALS:
+                                if (e instanceof EnderCrystal) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case AMBIENT:
+                                if (e instanceof Flying) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case HOSTILE:
+                            case MONSTERS:
+                                if (e instanceof Monster || e instanceof ComplexLivingEntity || e instanceof Flying || e instanceof Slime) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case PASSIVE:
+                            case ANIMALS:
+                                if (e instanceof Animals || e instanceof NPC || e instanceof Snowman || e instanceof WaterMob || e instanceof Ambient) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case MOBS:
+                                if (e instanceof Animals || e instanceof NPC || e instanceof Snowman || e instanceof WaterMob || e instanceof Monster || e instanceof ComplexLivingEntity || e instanceof Flying || e instanceof Slime || e instanceof Ambient) {
+                                    e.remove();
+                                    removed.incrementAndGet();
+                                }
+                                break;
+                            case ENTITIES:
+                            case ALL:
+                                e.remove();
+                                removed.incrementAndGet();
+                                break;
+                            case CUSTOM:
+                                for (final Mob type : customRemoveTypes) {
+                                    if (e.getType() == type.getType()) {
+                                        e.remove();
+                                        removed.incrementAndGet();
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+                if (remainingChunks.decrementAndGet() == 0) {
+                    sender.sendTl("removed", removed.get());
+                }
+            });
+        }
     }
 
     @Override

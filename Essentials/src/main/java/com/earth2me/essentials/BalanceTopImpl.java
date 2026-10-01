@@ -72,7 +72,7 @@ public class BalanceTopImpl implements BalanceTop {
             return cacheLock;
         }
         cacheLock = new CompletableFuture<>();
-        ess.runTaskAsynchronously(this::calculateBalanceTopMap);
+        ess.getTaskScheduler().runAsync(this::calculateBalanceTopMap);
         return cacheLock;
     }
 

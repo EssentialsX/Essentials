@@ -9,7 +9,6 @@ import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.util.MessageUtil;
 import net.essentialsx.discordlink.DiscordLinkSettings;
 import net.essentialsx.discordlink.EssentialsDiscordLink;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -160,11 +159,7 @@ public class LinkBukkitListener implements Listener {
         switch (ess.getSettings().getLinkPolicy()) {
             case KICK: {
                 final Runnable kickTask = () -> event.getUser().getBase().kickPlayer(ess.getEss().getAdventureFacet().miniToLegacy(event.getUser().playerTl("discordLinkLoginKick", "/link " + finalCode, ess.getApi().getInviteUrl())));
-                if (Bukkit.isPrimaryThread()) {
-                    kickTask.run();
-                } else {
-                    ess.getEss().scheduleSyncDelayedTask(kickTask);
-                }
+                ess.getEss().getTaskScheduler().executeEntity(event.getUser().getBase(), kickTask);
                 break;
             }
             case FREEZE: {

@@ -45,13 +45,13 @@ public class SignWeather extends EssentialsSign {
         charge.isAffordableFor(player);
         final String weatherString = sign.getLine(1);
         if ("§2Sun".equalsIgnoreCase(weatherString)) {
-            player.getWorld().setStorm(false);
+            ess.getTaskScheduler().executeGlobal(() -> player.getWorld().setStorm(false));
             charge.charge(player);
             Trade.log("Sign", "WeatherSun", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
             return true;
         }
         if ("§2Storm".equalsIgnoreCase(weatherString)) {
-            player.getWorld().setStorm(true);
+            ess.getTaskScheduler().executeGlobal(() -> player.getWorld().setStorm(true));
             charge.charge(player);
             Trade.log("Sign", "WeatherStorm", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
             return true;

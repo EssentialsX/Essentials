@@ -57,14 +57,30 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
             foundUser = true;
             if (args.length > 1) {
                 final Boolean toggle = matchToggleArgument(args[1]);
-                togglePlayer(sender, player, toggle);
+                togglePlayerOnTheirThread(sender, player, toggle);
             } else {
-                togglePlayer(sender, player, null);
+                togglePlayerOnTheirThread(sender, player, null);
             }
         }
         if (!foundUser) {
             throw new PlayerNotFoundException();
         }
+    }
+
+    // Changing a player is only allowed from the thread that owns them, which on Folia is not necessarily the sender's.
+    // When it is not, the change is made from the player's thread and any error is reported to the sender from there.
+    private void togglePlayerOnTheirThread(final CommandSource sender, final User user, final Boolean enabled) throws NotEnoughArgumentsException {
+        if (ess.getTaskScheduler().isOwnedByCurrentThread(user.getBase())) {
+            togglePlayer(sender, user, enabled);
+            return;
+        }
+        ess.getTaskScheduler().runEntity(user.getBase(), () -> {
+            try {
+                togglePlayer(sender, user, enabled);
+            } catch (final Exception e) {
+                showError(sender.getSender(), e, getName());
+            }
+        });
     }
 
     // Make sure when implementing this method that all 3 Boolean states are handled, 'null' should toggle the existing state.

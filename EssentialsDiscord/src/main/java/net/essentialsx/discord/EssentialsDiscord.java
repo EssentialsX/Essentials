@@ -60,7 +60,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
             jda = new JDADiscordService(this);
             try {
                 jda.startup();
-                ess.scheduleSyncDelayedTask(() -> ((InteractionControllerImpl) jda.getInteractionController()).processBatchRegistration());
+                ess.getTaskScheduler().runGlobal(() -> ((InteractionControllerImpl) jda.getInteractionController()).processBatchRegistration());
             } catch (Exception e) {
                 getLogger().log(Level.SEVERE, ess.getAdventureFacet().miniToLegacy(tlLiteral("discordErrorLogin", e.getMessage())));
                 if (ess.getSettings().isDebug()) {

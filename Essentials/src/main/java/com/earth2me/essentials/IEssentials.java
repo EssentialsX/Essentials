@@ -10,6 +10,7 @@ import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.IUserMap;
 import net.ess3.provider.Provider;
+import net.ess3.provider.TaskSchedulerProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
 import org.bukkit.Server;
@@ -80,7 +81,18 @@ public interface IEssentials extends Plugin {
 
     ISettings getSettings();
 
+    /**
+     * Gets the Bukkit scheduler.
+     *
+     * @deprecated The Bukkit scheduler is not supported by Folia, use {@link #getTaskScheduler()}.
+     */
+    @Deprecated
     BukkitScheduler getScheduler();
+
+    /**
+     * Gets the scheduler which runs tasks on the thread that owns what they touch, on Folia as well as on Bukkit.
+     */
+    TaskSchedulerProvider getTaskScheduler();
 
     List<Player> getJailedPlayers();
 
@@ -98,16 +110,40 @@ public interface IEssentials extends Plugin {
 
     UpdateChecker getUpdateChecker();
 
+    /**
+     * @deprecated Not supported by Folia, use {@link TaskSchedulerProvider#runAsync(Runnable, long)}.
+     */
+    @Deprecated
     BukkitTask runTaskAsynchronously(Runnable run);
 
+    /**
+     * @deprecated Not supported by Folia, use {@link TaskSchedulerProvider#runAsync(Runnable, long)}.
+     */
+    @Deprecated
     BukkitTask runTaskLaterAsynchronously(Runnable run, long delay);
 
+    /**
+     * @deprecated Not supported by Folia, use {@link TaskSchedulerProvider#runAsyncTimer(Runnable, long, long)}.
+     */
+    @Deprecated
     BukkitTask runTaskTimerAsynchronously(Runnable run, long delay, long period);
 
+    /**
+     * @deprecated Not supported by Folia, use {@link TaskSchedulerProvider#runGlobal(Runnable, long)} or one of the entity and location methods.
+     */
+    @Deprecated
     int scheduleSyncDelayedTask(Runnable run);
 
+    /**
+     * @deprecated Not supported by Folia, use {@link TaskSchedulerProvider#runGlobal(Runnable, long)} or one of the entity and location methods.
+     */
+    @Deprecated
     int scheduleSyncDelayedTask(Runnable run, long delay);
 
+    /**
+     * @deprecated Not supported by Folia, use {@link TaskSchedulerProvider#runGlobalTimer(Runnable, long, long)} or one of the entity methods.
+     */
+    @Deprecated
     int scheduleSyncRepeatingTask(Runnable run, long delay, long period);
 
     PermissionsHandler getPermissionsHandler();

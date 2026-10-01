@@ -46,6 +46,7 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.ModernPaperEnvironment;
 import com.earth2me.essentials.utils.PasteUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
@@ -70,14 +71,17 @@ import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.PlayerLocaleProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
+import net.ess3.provider.TaskSchedulerProvider;
 import net.ess3.provider.providers.BaseBannerDataProvider;
 import net.ess3.provider.providers.BaseInventoryViewProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
 import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
+import net.ess3.provider.providers.BukkitTaskSchedulerProvider;
 import net.ess3.provider.providers.BukkitTileEntityProvider;
 import net.ess3.provider.providers.FixedHeightWorldInfoProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
+import net.ess3.provider.providers.FoliaTaskSchedulerProvider;
 import net.ess3.provider.providers.LegacyBannerDataProvider;
 import net.ess3.provider.providers.LegacyBiomeNameProvider;
 import net.ess3.provider.providers.LegacyPatternTypeProvider;
@@ -187,6 +191,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
     private transient AdventureFacet adventureFacet;
+    private transient TaskSchedulerProvider taskScheduler;
 
     static {
         EconomyLayers.init();
@@ -261,6 +266,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 getLogger().severe(getAdventureFacet().miniToLegacy(tlLiteral("serverSnapshot")));
             }
 
+            if (PaperLib.isPaper() && !PaperLib.isVersion(13) && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
+                PaperLib.setCustomEnvironment(new ModernPaperEnvironment());
+            }
+
             final PluginManager pm = getServer().getPluginManager();
             for (final Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
@@ -326,9 +335,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             jails = new Jails(this);
             confList.add(jails);
             execTimer.mark("Init(Jails)");
-
-            EconomyLayers.onEnable(this);
-            execTimer.mark("Init(EconomyLayers)");
 
             // Spawner item provider only uses one, but it's here for legacy...
             providerFactory.registerProvider(BlockMetaSpawnerItemProvider.class);
@@ -405,9 +411,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Tick Count Provider
             providerFactory.registerProvider(PaperTickCountProvider.class);
 
+            // Task Scheduler Provider
+            providerFactory.registerProvider(BukkitTaskSchedulerProvider.class, FoliaTaskSchedulerProvider.class);
+
             if (!TESTING) {
                 providerFactory.finalizeRegistration();
             }
+            taskScheduler = TESTING ? new BukkitTaskSchedulerProvider(this) : provider(TaskSchedulerProvider.class);
+
+            EconomyLayers.onEnable(this);
+            execTimer.mark("Init(EconomyLayers)");
 
             // Event Providers
             if (PaperLib.isPaper()) {
@@ -436,7 +449,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 
             timer = new EssentialsTimer(this);
-            scheduleSyncRepeatingTask(timer, 1000, 50);
+            taskScheduler.runGlobalTimer(timer, 1000, 50);
 
             Economy.setEss(this);
             execTimer.mark("RegHandler");
@@ -447,7 +460,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             if (!TESTING) {
                 updateChecker = new UpdateChecker(this);
-                runTaskAsynchronously(() -> {
+                taskScheduler.runAsync(() -> {
                     getLogger().log(Level.INFO, getAdventureFacet().miniToLegacy(tlLiteral("versionFetching")));
                     for (final ComponentHolder component : updateChecker.getVersionMessages(false, true, new CommandSource(this, Bukkit.getConsoleSender()))) {
                         getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, getAdventureFacet().adventureToLegacy(component));
@@ -589,7 +602,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         EssentialsConfiguration.shutdownExecutor();
         PasteUtil.shutdownExecutor();
-        getServer().getScheduler().cancelTasks(this);
+        if (taskScheduler != null) {
+            taskScheduler.cancelAll();
+        }
 
         HandlerList.unregisterAll(this);
     }
@@ -911,8 +926,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    @Deprecated
     public BukkitScheduler getScheduler() {
         return this.getServer().getScheduler();
+    }
+
+    @Override
+    public TaskSchedulerProvider getTaskScheduler() {
+        return taskScheduler;
     }
 
     @Override

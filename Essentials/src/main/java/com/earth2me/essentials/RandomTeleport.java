@@ -61,6 +61,16 @@ public class RandomTeleport implements IConf {
         }
 
         final Location worldCenter = ess.getServer().getWorlds().get(0).getWorldBorder().getCenter();
+        if (!ess.getTaskScheduler().isOwnedByCurrentThread(worldCenter)) {
+            // The surface can only be read by the thread that owns the chunk, so that thread works out and saves the real height
+            final Location surface = worldCenter.clone();
+            ess.getTaskScheduler().runLocation(surface, () -> {
+                surface.setY(surface.getWorld().getHighestBlockYAt(surface) + HIGHEST_BLOCK_Y_OFFSET);
+                setCenter(name, surface);
+            });
+            worldCenter.setY(worldCenter.getWorld().getSpawnLocation().getY());
+            return worldCenter;
+        }
         worldCenter.setY(worldCenter.getWorld().getHighestBlockYAt(worldCenter) + HIGHEST_BLOCK_Y_OFFSET);
         setCenter(name, worldCenter);
         return worldCenter;
@@ -156,7 +166,7 @@ public class RandomTeleport implements IConf {
 
     // Prompts caching random valid locations, up to a maximum number of attempts.
     public void cacheRandomLocations(final String name) {
-        ess.getServer().getScheduler().scheduleSyncDelayedTask(ess, () -> {
+        ess.getTaskScheduler().runGlobal(() -> {
             for (int i = 0; i < this.getFindAttempts(); ++i) {
                 calculateRandomLocation(getCenter(name), getMinRange(name), getMaxRange(name)).thenAccept(location -> {
                     if (isValidRandomLocation(location)) {
@@ -214,14 +224,14 @@ public class RandomTeleport implements IConf {
             360 * RANDOM.nextFloat() - 180,
             0
         );
-        PaperLib.getChunkAtAsync(location).thenAccept(chunk -> {
+        PaperLib.getChunkAtAsync(location).thenAccept(chunk -> ess.getTaskScheduler().executeLocation(location, () -> {
             if (World.Environment.NETHER.equals(center.getWorld().getEnvironment())) {
                 location.setY(getNetherYAt(location));
             } else {
                 location.setY(center.getWorld().getHighestBlockYAt(location) + HIGHEST_BLOCK_Y_OFFSET);
             }
             future.complete(location);
-        });
+        }));
         return future;
     }
 

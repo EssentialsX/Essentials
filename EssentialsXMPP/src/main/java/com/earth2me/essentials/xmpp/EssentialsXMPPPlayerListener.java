@@ -2,7 +2,6 @@ package com.earth2me.essentials.xmpp;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -24,7 +23,7 @@ class EssentialsXMPPPlayerListener implements Listener {
     public void onPlayerJoin(final PlayerJoinEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(ess, EssentialsXMPP::updatePresence);
+        ess.getTaskScheduler().runGlobal(EssentialsXMPP::updatePresence);
 
         sendMessageToSpyUsers("Player " + user.getDisplayName() + " joined the game");
     }
@@ -39,7 +38,7 @@ class EssentialsXMPPPlayerListener implements Listener {
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(ess, EssentialsXMPP::updatePresence);
+        ess.getTaskScheduler().runGlobal(EssentialsXMPP::updatePresence);
 
         sendMessageToSpyUsers("Player " + user.getDisplayName() + " left the game");
     }
@@ -49,7 +48,7 @@ class EssentialsXMPPPlayerListener implements Listener {
             final List<String> users = EssentialsXMPP.getInstance().getSpyUsers();
             synchronized (users) {
                 for (final String address : users) {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(ess, () -> EssentialsXMPP.getInstance().sendMessage(address, message));
+                    ess.getTaskScheduler().runGlobal(() -> EssentialsXMPP.getInstance().sendMessage(address, message));
                 }
             }
         } catch (final Exception ignored) {

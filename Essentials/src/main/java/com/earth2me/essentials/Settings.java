@@ -852,7 +852,7 @@ public class Settings implements net.ess3.api.ISettings {
             if (reloadCount.get() < 2) {
                 // on startup: add plugins again in case they registered commands with the new API
                 // we need to schedule this task before any of the below tasks using _addAlternativeCommand.
-                ess.scheduleSyncDelayedTask(() -> {
+                ess.getTaskScheduler().runGlobal(() -> {
                     for (final Plugin plugin : ess.getServer().getPluginManager().getPlugins()) {
                         if (plugin.isEnabled()) {
                             ess.getAlternativeCommandsHandler().addPlugin(plugin);
@@ -878,9 +878,9 @@ public class Settings implements net.ess3.api.ISettings {
 
                     // This is 2 because Settings are reloaded twice in the startup lifecycle
                     if (reloadCount.get() < 2) {
-                        ess.scheduleSyncDelayedTask(() -> _addAlternativeCommand(effectiveAlias, toDisable));
+                        ess.getTaskScheduler().runGlobal(() -> _addAlternativeCommand(effectiveAlias, toDisable));
                     } else {
-                        _addAlternativeCommand(effectiveAlias, toDisable);
+                        ess.getTaskScheduler().executeGlobal(() -> _addAlternativeCommand(effectiveAlias, toDisable));
                     }
                     mapModified = true;
                 }
@@ -893,9 +893,9 @@ public class Settings implements net.ess3.api.ISettings {
                     ess.getLogger().log(Level.INFO, "Syncing commands");
                 }
                 if (reloadCount.get() < 2) {
-                    ess.scheduleSyncDelayedTask(syncCommandsProvider::syncCommands);
+                    ess.getTaskScheduler().runGlobal(syncCommandsProvider::syncCommands);
                 } else {
-                    syncCommandsProvider.syncCommands();
+                    ess.getTaskScheduler().executeGlobal(syncCommandsProvider::syncCommands);
                 }
             }
         }

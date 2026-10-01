@@ -32,13 +32,16 @@ public class Commandweather extends EssentialsCommand {
 
         final World world = user.getWorld();
 
+        // The weather belongs to the global thread on Folia
         if (args.length > 1) {
-            world.setStorm(isStorm);
-            world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
+            ess.getTaskScheduler().executeGlobal(() -> {
+                world.setStorm(isStorm);
+                world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
+            });
             user.sendTl(isStorm ? "weatherStormFor" : "weatherSunFor", world.getName(), args[1]);
             return;
         }
-        world.setStorm(isStorm);
+        ess.getTaskScheduler().executeGlobal(() -> world.setStorm(isStorm));
         user.sendTl(isStorm ? "weatherStorm" : "weatherSun", world.getName());
     }
 
@@ -55,12 +58,14 @@ public class Commandweather extends EssentialsCommand {
         }
 
         if (args.length > 2) {
-            world.setStorm(isStorm);
-            world.setWeatherDuration(Integer.parseInt(args[2]) * 20);
+            ess.getTaskScheduler().executeGlobal(() -> {
+                world.setStorm(isStorm);
+                world.setWeatherDuration(Integer.parseInt(args[2]) * 20);
+            });
             sender.sendTl(isStorm ? "weatherStormFor" : "weatherSunFor", world.getName(), args[2]);
             return;
         }
-        world.setStorm(isStorm);
+        ess.getTaskScheduler().executeGlobal(() -> world.setStorm(isStorm));
         sender.sendTl(isStorm ? "weatherStorm" : "weatherSun", world.getName());
     }
 
