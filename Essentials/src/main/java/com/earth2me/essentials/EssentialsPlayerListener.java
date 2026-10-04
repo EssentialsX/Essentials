@@ -867,6 +867,13 @@ public class EssentialsPlayerListener implements Listener {
             }
 
             if (!cooldownFound) {
+                final String exactLabel = event.getMessage().split(" ")[0].replace("/", "");
+
+                // Check if the command is actually known to the server before applying a cooldown.
+                if (!ess.provider(KnownCommandsProvider.class).getKnownCommands().containsKey(exactLabel)) {
+                    return;
+                }
+
                 final Entry<Pattern, Long> cooldownEntry = ess.getSettings().getCommandCooldownEntry(fullCommand);
 
                 if (cooldownEntry != null) {
