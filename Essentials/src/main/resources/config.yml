@@ -724,6 +724,28 @@ command-cooldowns:
 # Whether command cooldowns should persist across server shutdowns.
 command-cooldown-persistence: true
 
+# Command warmups: Set a delay (in seconds) before a command is executed.
+# During the warmup period, the player must stand still (unless they have essentials.commandwarmups.move permission).
+# If the player moves or takes damage during this period, the command is cancelled.
+#
+# This is similar to the teleport warmup feature, but for any command.
+# Bypass all warmups with the 'essentials.commandwarmups.bypass' permission, or
+# bypass specific command warmups with 'essentials.commandwarmups.bypass.<command>'.
+#
+# Wildcards and regex patterns are supported (same as command cooldowns).
+# For example:
+# - 'home': 5  # 5-second warmup before /home executes
+# - 'tpa*': 3  # 3-second warmup for all commands starting with tpa
+#
+# Note: If you have a command that starts with ^, escape it using a backslash (\).
+command-warmups:
+  #home: 5 # 5-second warmup on /home command
+  #back: 3 # 3-second warmup on /back command
+  #afk: 3 # 3-second warmup on /afk command
+
+# Whether command warmups should persist across server shutdowns.
+command-warmup-persistence: true
+
 # Whether NPC balances should be included in balance ranking features like /balancetop.
 # NPC balances can include features like factions from the FactionsUUID plugin.
 npcs-in-balance-ranking: false
