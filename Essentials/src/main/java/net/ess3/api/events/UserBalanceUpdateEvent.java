@@ -73,6 +73,7 @@ public class UserBalanceUpdateEvent extends Event {
         COMMAND_ECO,
         COMMAND_PAY,
         COMMAND_SELL,
+        COMMAND_BUY,
         API,
         SPECIAL, // Reserved for API usage
         UNKNOWN
