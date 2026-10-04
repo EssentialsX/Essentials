@@ -231,6 +231,8 @@ public interface ISettings extends IConf {
 
     boolean sleepIgnoresVanishedPlayers();
 
+    boolean isVanishFakeJoinLeave();
+
     boolean isAfkListName();
 
     String getAfkListName();
