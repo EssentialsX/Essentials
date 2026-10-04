@@ -84,7 +84,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
         }
 
         if (sender.isPlayer() && (searchTerm.equals("@s") || searchTerm.equals("@p"))) {
-            userConsumer.accept((User) sender.getUser());
+            acceptOnline(sender, (User) sender.getUser(), userConsumer);
             return;
         }
 
@@ -95,7 +95,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
                 if (skipHidden && onlineUser.isHidden(sender.getPlayer()) && onlineUser.isHiddenFrom(sender.getPlayer())) {
                     continue;
                 }
-                userConsumer.accept(onlineUser);
+                acceptOnline(sender, onlineUser, userConsumer);
             }
         } else if (multipleStringMatches) {
             if (searchTerm.trim().length() < 2) {
@@ -113,7 +113,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
                     final String displayName = FormatUtil.stripFormat(player.getDisplayName()).toLowerCase(Locale.ENGLISH);
                     if (displayName.contains(matchText)) {
                         foundUser = true;
-                        userConsumer.accept(player);
+                        acceptOnline(sender, player, userConsumer);
                     }
                 }
             } else {
@@ -123,7 +123,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
                         continue;
                     }
                     foundUser = true;
-                    userConsumer.accept(player);
+                    acceptOnline(sender, player, userConsumer);
                 }
             }
             if (!foundUser) {
@@ -131,8 +131,24 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
             }
         } else {
             final User player = getPlayer(server, sender, searchTerm);
-            userConsumer.accept(player);
+            acceptOnline(sender, player, userConsumer);
         }
+    }
+
+    // Changing a player is only allowed from the thread that owns them, which on Folia is not necessarily the sender's.
+    // When it is not, the change is made from the player's thread and any error is reported to the sender from there.
+    private void acceptOnline(final CommandSource sender, final User user, final UserConsumer userConsumer) throws NotEnoughArgumentsException, TranslatableException {
+        if (ess.getTaskScheduler().isOwnedByCurrentThread(user.getBase())) {
+            userConsumer.accept(user);
+            return;
+        }
+        ess.getTaskScheduler().runEntity(user.getBase(), () -> {
+            try {
+                userConsumer.accept(user);
+            } catch (final Exception e) {
+                showError(sender.getSender(), e, getName());
+            }
+        });
     }
 
     protected abstract void updatePlayer(Server server, CommandSource sender, User user, String[] args) throws NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException;

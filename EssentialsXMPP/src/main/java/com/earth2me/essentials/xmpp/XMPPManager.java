@@ -5,6 +5,7 @@ import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IUser;
+import net.ess3.provider.TaskSchedulerProvider;
 import org.bukkit.entity.Player;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
@@ -41,6 +42,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     private final transient Map<String, Chat> chats = Collections.synchronizedMap(new HashMap<>());
     private final transient Set<LogRecord> logrecords = Collections.synchronizedSet(new HashSet<>());
     private final transient IEssentialsXMPP parent;
+    private final transient TaskSchedulerProvider scheduler;
     private transient XMPPConnection connection;
     private transient ChatManager chatManager;
     private transient List<String> logUsers;
@@ -49,9 +51,10 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     private transient Thread loggerThread;
     private transient boolean threadrunning = true;
 
-    XMPPManager(final IEssentialsXMPP parent) {
+    XMPPManager(final IEssentialsXMPP parent, final TaskSchedulerProvider scheduler) {
         super();
         this.parent = parent;
+        this.scheduler = scheduler;
         config = new EssentialsConfiguration(new File(parent.getDataFolder(), "config.yml"), "/config.yml", EssentialsXMPP.class);
         reloadConfig();
     }
@@ -328,7 +331,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 
     private void sendCommand(final Chat chat, final String message) {
         if (config.getList("op-users", String.class).contains(StringUtils.parseBareAddress(chat.getParticipant()))) {
-            parent.getServer().getScheduler().runTask(parent, () -> {
+            scheduler.runGlobal(() -> {
                 try {
                     parent.getServer().dispatchCommand(Console.getInstance().getCommandSender(), message.substring(1));
                 } catch (final Exception ex) {

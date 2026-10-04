@@ -43,13 +43,15 @@ public class SignTime extends EssentialsSign {
         long time = player.getWorld().getTime();
         time -= time % 24000;
         if ("§2Day".equalsIgnoreCase(timeString)) {
-            player.getWorld().setTime(time + 24000);
+            final long newTime = time + 24000;
+            ess.getTaskScheduler().executeGlobal(() -> player.getWorld().setTime(newTime));
             charge.charge(player);
             Trade.log("Sign", "TimeDay", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
             return true;
         }
         if ("§2Night".equalsIgnoreCase(timeString)) {
-            player.getWorld().setTime(time + 37700);
+            final long newTime = time + 37700;
+            ess.getTaskScheduler().executeGlobal(() -> player.getWorld().setTime(newTime));
             charge.charge(player);
             Trade.log("Sign", "TimeNight", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
             return true;

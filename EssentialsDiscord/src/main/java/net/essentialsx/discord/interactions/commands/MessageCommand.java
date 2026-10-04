@@ -55,7 +55,7 @@ public class MessageCommand extends InteractionCommandImpl {
         user.sendTl("msgFormat", event.getMember().getName(), AdventureUtil.parsed(user.playerTl("meRecipient")), message);
         // We use an atomic reference here so that java will garbage collect the recipient
         final AtomicReference<DiscordMessageRecipient> ref = new AtomicReference<>(new DiscordMessageRecipient(event.getMember()));
-        jda.getPlugin().getEss().runTaskLaterAsynchronously(() -> ref.set(null), 6000); // Expires after 5 minutes
+        jda.getPlugin().getEss().getTaskScheduler().runAsync(() -> ref.set(null), 6000); // Expires after 5 minutes
         user.setReplyRecipient(ref.get());
     }
 }

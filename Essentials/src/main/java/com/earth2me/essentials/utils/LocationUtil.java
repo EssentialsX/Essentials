@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import net.ess3.api.IUser;
 import net.ess3.api.TranslatableException;
+import net.ess3.provider.TaskSchedulerProvider;
 import net.ess3.provider.WorldInfoProvider;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -164,6 +165,12 @@ public final class LocationUtil {
     }
 
     public static boolean isBlockUnsafe(IEssentials ess, final World world, final int x, final int y, final int z) {
+        // The search for a safe location spreads out from the destination, and on Folia a block can only be read by the
+        // region that owns it. Blocks owned by another region are skipped as unsafe so the search carries on elsewhere.
+        final TaskSchedulerProvider scheduler = ess.getTaskScheduler();
+        if (scheduler.isRegionized() && !scheduler.isOwnedByCurrentThread(new Location(world, x, y, z))) {
+            return true;
+        }
         return isBlockDamaging(world, x, y, z) || isBlockAboveAir(ess, world, x, y, z);
     }
 

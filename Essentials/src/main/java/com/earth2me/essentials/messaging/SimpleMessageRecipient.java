@@ -37,8 +37,9 @@ public class SimpleMessageRecipient implements IMessageRecipient {
     private final IEssentials ess;
     private final IMessageRecipient parent;
 
-    private long lastMessageMs;
-    private WeakReference<IMessageRecipient> replyRecipient;
+    // The sender writes these to the recipient they are messaging, which may be on another thread
+    private volatile long lastMessageMs;
+    private volatile WeakReference<IMessageRecipient> replyRecipient;
 
     public SimpleMessageRecipient(final IEssentials ess, final IMessageRecipient parent) {
         this.ess = ess;
@@ -229,7 +230,8 @@ public class SimpleMessageRecipient implements IMessageRecipient {
      */
     @Override
     public IMessageRecipient getReplyRecipient() {
-        return replyRecipient == null ? null : replyRecipient.get();
+        final WeakReference<IMessageRecipient> recipient = replyRecipient;
+        return recipient == null ? null : recipient.get();
     }
 
     /**

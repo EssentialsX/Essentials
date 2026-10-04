@@ -23,14 +23,17 @@ public class Commandthunder extends EssentialsCommand {
         final World world = user.getWorld();
         final boolean setThunder = args[0].equalsIgnoreCase("true");
 
+        // The weather belongs to the global thread on Folia
         if (args.length == 1) {
-            world.setThundering(setThunder);
+            ess.getTaskScheduler().executeGlobal(() -> world.setThundering(setThunder));
             user.sendTl("thunder", CommonPlaceholders.enableDisable(user.getSource(), setThunder));
             return;
         }
 
-        world.setThundering(setThunder);
-        world.setThunderDuration(Integer.parseInt(args[1]) * 20);
+        ess.getTaskScheduler().executeGlobal(() -> {
+            world.setThundering(setThunder);
+            world.setThunderDuration(Integer.parseInt(args[1]) * 20);
+        });
         user.sendTl("thunderDuration", CommonPlaceholders.enableDisable(user.getSource(), setThunder), Integer.parseInt(args[1]));
     }
 

@@ -133,11 +133,7 @@ public class AccountLinkManager implements IEssentialsModule, DiscordLinkService
     }
 
     private void ensureSync(final Runnable runnable) {
-        if (ess.getServer().isPrimaryThread()) {
-            runnable.run();
-            return;
-        }
-        ess.getEss().scheduleSyncDelayedTask(runnable);
+        ess.getEss().getTaskScheduler().executeGlobal(runnable);
     }
 
     private void ensureAsync(final Runnable runnable) {
@@ -145,7 +141,7 @@ public class AccountLinkManager implements IEssentialsModule, DiscordLinkService
             runnable.run();
             return;
         }
-        ess.getEss().runTaskAsynchronously(runnable);
+        ess.getEss().getTaskScheduler().runAsync(runnable);
     }
 
     private String generateCode() {

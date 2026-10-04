@@ -35,12 +35,15 @@ public class EssentialsTimer implements Runnable {
         if (timeSpent == 0) {
             timeSpent = 1;
         }
-        if (history.size() > 10) {
-            history.remove();
-        }
         final double tps = tickInterval * 1000000.0 / timeSpent;
-        if (tps <= 21) {
-            history.add(tps);
+        // Commands and placeholders on other threads read the history through getAverageTPS()
+        synchronized (history) {
+            if (history.size() > 10) {
+                history.remove();
+            }
+            if (tps <= 21) {
+                history.add(tps);
+            }
         }
         lastPoll = startTime;
         int count = 0;
@@ -61,7 +64,7 @@ public class EssentialsTimer implements Runnable {
                 final User user = ess.getUser(player);
                 onlineUsers.add(user.getBase().getUniqueId());
                 user.setLastOnlineActivity(currentTime);
-                user.checkActivity();
+                ess.getTaskScheduler().executeEntity(player, user::checkActivity);
             } catch (final Exception e) {
                 ess.getLogger().log(Level.WARNING, "EssentialsTimer Error:", e);
             }
@@ -94,19 +97,23 @@ public class EssentialsTimer implements Runnable {
                 iterator.remove();
                 continue;
             }
-            user.checkMuteTimeout(currentTime);
-            user.checkJailTimeout(currentTime);
+            ess.getTaskScheduler().executeEntity(user.getBase(), () -> {
+                user.checkMuteTimeout(currentTime);
+                user.checkJailTimeout(currentTime);
+            });
             user.resetInvulnerabilityAfterTeleport();
         }
     }
 
     public double getAverageTPS() {
-        double avg = 0;
-        for (final Double f : history) {
-            if (f != null) {
-                avg += f;
+        synchronized (history) {
+            double avg = 0;
+            for (final Double f : history) {
+                if (f != null) {
+                    avg += f;
+                }
             }
+            return avg / history.size();
         }
-        return avg / history.size();
     }
 }

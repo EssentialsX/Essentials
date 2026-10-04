@@ -52,8 +52,13 @@ public class Commandgc extends EssentialsCommand {
             int tileEntities = 0;
 
             try {
-                for (final Chunk chunk : w.getLoadedChunks()) {
-                    tileEntities += tileEntityProvider.getTileEntities(chunk).length;
+                if (ess.getTaskScheduler().isRegionized()) {
+                    // The chunks of other regions cannot be read from here, but they can be counted
+                    tileEntities = w.getTileEntityCount();
+                } else {
+                    for (final Chunk chunk : w.getLoadedChunks()) {
+                        tileEntities += tileEntityProvider.getTileEntities(chunk).length;
+                    }
                 }
             } catch (final java.lang.ClassCastException ex) {
                 ess.getLogger().log(Level.SEVERE, "Corrupted chunk data on world " + w, ex);
