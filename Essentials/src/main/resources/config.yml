@@ -1149,6 +1149,70 @@ protect:
       witch: false
       horse: false
       phantom: false
+      zombified_piglin: false
+      mooshroom: false
+      snow_golem: false
+      rabbit: false
+      guardian: false
+      elder_guardian: false
+      endermite: false
+      shulker: false
+      polar_bear: false
+      stray: false
+      husk: false
+      wither_skeleton: false
+      zombie_villager: false
+      skeleton_horse: false
+      zombie_horse: false
+      donkey: false
+      mule: false
+      llama: false
+      evoker: false
+      vex: false
+      vindicator: false
+      illusioner: false
+      parrot: false
+      turtle: false
+      cod: false
+      salmon: false
+      pufferfish: false
+      tropical_fish: false
+      dolphin: false
+      drowned: false
+      cat: false
+      fox: false
+      panda: false
+      pillager: false
+      ravager: false
+      trader_llama: false
+      wandering_trader: false
+      bee: false
+      hoglin: false
+      piglin: false
+      piglin_brute: false
+      strider: false
+      zoglin: false
+      axolotl: false
+      glow_squid: false
+      goat: false
+      allay: false
+      frog: false
+      tadpole: false
+      warden: false
+      camel: false
+      sniffer: false
+      armadillo: false
+      bogged: false
+      breeze: false
+      creaking: false
+      happy_ghast: false
+      copper_golem: false
+      camel_husk: false
+      nautilus: false
+      zombie_nautilus: false
+      parched: false
+      sulfur_cube: false
+      cushion: false
 
   # The maximum height a creeper can explode. -1 allows them to explode everywhere.
   # Set 'creeper-explosion' above to true if you want to disable creeper explosions completely.

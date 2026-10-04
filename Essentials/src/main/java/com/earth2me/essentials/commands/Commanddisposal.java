@@ -12,7 +12,8 @@ public class Commanddisposal extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         user.sendTl("openingDisposal");
-        user.getBase().openInventory(ess.getServer().createInventory(user.getBase(), 36, user.playerTl("disposal")));
+        final String title = ess.getAdventureFacet().miniToLegacy(user.playerTl("disposal"));
+        user.getBase().openInventory(ess.getServer().createInventory(user.getBase(), 36, title));
     }
 
 }
