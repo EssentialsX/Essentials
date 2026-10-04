@@ -89,17 +89,27 @@ public class Commandcondense extends EssentialsCommand {
                     amount += contents.getAmount();
                 }
             }
+            
+            final int crafts = amount / input.getAmount();
+            final int output = crafts * result.getAmount();
 
-            final int output = (amount / input.getAmount()) * result.getAmount();
             amount -= amount % input.getAmount();
 
             if (amount > 0) {
                 input.setAmount(amount);
                 result.setAmount(output);
+
                 final Trade remove = new Trade(input, ess);
                 final Trade add = new Trade(result, ess);
+
                 remove.charge(user);
                 add.pay(user, OverflowType.DROP);
+
+                for (final ItemStack remainingItem : condenseType.getRemainingItems()) {
+                    remainingItem.setAmount(remainingItem.getAmount() * crafts);
+                    new Trade(remainingItem, ess).pay(user, OverflowType.DROP);
+                }
+
                 return true;
             }
         }
@@ -120,7 +130,8 @@ public class Commandcondense extends EssentialsCommand {
             if (recipeItems != null && (recipeItems.size() == 4 || recipeItems.size() == 9) && (recipeItems.size() > recipe.getResult().getAmount())) {
                 final ItemStack input = stack.clone();
                 input.setAmount(recipeItems.size());
-                final SimpleRecipe newRecipe = new SimpleRecipe(recipe.getResult(), input);
+                final List<ItemStack> remainingItems = getRemainingItems(stack, recipeItems.size());
+                final SimpleRecipe newRecipe = new SimpleRecipe(recipe.getResult(), input, remainingItems);
                 bestRecipes.add(newRecipe);
             }
         }
@@ -187,10 +198,12 @@ public class Commandcondense extends EssentialsCommand {
     private static final class SimpleRecipe implements Recipe {
         private final ItemStack result;
         private final ItemStack input;
+        private final List<ItemStack> remainingItems;
 
-        private SimpleRecipe(final ItemStack result, final ItemStack input) {
+        private SimpleRecipe(final ItemStack result, final ItemStack input, final List<ItemStack> remainingItems) {
             this.result = result;
             this.input = input;
+            this.remainingItems = remainingItems;
         }
 
         @Override
@@ -201,6 +214,24 @@ public class Commandcondense extends EssentialsCommand {
         public ItemStack getInput() {
             return input.clone();
         }
+
+        public List<ItemStack> getRemainingItems() {
+            final List<ItemStack> clonedItems = new ArrayList<>();
+
+            for (final ItemStack item : remainingItems) {
+                clonedItems.add(item.clone());
+            }
+
+            return clonedItems;
+        }
+    }
+
+    private List<ItemStack> getRemainingItems(final ItemStack input, final int inputAmount) {
+        if (input.getType() == Material.HONEY_BOTTLE) {
+            return Collections.singletonList(new ItemStack(Material.GLASS_BOTTLE, inputAmount));
+        }
+
+        return Collections.emptyList();
     }
 
     private static class SimpleRecipeComparator implements Comparator<SimpleRecipe> {
