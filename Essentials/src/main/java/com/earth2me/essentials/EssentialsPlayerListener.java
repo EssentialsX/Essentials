@@ -298,6 +298,11 @@ public class EssentialsPlayerListener implements Listener {
         if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled()) {
             user.setGodModeEnabled(false);
         }
+        final GameMode quitGameMode = user.getBase().getGameMode();
+        if (user.isFlyModeEnabled() && !user.getBase().getAllowFlight()
+            && (quitGameMode == GameMode.SURVIVAL || quitGameMode == GameMode.ADVENTURE)) {
+            user.setFlyModeEnabled(false);
+        }
         if (user.isVanished()) {
             user.setLeavingHidden(true);
             user.setVanished(false);
