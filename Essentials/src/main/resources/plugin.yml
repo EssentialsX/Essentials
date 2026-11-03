@@ -431,6 +431,10 @@ commands:
     description: Creates a jail where you specified named [jailname].
     usage: /<command> <jailname>
     aliases: [esetjail,createjail,ecreatejail]
+  setmaxplayers:
+    description: Set the max player limit
+    usage: /<command> <number>
+    aliases: [esetmaxplayers]
   settpr:
     description: Set the random teleport location and parameters.
     usage: /<command> [center|minrange|maxrange] [value]
@@ -1209,6 +1213,8 @@ permissions:
     description: Allows access to delete other players homes with the /delhome command
   essentials.setjail:
     description: Allows access to the /setjail command
+  essentials.setmaxplayers:
+    description: Allows access to the /setmaxplayers command
   essentials.setwarp:
     description: Allows access to the /setwarp command
   essentials.setworth:
