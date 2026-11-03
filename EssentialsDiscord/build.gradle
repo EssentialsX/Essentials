@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     compileOnly project(':EssentialsX')
+    testImplementation project(':EssentialsX')
     implementation('net.dv8tion:JDA:6.0.0') {
         exclude(module: 'opus-java')
     }
