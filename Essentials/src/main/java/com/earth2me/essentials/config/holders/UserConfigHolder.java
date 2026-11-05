@@ -3,6 +3,7 @@ package com.earth2me.essentials.config.holders;
 import com.earth2me.essentials.config.annotations.DeleteIfIncomplete;
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
 import com.earth2me.essentials.config.entities.CommandCooldown;
+import com.earth2me.essentials.config.entities.CommandWarmup;
 import com.earth2me.essentials.config.entities.LazyLocation;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import org.bukkit.Location;
@@ -471,6 +472,21 @@ public class UserConfigHolder {
 
         public void commandCooldowns(final List<CommandCooldown> value) {
             this.commandCooldowns = value;
+        }
+
+        @DeleteOnEmpty
+        @DeleteIfIncomplete
+        private @MonotonicNonNull List<CommandWarmup> commandWarmups;
+
+        public List<CommandWarmup> commandWarmups() {
+            if (this.commandWarmups == null) {
+                this.commandWarmups = new ArrayList<>();
+            }
+            return this.commandWarmups;
+        }
+
+        public void commandWarmups(final List<CommandWarmup> value) {
+            this.commandWarmups = value;
         }
     }
 }

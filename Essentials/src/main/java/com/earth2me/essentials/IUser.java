@@ -4,6 +4,7 @@ import com.earth2me.essentials.adventure.ComponentHolder;
 import com.earth2me.essentials.api.IAsyncTeleport;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.config.entities.CommandCooldown;
+import com.earth2me.essentials.config.entities.CommandWarmup;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.essentialsx.api.v2.services.mail.MailMessage;
@@ -233,6 +234,16 @@ public interface IUser {
     void addCommandCooldown(Pattern pattern, Date expiresAt, boolean save);
 
     boolean clearCommandCooldown(Pattern pattern);
+
+    Map<Pattern, Long> getCommandWarmups();
+
+    List<CommandWarmup> getWarmupsList();
+
+    Date getCommandWarmupExpiry(String label);
+
+    void addCommandWarmup(Pattern pattern, Date expiresAt, boolean save);
+
+    boolean clearCommandWarmup(Pattern pattern);
 
     /*
      *  PlayerExtension
