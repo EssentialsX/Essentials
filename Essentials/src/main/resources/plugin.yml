@@ -76,6 +76,10 @@ commands:
     description: Set a player on fire.
     usage: /<command> <player> <seconds>
     aliases: [eburn]
+  buy:
+    description: Buys item 
+    usage: /<command> <<itemname>|<id>> [amount]
+    aliases: [ebuy]
   cartographytable:
     description: Opens up a cartography table.
     usage: /<command>
@@ -703,6 +707,8 @@ permissions:
     description: Allows access to the /broadcastworld command
   essentials.burn:
     description: Allows access to the /burn command
+  essentials.buy:
+    description: Allows access to the /buy command
   essentials.chat.ignoreexempt:
     default: false
     description: Someone with this permission will not be ignored, even if they are on another persons ignore list
