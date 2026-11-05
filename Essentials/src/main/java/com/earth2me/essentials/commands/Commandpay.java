@@ -64,7 +64,6 @@ public class Commandpay extends EssentialsLoopCommand {
                     user.sendTl("payOffline");
                     return;
                 }
-
                 if (!player.isAcceptingPay() || (ess.getSettings().isPayExcludesIgnoreList() && player.isIgnoredPlayer(user))) {
                     user.sendTl("notAcceptingPay", player.getDisplayName());
                     return;
@@ -78,6 +77,14 @@ public class Commandpay extends EssentialsLoopCommand {
                         informToConfirm.set(true);
                     }
                     user.getConfirmingPayments().put(player, amount);
+                    return;
+                }
+                final BigDecimal serverMaxBal = ess.getSettings().getMaxMoney();
+                final BigDecimal postTransactionBal = player.getMoney().add(amount);
+                if (postTransactionBal.compareTo(serverMaxBal) > 0) {
+                    if (!args[0].equals("*")) {
+                        user.sendMessage("§c" + player.getDisplayName() + " would surpass the server's maximum balance limit!");
+                    }
                     return;
                 }
                 user.payUser(player, amount, UserBalanceUpdateEvent.Cause.COMMAND_PAY);
