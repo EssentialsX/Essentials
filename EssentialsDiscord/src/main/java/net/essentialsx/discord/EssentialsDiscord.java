@@ -58,16 +58,20 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
         if (jda == null) {
             jda = new JDADiscordService(this);
-            try {
-                jda.startup();
-                ess.scheduleSyncDelayedTask(() -> ((InteractionControllerImpl) jda.getInteractionController()).processBatchRegistration());
-            } catch (Exception e) {
-                getLogger().log(Level.SEVERE, ess.getAdventureFacet().miniToLegacy(tlLiteral("discordErrorLogin", e.getMessage())));
-                if (ess.getSettings().isDebug()) {
-                    e.printStackTrace();
-                }
-                jda.shutdown();
+            ess.runTaskAsynchronously(this::startupAsync);
+        }
+    }
+
+    private void startupAsync() {
+        try {
+            jda.startup();
+            ess.scheduleSyncDelayedTask(() -> ((InteractionControllerImpl) jda.getInteractionController()).processBatchRegistration());
+        } catch (Exception e) {
+            getLogger().log(Level.SEVERE, ess.getAdventureFacet().miniToLegacy(tlLiteral("discordErrorLogin", e.getMessage())));
+            if (ess.getSettings().isDebug()) {
+                e.printStackTrace();
             }
+            jda.shutdown();
         }
     }
 
