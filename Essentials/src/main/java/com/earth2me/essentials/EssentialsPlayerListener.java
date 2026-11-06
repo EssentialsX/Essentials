@@ -21,6 +21,7 @@ import io.papermc.paper.event.connection.configuration.AsyncPlayerConnectionConf
 import io.papermc.paper.event.player.PlayerServerFullCheckEvent;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
+import net.ess3.api.events.VanishStatusChangeEvent;
 import net.ess3.provider.CommandSendListenerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.InventoryViewProvider;
@@ -30,12 +31,7 @@ import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
 import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.PaperAdventureSmuggler;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
-import org.bukkit.BanEntry;
-import org.bukkit.BanList;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.FormattedCommandAlias;
 import org.bukkit.command.PluginCommand;
@@ -70,6 +66,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.eclipse.sisu.Priority;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -147,6 +144,7 @@ public class EssentialsPlayerListener implements Listener {
 
     public void registerEvents() {
         ess.getServer().getPluginManager().registerEvents(this, ess);
+        ess.getServer().getPluginManager().registerEvents(new VanishListener(), ess);
 
         if (isArrowPickupEvent()) {
             ess.getServer().getPluginManager().registerEvents(new ArrowPickupListener(), ess);
@@ -1284,5 +1282,18 @@ public class EssentialsPlayerListener implements Listener {
                     && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials") || command.getPlugin().getClass().getName().startsWith("net.essentialsx"))
                     && (ess.getSettings().isCommandOverridden(label) || ess.getAlternativeCommandsHandler().getAlternative(label) == null);
         }
+    }
+    private class VanishListener implements Listener {
+
+        @EventHandler(priority = EventPriority.LOWEST)
+        private void vanishEvent(VanishStatusChangeEvent event) {
+            User user = ess.getUser(event.getAffected().getUUID());
+            if(event.getValue()){
+                user.setLastSleptBeforeVanish(user.getBase().getStatistic(Statistic.TIME_SINCE_REST));
+                return;
+            }
+            user.getBase().setStatistic(Statistic.TIME_SINCE_REST, user.getLastSleptBeforeVanish());
+        }
+
     }
 }
