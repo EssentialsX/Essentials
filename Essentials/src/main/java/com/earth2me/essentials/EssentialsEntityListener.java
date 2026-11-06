@@ -272,4 +272,14 @@ public class EssentialsEntityListener implements Listener {
             }
         }
     }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPhantomSpawn(final EntitySpawnEvent event) {
+        if (event.getEntity() instanceof Phantom) {
+            final Phantom phantom = (Phantom) event.getEntity();
+            final User user = ess.getUser((Player)  phantom.getTarget());
+            if (user.isVanished()) {
+                event.setCancelled(true);
+            }
+        }
+    }
 }
