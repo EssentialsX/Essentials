@@ -103,6 +103,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private transient int flightTick = -1;
     private String lastLocaleString;
     private Locale playerLocale;
+    private int lastSleptBeforeVanish;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -1375,5 +1376,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void setFlightTick(int flightTick) {
         this.flightTick = flightTick;
+    }
+
+    public void setLastSleptBeforeVanish(int lastSleptBeforeVanish) {
+        this.lastSleptBeforeVanish = lastSleptBeforeVanish;
+    }
+    public int getLastSleptBeforeVanish() {
+        return this.lastSleptBeforeVanish;
     }
 }
