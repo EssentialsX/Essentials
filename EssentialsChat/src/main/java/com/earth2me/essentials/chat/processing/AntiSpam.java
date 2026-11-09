@@ -9,7 +9,7 @@ public class AntiSpam {
     Map<UUID, String> lastMessage = new HashMap<>();
     public boolean newMessage(UUID uuid, String message){
         String storedMessage = lastMessage.get(uuid);
-        if(storedMessage == message){
+        if(storedMessage.equalsIgnoreCase(message) || storedMessage.startsWith(message)) {
             return true;
         }
         lastMessage.put(uuid, message);
