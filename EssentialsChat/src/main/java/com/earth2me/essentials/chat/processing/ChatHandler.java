@@ -47,6 +47,9 @@ public class ChatHandler extends AbstractChatHandler {
             final AbstractChatEvent absEvent = wrap(event);
             handleChatPostFormat(absEvent);
             handleChatSubmit(absEvent);
+
+            event.setCancelled(AntiSpam.getAntiSpam().newMessage(event.getPlayer().getUniqueId(),
+                    event.getMessage()));
         }
     }
 }

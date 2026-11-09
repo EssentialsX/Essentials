@@ -2,6 +2,7 @@ package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.EssentialsLogger;
+import com.earth2me.essentials.chat.processing.AntiSpam;
 import com.earth2me.essentials.chat.processing.ChatHandler;
 import com.earth2me.essentials.chat.processing.PaperChatHandler;
 import com.earth2me.essentials.metrics.MetricsWrapper;
@@ -19,6 +20,7 @@ import static com.earth2me.essentials.I18n.tlLiteral;
 public class EssentialsChat extends JavaPlugin {
     private transient IEssentials ess;
     private transient MetricsWrapper metrics = null;
+    public transient AntiSpam antiSpam = new AntiSpam();
 
     @Override
     public void onEnable() {
