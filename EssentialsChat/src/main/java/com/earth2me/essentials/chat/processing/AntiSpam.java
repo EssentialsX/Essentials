@@ -5,6 +5,10 @@ import java.util.Map;
 import java.util.UUID;
 
 public class AntiSpam {
+    static AntiSpam antiSpam;
+    public AntiSpam() {
+        antiSpam = this;
+    }
     //Needs a listener, last message cache, compare to last message,
     Map<UUID, String> lastMessage = new HashMap<>();
     public boolean newMessage(UUID uuid, String message){
@@ -14,5 +18,8 @@ public class AntiSpam {
         }
         lastMessage.put(uuid, message);
         return false;
+    }
+    public static AntiSpam getAntiSpam(){
+        return antiSpam;
     }
 }
