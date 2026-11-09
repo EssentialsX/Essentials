@@ -10,10 +10,11 @@ public class PaperChatHandler extends AbstractChatHandler {
     public PaperChatHandler(Essentials ess, EssentialsChat essChat) {
         super(ess, essChat);
     }
-
+    AntiSpam antiSpam = new AntiSpam();
     public void registerListeners() {
         final PluginManager pm = essChat.getServer().getPluginManager();
         pm.registerEvents(new ChatListener(), essChat);
+        antiSpam = new AntiSpam();
     }
 
     public final class ChatListener extends PaperChatListenerProvider {
@@ -31,6 +32,7 @@ public class PaperChatHandler extends AbstractChatHandler {
         public void onChatHighest(AbstractChatEvent event) {
             handleChatPostFormat(event);
             handleChatSubmit(event);
+            antiSpam.newMessage(event.getPlayer().getUniqueId(), event.getMessage());
         }
     }
 }
