@@ -13,6 +13,8 @@ public class SpigotChatEvent implements AbstractChatEvent {
 
     public SpigotChatEvent(AsyncPlayerChatEvent event) {
         this.event = event;
+        event.setCancelled(AntiSpam.getAntiSpam().newMessage(event.getPlayer().getUniqueId(),
+                event.getMessage()));
     }
 
     @Override
@@ -69,4 +71,5 @@ public class SpigotChatEvent implements AbstractChatEvent {
     public void addRecipient(Player player) {
         event.getRecipients().add(player);
     }
+
 }
