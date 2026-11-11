@@ -30,8 +30,6 @@ public class PaperChatHandler extends AbstractChatHandler {
         public void onChatHighest(AbstractChatEvent event) {
             handleChatPostFormat(event);
             handleChatSubmit(event);
-            event.setCancelled(AntiSpam.getAntiSpam().newMessage(event.getPlayer().getUniqueId(),
-                    event.getMessage()));
         }
     }
 }
