@@ -48,7 +48,7 @@ public class AntiSpam {
                 event.setMessage(storedMessage.toLowerCase());
                 player.sendMessage(Color.RED + "Please do not spam capital letters in chat");
                 event.setMessage(storedMessage.toLowerCase());
-                if(Objects.requireNonNull(config.getString("caps-punish")).equalsIgnoreCase("")){
+                if(!Objects.requireNonNull(config.getString("caps-punish")).isEmpty()){
                     ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), Objects.requireNonNull(config.getString("caps-punish")));
                 }
 
@@ -60,7 +60,7 @@ public class AntiSpam {
             if (lastMessage.get(uuid).equalsIgnoreCase(message) || lastMessage.get(uuid).startsWith(message)|| lastMessage.get(uuid).endsWith(message)) {
                 player.sendMessage(Color.RED + "Please do not send the same message twice.");
                 event.setCancelled(true);
-                if (Objects.requireNonNull(config.getString("duplicate-punish")).equalsIgnoreCase("")) {
+                if (!Objects.requireNonNull(config.getString("duplicate-punish")).isEmpty()) {
                     ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), Objects.requireNonNull(config.getString("duplicate-punish")));
                 }
                 return;
@@ -74,6 +74,9 @@ public class AntiSpam {
                     @Override
                     public void run() {
                         for(Map.Entry<UUID, Integer> entry : lastMessageTimer.entrySet()){
+                            if(entry.getValue() == null){
+                                entry.setValue(0);
+                            }
                             entry.setValue(entry.getValue() + 1);
                             if(entry.getValue() >= ess.getConfig().getInt("chat-cooldown-time")){ lastMessageTimer.remove(entry.getKey());
 
