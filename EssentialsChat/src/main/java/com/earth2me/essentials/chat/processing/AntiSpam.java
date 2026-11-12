@@ -47,7 +47,7 @@ public class AntiSpam {
                     count++;
                 }
             }
-            if (message.length() * 0.70 > count) {
+            if (message.length() * 0.70 < count) {
                 //return the message to chat with lowercase replaced
                 event.setMessage(message.toLowerCase());
                 player.sendMessage(Color.RED + "Please do not spam capital letters in chat");
