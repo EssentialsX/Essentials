@@ -62,6 +62,7 @@ public class AntiSpam {
         }
         if(player.hasPermission("essentials.chat.bypass.cooldown")) return;
         if(ess.getConfig().getBoolean("chat-cooldown-enable")){
+            //if task is shutdown for some reason, recreate it
             if(runable == null){
                 runable = new BukkitRunnable() {
                     @Override
@@ -76,7 +77,7 @@ public class AntiSpam {
                 }.runTaskTimer(ess, 20L, 20L);
             }
         }
-        if (lastMessage.containsKey(uuid)) {
+        if (lastMessageTimer.containsKey(uuid)) {
             event.setCancelled(true);
             player.sendMessage(Color.RED + "There is currently a chat cooldown. Please wait " + lastMessage.get(uuid) + " seconds before sending another message.");
         }
