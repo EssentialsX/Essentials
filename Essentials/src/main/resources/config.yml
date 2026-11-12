@@ -1045,6 +1045,16 @@ chat:
   # You must restart your server after changing this setting.
   paper-chat-events: true
 
+  #Whether a player should be allowed to send the same, or similar messages.
+  duplicate-prevention: true
+
+  #Whether chat should have a cooldown per player.
+  chat-cooldown-enable: false
+  chat-cooldown-time: 0
+
+  #Whether messages containing lots of capitols should be changed to lowercase
+  chat-caps-filter: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                  EssentialsX Protect                 | #
