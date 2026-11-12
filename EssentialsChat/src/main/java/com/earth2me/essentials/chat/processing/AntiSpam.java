@@ -34,7 +34,7 @@ public class AntiSpam {
         UUID uuid = player.getUniqueId();
         String storedMessage = lastMessage.get(uuid);
         // Check for caps first to prevent bypass due to caps and noncaps messages having identical messages
-        if(ess.getConfig().getBoolean("chat-caps-filter")) {
+        if(ess.getConfig().getBoolean("chat.chat-caps-filter")) {
 
             int count = 0;
 
@@ -56,7 +56,7 @@ public class AntiSpam {
             }
             lastMessage.put(uuid, message.toLowerCase());
         }
-        if(ess.getConfig().getBoolean("duplicate-prevention")) {
+        if(ess.getConfig().getBoolean("chat.duplicate-prevention")) {
             if (lastMessage.get(uuid).equalsIgnoreCase(message) || lastMessage.get(uuid).startsWith(message)|| lastMessage.get(uuid).endsWith(message)) {
                 player.sendMessage(Color.RED + "Please do not send the same message twice.");
                 event.setCancelled(true);
@@ -67,7 +67,7 @@ public class AntiSpam {
             }
         }
         if(player.hasPermission("essentials.chat.bypass.cooldown")) return;
-        if(ess.getConfig().getBoolean("chat-cooldown-enable")){
+        if(ess.getConfig().getBoolean("chat.chat-cooldown-enable")){
             //if task is shutdown for some reason, recreate it
             if(runable == null){
                 runable = new BukkitRunnable() {
@@ -78,7 +78,7 @@ public class AntiSpam {
                                 lastMessageTimer.putIfAbsent(entry.getKey(), 0);
                             }
                             lastMessageTimer.put(entry.getKey(), entry.getValue() +1);
-                            if(entry.getValue() >= ess.getConfig().getInt("chat-cooldown-time")){
+                            if(entry.getValue() >= ess.getConfig().getInt("chat.chat-cooldown-time")){
                                 lastMessageTimer.remove(entry.getKey());
 
                             }
