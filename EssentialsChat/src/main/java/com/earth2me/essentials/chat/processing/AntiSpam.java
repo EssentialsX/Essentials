@@ -51,7 +51,6 @@ public class AntiSpam {
                 //return the message to chat with lowercase replaced
                 event.setMessage(message.toLowerCase());
                 player.sendMessage(Color.RED + "Please do not spam capital letters in chat");
-                event.setMessage(message.toLowerCase());
                 if(!Objects.requireNonNull(config.getString("caps-punish")).isEmpty()){
                     ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), Objects.requireNonNull(config.getString("caps-punish")));
                 }
@@ -97,7 +96,7 @@ public class AntiSpam {
         }
         if (lastMessageTimer.containsKey(player.getUniqueId())) {
             event.setCancelled(true);
-            player.sendMessage(Color.RED + "There is currently a chat cooldown. Please wait " + lastMessage.get(uuid) + " seconds before sending another message.");
+            player.sendMessage(Color.RED + "There is currently a chat cooldown. Please wait " + lastMessage.get(player.getUniqueId()) + " seconds before sending another message.");
         }
     }
     public static AntiSpam getAntiSpam(){
