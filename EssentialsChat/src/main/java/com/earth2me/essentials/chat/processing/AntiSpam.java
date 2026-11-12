@@ -71,6 +71,7 @@ public class AntiSpam {
                 }
             }
         }
+        lastMessage.put(player.getUniqueId(), message.toLowerCase());
     }
     private void chatCooldown(Player player, AsyncPlayerChatEvent event) {
         if(player.hasPermission("essentials.chat.bypass.cooldown")) return;
