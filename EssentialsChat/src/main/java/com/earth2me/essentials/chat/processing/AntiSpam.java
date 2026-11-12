@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AntiSpam {
     static AntiSpam antiSpam;
@@ -32,22 +33,21 @@ public class AntiSpam {
 
     public void newMessage(Player player, String message, AsyncPlayerChatEvent event) {
         UUID uuid = player.getUniqueId();
-        String storedMessage = lastMessage.get(uuid);
         // Check for caps first to prevent bypass due to caps and noncaps messages having identical messages
         if(ess.getConfig().getBoolean("chat.chat-caps-filter")) {
 
             int count = 0;
 
-            for (int i = 0; i < storedMessage.length(); i++) {
-                if (Character.isUpperCase(storedMessage.charAt(i))) {
+            for (int i = 0; i < message.length(); i++) {
+                if (Character.isUpperCase(message.charAt(i))) {
                     count++;
                 }
             }
-            if (storedMessage.length() * 0.70 > count) {
+            if (message.length() * 0.70 > count) {
                 //return the message to chat with lowercase replaced
-                event.setMessage(storedMessage.toLowerCase());
+                event.setMessage(message.toLowerCase());
                 player.sendMessage(Color.RED + "Please do not spam capital letters in chat");
-                event.setMessage(storedMessage.toLowerCase());
+                event.setMessage(message.toLowerCase());
                 if(!Objects.requireNonNull(config.getString("caps-punish")).isEmpty()){
                     ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), Objects.requireNonNull(config.getString("caps-punish")));
                 }
