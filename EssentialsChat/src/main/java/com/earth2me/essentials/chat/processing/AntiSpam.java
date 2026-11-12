@@ -54,16 +54,16 @@ public class AntiSpam {
                 if(!Objects.requireNonNull(config.getString("caps-punish")).isEmpty()){
                     ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), Objects.requireNonNull(config.getString("caps-punish")));
                 }
-
-                return;
             }
-            lastMessage.put(player.getUniqueId(), message.toLowerCase());
         }
     }
     private void duplicationFilter(String message, Player player, AsyncPlayerChatEvent event) {
+        lastMessage.put(player.getUniqueId(), message.toLowerCase(Locale.ROOT));
         if(ess.getConfig().getBoolean("chat.duplicate-prevention")) {
             UUID uuid = player.getUniqueId();
-            if (lastMessage.get(uuid).equalsIgnoreCase(message) || lastMessage.get(uuid).startsWith(message)|| lastMessage.get(uuid).endsWith(message)) {
+            if (lastMessage.get(uuid).equalsIgnoreCase(message) ||
+                    lastMessage.get(uuid).startsWith(message.toLowerCase(Locale.ROOT))||
+                    lastMessage.get(uuid).endsWith(message.toLowerCase(Locale.ROOT))) {
                 player.sendMessage(Color.RED + "Please do not send the same message twice.");
                 event.setCancelled(true);
                 if (!Objects.requireNonNull(config.getString("duplicate-punish")).isEmpty()) {
