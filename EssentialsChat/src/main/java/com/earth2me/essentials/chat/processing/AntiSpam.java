@@ -26,8 +26,8 @@ public class AntiSpam {
     public AntiSpam() {
         antiSpam = this;
         config = ess.getConfig();
-        lastMessage = new HashMap<>();
-        lastMessageTimer = new HashMap<>();
+        lastMessage = new ConcurrentHashMap<>();
+        lastMessageTimer = new ConcurrentHashMap<>();
     }
 
 
