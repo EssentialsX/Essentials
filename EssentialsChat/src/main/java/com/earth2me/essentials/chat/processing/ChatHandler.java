@@ -44,12 +44,13 @@ public class ChatHandler extends AbstractChatHandler {
         @Override
         @EventHandler(priority = EventPriority.HIGHEST)
         public void onPlayerChat(AsyncPlayerChatEvent event) {
+            AntiSpam.getAntiSpam().newMessage(event.getPlayer(),
+                    event.getMessage(), event);
             final AbstractChatEvent absEvent = wrap(event);
             handleChatPostFormat(absEvent);
             handleChatSubmit(absEvent);
 
-            AntiSpam.getAntiSpam().newMessage(event.getPlayer(),
-                    event.getMessage(), event);
+
         }
     }
 }
