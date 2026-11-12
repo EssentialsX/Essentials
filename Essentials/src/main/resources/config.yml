@@ -1045,7 +1045,8 @@ chat:
   # You must restart your server after changing this setting.
   paper-chat-events: true
 
-  #Whether a player should be allowed to send the same, or similar messages.
+  #When enabled the plugin sends a message to the player letting them know not to send similar messages.
+  #Whether duplicate messages should be blocked.
   duplicate-prevention: true
 
   #Whether we run a command in response to duplicate messages. Leave empty for no punishment.
@@ -1055,6 +1056,8 @@ chat:
   chat-cooldown-enable: false
   chat-cooldown-time: 0
 
+  #When enabled the plugin sends a message to the player letting them know not to use too many capitol letters.
+  #Message is converted to lowercase before being sent
   #Whether messages containing lots of capitols should be changed to lowercase
   chat-caps-filter: true
 
