@@ -1,7 +1,11 @@
 package com.earth2me.essentials.chat.processing;
 
+import com.earth2me.essentials.Essentials;
+import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -15,33 +19,57 @@ public class AntiSpam {
     }
     //Needs a listener, last message cache, compare to last message,
     Map<UUID, String> lastMessage = new HashMap<>();
+    Map<UUID, Integer> lastMessageTimer = new HashMap<>();
+    BukkitTask runable;
     public void newMessage(Player player, String message, AsyncPlayerChatEvent event) {
         UUID uuid = player.getUniqueId();
         String storedMessage = lastMessage.get(uuid);
-        if(storedMessage.equalsIgnoreCase(message) || storedMessage.startsWith(message)) {
-            player.sendMessage("Please do not send the same message twice.");
-            event.setCancelled(true);
-            return;
-        }
-        if(storedMessage.endsWith(message)) {
-            player.sendMessage("Please do not send the same message twice.");
-            event.setCancelled(true);
-            return;}
-        int count = 0;
-
-        for (int i = 0; i < storedMessage.length(); i++) {
-            if (Character.isUpperCase(storedMessage.charAt(i))) {
-                count++;
+        Essentials ess =  Essentials.getPlugin(Essentials.class);
+        if(ess.getConfig().getBoolean("duplicate-prevention")) {
+            if (storedMessage.equalsIgnoreCase(message) || storedMessage.startsWith(message)|| storedMessage.endsWith(message)) {
+                player.sendMessage(Color.RED + "Please do not send the same message twice.");
+                event.setCancelled(true);
+                return;
             }
         }
-        if(storedMessage.length() * 0.70 > count) {
-            //return the message to chat with lowercase replaced
-            event.setMessage(storedMessage.toLowerCase());
-            player.sendMessage("Please do not spam capital letters in chat");
-            event.setMessage(storedMessage.toLowerCase());
+        if(ess.getConfig().getBoolean("chat-caps-filter")) {
 
-            return;}
-        lastMessage.put(uuid, message);
+            int count = 0;
+
+            for (int i = 0; i < storedMessage.length(); i++) {
+                if (Character.isUpperCase(storedMessage.charAt(i))) {
+                    count++;
+                }
+            }
+            if (storedMessage.length() * 0.70 > count) {
+                //return the message to chat with lowercase replaced
+                event.setMessage(storedMessage.toLowerCase());
+                player.sendMessage(Color.RED + "Please do not spam capital letters in chat");
+                event.setMessage(storedMessage.toLowerCase());
+
+                return;
+            }
+            lastMessage.put(uuid, message);
+        }
+        if(ess.getConfig().getBoolean("chat-cooldown-enable")){
+            if(runable == null){
+                runable = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        for(Map.Entry<UUID, Integer> entry : lastMessageTimer.entrySet()){
+                            entry.setValue(entry.getValue() + 1);
+                            if(entry.getValue() >= 5){ lastMessageTimer.remove(entry.getKey());
+
+                            }
+                        }
+                    }
+                }.runTaskTimer(ess, 20L, 20L);
+            }
+        }
+        if (lastMessage.containsKey(uuid)) {
+            event.setCancelled(true);
+            player.sendMessage(Color.RED + "There is currently a chat cooldown. Please wait " + lastMessage.get(uuid) + " seconds before sending another message.");
+        }
     }
     public static AntiSpam getAntiSpam(){
         return antiSpam;
