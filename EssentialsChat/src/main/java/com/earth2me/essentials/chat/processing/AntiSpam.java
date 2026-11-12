@@ -74,11 +74,12 @@ public class AntiSpam {
                     @Override
                     public void run() {
                         for(Map.Entry<UUID, Integer> entry : lastMessageTimer.entrySet()){
-                            if(entry.getValue() == null){
-                                entry.setValue(0);
+                            if(lastMessageTimer.get(entry.getKey()) == null){
+                                lastMessageTimer.putIfAbsent(entry.getKey(), 0);
                             }
-                            entry.setValue(entry.getValue() + 1);
-                            if(entry.getValue() >= ess.getConfig().getInt("chat-cooldown-time")){ lastMessageTimer.remove(entry.getKey());
+                            lastMessageTimer.put(entry.getKey(), entry.getValue() +1);
+                            if(entry.getValue() >= ess.getConfig().getInt("chat-cooldown-time")){
+                                lastMessageTimer.remove(entry.getKey());
 
                             }
                         }
