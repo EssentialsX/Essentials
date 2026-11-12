@@ -43,3 +43,6 @@ permissions:
   essentials.chat.receive.question:
     default: true
     description: Allows access to receiving global question chat messages
+  essentials.chat.bypass.cooldown:
+    default: false
+    description: Allows a player to bypass chat cooldowns
