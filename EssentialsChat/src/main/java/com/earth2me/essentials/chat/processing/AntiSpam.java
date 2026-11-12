@@ -10,10 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class AntiSpam {
     static AntiSpam antiSpam;
@@ -30,16 +27,7 @@ public class AntiSpam {
         String storedMessage = lastMessage.get(uuid);
         Essentials ess =  Essentials.getPlugin(Essentials.class);
         config = ess.getConfig();
-        if(ess.getConfig().getBoolean("duplicate-prevention")) {
-            if (storedMessage.equalsIgnoreCase(message) || storedMessage.startsWith(message)|| storedMessage.endsWith(message)) {
-                player.sendMessage(Color.RED + "Please do not send the same message twice.");
-                event.setCancelled(true);
-                if (Objects.requireNonNull(config.getString("duplicate-punish")).equalsIgnoreCase("")) {
-                    ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), Objects.requireNonNull(config.getString("duplicate-punish")));
-                }
-                return;
-            }
-        }
+        // Check for caps first to prevent bypass due to caps and noncaps messages having identical messages
         if(ess.getConfig().getBoolean("chat-caps-filter")) {
 
             int count = 0;
@@ -60,7 +48,17 @@ public class AntiSpam {
 
                 return;
             }
-            lastMessage.put(uuid, message);
+            lastMessage.put(uuid, message.toLowerCase());
+        }
+        if(ess.getConfig().getBoolean("duplicate-prevention")) {
+            if (lastMessage.get(uuid).equalsIgnoreCase(message) || lastMessage.get(uuid).startsWith(message)|| lastMessage.get(uuid).endsWith(message)) {
+                player.sendMessage(Color.RED + "Please do not send the same message twice.");
+                event.setCancelled(true);
+                if (Objects.requireNonNull(config.getString("duplicate-punish")).equalsIgnoreCase("")) {
+                    ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), Objects.requireNonNull(config.getString("duplicate-punish")));
+                }
+                return;
+            }
         }
         if(player.hasPermission("essentials.chat.bypass.cooldown")) return;
         if(ess.getConfig().getBoolean("chat-cooldown-enable")){
