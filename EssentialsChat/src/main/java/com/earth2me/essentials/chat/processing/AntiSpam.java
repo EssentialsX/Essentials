@@ -14,19 +14,25 @@ import java.util.*;
 
 public class AntiSpam {
     static AntiSpam antiSpam;
+
+    Essentials ess =  Essentials.getPlugin(Essentials.class);
+    private final FileConfiguration config;
+
+    private final Map<UUID, String> lastMessage;
+    private final Map<UUID, Integer> lastMessageTimer;
+    private BukkitTask runable;
+
     public AntiSpam() {
         antiSpam = this;
+        config = ess.getConfig();
+        lastMessage = new HashMap<>();
+        lastMessageTimer = new HashMap<>();
     }
-    //Needs a listener, last message cache, compare to last message,
-    Map<UUID, String> lastMessage = new HashMap<>();
-    Map<UUID, Integer> lastMessageTimer = new HashMap<>();
-    BukkitTask runable;
-    FileConfiguration config;
+
+
     public void newMessage(Player player, String message, AsyncPlayerChatEvent event) {
         UUID uuid = player.getUniqueId();
         String storedMessage = lastMessage.get(uuid);
-        Essentials ess =  Essentials.getPlugin(Essentials.class);
-        config = ess.getConfig();
         // Check for caps first to prevent bypass due to caps and noncaps messages having identical messages
         if(ess.getConfig().getBoolean("chat-caps-filter")) {
 
