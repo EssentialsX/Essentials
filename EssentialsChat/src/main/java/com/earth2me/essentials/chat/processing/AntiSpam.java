@@ -32,8 +32,12 @@ public class AntiSpam {
 
 
     public void newMessage(Player player, String message, AsyncPlayerChatEvent event) {
-        UUID uuid = player.getUniqueId();
-        // Check for caps first to prevent bypass due to caps and noncaps messages having identical messages
+        capsFilter(message, player, event);
+        duplicationFilter(message, player, event);
+        chatCooldown(player, event);
+
+    }
+    private void capsFilter(String message, Player player, AsyncPlayerChatEvent event) {
         if(ess.getConfig().getBoolean("chat.chat-caps-filter")) {
 
             int count = 0;
@@ -54,18 +58,22 @@ public class AntiSpam {
 
                 return;
             }
-            lastMessage.put(uuid, message.toLowerCase());
+            lastMessage.put(player.getUniqueId(), message.toLowerCase());
         }
+    }
+    private void duplicationFilter(String message, Player player, AsyncPlayerChatEvent event) {
         if(ess.getConfig().getBoolean("chat.duplicate-prevention")) {
+            UUID uuid = player.getUniqueId();
             if (lastMessage.get(uuid).equalsIgnoreCase(message) || lastMessage.get(uuid).startsWith(message)|| lastMessage.get(uuid).endsWith(message)) {
                 player.sendMessage(Color.RED + "Please do not send the same message twice.");
                 event.setCancelled(true);
                 if (!Objects.requireNonNull(config.getString("duplicate-punish")).isEmpty()) {
                     ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), Objects.requireNonNull(config.getString("duplicate-punish")));
                 }
-                return;
             }
         }
+    }
+    private void chatCooldown(Player player, AsyncPlayerChatEvent event) {
         if(player.hasPermission("essentials.chat.bypass.cooldown")) return;
         if(ess.getConfig().getBoolean("chat.chat-cooldown-enable")){
             //if task is shutdown for some reason, recreate it
@@ -87,7 +95,7 @@ public class AntiSpam {
                 }.runTaskTimer(ess, 20L, 20L);
             }
         }
-        if (lastMessageTimer.containsKey(uuid)) {
+        if (lastMessageTimer.containsKey(player.getUniqueId())) {
             event.setCancelled(true);
             player.sendMessage(Color.RED + "There is currently a chat cooldown. Please wait " + lastMessage.get(uuid) + " seconds before sending another message.");
         }
