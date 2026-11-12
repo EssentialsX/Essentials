@@ -2,6 +2,8 @@ package com.earth2me.essentials.chat.processing;
 
 import com.earth2me.essentials.Essentials;
 import org.bukkit.Color;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -10,6 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class AntiSpam {
@@ -21,14 +24,19 @@ public class AntiSpam {
     Map<UUID, String> lastMessage = new HashMap<>();
     Map<UUID, Integer> lastMessageTimer = new HashMap<>();
     BukkitTask runable;
+    FileConfiguration config;
     public void newMessage(Player player, String message, AsyncPlayerChatEvent event) {
         UUID uuid = player.getUniqueId();
         String storedMessage = lastMessage.get(uuid);
         Essentials ess =  Essentials.getPlugin(Essentials.class);
+        config = ess.getConfig();
         if(ess.getConfig().getBoolean("duplicate-prevention")) {
             if (storedMessage.equalsIgnoreCase(message) || storedMessage.startsWith(message)|| storedMessage.endsWith(message)) {
                 player.sendMessage(Color.RED + "Please do not send the same message twice.");
                 event.setCancelled(true);
+                if (Objects.requireNonNull(config.getString("duplicate-punish")).equalsIgnoreCase("")) {
+                    ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), Objects.requireNonNull(config.getString("duplicate-punish")));
+                }
                 return;
             }
         }
@@ -46,11 +54,15 @@ public class AntiSpam {
                 event.setMessage(storedMessage.toLowerCase());
                 player.sendMessage(Color.RED + "Please do not spam capital letters in chat");
                 event.setMessage(storedMessage.toLowerCase());
+                if(Objects.requireNonNull(config.getString("caps-punish")).equalsIgnoreCase("")){
+                    ess.getServer().dispatchCommand(ess.getServer().getConsoleSender(), Objects.requireNonNull(config.getString("caps-punish")));
+                }
 
                 return;
             }
             lastMessage.put(uuid, message);
         }
+        if(player.hasPermission("essentials.chat.bypass.cooldown")) return;
         if(ess.getConfig().getBoolean("chat-cooldown-enable")){
             if(runable == null){
                 runable = new BukkitRunnable() {
@@ -58,7 +70,7 @@ public class AntiSpam {
                     public void run() {
                         for(Map.Entry<UUID, Integer> entry : lastMessageTimer.entrySet()){
                             entry.setValue(entry.getValue() + 1);
-                            if(entry.getValue() >= 5){ lastMessageTimer.remove(entry.getKey());
+                            if(entry.getValue() >= ess.getConfig().getInt("chat-cooldown-time")){ lastMessageTimer.remove(entry.getKey());
 
                             }
                         }
