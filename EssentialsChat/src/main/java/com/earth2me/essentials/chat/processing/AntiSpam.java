@@ -100,6 +100,7 @@ public class AntiSpam {
         }
         return false;
     }
+
     private double similarity(String a, String b) {
         if (a.equals(b)) {
             return 1.0;
@@ -141,8 +142,9 @@ public class AntiSpam {
         lastMessage.remove(player.getUniqueId());
         cooldowns.remove(player.getUniqueId());
     }
+
     private int levenshteinDistance(String a, String b) {
-        int[] costs = new int[b.length() + 1];
+        final int[] costs = new int[b.length() + 1];
 
         for (int j = 0; j <= b.length(); j++) {
             costs[j] = j;
@@ -153,7 +155,7 @@ public class AntiSpam {
             int previousCost = i - 1;
 
             for (int j = 1; j <= b.length(); j++) {
-                int currentCost = costs[j];
+                final int currentCost = costs[j];
 
                 costs[j] = Math.min(
                         Math.min(costs[j] + 1, costs[j - 1] + 1),
