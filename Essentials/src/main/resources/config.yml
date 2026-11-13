@@ -1050,6 +1050,7 @@ chat:
   duplicate-prevention: true
 
   #Whether we run a command in response to duplicate messages. Leave empty for no punishment.
+  #Use {player} to insert the player that triggered this punishment
   duplicate-punish:
 
   #Whether chat should have a cooldown per player.
@@ -1061,6 +1062,7 @@ chat:
   #Whether messages containing lots of capitols should be changed to lowercase
   chat-caps-filter: true
 
+  #Use {player} to insert the player that triggered this punishment
   #Whether we run a command in response to too many capitol letters. Leave empty for no punishment.
   caps-punishment:
 
