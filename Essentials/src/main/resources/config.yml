@@ -1045,6 +1045,27 @@ chat:
   # You must restart your server after changing this setting.
   paper-chat-events: true
 
+  #When enabled the plugin sends a message to the player letting them know not to send similar messages.
+  #Whether duplicate messages should be blocked.
+  duplicate-prevention: true
+
+  #Whether we run a command in response to duplicate messages. Leave empty for no punishment.
+  #Use {player} to insert the player that triggered this punishment
+  duplicate-punish:
+
+  #Whether chat should have a cooldown per player.
+  chat-cooldown-enable: false
+  chat-cooldown-time: 0
+
+  #When enabled the plugin sends a message to the player letting them know not to use too many capitol letters.
+  #Message is converted to lowercase before being sent
+  #Whether messages containing lots of capitols should be changed to lowercase
+  chat-caps-filter: true
+
+  #Use {player} to insert the player that triggered this punishment
+  #Whether we run a command in response to too many capitol letters. Leave empty for no punishment.
+  caps-punishment:
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                  EssentialsX Protect                 | #

@@ -45,6 +45,7 @@ public class ChatHandler extends AbstractChatHandler {
         @EventHandler(priority = EventPriority.HIGHEST)
         public void onPlayerChat(AsyncPlayerChatEvent event) {
             final AbstractChatEvent absEvent = wrap(event);
+            AntiSpam.getAntiSpam().newMessage(absEvent);
             handleChatPostFormat(absEvent);
             handleChatSubmit(absEvent);
         }

@@ -69,4 +69,5 @@ public class SpigotChatEvent implements AbstractChatEvent {
     public void addRecipient(Player player) {
         event.getRecipients().add(player);
     }
+
 }

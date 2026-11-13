@@ -29,6 +29,7 @@ public class PaperChatHandler extends AbstractChatHandler {
 
         @Override
         public void onChatHighest(AbstractChatEvent event) {
+            AntiSpam.getAntiSpam().newMessage(event);
             handleChatPostFormat(event);
             handleChatSubmit(event);
         }
