@@ -27,15 +27,27 @@ public class AntiSpam {
         ess.getServer().getPluginManager().registerEvents(new PlayerDisconnectListner(), ess);
     }
 
-    public void newMessage(AbstractChatEvent event){
+    public void newMessage(AbstractChatEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
         final Player player = event.getPlayer();
         final String message = event.getMessage();
+
         event.setMessage(capsFilter(message, player));
-        event.setCancelled(
-                event.isCancelled()
-                        || duplicationFilter(message, player)
-                        || chatCooldown(player)
-        );
+
+        if (duplicationFilter(message, player)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (chatCooldown(player)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        lastMessage.put(player.getUniqueId(), message.toLowerCase(Locale.ROOT));
     }
 
     private String capsFilter(String message, Player player) {
