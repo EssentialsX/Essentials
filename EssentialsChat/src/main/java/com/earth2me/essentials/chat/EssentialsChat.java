@@ -5,6 +5,7 @@ import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.chat.processing.AntiSpam;
 import com.earth2me.essentials.chat.processing.ChatHandler;
 import com.earth2me.essentials.chat.processing.PaperChatHandler;
+import com.earth2me.essentials.chat.processing.PlayerDisconnectListner;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
@@ -20,7 +21,7 @@ import static com.earth2me.essentials.I18n.tlLiteral;
 public class EssentialsChat extends JavaPlugin {
     private transient IEssentials ess;
     private transient MetricsWrapper metrics = null;
-    public transient AntiSpam antiSpam = new AntiSpam();
+    public transient AntiSpam antiSpam;
 
     @Override
     public void onEnable() {
@@ -46,6 +47,8 @@ public class EssentialsChat extends JavaPlugin {
         if (metrics == null) {
             metrics = new MetricsWrapper(this, 3814, false);
         }
+        antiSpam = new AntiSpam(ess);
+        pluginManager.registerEvents(new PlayerDisconnectListner(), this);
     }
 
     @Override
