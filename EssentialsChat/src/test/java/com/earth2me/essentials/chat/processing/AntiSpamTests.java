@@ -35,13 +35,11 @@ class AntiSpamTests {
         when(ess.getServer()).thenReturn(server);
         when(server.getConsoleSender()).thenReturn(console);
 
-        // Default configuration
         when(config.getBoolean("chat.chat-caps-filter")).thenReturn(false);
         when(config.getBoolean("chat.duplicate-prevention")).thenReturn(true);
         when(config.getBoolean("chat.chat-cooldown-enable")).thenReturn(false);
         when(config.getInt("chat.chat-cooldown-time")).thenReturn(5);
 
-        // Player configuration
         when(player.getUniqueId()).thenReturn(UUID.randomUUID());
         when(player.getName()).thenReturn("TestPlayer");
         when(player.hasPermission("essentials.chat.bypass.cooldown")).thenReturn(false);
@@ -58,7 +56,6 @@ class AntiSpamTests {
 
         return event;
     }
-
 
     private void assertMessageCancelled(String message, boolean cancelled) {
         final AbstractChatEvent event = createEvent(message);
@@ -92,21 +89,57 @@ class AntiSpamTests {
     }
 
     @Test
-    void messageStartingWithPreviousMessageShouldBeCancelled() {
+    void similarMessageWithOneCharacterChangedShouldBeCancelled() {
         assertMessageCancelled("Hello everyone", false);
-        assertMessageCancelled("Hello", true);
+        assertMessageCancelled("Hello everyonf", true);
     }
 
     @Test
-    void messageEndingWithPreviousMessageShouldBeCancelled() {
-        assertMessageCancelled("Hello everyone", false);
-        assertMessageCancelled("everyone", true);
+    void similarMessageWithCharacterInsertedShouldBeCancelled() {
+        assertMessageCancelled("buy cheap diamonds", false);
+        assertMessageCancelled("buy cheap diamondss", true);
     }
 
     @Test
-    void differentMessageShouldBeAllowed() {
+    void similarMessageWithCharacterRemovedShouldBeCancelled() {
+        assertMessageCancelled("buy cheap diamondss", false);
+        assertMessageCancelled("buy cheap diamonds", true);
+    }
+
+    @Test
+    void similarMessageWithCharacterSubstitutedShouldBeCancelled() {
+        assertMessageCancelled("Hello everyone", false);
+        assertMessageCancelled("Hello evetyone", true);
+    }
+
+    @Test
+    void messageStartingWithPreviousMessageShouldBeAllowed() {
         assertMessageCancelled("Hello", false);
-        assertMessageCancelled("Goodbye", false);
+        assertMessageCancelled("Hello everyone", false);
+    }
+
+    @Test
+    void messageEndingWithPreviousMessageShouldBeAllowed() {
+        assertMessageCancelled("everyone", false);
+        assertMessageCancelled("Hello everyone", false);
+    }
+
+    @Test
+    void completelyDifferentMessageShouldBeAllowed() {
+        assertMessageCancelled("Hello everyone", false);
+        assertMessageCancelled("Goodbye world", false);
+    }
+
+    @Test
+    void similarityExactlyAtThresholdShouldBeCancelled() {
+        assertMessageCancelled("abcdefghijklmnopqrst", false);
+        assertMessageCancelled("abcXXXghijklmnopqrst", true);
+    }
+
+    @Test
+    void similarityBelowThresholdShouldBeAllowed() {
+        assertMessageCancelled("abcdefghijklmnopqrst", false);
+        assertMessageCancelled("abcdXXXXijklmnopqrst", false);
     }
 
     @Test
@@ -155,16 +188,11 @@ class AntiSpamTests {
     void cooldownRejectedMessageShouldNotReplaceLastAcceptedMessage() {
         when(config.getBoolean("chat.chat-cooldown-enable")).thenReturn(true);
 
-        // First message is accepted.
         assertMessageCancelled("First message", false);
-
-        // Second message is rejected by cooldown.
         assertMessageCancelled("Second message", true);
 
-        // Bypass cooldown to isolate duplicate detection.
         when(player.hasPermission("essentials.chat.bypass.cooldown")).thenReturn(true);
 
-        // The original accepted message should still be recognized as a duplicate.
         assertMessageCancelled("First message", true);
     }
 
@@ -284,7 +312,6 @@ class AntiSpamTests {
 
         antiSpam.unloadPlayer(player);
 
-        // The same message should be accepted after cleanup.
         assertMessageCancelled("Hello", false);
     }
 }
