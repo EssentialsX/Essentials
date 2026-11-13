@@ -12,14 +12,12 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AntiSpam {
-    static AntiSpam antiSpam;
+    private static AntiSpam antiSpam;
+    private final Essentials ess = Essentials.getPlugin(Essentials.class);
 
-    Essentials ess =  Essentials.getPlugin(Essentials.class);
     private final FileConfiguration config;
-
     private final Map<UUID, String> lastMessage;
-    private final Map<UUID, Integer> lastMessageTimer;
-    private BukkitTask runable;
+    private final Map<UUID, Long> cooldowns;
 
     public AntiSpam() {
         antiSpam = this;
