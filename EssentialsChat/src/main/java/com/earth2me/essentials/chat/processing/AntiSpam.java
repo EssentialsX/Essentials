@@ -99,17 +99,6 @@ public class AntiSpam {
         return false;
     }
 
-    private double similarity(String a, String b) {
-        if (a.equals(b)) {
-            return 1.0;
-        }
-
-        final int distance = levenshteinDistance(a, b);
-        final int maxLength = Math.max(a.length(), b.length());
-
-        return maxLength == 0 ? 1.0 : 1.0 - (double) distance / maxLength;
-    }
-
     private boolean chatCooldown(Player player) {
         if (player.hasPermission("essentials.chat.bypass.cooldown")
                 || !config.getBoolean("chat.chat-cooldown-enable")) {
