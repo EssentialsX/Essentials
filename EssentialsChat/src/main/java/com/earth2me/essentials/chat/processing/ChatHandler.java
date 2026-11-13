@@ -3,7 +3,6 @@ package com.earth2me.essentials.chat.processing;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.chat.EssentialsChat;
 import net.ess3.provider.AbstractChatEvent;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -45,12 +44,10 @@ public class ChatHandler extends AbstractChatHandler {
         @Override
         @EventHandler(priority = EventPriority.HIGHEST)
         public void onPlayerChat(AsyncPlayerChatEvent event) {
-            AntiSpam.getAntiSpam().newMessage(event);
             final AbstractChatEvent absEvent = wrap(event);
+            AntiSpam.getAntiSpam().newMessage(absEvent);
             handleChatPostFormat(absEvent);
             handleChatSubmit(absEvent);
-
-
         }
     }
 }
