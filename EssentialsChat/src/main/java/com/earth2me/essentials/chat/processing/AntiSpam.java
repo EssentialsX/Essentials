@@ -104,7 +104,6 @@ public class AntiSpam {
             player.sendMessage(ChatColor.RED + "Please do not send the same message twice.");
             return true;
         }
-        lastMessage.put(uuid, normalizedMessage);
         return false;
     }
 
