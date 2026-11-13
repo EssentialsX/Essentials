@@ -50,7 +50,7 @@ class AntiSpamTests {
     }
 
     private AbstractChatEvent createEvent(String message) {
-        AbstractChatEvent event = mock(AbstractChatEvent.class);
+        final AbstractChatEvent event = mock(AbstractChatEvent.class);
 
         when(event.getPlayer()).thenReturn(player);
         when(event.getMessage()).thenReturn(message);
@@ -61,7 +61,7 @@ class AntiSpamTests {
 
 
     private void assertMessageCancelled(String message, boolean cancelled) {
-        AbstractChatEvent event = createEvent(message);
+        final AbstractChatEvent event = createEvent(message);
 
         antiSpam.newMessage(event);
 
@@ -174,7 +174,7 @@ class AntiSpamTests {
     void excessiveCapitalizationShouldBeConvertedToLowercase() {
         when(config.getBoolean("chat.chat-caps-filter")).thenReturn(true);
 
-        AbstractChatEvent event = createEvent("HELLO");
+        final AbstractChatEvent event = createEvent("HELLO");
 
         antiSpam.newMessage(event);
 
@@ -185,7 +185,7 @@ class AntiSpamTests {
     void normalCapitalizationShouldRemainUnchanged() {
         when(config.getBoolean("chat.chat-caps-filter")).thenReturn(true);
 
-        AbstractChatEvent event = createEvent("Hello everyone");
+        final AbstractChatEvent event = createEvent("Hello everyone");
 
         antiSpam.newMessage(event);
 
@@ -194,7 +194,7 @@ class AntiSpamTests {
 
     @Test
     void disabledCapsFilterShouldLeaveMessageUnchanged() {
-        AbstractChatEvent event = createEvent("HELLO");
+        final AbstractChatEvent event = createEvent("HELLO");
 
         antiSpam.newMessage(event);
 
@@ -256,7 +256,7 @@ class AntiSpamTests {
 
     @Test
     void alreadyCancelledEventShouldRemainCancelled() {
-        AbstractChatEvent event = createEvent("Hello");
+        final AbstractChatEvent event = createEvent("Hello");
         when(event.isCancelled()).thenReturn(true);
 
         antiSpam.newMessage(event);
