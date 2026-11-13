@@ -13,13 +13,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AntiSpam {
     private static AntiSpam antiSpam;
-    private final Essentials ess = Essentials.getPlugin(Essentials.class);
+    private final Essentials ess;
 
     private final FileConfiguration config;
     private final Map<UUID, String> lastMessage;
     private final Map<UUID, Long> cooldowns;
 
     public AntiSpam() {
+        this(Essentials.getPlugin(Essentials.class));
+    }
+
+    public AntiSpam(Essentials ess) {
+        this.ess = ess;
         antiSpam = this;
         config = ess.getConfig();
         lastMessage = new ConcurrentHashMap<>();
