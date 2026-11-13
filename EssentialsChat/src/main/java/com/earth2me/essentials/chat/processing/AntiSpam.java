@@ -87,8 +87,7 @@ public class AntiSpam {
 
         if (previousMessage != null
                 && (previousMessage.equals(normalizedMessage)
-                || previousMessage.startsWith(normalizedMessage)
-                || previousMessage.endsWith(normalizedMessage))) {
+                || similarity(previousMessage, normalizedMessage) >= 0.85)) {
             final String command = config.getString("duplication-punish");
             if (command != null && !command.trim().isEmpty()) {
                 ess.getServer().dispatchCommand(
@@ -100,6 +99,16 @@ public class AntiSpam {
             return true;
         }
         return false;
+    }
+    private double similarity(String a, String b) {
+        if (a.equals(b)) {
+            return 1.0;
+        }
+
+        final int distance = levenshteinDistance(a, b);
+        final int maxLength = Math.max(a.length(), b.length());
+
+        return maxLength == 0 ? 1.0 : 1.0 - (double) distance / maxLength;
     }
 
     private boolean chatCooldown(Player player) {
@@ -131,5 +140,30 @@ public class AntiSpam {
     public void unloadPlayer(Player player){
         lastMessage.remove(player.getUniqueId());
         cooldowns.remove(player.getUniqueId());
+    }
+    private int levenshteinDistance(String a, String b) {
+        int[] costs = new int[b.length() + 1];
+
+        for (int j = 0; j <= b.length(); j++) {
+            costs[j] = j;
+        }
+
+        for (int i = 1; i <= a.length(); i++) {
+            costs[0] = i;
+            int previousCost = i - 1;
+
+            for (int j = 1; j <= b.length(); j++) {
+                int currentCost = costs[j];
+
+                costs[j] = Math.min(
+                        Math.min(costs[j] + 1, costs[j - 1] + 1),
+                        previousCost + (a.charAt(i - 1) == b.charAt(j - 1) ? 0 : 1)
+                );
+
+                previousCost = currentCost;
+            }
+        }
+
+        return costs[b.length()];
     }
 }
