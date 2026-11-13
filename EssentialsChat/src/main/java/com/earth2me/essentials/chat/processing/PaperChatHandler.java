@@ -4,7 +4,6 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.chat.EssentialsChat;
 import net.ess3.provider.AbstractChatEvent;
 import net.ess3.provider.providers.PaperChatListenerProvider;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 
 public class PaperChatHandler extends AbstractChatHandler {
@@ -30,7 +29,7 @@ public class PaperChatHandler extends AbstractChatHandler {
 
         @Override
         public void onChatHighest(AbstractChatEvent event) {
-            AntiSpam.getAntiSpam().newMessagePaper(event);
+            AntiSpam.getAntiSpam().newMessage(event);
             handleChatPostFormat(event);
             handleChatSubmit(event);
         }
