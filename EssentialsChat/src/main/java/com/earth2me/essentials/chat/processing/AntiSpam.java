@@ -166,6 +166,7 @@ public class AntiSpam {
 
         return costs[b.length()];
     }
+
     private boolean isSimilar(String a, String b) {
         if (a.equals(b)) {
             return true;
