@@ -85,9 +85,7 @@ public class AntiSpam {
         final String normalizedMessage = message.toLowerCase(Locale.ROOT);
         final String previousMessage = lastMessage.get(uuid);
 
-        if (previousMessage != null
-                && (previousMessage.equals(normalizedMessage)
-                || similarity(previousMessage, normalizedMessage) >= 0.85)) {
+        if (previousMessage != null && isSimilar(previousMessage, normalizedMessage)) {
             final String command = config.getString("duplication-punish");
             if (command != null && !command.trim().isEmpty()) {
                 ess.getServer().dispatchCommand(
@@ -167,5 +165,16 @@ public class AntiSpam {
         }
 
         return costs[b.length()];
+    }
+    private boolean isSimilar(String a, String b) {
+        if (a.equals(b)) {
+            return true;
+        }
+
+        final int distance = levenshteinDistance(a, b);
+        final int maxLength = Math.max(a.length(), b.length());
+
+        return distance <= 1
+                || 1.0 - (double) distance / maxLength >= 0.85;
     }
 }
