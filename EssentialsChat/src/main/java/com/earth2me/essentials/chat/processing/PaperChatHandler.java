@@ -11,6 +11,7 @@ public class PaperChatHandler extends AbstractChatHandler {
     public PaperChatHandler(Essentials ess, EssentialsChat essChat) {
         super(ess, essChat);
     }
+
     public void registerListeners() {
         final PluginManager pm = essChat.getServer().getPluginManager();
         pm.registerEvents(new ChatListener(), essChat);
