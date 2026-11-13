@@ -1,6 +1,6 @@
 package com.earth2me.essentials.chat.processing;
 
-import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IEssentials;
 import net.ess3.provider.AbstractChatEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,23 +13,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AntiSpam {
     private static AntiSpam antiSpam;
-    private final Essentials ess;
+    private final IEssentials ess;
 
     private final FileConfiguration config;
     private final Map<UUID, String> lastMessage;
     private final Map<UUID, Long> cooldowns;
 
-    public AntiSpam() {
-        this(Essentials.getPlugin(Essentials.class));
-    }
-
-    public AntiSpam(Essentials ess) {
+    public AntiSpam(IEssentials ess) {
         this.ess = ess;
         antiSpam = this;
         config = ess.getConfig();
         lastMessage = new ConcurrentHashMap<>();
         cooldowns = new ConcurrentHashMap<>();
-        ess.getServer().getPluginManager().registerEvents(new PlayerDisconnectListner(), ess);
     }
 
     public void newMessage(AbstractChatEvent event) {
