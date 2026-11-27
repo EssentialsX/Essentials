@@ -110,21 +110,31 @@ public class AsyncTeleport implements IAsyncTeleport {
 
     @Override
     public void now(final Location loc, final boolean cooldown, final TeleportCause cause, final CompletableFuture<Boolean> future) {
+        now((IUser) null, loc, cooldown, cause, future);
+    }
+
+    @Override
+    public void now(final IUser teleporter, final Location loc, final boolean cooldown, final TeleportCause cause, final CompletableFuture<Boolean> future) {
         if (cooldown && cooldown(false, future)) {
             return;
         }
         final ITarget target = new LocationTarget(loc);
-        nowAsync(teleportOwner, target, cause, future);
+        nowAsync(teleporter, teleportOwner, target, cause, future);
     }
 
     @Override
     public void now(final Player entity, final boolean cooldown, final TeleportCause cause, final CompletableFuture<Boolean> future) {
+        now((IUser) null, entity, cooldown, cause, future);
+    }
+
+    @Override
+    public void now(final IUser teleporter, final Player entity, final boolean cooldown, final TeleportCause cause, final CompletableFuture<Boolean> future) {
         if (cooldown && cooldown(false, future)) {
             future.complete(false);
             return;
         }
         final ITarget target = new PlayerTarget(entity);
-        nowAsync(teleportOwner, target, cause, future);
+        nowAsync(teleporter, teleportOwner, target, cause, future);
         future.thenAccept(success -> {
             if (success) {
                 teleportOwner.sendTl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ());
@@ -153,9 +163,16 @@ public class AsyncTeleport implements IAsyncTeleport {
     }
 
     protected void nowAsync(final IUser teleportee, final ITarget target, final TeleportCause cause, final CompletableFuture<Boolean> future) {
+        nowAsync(null, teleportee, target, cause, future);
+    }
+
+    /**
+     * @param teleporter the user who initiated the teleport, or null to report the teleportee
+     */
+    protected void nowAsync(final IUser teleporter, final IUser teleportee, final ITarget target, final TeleportCause cause, final CompletableFuture<Boolean> future) {
         cancel(false);
 
-        final PreTeleportEvent event = new PreTeleportEvent(teleportee, cause, target);
+        final PreTeleportEvent event = new PreTeleportEvent(teleporter != null ? teleporter : teleportee, teleportee, cause, target);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             future.complete(false);
@@ -339,7 +356,7 @@ public class AsyncTeleport implements IAsyncTeleport {
                 return;
             }
 
-            nowAsync(teleportee, target, cause, future);
+            nowAsync(teleporter, teleportee, target, cause, future);
             if (teleporter != null && cashCharge != null) {
                 cashCharge.charge(teleporter, future);
                 if (future.isCompletedExceptionally()) {

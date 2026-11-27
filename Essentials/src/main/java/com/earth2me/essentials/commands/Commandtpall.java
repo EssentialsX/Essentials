@@ -31,6 +31,7 @@ public class Commandtpall extends EssentialsCommand {
     private void teleportAllPlayers(final Server server, final CommandSource sender, final User target, final String label) {
         sender.sendTl("teleportAll");
         final Location loc = target.getLocation();
+        final User teleporter = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
         for (final User player : ess.getOnlineUsers()) {
             if (target == player) {
                 continue;
@@ -38,7 +39,7 @@ public class Commandtpall extends EssentialsCommand {
             if (sender.getSender().equals(target.getBase()) && target.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !target.isAuthorized("essentials.worlds." + target.getWorld().getName())) {
                 continue;
             }
-            player.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, getNewExceptionFuture(sender, label));
+            player.getAsyncTeleport().now(teleporter, loc, false, TeleportCause.COMMAND, getNewExceptionFuture(sender, label));
         }
     }
 

@@ -123,7 +123,8 @@ public class AsyncTimedTeleport implements Runnable {
                         if (timer_respawn) {
                             teleport.respawnNow(teleportUser, timer_cause, parentFuture);
                         } else {
-                            teleport.nowAsync(teleportUser, timer_teleportTarget, timer_cause, parentFuture);
+                            // teleportOwner started the warmup (e.g. the /tphere sender), report it as the teleporter
+                            teleport.nowAsync(teleportOwner, teleportUser, timer_teleportTarget, timer_cause, parentFuture);
                         }
                         parentFuture.thenAccept(success -> {
                             if (timer_chargeFor != null) {

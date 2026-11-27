@@ -82,7 +82,7 @@ public class Commandtp extends EssentialsCommand {
                     throw new TranslatableException("teleportDisabled", target2.getDisplayName());
                 }
                 user.sendTl("teleporting", locposother.getWorld().getName(), locposother.getBlockX(), locposother.getBlockY(), locposother.getBlockZ());
-                target2.getAsyncTeleport().now(locposother, false, TeleportCause.COMMAND, future);
+                target2.getAsyncTeleport().now(user, locposother, false, TeleportCause.COMMAND, future);
                 future.thenAccept(success -> {
                     if (success) {
                         target2.sendTl("teleporting", locposother.getWorld().getName(), locposother.getBlockX(), locposother.getBlockY(), locposother.getBlockZ());
@@ -106,7 +106,7 @@ public class Commandtp extends EssentialsCommand {
                     throw new TranslatableException("noPerm", "essentials.worlds." + toPlayer.getWorld().getName());
                 }
                 target.sendTl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName());
-                target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, future);
+                target.getAsyncTeleport().now(user, toPlayer.getBase(), false, TeleportCause.COMMAND, future);
                 break;
         }
     }

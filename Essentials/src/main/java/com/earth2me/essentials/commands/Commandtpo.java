@@ -40,7 +40,7 @@ public class Commandtpo extends EssentialsCommand {
                 }
 
                 final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
-                target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, future);
+                target.getAsyncTeleport().now(user, toPlayer.getBase(), false, TeleportCause.COMMAND, future);
                 future.thenAccept(success -> {
                     if (success) {
                         target.sendTl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName());
