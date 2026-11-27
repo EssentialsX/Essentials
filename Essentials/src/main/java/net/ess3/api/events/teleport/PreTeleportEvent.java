@@ -19,6 +19,10 @@ public class PreTeleportEvent extends TeleportEvent {
         super(teleportee, cause, target);
     }
 
+    public PreTeleportEvent(final IUser teleporter, final IUser teleportee, final PlayerTeleportEvent.TeleportCause cause, final ITarget target) {
+        super(teleporter, teleportee, cause, target);
+    }
+
     public static HandlerList getHandlerList() {
         return handlers;
     }

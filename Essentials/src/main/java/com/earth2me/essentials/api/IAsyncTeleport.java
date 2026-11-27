@@ -35,6 +35,34 @@ public interface IAsyncTeleport {
     void now(Player entity, boolean cooldown, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Boolean> future);
 
     /**
+     * Same as {@link #now(Location, boolean, PlayerTeleportEvent.TeleportCause, CompletableFuture)}, but reports
+     * {@code teleporter} as the user who initiated the teleport in {@link net.ess3.api.events.teleport.PreTeleportEvent}.
+     *
+     * @param teleporter - The user who initiated the teleport, or null if unknown (e.g. console)
+     * @param loc        - Where should the player end up
+     * @param cooldown   - If cooldown should be enforced
+     * @param cause      - The reported teleportPlayer cause
+     * @param future     - Future which is completed with the success status of the execution
+     */
+    default void now(IUser teleporter, Location loc, boolean cooldown, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Boolean> future) {
+        now(loc, cooldown, cause, future);
+    }
+
+    /**
+     * Same as {@link #now(Player, boolean, PlayerTeleportEvent.TeleportCause, CompletableFuture)}, but reports
+     * {@code teleporter} as the user who initiated the teleport in {@link net.ess3.api.events.teleport.PreTeleportEvent}.
+     *
+     * @param teleporter - The user who initiated the teleport, or null if unknown (e.g. console)
+     * @param entity     - Where should the player end up
+     * @param cooldown   - If cooldown should be enforced
+     * @param cause      - The reported teleportPlayer cause
+     * @param future     - Future which is completed with the success status of the execution
+     */
+    default void now(IUser teleporter, Player entity, boolean cooldown, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Boolean> future) {
+        now(entity, cooldown, cause, future);
+    }
+
+    /**
      * Used to skip all safety checks while teleporting a player asynchronously.
      *
      * @param loc    - Where should the player end up
