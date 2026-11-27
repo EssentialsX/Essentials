@@ -237,13 +237,13 @@ public class AsyncTeleport implements IAsyncTeleport {
 
     @Override
     public void teleportPlayer(final IUser otherUser, final Location loc, final Trade chargeFor, final TeleportCause cause, final CompletableFuture<Boolean> future) {
-        teleport(otherUser, new LocationTarget(loc), chargeFor, cause, future);
+        teleportOther(teleportOwner, otherUser, new LocationTarget(loc), chargeFor, cause, future);
     }
 
     @Override
     public void teleportPlayer(final IUser otherUser, final Player entity, final Trade chargeFor, final TeleportCause cause, final CompletableFuture<Boolean> future) {
         final ITarget target = new PlayerTarget(entity);
-        teleport(otherUser, target, chargeFor, cause, future);
+        teleportOther(teleportOwner, otherUser, target, chargeFor, cause, future);
         future.thenAccept(success -> {
             if (success) {
                 otherUser.sendTl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ());
@@ -309,6 +309,7 @@ public class AsyncTeleport implements IAsyncTeleport {
         final TeleportWarmupEvent event = new TeleportWarmupEvent(teleporter, teleportee, cause, target, delay);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
+            future.complete(false);
             return;
         }
         delay = event.getDelay();
@@ -329,6 +330,7 @@ public class AsyncTeleport implements IAsyncTeleport {
         }
 
         if (cooldown(true, future)) {
+            future.complete(false);
             return;
         }
         if (delay <= 0 || teleporter == null
@@ -336,6 +338,7 @@ public class AsyncTeleport implements IAsyncTeleport {
             || teleportOwner.isAuthorized("essentials.teleport.timer.bypass")
             || teleportee.isAuthorized("essentials.teleport.timer.bypass")) {
             if (cooldown(false, future)) {
+                future.complete(false);
                 return;
             }
 
@@ -436,7 +439,7 @@ public class AsyncTeleport implements IAsyncTeleport {
                 }
             }
         });
-        teleport(otherUser, new LocationTarget(loc), chargeFor, cause, future);
+        teleportOther(teleportOwner, otherUser, new LocationTarget(loc), chargeFor, cause, future);
     }
 
     @Override
