@@ -14,6 +14,7 @@ public class TPARequestEvent extends Event implements Cancellable {
     private final CommandSource requester;
     private final IUser target;
     private boolean cancelled = false;
+    private boolean silent = false;
     private boolean requestToTPAHere;
 
     public TPARequestEvent(final CommandSource requester, final IUser target, final boolean tpaHere) {
@@ -37,6 +38,23 @@ public class TPARequestEvent extends Event implements Cancellable {
 
     public boolean isTeleportHere() {
         return requestToTPAHere;
+    }
+
+    /**
+     * @return true if a cancelled request should not show the default "request cancelled" message
+     */
+    public boolean isSilent() {
+        return silent;
+    }
+
+    /**
+     * Suppresses the default "request cancelled" message when this event is cancelled.
+     * Use it when the cancelling plugin informs the requester itself.
+     *
+     * @param silent whether the cancel message should be suppressed
+     */
+    public void setSilent(final boolean silent) {
+        this.silent = silent;
     }
 
     @Override
